@@ -1,9 +1,11 @@
 USE EenmaalAndermaal
 
-create table vragen (  
-vraagnr integer not null,  
-vraag varchar(80) not null,  
-constraint pk_vraagnr primary key(vraagnr)  
+DROP TABLE IF EXISTS Gebruiker, Vragen, Verkoper;
+
+CREATE TABLE Vragen (  
+vraagnr Tinyint NOT NULL,  
+vraag VARCHAR(80) NOT NULL,  
+CONSTRAINT pk_vraagnr PRIMARY KEY(vraagnr)  
 ) 
 
 CREATE TABLE Gebruiker (
@@ -24,8 +26,24 @@ verkoper bit NOT NUll,
 CONSTRAINT PK_Gebruiker PRIMARY KEY (gebruikersnaam)
 );
 
+CREATE TABLE Verkoper (
+gebruikersnaam VARCHAR(50) NOT NULL,
+bank CHAR(4) NULL,
+bankrekeningnummer CHAR(18) NULL,
+--controle optie nog niet duidelijk
+creditcard CHAR(19) NULL,
+CONSTRAINT PK_Verkoper PRIMARY KEY (gebruikersnaam)
+);
+
 ALTER TABLE Gebruiker ADD 
 CONSTRAINT FK_Vraag 
-	FOREIGN KEY (vraag) REFERENCES Vraag(vraagnummer)
+	FOREIGN KEY (vraag) REFERENCES Vragen(vraagnr)
 	ON UPDATE CASCADE
 	ON DELETE NO ACTION
+
+ALTER TABLE Verkoper ADD
+CONSTRAINT FK_Gebruiker
+	FOREIGN KEY (gebruikersnaam) REFERENCES Gebruiker(gebruikersnaam)
+	ON UPDATE CASCADE
+	ON DELETE CASCADE
+
