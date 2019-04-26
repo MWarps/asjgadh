@@ -1,4 +1,4 @@
-// script om de tabellen te maken
+USE EenmaalAndermaal
 
 CREATE TABLE Gebruiker (
 gebruikersnaam VARCHAR(50) NOT NULL,
