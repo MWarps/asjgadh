@@ -1,6 +1,6 @@
 USE EenmaalAndermaal
 
-DROP TABLE IF EXISTS Verificatie, Verificatietypen, Gebruiker, Vragen, Verkoper;
+DROP TABLE IF EXISTS Verificatie, Verificatietypen, Verkoper, Gebruiker, Vragen;
 
 CREATE TABLE Vragen (  
 vraagnr Tinyint NOT NULL,  
