@@ -15,7 +15,11 @@ wachtwoord VARCHAR(28) NOT NULL,
 vraag Tinyint NOT NULL,
 antwoordtekst VARCHAR(50) NOT NULL,
 verkoper bit NOT NUll,
-CONSTRAINT PK_Gebruiker PRIMARY KEY (gebruikersnaam),
-
+CONSTRAINT PK_Gebruiker PRIMARY KEY (gebruikersnaam)
 );
 
+ALTER TABLE Gebruiker ADD 
+CONSTRAINT FK_Vraag 
+	FOREIGN KEY (vraag) REFERENCES Vraag(vraagnummer)
+	ON UPDATE CASCADE
+	ON DELETE NO ACTION
