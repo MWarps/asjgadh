@@ -1,6 +1,6 @@
 USE EenmaalAndermaal
 
-DROP TABLE IF EXISTS Gebruiker, Vragen, Verkoper;
+DROP TABLE IF EXISTS Verificatie, Verificatietypen, Gebruiker, Vragen, Verkoper;
 
 CREATE TABLE Vragen (  
 vraagnr Tinyint NOT NULL,  
@@ -35,6 +35,19 @@ creditcard CHAR(19) NULL,
 CONSTRAINT PK_Verkoper PRIMARY KEY (gebruikersnaam)
 );
 
+CREATE TABLE Verificatietypen (
+verificatietype CHAR(4) NOT NULL,
+CONSTRAINT PK_Verificatietypen PRIMARY KEY (verificatietype)
+);
+
+CREATE TABLE Verificatie (
+gebruikersnaam VARCHAR(50) NOT NULL,
+type CHAR(4) NOT NULL,
+verificatiecode CHAR(6) NOT NULL,
+eindtijd Smalldatetime NOT NULL,
+CONSTRAINT PK_Verificatie PRIMARY KEY (gebruikersnaam)
+);
+
 ALTER TABLE Gebruiker ADD 
 CONSTRAINT FK_Vraag 
 	FOREIGN KEY (vraag) REFERENCES Vragen(vraagnr)
@@ -47,3 +60,8 @@ CONSTRAINT FK_Gebruiker
 	ON UPDATE CASCADE
 	ON DELETE CASCADE
 
+ALTER TABLE Verificatie ADD
+CONSTRAINT FK_Verificatietype
+	FOREIGN KEY (type) REFERENCES Verificatietypen(verificatietype)
+	ON UPDATE CASCADE
+	ON DELETE CASCADE
