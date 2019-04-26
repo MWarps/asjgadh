@@ -1,5 +1,11 @@
 USE EenmaalAndermaal
 
+create table vragen (  
+vraagnr integer not null,  
+vraag varchar(80) not null,  
+constraint pk_vraagnr primary key(vraagnr)  
+) 
+
 CREATE TABLE Gebruiker (
 gebruikersnaam VARCHAR(50) NOT NULL,
 voornaam VARCHAR(50) NOT NULL,
