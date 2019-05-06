@@ -22,15 +22,15 @@
                     <div class="navbar-collapse collapse">
                         <ul class="navbar-nav mr-auto">
                             <li class="nav-items">
-                                <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                                <a class="nav-link" href="../index.php">Home <span class="sr-only">(current)</span></a>
                             </li>
                         </ul>
                         <ul class="navbar-nav">
                             <li class="nav-item">
-                                <a class="nav-link" href="">Login</a>
+                                <a class="nav-link" href="../pages/login.php">Login</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="">Register</a>
+                                <a class="nav-link" href="../pages/register.php">Register</a>
                             </li>
                         </ul>
                     </div>
