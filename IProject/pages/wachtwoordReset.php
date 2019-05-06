@@ -63,7 +63,6 @@ include '../includes/functies.php';
         require('../core/dbconnection.php');
         $sqlSelect = $dbh->query("select vraagnr, vraag from vragen");
 
-        // Loop through the query results, outputing the options one by one
         while ($row = $sqlSelect->fetch(PDO::FETCH_ASSOC)) {
             echo '<option value="'.$row['vraagnr'].'">'.$row['vraagnr'].'.&nbsp'.$row['vraag'].'</option>';
         }
