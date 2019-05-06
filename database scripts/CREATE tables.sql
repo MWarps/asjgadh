@@ -65,3 +65,9 @@ CONSTRAINT FK_Verificatietype
 	FOREIGN KEY (type) REFERENCES Verificatietypen(verificatietype)
 	ON UPDATE CASCADE
 	ON DELETE CASCADE
+
+ALTER TABLE Verificatie ADD
+CONSTRAINT FK_GebruikersVerificatie
+	FOREIGN KEY (gebruikersnaam) REFERENCES Gebruiker(gebruikersnaam)
+	ON UPDATE CASCADE
+	ON DELETE CASCADE
