@@ -1,4 +1,7 @@
-<?php include 'includes/header.php' ?>
+<?php 
+include 'includes/header.php'
+include 'includes/functies.php'
+?>
 
 <div class="container">
     <div class="offset-md-3">
