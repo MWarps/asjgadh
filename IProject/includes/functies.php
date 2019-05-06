@@ -4,7 +4,7 @@
 function bestaatGebruikersnaam($gebruikersnaam)
 {
     try {
-        require('dbconnection.php');
+        require('../core/dbconnection.php');
         $sqlSelect = $dbh->prepare("select gebruikersnaam from Gebruiker where gebruikersnaam=:gebruikersnaam");
 
         $sqlSelect->execute(
@@ -24,7 +24,7 @@ function bestaatGebruikersnaam($gebruikersnaam)
 function bestaatEmailadres($email)
 {
   try{
-      require('dbconnection.php');
+      require('../core/dbconnection.php');
       $sqlSelect = $dbh->prepare("select email from gebruikers where email=:email");
 
       $sqlSelect->execute(
@@ -44,7 +44,7 @@ function bestaatEmailadres($email)
 function resetVragen()
 {
   try {
-        require('dbconnection.php');
+        require('../core/dbconnection.php');
         $sqlSelect = $dbh->query("select vraagnr, vraag from vragen");
 
         echo '<label for="inputGeheimeVraag">Geheime Vraag</label>';
@@ -65,7 +65,7 @@ function resetVragen()
 function emailResetWachtwoord($gebruikersnaam)
 {
   try{
-      require('dbconnection.php');
+      require('../core/dbconnection.php');
       $sqlSelect = $dbh->prepare("select email, voornaam from gebruikers where gebruikersnaam = :gebruikersnaam");
 
       $sqlSelect->execute(
@@ -104,7 +104,7 @@ function emailResetWachtwoord($gebruikersnaam)
 function veranderWachtwoord($gebruikersnaam,$wachtwoord)
 {
   try{
-      require('dbconnection.php');
+      require('../core/dbconnection.php');
       $sqlSelect = $dbh->prepare("update gebruiker set wachtwoord = :wachtwoord
                                   where gebruikersnaam = :gebruikersnaam");
 
@@ -121,7 +121,7 @@ function veranderWachtwoord($gebruikersnaam,$wachtwoord)
 
   function controleVraag($vraag){
     try{
-        require('dbconnection.php');
+        require('../core/dbconnection.php');
         $sqlSelect = $dbh->prepare("select gebruiker.vraag from gebruikers join vragen
         on gebruiker.vraag = vragen.vraagnr where gebruiker.email=:email");
 

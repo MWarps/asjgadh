@@ -1,7 +1,7 @@
 <?php
-include 'includes/header.php';
-require_once 'includes/dbconnection.php';
-require 'includes/functies.php';
+include '../includes/header.php';
+require_once '../core/dbconnection.php';
+require '../includes/functies.php';
 
 if (isset($_POST['registreren'])) {
     $rGebruikersnaam = $_POST['rGebruikersnaam'];
@@ -159,9 +159,7 @@ if (isset($_POST['registreren'])) {
                         <div class="form-group">
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" id="gridCheck">
-                                <label class="form-check-label" for="gridCheck">
-                                    Algemene voorwaarden
-                                </label>
+                                <label class="form-check-label" for="gridCheck">Algemene voorwaarden</label>
                             </div>
                         </div>
                     </div>
@@ -171,4 +169,4 @@ if (isset($_POST['registreren'])) {
         </div>
     </div>
 
-    <?php include 'includes/footer.php' ?>
+    <?php include '../includes/footer.php' ?>
