@@ -114,11 +114,11 @@ if (isset($_POST['registreren'])) {
                     <div class="form-row">
                         <div class="form-group col-md-4">
                             <label for="inputWachtwoord">Wachtwoord</label>
-                            <input type="password" name="rWachtwoord" class="form-control" id="inputWachtwoord" name='pas1' placeholder="Wachtwoord">
+                            <input type="password" name="rWachtwoord" class="form-control" id="inputWachtwoord" placeholder="Wachtwoord">
                         </div>
                         <div class="form-group col-md-4">
                             <label for="inputHerhaalWachtwoord">Herhaal Wachtwoord</label>
-                            <input type="password" name="rHerhaalWachtwoord" class="form-control" id="inputHerhaalWachtwoord" name='pas2' placeholder="Herhaal Wachtwoord">
+                            <input type="password" name="rHerhaalWachtwoord" class="form-control" id="inputHerhaalWachtwoord" placeholder="Herhaal Wachtwoord">
                         </div>
                     </div>
                         <div class="form-row">
@@ -165,9 +165,35 @@ if (isset($_POST['registreren'])) {
                             </div>
                         </div>
                     </div>
-                    <button type="submit" value="registreren" name="registreren" class="btn btn-primary">Registreren</button>
+                    <button type="button" name="validatie" class="btn btn-primary" data-toggle="modal" data-target="#validatiemodal">Volgende
+                    </button>
                 </form>
             </div>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="validatiemodal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="ModalLabel">Valideren</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <h3> Er is een code gestuurd naar het ingevoerde e-mail adres.</h3>
+
+                <label for="validatiecode">vul hier uw validatie code in:</label>
+                <input type="text" name="validatiecode" class="form-control" id="inputVoornaam">
+
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" name="registeren" class="btn btn-primary">Registreren</button>
+              </div>
+            </div>
+          </div>
         </div>
     </div>
 
