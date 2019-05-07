@@ -1,4 +1,5 @@
 <?php
+
 include 'includes/header.php';
 require_once 'includes/dbconnection.php';
 require 'includes/functies.php';
@@ -16,6 +17,7 @@ if (isset($_POST['rVolgende'])) {
     $rGeheimV = (int)$_POST['rGeheimV'];
     $rGeheimA = $_POST['rGeheimA'];
     $rStraat = $_POST['rStraat'] . ' ' . $_POST['rHuisnr'];
+    $rStraat1 = $_POST['rStraat1'] . ' ' . $_POST['rHuisnr1'];
     $rPlaats = $_POST['rPlaats'];
     $rPostcode = $_POST['rPostcode'];;
     $rLand = $_POST['rLand'];
@@ -26,27 +28,29 @@ if (isset($_POST['rVolgende'])) {
     $rEmail, $rGeboorte, $rGeheimV, $rGeheimA, $rStraat, $rPlaats, $rPostcode,
     $rLand, $rVerkoper);
 
+   // controleert of gebruikrsnaam bestaat
   if(!empty(bestaatGebruikersnaam($_POST['rGebruikersnaam']))) {
       $Gbestaat = True;
       }
-
+  // controleert of emailadres bestaat
   if(!empty(bestaatEmailadres($_POST['rEmail']))) {
       $Ebestaat = True;
       }
 
+  // controleert of er geen error's zijn
   if($Ebestaat == false && $Gbestaat == false){
     //header("Refresh: 1; url=validatie.php");
-    $_SESSION['input'] = $input;
+    //$_SESSION['input'] = $input;
     $hashedWachtwoord = password_hash($rWachtwoord, PASSWORD_DEFAULT);
 
     try {
       // SQL insert statement
         $sqlInsert = $dbh->prepare("INSERT INTO Gebruiker (
-           gebruikersnaam, voornaam, achternaam, geslacht, adresregel1,
+           gebruikersnaam, voornaam, achternaam, geslacht, adresregel1, adresregel2,
            postcode, plaatsnaam, land, geboortedatum, email,
            wachtwoord, vraag, antwoordtekst, verkoper)
           values (
-            :rGebruikersnaam, :rVoornaam, :rAchternaam, :rGeslacht, :rAdresregel1,
+            :rGebruikersnaam, :rVoornaam, :rAchternaam, :rGeslacht, :rAdresregel1, :rAdresregel2,
             :rPostcode, :rPlaatsnaam, :rLand, :rGeboortedatum, :rEmail,
             :rWachtwoord, :rVraag, :rAntwoordtekst, :rVerkoper)");
 
@@ -57,31 +61,31 @@ if (isset($_POST['rVolgende'])) {
                 ':rAchternaam' => $rAchternaam,
                 ':rGeslacht' => $rGeslacht,
                 ':rAdresregel1' => $rStraat,
-                ':rPostcode' => $Postcode,
+                ':rAdresregel2' => $rStraat1,
+                ':rPostcode' => $rPostcode,
                 ':rPlaatsnaam' => $rPlaats,
-                ':rLand' => $Land,
+                ':rLand' => $rLand,
                 ':rGeboortedatum' => $rGeboorte,
                 ':rEmail' => $rEmail,
                 ':rWachtwoord' => $hashedWachtwoord,
                 ':rVraag' => $rGeheimV,
                 ':rAntwoordtekst' => $rGeheimA,
-                ':rVerkoper' => $Verkoper
+                ':rVerkoper' => $rVerkoper
 
             ));
-    } catch (PDOexception $e) {
+          }
+        catch (PDOexception $e) {
         echo "er ging iets mis {$e->getMessage()}";
-    }
+      }
 
     }
   }
-
-
 
 ?>
     <div class="container-fluid h-100">
         <div class="row h-100">
             <div class="offset-2 col-md-8">
-                <form class="needs-validation" novalidate action='register.php' method="post"
+                <form class="needs-validation" novalidate action='register1.php' method="post"
                 oninput='rHerhaalWachtwoord.setCustomValidity(rHerhaalWachtwoord.value != rWachtwoord.value ? "Passwords do not match." : "")'>
                     <h1 class="h3 mb-3 text-center">Registreer je hier!</h1>
                     <?php
@@ -104,7 +108,7 @@ if (isset($_POST['rVolgende'])) {
                           <div class="form-group col-md-4">
                             <label for="inputVoornaam">Voornaam</label>
                             <input type="text" name="rVoornaam" class="form-control" id="inputVoornaam"
-                            placeholder="Voornaam" value="<?php if($_POST) { echo $_POST['rVoornaam'];} ?>" required>
+                            pattern="[a-zA-Z]*" maxlength="50" placeholder="Voornaam" value="<?php if($_POST) { echo $_POST['rVoornaam'];} ?>" required>
                             <div class="invalid-feedback">
                               Voer een voornaam in.
                             </div>
@@ -112,12 +116,12 @@ if (isset($_POST['rVolgende'])) {
                         <div class="form-group col-md-4">
                             <label for="inputTussennaam">Tussennaam</label>
                             <input type="text" name="rTussen" class="form-control" id="inputTussennaam" placeholder="Tussennaam"
-                            value="<?php if($_POST) { echo $_POST['rTussen'];} ?>">
+                            pattern="[A-Za-z]*" maxlength="10" value="<?php if($_POST) { echo $_POST['rTussen'];} ?>">
                         </div>
                         <div class="form-group col-md-4">
                             <label for="inputAchternaam">Achternaam</label>
                             <input type="text" name="rAchternaam" class="form-control" id="inputAchternaam" placeholder="Achternaam"
-                            value="<?php if($_POST) { echo $_POST['rAchternaam'];} ?>" required>
+                            pattern="[A-Za-z]*" maxlength="41" value="<?php if($_POST) { echo $_POST['rAchternaam'];} ?>" required>
                             <div class="invalid-feedback">
                               Typ een achternaam in.
                             </div>
@@ -127,7 +131,7 @@ if (isset($_POST['rVolgende'])) {
                         <div class="form-group col-md-4">
                             <label for="inputGebruikersNaam">Gebruikersnaam</label>
                             <input type="text" name="rGebruikersnaam" class="form-control" id="inputGebruikersNaam" placeholder="Gebruikersnaam"
-                            value="<?php if($_POST) { echo $_POST['rGebruikersnaam'];} ?>" required>
+                            pattern="^[a-zA-Z][a-zA-Z0-9-_\.]{1,49}$" maxlength="50" value="<?php if($_POST) { echo $_POST['rGebruikersnaam'];} ?>" required>
                             <div class="invalid-feedback">
                               Voer een gebruikersnaam in.
                             </div>
@@ -135,7 +139,7 @@ if (isset($_POST['rVolgende'])) {
                         <div class="form-group col-md-8">
                             <label for="inputEmailR">Email</label>
                             <input type="email" name="rEmail" class="form-control" id="inputEmailR" placeholder="Email"
-                            value="<?php if($_POST) { echo $_POST['rEmail'];} ?>" required>
+                             maxlength="254" value="<?php if($_POST) { echo $_POST['rEmail'];} ?>" required>
                             <div class="invalid-feedback">
                               Voer een email adres in.
                             </div>
@@ -144,14 +148,16 @@ if (isset($_POST['rVolgende'])) {
                     <div class="form-row">
                         <div class="form-group col-md-4">
                             <label for="inputWachtwoord">Wachtwoord</label>
-                            <input type="password" name="rWachtwoord" class="form-control" id="inputWachtwoord" placeholder="Wachtwoord" required>
+                            <input type="password" name="rWachtwoord" class="form-control" id="inputWachtwoord"
+                            pattern="(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$" placeholder="Wachtwoord" required>
                             <div class="invalid-feedback">
-                              Voer een wachtwoord in.
+                              Voer een wachtwoord in met minimaal 8 tekens.
                             </div>
                         </div>
                         <div class="form-group col-md-4">
                             <label for="inputHerhaalWachtwoord">Herhaal Wachtwoord</label>
-                            <input type="password" name="rHerhaalWachtwoord" class="form-control" id="inputHerhaalWachtwoord" placeholder="Herhaal Wachtwoord" required>
+                            <input type="password" name="rHerhaalWachtwoord" class="form-control" id="inputHerhaalWachtwoord"
+                            pattern="(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$" placeholder="Herhaal Wachtwoord" required>
                             <div class="invalid-feedback">
                             Voer hetzelfde wachtwoord in.
                             </div>
@@ -161,7 +167,7 @@ if (isset($_POST['rVolgende'])) {
                           <div class="form-group col-md-4">
                           <label for="inputGeboortedatum">Geboortedatum</label>
                           <input type="date" name="rGeboorte" class="form-control" id="inputGeboortedatum" placeholder="Geboortedatum"
-                          value="<?php if($_POST) { echo $_POST['rGeboorte'];} ?>" required>
+                           max="<?php echo date('Y-m-d'); ?>" min="<?php echo date('Y-m-d',strtotime("-120 year", time())); ?>" value="<?php if($_POST) { echo $_POST['rGeboorte'];} ?>" required>
                             <div class="invalid-feedback">
                               Voer een geboortedatum in.
                             </div>
@@ -169,9 +175,9 @@ if (isset($_POST['rVolgende'])) {
                               <div class="form-group col-md-2">
                               <label for="inputGeslacht">Geslacht</label>
                               <select name="rGeslacht" class="form-control" id="inputGeslacht" value="<?php if($_POST) { echo $_POST['rGeboorte'];} ?>" required>
-                                <option> - </option>
-                                <option> Man </option>
-                                <option> Vrouw </option>
+                                <option value="X"> - </option>
+                                <option value="M"> Man </option>
+                                <option value="F"> Female </option>
                               </select>
                           </div>
                         </div>
@@ -184,7 +190,7 @@ if (isset($_POST['rVolgende'])) {
                       <div class="form-group col-md-6">
                           <label for="inputGeheimAntwoord">Geheim Antwoord</label>
                           <input type="text" name="rGeheimA" class="form-control" id="inputGeheimAntwoord" placeholder="Geheim Antwoord"
-                          value="<?php if (isset($_POST['rGeheimA'])) echo $_POST['rGeheimA']; ?>" required>
+                          pattern="[A-Za-z0-9]*" maxlength="50" value="<?php if (isset($_POST['rGeheimA'])) echo $_POST['rGeheimA']; ?>" required>
                           <div class="invalid-feedback">
                           Voer een antwoord in.
                           </div>
@@ -192,17 +198,17 @@ if (isset($_POST['rVolgende'])) {
                   </div>
                     <div class="form-row">
                         <div class="form-group col-md-6">
-                            <label for="inputStraatnaam">Straatnaam</label>
-                            <input type="text" name="rStraat" class="form-control" id="inputStraatnaam" placeholder="Straatnaam"
-                            value="<?php if (isset($_POST['rStraat'])) echo $_POST['rStraat']; ?>" required>
+                            <label for="inputStraatnaam">Adres 1</label>
+                            <input type="text" name="rStraat" class="form-control" id="inputStraatnaam" placeholder="adres"
+                            pattern="[A-Za-z0-9]*" maxlength="65" value="<?php if (isset($_POST['rStraat'])) echo $_POST['rStraat']; ?>" required>
                             <div class="invalid-feedback">
-                            Voer een straatnaam in.
+                            Voer een adres in.
                             </div>
                         </div>
                         <div class="form-group col-md-2">
-                            <label for="inputHuisnummer">Huisnummer</label>
-                            <input type="number" name="rHuisnr" class="form-control" id="inputHuisnummer" placeholder="Huisnummer"
-                            value="<?php if (isset($_POST['rHuisnr'])) echo $_POST['rHuisnr']; ?>" required>
+                            <label for="inputHuisnummer">Huisnr 1</label>
+                            <input type="text" name="rHuisnr" class="form-control" id="inputHuisnummer" placeholder="Huisnummer"
+                            pattern="[A-Za-z0-9]*" maxlength="6" value="<?php if (isset($_POST['rHuisnr'])) echo $_POST['rHuisnr']; ?>" min="1" required>
                             <div class="invalid-feedback">
                             Voer een huisnummer in.
                             </div>
@@ -210,9 +216,21 @@ if (isset($_POST['rVolgende'])) {
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-6">
+                            <label for="inputStraatnaam1">Adres 2 (optioneel)</label>
+                            <input type="text" name="rStraat1" class="form-control" id="inputStraatnaam1" placeholder="adres"
+                            pattern="[A-Za-z0-9]*" maxlength="65" value="<?php if (isset($_POST['rStraat1'])) echo $_POST['rStraat1']; ?>">
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label for="inputHuisnummer1">(optioneel)</label>
+                            <input type="text" name="rHuisnr1" class="form-control" id="inputHuisnummer" min="1" placeholder="Huisnummer"
+                            pattern="[A-Za-z0-9]*" maxlength="6" value="<?php if (isset($_POST['rHuisnr1'])) echo $_POST['rHuisnr1']; ?>">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
                             <label for="inputPlaats">Postcode</label>
                             <input type="text" name="rPostcode" class="form-control" id="inputPlaats" placeholder="Postcode"
-                            value="<?php if (isset($_POST['rPostcode'])) echo $_POST['rPostcode']; ?>"  required>
+                            pattern="[1-9][0-9]{3}\s?[a-zA-Z]{2}" value="<?php if (isset($_POST['rPostcode'])) echo $_POST['rPostcode']; ?>" maxlength="7" required>
                             <div class="invalid-feedback">
                             Voer een postcode in.
                             </div>
@@ -222,7 +240,7 @@ if (isset($_POST['rVolgende'])) {
                         <div class="form-group col-md-6">
                             <label for="inputPlaats">Plaats</label>
                             <input type="text" name="rPlaats" class="form-control" id="inputPlaats" placeholder="Plaats"
-                            value="<?php if (isset($_POST['rPlaats'])) echo $_POST['rPlaats']; ?>" required>
+                            pattern="[A-Za-z]*" maxlength="28" value="<?php if (isset($_POST['rPlaats'])) echo $_POST['rPlaats']; ?>" required>
                             <div class="invalid-feedback">
                             Voer een plaats in.
                             </div>
@@ -256,5 +274,3 @@ if (isset($_POST['rVolgende'])) {
     <?php
 
      include 'includes/footer.php' ?>
-
-    <?php include'includes/footer.php' ?>
