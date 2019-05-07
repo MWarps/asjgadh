@@ -40,6 +40,7 @@ wachtwoord VARCHAR(100) NOT NULL,
 vraag Tinyint NOT NULL,
 antwoordtekst VARCHAR(50) NOT NULL,
 verkoper bit NOT NUll,
+verifieerd bit NOT NULL,
 CONSTRAINT PK_Gebruiker PRIMARY KEY (gebruikersnaam),
 CONSTRAINT CK_gerbruiker_geslacht CHECK (geslacht IN ( 'M','F','X') )
 );
