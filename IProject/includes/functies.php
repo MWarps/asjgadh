@@ -60,6 +60,18 @@ function resetVragen()
         echo "er ging iets mis error: {$e->getMessage()}";
     }
 }
+function vragenOphalen() { // haalt alleen de veiligheidsvragen op
+    try {
+        require('../core/dbconnection.php');
+        $sqlvragenOphalen = $dbh-> prepare ("select vraagnr, vraag from vragen");
+
+        while ($row = $sqlvragenOphalen->fetch(PDO::FETCH_ASSOC)) {
+            echo '<option value="'.$row['vraagnr'].'">'.$row['vraagnr'].'.&nbsp'.$row['vraag'].'</option>';
+        }
+    } catch (PDOexception $e) {
+        echo "er ging iets mis error: {$e->getMessage()}";
+    }
+}// einde functie vragenOphalen
 
 /* haal landen op */
 function landen()

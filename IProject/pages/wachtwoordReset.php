@@ -20,7 +20,7 @@ include '../includes/functies.php';
                     <label for="selecteerVeiligheidsvraag">Selecteer je Veiligheidsvraag</label>
                     <select class="Veiliheidsvraag form-control">
                         <option selected>Selecteer</option> <!-- Standard in select menu -->
-                        <?php vragenOphalen() ?>
+                        <?php echo vragenOphalen(); ?>
                     </select>
                 </div>
             </div>
@@ -55,42 +55,34 @@ include '../includes/functies.php';
 </div>
 <?php include '../includes/footer.php' ?>
 
-<?php
-
-    function vragenOphalen() {
-    try {
-        require('../core/dbconnection.php');
-        $sqlSelect = $dbh->query("select vraagnr, vraag from vragen");
-
-        while ($row = $sqlSelect->fetch(PDO::FETCH_ASSOC)) {
-            echo '<option value="'.$row['vraagnr'].'">'.$row['vraagnr'].'.&nbsp'.$row['vraag'].'</option>';
-        }
-    } catch (PDOexception $e) {
-        echo "er ging iets mis error: {$e->getMessage()}";
-    }
-}
-
+<?php 
+//    $sqlinformatie = $dbh -> prepare(
+//    "SELECT gebruikersnaam, vraag, antwoordtekst FROM Gebruiker WHERE gebruikersnaam = ':gebruikersnaamPHP' "
+//);// einde prepared statement $sqlinformatie
+//
+//
+//
 //                        if (isset($_POST['wwReset'])){
-//                            $gebruikersnaam = $_POST['gebruikersnaam'];
+//                            $gebruikersnaamPHP = $_POST['gebruikersnaam'];
 //                            $veiligheidsvraag = $_POST['veiligheidsvraag'];
 //                            $antwoordVeiligheidsvraag = $_POST ['antwoordVeiligheidsvraag'];
 //                            $nwachtwoord1 = $_POST ['wachtwoord1'];
 //                            $nwachtwoord2 = $_POST['wachtwoord2'];
 //
-// $sqlinformatie = $dbh -> prepare(
-//    "SELECT gebruikersnaam, vraag, antwoordtekst
-//    FROM Gebruiker
-//    WHERE gebruikersnaam = ':gebruikersnaam'
-//    "
-// )
-//     $sqlinformatie -> execute (
-//        array(
-//        ':gebruikersnaam' => $gebruikersnaam
-//        )
-// );
+//                            if ($nwachtwoord1 == $nwachtwoord2){
 //
+//                                while ($data = $sqlinformatie-> fetch() ){
+//                                    $dbgebruikersnaam = $data['gebruikersnaam'];
+//                                    $dbVvraag = $data['vraag'];
+//                                    $dbVantwoord = $data['antwoordtekst'];
+//                                    if ($gebruikersnaamPHP == $dbgebruikersnaam ){
+//                                        if ($antwoordVeiligheidsvraag == $dbVvraag){
+//                                            if ($antwoordVeiligheidsvraag == $dbVantwoord){
 //
-//
+//                                            }
+//                                        }
+//                                    }
+//                                }
+//                            }// einde if ww vergelijking
 //                        }// einde if isset
-
 ?>
