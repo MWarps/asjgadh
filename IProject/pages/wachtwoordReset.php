@@ -74,12 +74,24 @@ include '../includes/functies.php';
                         if (isset($_POST['wwReset'])){
                             $gebruikersnaam = $_POST['gebruikersnaam'];
                             $veiligheidsvraag = $_POST['veiligheidsvraag'];
-                            $veiligantwoord = $_POST ['veiligantwoord'];
-                            $wachtwoord1 = $_POST ['wachtwoord1'];
-                            $wachtwoord2 = $_POST['wachtwoord2'];
-                        
-                        if ()
-                            
+                            $antwoordVeiligheidsvraag = $_POST ['antwoordVeiligheidsvraag'];
+                            $nwachtwoord1 = $_POST ['wachtwoord1'];
+                            $nwachtwoord2 = $_POST['wachtwoord2'];
+
+ $sqlinformatie = $dbh -> prepare( 
+    "SELECT gebruikersnaam, vraag, antwoordtekst  
+    FROM Gebruiker 
+    WHERE gebruikersnaam = ':gebruikersnaam'
+    "
+ )
+     $sqlinformatie -> execute (
+        array(
+        ':gebruikersnaam' => $gebruikersnaam
+        )
+ );
+
+
+
                         }// einde if isset
 
 ?>
