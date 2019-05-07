@@ -48,7 +48,7 @@ include '../includes/functies.php';
             <!-- hier wordt de reset button gemaakt. -->
             <div class="offset-md-2">
                 <div class="form-row">
-                    <button  type = "submit" value="wwReset "class="btn btn-primary">Reset Wachtwoord</button>
+                    <button  type = "submit" value="wwReset "class="btn bg-flame">Reset Wachtwoord</button>
                 </div>
             </div>
         </div>
@@ -77,8 +77,7 @@ include '../includes/functies.php';
                             $veiligantwoord = $_POST ['veiligantwoord'];
                             $wachtwoord1 = $_POST ['wachtwoord1'];
                             $wachtwoord2 = $_POST['wachtwoord2'];
-                        
-                        if ()
+
                             
                         }// einde if isset
 

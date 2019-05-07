@@ -42,7 +42,7 @@ if (isset($_POST['loginKnop'])) {
     <div class="container-fluid">
         <div class="row">
             <form method="post" action="login.php" class="form-signin">
-                <h1 class="h3 mb-3 font-weight-normal text-center">Login</h1>
+                <h1 class="h3 mb-3 mt-3 font-weight-normal text-center">Login</h1>
                 <label for="inputEmail" class="sr-only">Gebruikersnaam</label>
                 <input type="text" name="gebruikersnaam" id="inputEmail" class="form-control" placeholder="Gebruikersnaam" required autofocus>
                 <label for="inputPassword" class="sr-only">Password</label>
