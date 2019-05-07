@@ -63,13 +63,15 @@ function resetVragen()
 function vragenOphalen() { // haalt alleen de veiligheidsvragen op
     try {
         require('../core/dbconnection.php');
-        $sqlvragenOphalen = $dbh-> prepare ("SELECT vraagnr, vraag FROM vragen");
+        $sqlvragenOphalen = $dbh -> prepare ("SELECT vraagnr, vraag FROM vragen");
+        $sqlvragenOphalen -> execute();
 
-        while ($vraag = $sqlvragenOphalen->fetch()) {//PDO::FETCH_ASSOC
-        } // einde while loop
-            echo '<option value="'.$vraag['vraagnr'].'">'.$vraag['vraagnr'].'.&nbsp'.$vraag['vraag'].'</option>';
-        echo "er ging iets mis error: {$e->getMessage()}";
+        while ($info = $sqlvragenOphalen-> fetch(PDO::FETCH_ASSOC)){
+            //var_dump($info);
+            echo '<option value="'.$info['vraagnr'].'">'.$info['vraagnr'].'.&nbsp'.$info['vraag'].'</option>';
+        }
     } catch (PDOexception $e) {
+        echo 'error: vragen niet opgehaald';
     }// einde catch exeption $e
 }// einde functie vragenOphalen
 
@@ -86,10 +88,10 @@ function landen()
 
         // Loop through the query results, outputing the options one by one
         while ($row = $sqlSelect->fetch(PDO::FETCH_ASSOC)) {
-          }
-          echo '<option value="'.$row['Id'].'">'.$row['Name'].'</option>';
-          echo '</select>';// Close your drop down box
 
+            echo '<option value="'.$row['Id'].'">'.$row['Name'].'</option>';
+            echo '</select>';// Close your drop down box
+        }
     } catch (PDOexception $e) {
         echo "er ging iets mis error: {$e->getMessage()}";
     }

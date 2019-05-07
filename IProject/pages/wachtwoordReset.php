@@ -23,7 +23,7 @@ include '../includes/functies.php';
                     <select class="Veiliheidsvraag form-control">
                         <option selected>Selecteer</option> <!-- Standard in select menu -->
                         <?php 
-                         vragenOphalen(); 
+                        vragenOphalen(); 
                         ?>
                     </select>
                 </div>
@@ -60,32 +60,35 @@ include '../includes/functies.php';
 <?php include '../includes/footer.php' ?>
 
 <?php 
-    $sqlinformatie = $dbh -> prepare(
-    "SELECT gebruikersnaam, vraag, antwoordtekst FROM Gebruiker WHERE gebruikersnaam = ':gebruikersnaamPHP' "
-);// einde prepared statement $sqlinformatie
+//    $sqlinformatie = $dbh -> prepare(
+//    "SELECT gebruikersnaam, vraag, antwoordtekst FROM Gebruiker WHERE gebruikersnaam = ':gebruikersnaamPHP' ");// einde prepared statement $sqlinformatie
+//    $sqlWWreset = $dbh -> prepare (
+//    "UPDATE Gebruiker SET wachtwoord where gebruikersnaam = ':gebruikersnaamPHP' "
+//    )
+//
+//if (isset($_POST['wwReset'])){
+//    $gebruikersnaamPHP = $_POST['gebruikersnaam'];
+//    $veiligheidsvraag = $_POST['veiligheidsvraag'];
+//    $antwoordVeiligheidsvraag = $_POST ['antwoordVeiligheidsvraag'];
+//    $nwachtwoord1 = $_POST ['wachtwoord1'];
+//    $nwachtwoord2 = $_POST['wachtwoord2'];
+//
+//    while ($data = $sqlinformatie-> fetch(PDO::FETCH_ASSOC) ){
+//        $dbgebruikersnaam = $data['gebruikersnaam'];
+//        $dbVvraag = $data['vraag'];
+//        $dbVantwoord = $data['antwoordtekst'];
+//        if ($gebruikersnaamPHP == $dbgebruikersnaam ){
+//            echo "<h1> gebruikersnaam is correct, maar de gekozen veiligheidsvraag niet.</h1>";
+//            if ($antwoordVeiligheidsvraag == $dbVvraag){
+//                echo"<h1>de gebruikersnaam en de gekozen veiligheidsvraag is correct, maar het antwoord niet.</h1>";
+//                if ($antwoordVeiligheidsvraag == $dbVantwoord){
+//                    echo"<h1>de gebruikersnaam,veiighiedsvraag en het antwoord is correct. gegevens worden gewijzigd.</h1>";
+//                    echo  "<h1> Het werkt</h1>";
+//
+//                }
+//            }
+//        }
+//    }
+//}// einde if isset
 
-if (isset($_POST['wwReset'])){
-    $gebruikersnaamPHP = $_POST['gebruikersnaam'];
-    $veiligheidsvraag = $_POST['veiligheidsvraag'];
-    $antwoordVeiligheidsvraag = $_POST ['antwoordVeiligheidsvraag'];
-    $nwachtwoord1 = $_POST ['wachtwoord1'];
-    $nwachtwoord2 = $_POST['wachtwoord2'];
-
-    while ($data = $sqlinformatie-> fetch() ){
-        $dbgebruikersnaam = $data['gebruikersnaam'];
-        $dbVvraag = $data['vraag'];
-        $dbVantwoord = $data['antwoordtekst'];
-        if ($gebruikersnaamPHP == $dbgebruikersnaam ){
-            echo "gebruikersnaam is correct, maar de gekozen veiligheidsvraag niet.";
-            if ($antwoordVeiligheidsvraag == $dbVvraag){
-                echo"de gebruikersnaam en de gekozen veiligheidsvraag is correct, maar het antwoord niet.";
-                if ($antwoordVeiligheidsvraag == $dbVantwoord){
-                   echo"de gebruikersnaam,veiighiedsvraag en het antwoord is correct. gegevens worden gewijzigd.";
-                    echo  "<h1> Het werkt</h1>";
-
-                }
-            }
-        }
-    }
-}// einde if isset
 ?>
