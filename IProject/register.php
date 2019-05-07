@@ -1,7 +1,7 @@
 <?php
 
 include 'includes/header.php';
-require_once 'includes/dbconnection.php';
+require_once 'core/dbconnection.php';
 require 'includes/functies.php';
 $Gbestaat = False;
 $Ebestaat = False;
