@@ -1,7 +1,8 @@
 <?php
-include '../includes/header.php';
-require_once '../core/dbconnection.php';
-require '../includes/functies.php';
+
+include 'includes/header.php';
+require_once 'core/dbconnection.php';
+require 'includes/functies.php';
 $Gbestaat = False;
 $Ebestaat = False;
 
@@ -84,7 +85,7 @@ if (isset($_POST['rVolgende'])) {
     <div class="container-fluid h-100">
         <div class="row h-100">
             <div class="offset-2 col-md-8">
-                <form class="needs-validation" novalidate action='register.php' method="post"
+                <form class="needs-validation" novalidate action='register1.php' method="post"
                 oninput='rHerhaalWachtwoord.setCustomValidity(rHerhaalWachtwoord.value != rWachtwoord.value ? "Passwords do not match." : "")'>
                     <h1 class="h3 mb-3 text-center">Registreer je hier!</h1>
                     <?php
@@ -272,4 +273,4 @@ if (isset($_POST['rVolgende'])) {
 
     <?php
 
-     include '../includes/footer.php' ?>
+     include 'includes/footer.php' ?>
