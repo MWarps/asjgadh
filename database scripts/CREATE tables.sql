@@ -1,6 +1,6 @@
 
-USE iproject
-go
+--USE iproject
+--go
 DROP TABLE IF EXISTS Verificatie, Verificatietypen, Verkoper, Gebruiker, Vragen;
 
 CREATE TABLE Vragen (  
@@ -13,7 +13,7 @@ CREATE TABLE Gebruiker (
 gebruikersnaam VARCHAR(50) NOT NULL,
 voornaam VARCHAR(50) NOT NULL,
 achternaam VARCHAR(51) NOT NULL,
-geslacht varchar(1) NOT NULL,
+geslacht char(1) NOT NULL,
 adresregel1 VARCHAR(71) NOT NULL,
 adresregel2 VARCHAR(71) NULL,
 postcode CHAR(7) NOT NUll,
@@ -25,7 +25,8 @@ wachtwoord VARCHAR(100) NOT NULL,
 vraag Tinyint NOT NULL,
 antwoordtekst VARCHAR(50) NOT NULL,
 verkoper bit NOT NUll,
-CONSTRAINT PK_Gebruiker PRIMARY KEY (gebruikersnaam)
+CONSTRAINT PK_Gebruiker PRIMARY KEY (gebruikersnaam),
+CONSTRAINT CK_gerbruiker_geslacht CHECK (geslacht IN ( 'M','F','X') )
 );
 
 CREATE TABLE Verkoper (
@@ -56,7 +57,7 @@ CONSTRAINT FK_Vraag
 	ON UPDATE CASCADE
 	ON DELETE NO ACTION,
 CONSTRAINT chk_Email check (email like'%_@__%.__%'),
-CONSTRAINT CK_gerbruiker_geslacht CHECK (geslacht IN ( 'M','F','X') ),
+--CONSTRAINT CK_gerbruiker_geslacht CHECK (geslacht IN ( 'M','F','X') ),
 CONSTRAINT CK_voornaam CHECK ( voornaam not like '%[0-9]%'),
 CONSTRAINT CK_achternaam CHECK ( achternaam not like '%[0-9]%'),
 CONSTRAINT CK_plaatsnaam CHECK ( plaatsnaam not like '%[0-9]%')

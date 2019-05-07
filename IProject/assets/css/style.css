@@ -39,7 +39,9 @@
 /* =============================================
                       Navbar
    =============================================*/
-
+.spacing {
+  margin-bottom: 20px;
+}
 .navbar-light .navbar-nav .nav-link {
   color: white;
 }
@@ -105,7 +107,7 @@ body {
 /* =============================================
                       Footer
    =============================================*/
-footer{
+.footer-login{
   position: fixed;
   left:0;
   bottom:0;
@@ -132,24 +134,49 @@ footer{
   font-weight: 400;
 }
 
+.register-link {
+  display:inline-block;
+  text-decoration: none;
+  color: #000000;
+  font-size:18px;
+  margin-top:10px;
+  margin-bottom:10px;
+}
+
+.register-link:hover{
+  text-decoration: none;
+  color:#F2884B;
+}
+
+
 /* =============================================
                       Kleuren
    =============================================*/
 
 .bg-flame {
   background-color: #F2552C;
+  border-color: #F2552C;
+  color:#FFFFFF;
 }
 .bg-silver2 {
   background-color: #EFF1F2;
+  border-color: #EFF1F2;
+  color:#FFFFFF;
 }
 .bg-orange2 {
   background-color:#F2884B;
+  border-color:#F2884B;
+  color:#FFFFFF;
 }
 .bg-red2 {
   background-color:#F22E1D;
+  border-color:#F22E1D;
+  color:#FFFFFF;
 }
 .bg-beige {
   backgound-color:#BF3F33;
+  border-color:#BF3F33;
+  color:#FFFFFF;
 }
 
 /* =============================================
