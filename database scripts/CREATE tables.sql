@@ -1,5 +1,5 @@
 
-USE EenmaalAndermaal
+USE iproject
 go
 DROP TABLE IF EXISTS Verificatie, Verificatietypen, Verkoper, Gebruiker, Vragen;
 
@@ -13,6 +13,7 @@ CREATE TABLE Gebruiker (
 gebruikersnaam VARCHAR(50) NOT NULL,
 voornaam VARCHAR(50) NOT NULL,
 achternaam VARCHAR(51) NOT NULL,
+geslacht varchar(1) NOT NULL,
 adresregel1 VARCHAR(71) NOT NULL,
 adresregel2 VARCHAR(71) NULL,
 postcode CHAR(7) NOT NUll,
@@ -54,7 +55,11 @@ CONSTRAINT FK_Vraag
 	FOREIGN KEY (vraag) REFERENCES Vragen(vraagnr)
 	ON UPDATE CASCADE
 	ON DELETE NO ACTION,
-CONSTRAINT chk_Email check (email like'%_@__%.__%')
+CONSTRAINT chk_Email check (email like'%_@__%.__%'),
+CONSTRAINT CK_gerbruiker_geslacht CHECK (geslacht IN ( 'M','F','X') ),
+CONSTRAINT CK_voornaam CHECK ( voornaam not like '%[0-9]%'),
+CONSTRAINT CK_achternaam CHECK ( achternaam not like '%[0-9]%'),
+CONSTRAINT CK_plaatsnaam CHECK ( plaatsnaam not like '%[0-9]%')
 
 ALTER TABLE Verkoper ADD
 CONSTRAINT FK_Gebruiker
