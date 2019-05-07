@@ -179,6 +179,12 @@ body {
   color:#FFFFFF;
 }
 
+.bg-grey1 {
+  backgound-color:#656565;
+  border-color:#656565;
+  color:#FFFFFF;
+}
+
 /* =============================================
                       Hovereffect
    =============================================*/
