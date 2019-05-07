@@ -5,7 +5,9 @@ include '../includes/functies.php';
 ?>
 <div class="container">
     <div class="offset-md-3">
-        <form action='wachtwoordReset.php' method ="post" role="form" >
+        <form action='wachtwoordReset.php' method ="post" role="form" 
+              oninput='nWachtwoord2.setCustomValidity(nWachtwoord2.value != nWachtwoord1.value ? "wachtwoorden komen niet overheen." : "")'
+              >
             <h1 class="h3 mb-3 mt-3 font-weight-normal>">Wachtwoord resetten</h1>
             <!-- hieronder wordt de tekst en invulveld voor de gebruikersnaam gemaakt -->
             <div class="form-row">
@@ -20,7 +22,9 @@ include '../includes/functies.php';
                     <label for="selecteerVeiligheidsvraag">Selecteer je Veiligheidsvraag</label>
                     <select class="Veiliheidsvraag form-control">
                         <option selected>Selecteer</option> <!-- Standard in select menu -->
-                        <?php echo vragenOphalen(); ?>
+                        <?php 
+                         vragenOphalen(); 
+                        ?>
                     </select>
                 </div>
             </div>
@@ -56,33 +60,32 @@ include '../includes/functies.php';
 <?php include '../includes/footer.php' ?>
 
 <?php 
-//    $sqlinformatie = $dbh -> prepare(
-//    "SELECT gebruikersnaam, vraag, antwoordtekst FROM Gebruiker WHERE gebruikersnaam = ':gebruikersnaamPHP' "
-//);// einde prepared statement $sqlinformatie
-//
-//
-//
-//                        if (isset($_POST['wwReset'])){
-//                            $gebruikersnaamPHP = $_POST['gebruikersnaam'];
-//                            $veiligheidsvraag = $_POST['veiligheidsvraag'];
-//                            $antwoordVeiligheidsvraag = $_POST ['antwoordVeiligheidsvraag'];
-//                            $nwachtwoord1 = $_POST ['wachtwoord1'];
-//                            $nwachtwoord2 = $_POST['wachtwoord2'];
-//
-//                            if ($nwachtwoord1 == $nwachtwoord2){
-//
-//                                while ($data = $sqlinformatie-> fetch() ){
-//                                    $dbgebruikersnaam = $data['gebruikersnaam'];
-//                                    $dbVvraag = $data['vraag'];
-//                                    $dbVantwoord = $data['antwoordtekst'];
-//                                    if ($gebruikersnaamPHP == $dbgebruikersnaam ){
-//                                        if ($antwoordVeiligheidsvraag == $dbVvraag){
-//                                            if ($antwoordVeiligheidsvraag == $dbVantwoord){
-//
-//                                            }
-//                                        }
-//                                    }
-//                                }
-//                            }// einde if ww vergelijking
-//                        }// einde if isset
+    $sqlinformatie = $dbh -> prepare(
+    "SELECT gebruikersnaam, vraag, antwoordtekst FROM Gebruiker WHERE gebruikersnaam = ':gebruikersnaamPHP' "
+);// einde prepared statement $sqlinformatie
+
+if (isset($_POST['wwReset'])){
+    $gebruikersnaamPHP = $_POST['gebruikersnaam'];
+    $veiligheidsvraag = $_POST['veiligheidsvraag'];
+    $antwoordVeiligheidsvraag = $_POST ['antwoordVeiligheidsvraag'];
+    $nwachtwoord1 = $_POST ['wachtwoord1'];
+    $nwachtwoord2 = $_POST['wachtwoord2'];
+
+    while ($data = $sqlinformatie-> fetch() ){
+        $dbgebruikersnaam = $data['gebruikersnaam'];
+        $dbVvraag = $data['vraag'];
+        $dbVantwoord = $data['antwoordtekst'];
+        if ($gebruikersnaamPHP == $dbgebruikersnaam ){
+            echo "gebruikersnaam is correct, maar de gekozen veiligheidsvraag niet.";
+            if ($antwoordVeiligheidsvraag == $dbVvraag){
+                echo"de gebruikersnaam en de gekozen veiligheidsvraag is correct, maar het antwoord niet.";
+                if ($antwoordVeiligheidsvraag == $dbVantwoord){
+                   echo"de gebruikersnaam,veiighiedsvraag en het antwoord is correct. gegevens worden gewijzigd.";
+                    echo  "<h1> Het werkt</h1>";
+
+                }
+            }
+        }
+    }
+}// einde if isset
 ?>
