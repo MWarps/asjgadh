@@ -4,7 +4,7 @@
 
 --kolom met gebruikersnaam als foreign key altijd genoemd gebruikersnaam
 
-DROP TABLE IF EXISTS Verificatie, Verificatietypen, Verkoper, Gebruiker, Vragen;
+DROP TABLE IF EXISTS Verificatie, Verificatietypen, Verkoper, Gebruiker, Landen, Vragen;
 
 CREATE TABLE Vragen (  
 vraagnr Tinyint NOT NULL,  
@@ -73,7 +73,7 @@ CONSTRAINT FK_Vraag
 	ON UPDATE CASCADE
 	ON DELETE NO ACTION,
 CONSTRAINT FK_Land 
-	FOREIGN KEY (Land) REFERENCES Land(Id)
+	FOREIGN KEY (Land) REFERENCES Landen(Id)
 	ON UPDATE CASCADE
 	ON DELETE NO ACTION,
 CONSTRAINT chk_Email check (email like'%_@__%.__%'),
@@ -102,12 +102,12 @@ CONSTRAINT FK_GebruikersVerificatie
 
 --Landen insert
 
-SET IDENTITY_INSERT Countries ON
+SET IDENTITY_INSERT Landen ON
 
 --
 -- Dumping data for table `Countries`
 --
-INSERT INTO Countries (Id, Iso, Name, Iso3, Numcode, PhoneCode) VALUES
+INSERT INTO Landen (Id, Iso, Name, Iso3, Numcode, PhoneCode) VALUES
 (1, 'AF', 'Afghanistan', 'AFG', 4, 93),
 (2, 'AL', 'Albania', 'ALB', 8, 355),
 (3, 'DZ', 'Algeria', 'DZA', 12, 213),
@@ -348,4 +348,4 @@ INSERT INTO Countries (Id, Iso, Name, Iso3, Numcode, PhoneCode) VALUES
 (238, 'ZM', 'Zambia', 'ZMB', 894, 260),
 (239, 'ZW', 'Zimbabwe', 'ZWE', 716, 263);
 
-SET IDENTITY_INSERT Countries Off
+SET IDENTITY_INSERT Landen Off
