@@ -3,11 +3,10 @@ require_once '../core/dbconnection.php';
 include '../includes/header.php';
 include '../includes/functies.php';
 ?>
-
-<form action='wachtwoordReset.php' method ="post" role="form" >
-    <div class="container">
-        <div class="offset-md-3">
-            <h1>Wachtwoord resetten <span class="h3 mb-3 font-weight-normal"></span></h1>
+<div class="container">
+    <div class="offset-md-3">
+        <form action='wachtwoordReset.php' method ="post" role="form" >
+            <h1 class="h3 mb-3 mt-3 font-weight-normal>">Wachtwoord resetten</h1>
             <!-- hieronder wordt de tekst en invulveld voor de gebruikersnaam gemaakt -->
             <div class="form-row">
                 <div class="form-group col-md-6">  
@@ -51,9 +50,9 @@ include '../includes/functies.php';
                     <button  type = "submit" value="wwReset "class="btn bg-flame">Reset Wachtwoord</button>
                 </div>
             </div>
-        </div>
+        </form>
     </div>
-</form> 
+</div>
 <?php include '../includes/footer.php' ?>
 
 <?php
@@ -71,27 +70,27 @@ include '../includes/functies.php';
     }
 }
 
-                        if (isset($_POST['wwReset'])){
-                            $gebruikersnaam = $_POST['gebruikersnaam'];
-                            $veiligheidsvraag = $_POST['veiligheidsvraag'];
-                            $antwoordVeiligheidsvraag = $_POST ['antwoordVeiligheidsvraag'];
-                            $nwachtwoord1 = $_POST ['wachtwoord1'];
-                            $nwachtwoord2 = $_POST['wachtwoord2'];
-
- $sqlinformatie = $dbh -> prepare( 
-    "SELECT gebruikersnaam, vraag, antwoordtekst  
-    FROM Gebruiker 
-    WHERE gebruikersnaam = ':gebruikersnaam'
-    "
- )
-     $sqlinformatie -> execute (
-        array(
-        ':gebruikersnaam' => $gebruikersnaam
-        )
- );
-
-
-
-                        }// einde if isset
+//                        if (isset($_POST['wwReset'])){
+//                            $gebruikersnaam = $_POST['gebruikersnaam'];
+//                            $veiligheidsvraag = $_POST['veiligheidsvraag'];
+//                            $antwoordVeiligheidsvraag = $_POST ['antwoordVeiligheidsvraag'];
+//                            $nwachtwoord1 = $_POST ['wachtwoord1'];
+//                            $nwachtwoord2 = $_POST['wachtwoord2'];
+//
+// $sqlinformatie = $dbh -> prepare(
+//    "SELECT gebruikersnaam, vraag, antwoordtekst
+//    FROM Gebruiker
+//    WHERE gebruikersnaam = ':gebruikersnaam'
+//    "
+// )
+//     $sqlinformatie -> execute (
+//        array(
+//        ':gebruikersnaam' => $gebruikersnaam
+//        )
+// );
+//
+//
+//
+//                        }// einde if isset
 
 ?>
