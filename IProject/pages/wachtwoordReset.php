@@ -2,9 +2,9 @@
 require_once '../core/dbconnection.php';
 include '../includes/header.php';
 include '../includes/functies.php';
-
 ?>
-<form action='' method ="post" role="form" >
+
+<form action='wachtwoordReset.php' method ="post" role="form" >
     <div class="container">
         <div class="offset-md-3">
             <h1>Wachtwoord resetten <span class="h3 mb-3 font-weight-normal"></span></h1>
@@ -48,7 +48,7 @@ include '../includes/functies.php';
             <!-- hier wordt de reset button gemaakt. -->
             <div class="offset-md-2">
                 <div class="form-row">
-                    <button class="btn btn-primary" type="submit">Reset</button>
+                    <button  type = "submit" value="wwReset "class="btn btn-primary">Reset Wachtwoord</button>
                 </div>
             </div>
         </div>
@@ -70,4 +70,16 @@ include '../includes/functies.php';
         echo "er ging iets mis error: {$e->getMessage()}";
     }
 }
+
+                        if (isset($_POST['wwReset'])){
+                            $gebruikersnaam = $_POST['gebruikersnaam'];
+                            $veiligheidsvraag = $_POST['veiligheidsvraag'];
+                            $veiligantwoord = $_POST ['veiligantwoord'];
+                            $wachtwoord1 = $_POST ['wachtwoord1'];
+                            $wachtwoord2 = $_POST['wachtwoord2'];
+                        
+                        if ()
+                            
+                        }// einde if isset
+
 ?>
