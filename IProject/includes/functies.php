@@ -4,7 +4,7 @@
 function bestaatGebruikersnaam($gebruikersnaam)
 {
     try {
-        require('../core/dbconnection.php');
+        require('dbconnection.php');
         $sqlSelect = $dbh->prepare("select gebruikersnaam from Gebruiker where gebruikersnaam=:gebruikersnaam");
 
         $sqlSelect->execute(
@@ -24,8 +24,8 @@ function bestaatGebruikersnaam($gebruikersnaam)
 function bestaatEmailadres($email)
 {
   try{
-      require('../core/dbconnection.php');
-      $sqlSelect = $dbh->prepare("select email from gebruikers where email=:email");
+      require('dbconnection.php');
+      $sqlSelect = $dbh->prepare("select email from Gebruiker where email=:email");
 
       $sqlSelect->execute(
           array(
@@ -44,7 +44,7 @@ function bestaatEmailadres($email)
 function resetVragen()
 {
   try {
-        require('../core/dbconnection.php');
+        require('dbconnection.php');
         $sqlSelect = $dbh->query("select vraagnr, vraag from vragen");
 
         echo '<label for="inputGeheimeVraag">Geheime Vraag</label>';
@@ -61,11 +61,91 @@ function resetVragen()
     }
 }
 
+/* haal landen op */
+function landen()
+{
+  try {
+        require('dbconnection.php');
+        $sqlSelect = $dbh->query("select Name from Countries");
+
+        echo '<label for="inputLanden">Land</label>';
+        echo '<select name="rLand" class="form-control" id="inputLanden" required>';
+         // Open your drop down box
+
+        // Loop through the query results, outputing the options one by one
+        while ($row = $sqlSelect->fetch(PDO::FETCH_ASSOC)) {
+          echo '<option value="'.$row['Name'].'">'.$row['Name'].'</option>';
+          }
+          echo '</select>';// Close your drop down box
+
+    } catch (PDOexception $e) {
+        echo "er ging iets mis error: {$e->getMessage()}";
+    }
+}
+
+function StuurRegistreerEmail($rVoornaam, $rEmail){
+  $code = rand(1000,9999);
+
+  try{
+      require('dbconnection.php');
+      $sqlSelect = $dbh->prepare("insert into verificatie (gebruikersnaam) ");
+
+      $sqlSelect->execute(
+          array(
+            ':gebruikersnaam' => $gebruikersnaam,
+          ));
+      $records = $sqlSelect->fetch(PDO::FETCH_ASSOC);
+
+
+ini_set( 'display_errors', 1 );
+error_reporting( E_ALL );
+$from = "no-reply@iconcepts.nl";
+$to = $rEmail;
+$subject = "Validatie code account registreren";
+$message = 'Hallo '.$rVoornaam.',
+            <br>
+            <br>
+            Bedankt voor het registreren. Hieronder staat de code die ingevoerd
+            moet worden om het registeren te voltooien:
+            <br>
+            <h1>'. $voornaam.' ';
+$headers = "From:" .$from;
+mail($to,$subject,$message, $headers);
+
+}
+catch (PDOexception $e) {
+    echo "er ging iets mis error: {$e->getMessage()}";
+}
+}
+
+function geslacht()
+{
+
+  try {
+        require('dbconnection.php');
+        $sqlSelect = $dbh->query("select geslacht from Geslacht");
+
+        echo '<label for="inputGeslacht">Geslacht</label>';
+        echo '<select name="rGeslacht" class="form-control" id="inputGeslacht" required>';
+         // Open your drop down box
+
+        // Loop through the query results, outputing the options one by one
+        while ($row = $sqlSelect->fetch(PDO::FETCH_ASSOC)) {
+          echo '<option value="'.$row['geslacht'].'">'.$row['geslacht'].'</option>';
+          }
+          echo '</select>';// Close your drop down box
+
+    } catch (PDOexception $e) {
+        echo "er ging iets mis error: {$e->getMessage()}";
+    }
+
+}
+
 /* stuur reset email naar gebruiker */
 function emailResetWachtwoord($gebruikersnaam)
 {
   try{
-      require('../core/dbconnection.php');
+      require('dbconnection.php');
       $sqlSelect = $dbh->prepare("select email, voornaam from gebruikers where gebruikersnaam = :gebruikersnaam");
 
       $sqlSelect->execute(
@@ -104,7 +184,7 @@ function emailResetWachtwoord($gebruikersnaam)
 function veranderWachtwoord($gebruikersnaam,$wachtwoord)
 {
   try{
-      require('../core/dbconnection.php');
+      require('dbconnection.php');
       $sqlSelect = $dbh->prepare("update gebruiker set wachtwoord = :wachtwoord
                                   where gebruikersnaam = :gebruikersnaam");
 
@@ -121,7 +201,7 @@ function veranderWachtwoord($gebruikersnaam,$wachtwoord)
 
   function controleVraag($vraag){
     try{
-        require('../core/dbconnection.php');
+        require('dbconnection.php');
         $sqlSelect = $dbh->prepare("select gebruiker.vraag from gebruikers join vragen
         on gebruiker.vraag = vragen.vraagnr where gebruiker.email=:email");
 
