@@ -1,6 +1,6 @@
 
-USE iproject
-go
+--USE iproject
+--go
 DROP TABLE IF EXISTS Verificatie, Verificatietypen, Verkoper, Gebruiker, Vragen;
 
 CREATE TABLE Vragen (  
@@ -13,7 +13,7 @@ CREATE TABLE Gebruiker (
 gebruikersnaam VARCHAR(50) NOT NULL,
 voornaam VARCHAR(50) NOT NULL,
 achternaam VARCHAR(51) NOT NULL,
-geslacht varchar(1) NOT NULL,
+geslacht char(1) NOT NULL,
 adresregel1 VARCHAR(71) NOT NULL,
 adresregel2 VARCHAR(71) NULL,
 postcode CHAR(7) NOT NUll,
