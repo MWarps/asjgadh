@@ -1,8 +1,4 @@
 <?php
-$hostname = 'localhost';
-$dbname = 'iproject';
-$username = 'iproject34';
-$password = 'frSjuhb7yr';
 
 try {
     global $dbh;
