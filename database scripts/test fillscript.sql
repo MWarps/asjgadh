@@ -1,3 +1,6 @@
+use iproject
+go 
+
 insert into dbo.vragen(vraagnr,vraag) 
     values (1,'Wat was de naam van uw eerste huisdier?'), 
            (2,'Welke kleur was uw eerste auto?'), 
@@ -9,7 +12,7 @@ insert into dbo.vragen(vraagnr,vraag)
 ; 
 
 INSERT INTO Gebruiker
-VALUES ('MWarps', 'Merlijn', 'Warps', 'testadres', NULL, '1234 AB', 'Nijmegen', 'Nederland','20000101', 'merlijn@warps.nu', 'hashed', 5, 'test antwoord', 0);
+VALUES ('MWarps', 'Merlijn', 'Warps', 'M','testadres', NULL, '1234 AB', 'Nijmegen', 'Nederland','20000101', 'merlijn@warps.nu', 'hashed', 5, 'test antwoord', 0);
 
 INSERT INTO Gebruiker
-VALUES ('test2', 'testvoornaam', 'testachternaam', 'testadres', NULL, '1234 AB', 'testplaats', 'testland','20000101', 'test@email.test', 'hashed', 5, 'test antwoord', 0);
+VALUES ('test2', 'testvoornaam', 'testachternaam', 'X','testadres', NULL, '1234 AB', 'testplaats', 'testland','20000101', 'test@email.test', 'hashed', 5, 'test antwoord', 0);
