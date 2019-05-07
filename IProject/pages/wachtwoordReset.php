@@ -3,11 +3,10 @@ require_once '../core/dbconnection.php';
 include '../includes/header.php';
 include '../includes/functies.php';
 ?>
-
-<form action='wachtwoordReset.php' method ="post" role="form" >
-    <div class="container">
-        <div class="offset-md-3">
-            <h1>Wachtwoord resetten <span class="h3 mb-3 font-weight-normal"></span></h1>
+<div class="container">
+    <div class="offset-md-3">
+        <form action='wachtwoordReset.php' method ="post" role="form" >
+            <h1 class="h3 mb-3 mt-3 font-weight-normal>">Wachtwoord resetten</h1>
             <!-- hieronder wordt de tekst en invulveld voor de gebruikersnaam gemaakt -->
             <div class="form-row">
                 <div class="form-group col-md-6">  
@@ -21,7 +20,7 @@ include '../includes/functies.php';
                     <label for="selecteerVeiligheidsvraag">Selecteer je Veiligheidsvraag</label>
                     <select class="Veiliheidsvraag form-control">
                         <option selected>Selecteer</option> <!-- Standard in select menu -->
-                        <?php vragenOphalen() ?>
+                        <?php echo vragenOphalen(); ?>
                     </select>
                 </div>
             </div>
@@ -48,38 +47,42 @@ include '../includes/functies.php';
             <!-- hier wordt de reset button gemaakt. -->
             <div class="offset-md-2">
                 <div class="form-row">
-                    <button  type = "submit" value="wwReset "class="btn btn-primary">Reset Wachtwoord</button>
+                    <button  type = "submit" value="wwReset "class="btn bg-flame">Reset Wachtwoord</button>
                 </div>
             </div>
-        </div>
+        </form>
     </div>
-</form> 
+</div>
 <?php include '../includes/footer.php' ?>
 
-<?php
-
-    function vragenOphalen() {
-    try {
-        require('../core/dbconnection.php');
-        $sqlSelect = $dbh->query("select vraagnr, vraag from vragen");
-
-        while ($row = $sqlSelect->fetch(PDO::FETCH_ASSOC)) {
-            echo '<option value="'.$row['vraagnr'].'">'.$row['vraagnr'].'.&nbsp'.$row['vraag'].'</option>';
-        }
-    } catch (PDOexception $e) {
-        echo "er ging iets mis error: {$e->getMessage()}";
-    }
-}
-
-                        if (isset($_POST['wwReset'])){
-                            $gebruikersnaam = $_POST['gebruikersnaam'];
-                            $veiligheidsvraag = $_POST['veiligheidsvraag'];
-                            $veiligantwoord = $_POST ['veiligantwoord'];
-                            $wachtwoord1 = $_POST ['wachtwoord1'];
-                            $wachtwoord2 = $_POST['wachtwoord2'];
-                        
-                        if ()
-                            
-                        }// einde if isset
-
+<?php 
+//    $sqlinformatie = $dbh -> prepare(
+//    "SELECT gebruikersnaam, vraag, antwoordtekst FROM Gebruiker WHERE gebruikersnaam = ':gebruikersnaamPHP' "
+//);// einde prepared statement $sqlinformatie
+//
+//
+//
+//                        if (isset($_POST['wwReset'])){
+//                            $gebruikersnaamPHP = $_POST['gebruikersnaam'];
+//                            $veiligheidsvraag = $_POST['veiligheidsvraag'];
+//                            $antwoordVeiligheidsvraag = $_POST ['antwoordVeiligheidsvraag'];
+//                            $nwachtwoord1 = $_POST ['wachtwoord1'];
+//                            $nwachtwoord2 = $_POST['wachtwoord2'];
+//
+//                            if ($nwachtwoord1 == $nwachtwoord2){
+//
+//                                while ($data = $sqlinformatie-> fetch() ){
+//                                    $dbgebruikersnaam = $data['gebruikersnaam'];
+//                                    $dbVvraag = $data['vraag'];
+//                                    $dbVantwoord = $data['antwoordtekst'];
+//                                    if ($gebruikersnaamPHP == $dbgebruikersnaam ){
+//                                        if ($antwoordVeiligheidsvraag == $dbVvraag){
+//                                            if ($antwoordVeiligheidsvraag == $dbVantwoord){
+//
+//                                            }
+//                                        }
+//                                    }
+//                                }
+//                            }// einde if ww vergelijking
+//                        }// einde if isset
 ?>
