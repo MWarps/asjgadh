@@ -1,6 +1,9 @@
 
 --USE iproject
 --go
+
+--kolom met gebruikersnaam als foreign key altijd genoemd gebruikersnaam
+
 DROP TABLE IF EXISTS Verificatie, Verificatietypen, Verkoper, Gebruiker, Vragen;
 
 CREATE TABLE Vragen (  
