@@ -39,20 +39,37 @@ if (isset($_POST['loginKnop'])) {
 
 
  ?>
-    <div class="container-fluid h-100">
-        <div class="row h-100">
+    <div class="container-fluid">
+        <div class="row">
             <form method="post" action="login.php" class="form-signin">
                 <h1 class="h3 mb-3 font-weight-normal text-center">Login</h1>
                 <label for="inputEmail" class="sr-only">Gebruikersnaam</label>
                 <input type="text" name="gebruikersnaam" id="inputEmail" class="form-control" placeholder="Gebruikersnaam" required autofocus>
                 <label for="inputPassword" class="sr-only">Password</label>
                 <input type="password" name="wachtwoord" id="inputPassword" class="form-control" placeholder="Wachtwoord" required>
-                <div class="checkbox mb-3">
-                    <label><input type="checkbox" value="remember-me"> Remember me</label>
-                </div>
-                <button class="btn btn-lg btn-primary btn-block bg-flame" type="submit" value="Login" name="loginKnop">Sign in</button>
+                <a href="register.php" class="register-link">Nog geen account? Registreer hier!</a>
+                <button class="btn btn-lg btn-block bg-flame" type="submit" value="Login" name="loginKnop">Inloggen</button>
             </form>
         </div>
     </div>
-
-<?php include '../includes/footer.php' ?>
+    <div class="footercolor">
+        <footer class="footer-login">
+            <div class="container py-2">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h5>Copyright</h5>
+                        <small class="d-block mb-3 text-muted">&copy; Project Groep 34 / 2019</small>
+                    </div>
+                    <div class="col-md-6">
+                        <h5>Over ons</h5>
+                        <ul class="list-unstyled text-small">
+                            <li><a class="text-muted" href="#">Contact</a></li>
+                            <li><a class="text-muted" href="#">Algemene voorwaardes</a></li>
+                            <li><a class="text-muted" href="#">Privacy</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+</body>

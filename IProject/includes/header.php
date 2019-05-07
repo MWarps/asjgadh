@@ -36,7 +36,7 @@
                     </div>
                 </div>
             </nav>
-            <nav class="navbar navbar-expand-lg navbar-light bg-orange2 justify-content-md-center">
+            <nav class="navbar navbar-expand-lg navbar-light bg-orange2 spacing justify-content-md-center">
                 <form class="form-inline my-2 my-md-0">
                     <ul class="navbar-nav">
                         <li class="navbar-item p-2">
