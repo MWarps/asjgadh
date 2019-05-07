@@ -60,25 +60,13 @@ function resetVragen()
         echo "er ging iets mis error: {$e->getMessage()}";
     }
 }
-function vragenOphalen() { // haalt alleen de veiligheidsvragen op
-    try {
-        require('../core/dbconnection.php');
-        $sqlvragenOphalen = $dbh-> prepare ("select vraagnr, vraag from vragen");
-
-        while ($row = $sqlvragenOphalen->fetch(PDO::FETCH_ASSOC)) {
-            echo '<option value="'.$row['vraagnr'].'">'.$row['vraagnr'].'.&nbsp'.$row['vraag'].'</option>';
-        }
-    } catch (PDOexception $e) {
-        echo "er ging iets mis error: {$e->getMessage()}";
-    }
-}// einde functie vragenOphalen
 
 /* haal landen op */
 function landen()
 {
   try {
         require('../core/dbconnection.php');
-        $sqlSelect = $dbh->query("select Name from Countries");
+        $sqlSelect = $dbh->query("select Id, Name from Countries");
 
         echo '<label for="inputLanden">Land</label>';
         echo '<select name="rLand" class="form-control" id="inputLanden" required>';
@@ -86,7 +74,7 @@ function landen()
 
         // Loop through the query results, outputing the options one by one
         while ($row = $sqlSelect->fetch(PDO::FETCH_ASSOC)) {
-          echo '<option value="'.$row['Name'].'">'.$row['Name'].'</option>';
+          echo '<option value="'.$row['Id'].'">'.$row['Name'].'</option>';
           }
           echo '</select>';// Close your drop down box
 
