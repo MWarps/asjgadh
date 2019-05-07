@@ -2,8 +2,10 @@
 include 'includes/header.php';
 require_once 'includes/dbconnection.php';
 require 'includes/functies.php';
+$Gbestaat = False;
+$Ebestaat = False;
 
-if (isset($_POST['registreren'])) {
+if (isset($_POST['rVolgende'])) {
     $rGebruikersnaam = $_POST['rGebruikersnaam'];
     $rVoornaam = $_POST['rVoornaam'];
     $rAchternaam = $_POST['rTussen'] . ' ' . $_POST['rAchternaam'];
@@ -15,199 +17,244 @@ if (isset($_POST['registreren'])) {
     $rGeheimA = $_POST['rGeheimA'];
     $rStraat = $_POST['rStraat'] . ' ' . $_POST['rHuisnr'];
     $rPlaats = $_POST['rPlaats'];
-    $Verkoper = 0;
-    $Postcode = "4399BC";
-    $Land = "Nederland";
+    $rPostcode = $_POST['rPostcode'];;
+    $rLand = $_POST['rLand'];
+    $rGeslacht = $_POST['rGeslacht'];
+    $rVerkoper = 0;
 
-    // er wordt gecontroleerd of de gebruikersnaam al bestaat
-    if (!empty(bestaatGebruikersnaam($rGebruikersnaam))) {
-        echo 'Gebruikersnaam bestaat al';
-        header("Refresh: 2; url=register.php");
-        die();
-    }
+    $input = array($rGebruikersnaam, $rVoornaam, $rAchternaam, $rWachtwoord,
+    $rEmail, $rGeboorte, $rGeheimV, $rGeheimA, $rStraat, $rPlaats, $rPostcode,
+    $rLand, $rVerkoper);
 
-    else {
-      /*
-      $code = rand(1000,9999);
-      $foutInvoer = 0;
-      verstuur mail
-      popup verficatie waar verficatie code in moet worden ingetoetst
-      if (isset($_POST['registreren'])){
-        if ($code == $_POST['ingevoerdecode']){
-
+  if(!empty(bestaatGebruikersnaam($_POST['rGebruikersnaam']))) {
+      $Gbestaat = True;
       }
-      else{ $foutInvoer++;
-      echo 'foute invoer probeer opnieuw';
 
-*/
+  if(!empty(bestaatEmailadres($_POST['rEmail']))) {
+      $Ebestaat = True;
+      }
 
-      // wachtwoord word gehashed
-        $hashedWachtwoord = password_hash($rWachtwoord, PASSWORD_DEFAULT);
+  if($Ebestaat == false && $Gbestaat == false){
+    //header("Refresh: 1; url=validatie.php");
+    $_SESSION['input'] = $input;
+    $hashedWachtwoord = password_hash($rWachtwoord, PASSWORD_DEFAULT);
 
-        try {
-          // SQL insert statement
-            $sqlInsert = $dbh->prepare("INSERT INTO Gebruiker (
-               gebruikersnaam, voornaam, achternaam, adresregel1,
-               postcode, plaatsnaam, land, geboortedatum, email,
-               wachtwoord, vraag, antwoordtekst, verkoper)
-              values (
-                :rGebruikersnaam, :rVoornaam, :rAchternaam, :rAdresregel1,
-                :rPostcode, :rPlaatsnaam, :rLand, :rGeboortedatum, :rEmail,
-                :rWachtwoord, :rVraag, :rAntwoordtekst, :rVerkoper)");
+    try {
+      // SQL insert statement
+        $sqlInsert = $dbh->prepare("INSERT INTO Gebruiker (
+           gebruikersnaam, voornaam, achternaam, geslacht, adresregel1,
+           postcode, plaatsnaam, land, geboortedatum, email,
+           wachtwoord, vraag, antwoordtekst, verkoper)
+          values (
+            :rGebruikersnaam, :rVoornaam, :rAchternaam, :rGeslacht, :rAdresregel1,
+            :rPostcode, :rPlaatsnaam, :rLand, :rGeboortedatum, :rEmail,
+            :rWachtwoord, :rVraag, :rAntwoordtekst, :rVerkoper)");
 
-            $sqlInsert->execute(
-                array(
-                    ':rGebruikersnaam' => $rGebruikersnaam,
-                    ':rVoornaam' => $rVoornaam,
-                    ':rAchternaam' => $rAchternaam,
-                    ':rAdresregel1' => $rStraat,
-                    ':rPostcode' => $Postcode,
-                    ':rPlaatsnaam' => $rPlaats,
-                    ':rLand' => $Land,
-                    ':rGeboortedatum' => $rGeboorte,
-                    ':rEmail' => $rEmail,
-                    ':rWachtwoord' => $hashedWachtwoord,
-                    ':rVraag' => $rGeheimV,
-                    ':rAntwoordtekst' => $rGeheimA,
-                    ':rVerkoper' => $Verkoper
+        $sqlInsert->execute(
+            array(
+                ':rGebruikersnaam' => $rGebruikersnaam,
+                ':rVoornaam' => $rVoornaam,
+                ':rAchternaam' => $rAchternaam,
+                ':rGeslacht' => $rGeslacht,
+                ':rAdresregel1' => $rStraat,
+                ':rPostcode' => $Postcode,
+                ':rPlaatsnaam' => $rPlaats,
+                ':rLand' => $Land,
+                ':rGeboortedatum' => $rGeboorte,
+                ':rEmail' => $rEmail,
+                ':rWachtwoord' => $hashedWachtwoord,
+                ':rVraag' => $rGeheimV,
+                ':rAntwoordtekst' => $rGeheimA,
+                ':rVerkoper' => $Verkoper
 
-                ));
-        } catch (PDOexception $e) {
-            echo "er ging iets mis {$e->getMessage()}";
-        }
-
+            ));
+    } catch (PDOexception $e) {
+        echo "er ging iets mis {$e->getMessage()}";
+    }
 
     }
-}
-  /*  <?php if($_POST) {  echo $_POST['voornaam']; } ?> */
+  }
+
+
 
 ?>
     <div class="container-fluid h-100">
         <div class="row h-100">
             <div class="offset-2 col-md-8">
-                <form action='register.php' method="post">
+                <form class="needs-validation" novalidate action='register.php' method="post"
+                oninput='rHerhaalWachtwoord.setCustomValidity(rHerhaalWachtwoord.value != rWachtwoord.value ? "Passwords do not match." : "")'>
                     <h1 class="h3 mb-3 text-center">Registreer je hier!</h1>
-                    <div class="form-row">
-                        <div class="form-group col-md-4">
+                    <?php
+                      if($Gbestaat){
+                        echo  '<div class="form-row">
+                                <div class="alert alert-warning" role="alert">
+                                  <strong>De gebruikersnaam bestaat al!</strong>
+                                </div>
+                              </div>';
+                      }
+                      if($Ebestaat){
+                        echo  '<div class="form-row">
+                              <div class="alert alert-warning" role="alert">
+                                  <strong>Het ingevoerde email adres wordt al gebruikt!</strong>
+                                </div>
+                               </div>';
+                      }
+                    ?>
+                        <div class="form-row">
+                          <div class="form-group col-md-4">
                             <label for="inputVoornaam">Voornaam</label>
-                            <input type="text" name="rVoornaam" class="form-control" id="inputVoornaam" placeholder="Voornaam">
+                            <input type="text" name="rVoornaam" class="form-control" id="inputVoornaam"
+                            placeholder="Voornaam" value="<?php if($_POST) { echo $_POST['rVoornaam'];} ?>" required>
+                            <div class="invalid-feedback">
+                              Voer een voornaam in.
+                            </div>
                         </div>
                         <div class="form-group col-md-4">
                             <label for="inputTussennaam">Tussennaam</label>
-                            <input type="text" name="rTussen" class="form-control" id="inputTussennaam" placeholder="Tussennaam">
+                            <input type="text" name="rTussen" class="form-control" id="inputTussennaam" placeholder="Tussennaam"
+                            value="<?php if($_POST) { echo $_POST['rTussen'];} ?>">
                         </div>
                         <div class="form-group col-md-4">
                             <label for="inputAchternaam">Achternaam</label>
-                            <input type="text" name="rAchternaam" class="form-control" id="inputAchternaam" placeholder="Achternaam">
+                            <input type="text" name="rAchternaam" class="form-control" id="inputAchternaam" placeholder="Achternaam"
+                            value="<?php if($_POST) { echo $_POST['rAchternaam'];} ?>" required>
+                            <div class="invalid-feedback">
+                              Typ een achternaam in.
+                            </div>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-4">
                             <label for="inputGebruikersNaam">Gebruikersnaam</label>
-                            <input type="text" name="rGebruikersnaam" class="form-control" id="inputGebruikersNaam" placeholder="Gebruikersnaam">
+                            <input type="text" name="rGebruikersnaam" class="form-control" id="inputGebruikersNaam" placeholder="Gebruikersnaam"
+                            value="<?php if($_POST) { echo $_POST['rGebruikersnaam'];} ?>" required>
+                            <div class="invalid-feedback">
+                              Voer een gebruikersnaam in.
+                            </div>
                         </div>
                         <div class="form-group col-md-8">
                             <label for="inputEmailR">Email</label>
-                            <input type="email" name="rEmail" class="form-control" id="inputEmailR" placeholder="Email">
+                            <input type="email" name="rEmail" class="form-control" id="inputEmailR" placeholder="Email"
+                            value="<?php if($_POST) { echo $_POST['rEmail'];} ?>" required>
+                            <div class="invalid-feedback">
+                              Voer een email adres in.
+                            </div>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-4">
                             <label for="inputWachtwoord">Wachtwoord</label>
-                            <input type="password" name="rWachtwoord" class="form-control" id="inputWachtwoord" placeholder="Wachtwoord">
+                            <input type="password" name="rWachtwoord" class="form-control" id="inputWachtwoord" placeholder="Wachtwoord" required>
+                            <div class="invalid-feedback">
+                              Voer een wachtwoord in.
+                            </div>
                         </div>
                         <div class="form-group col-md-4">
                             <label for="inputHerhaalWachtwoord">Herhaal Wachtwoord</label>
-                            <input type="password" name="rHerhaalWachtwoord" class="form-control" id="inputHerhaalWachtwoord" placeholder="Herhaal Wachtwoord">
+                            <input type="password" name="rHerhaalWachtwoord" class="form-control" id="inputHerhaalWachtwoord" placeholder="Herhaal Wachtwoord" required>
+                            <div class="invalid-feedback">
+                            Voer hetzelfde wachtwoord in.
+                            </div>
                         </div>
                     </div>
                         <div class="form-row">
                           <div class="form-group col-md-4">
                           <label for="inputGeboortedatum">Geboortedatum</label>
-                          <input type="date" name="rGeboorte" class="form-control" id="inputGeboortedatum" placeholder="Geboortedatum">
-                      </div>
-
-                    </div>
+                          <input type="date" name="rGeboorte" class="form-control" id="inputGeboortedatum" placeholder="Geboortedatum"
+                          value="<?php if($_POST) { echo $_POST['rGeboorte'];} ?>" required>
+                            <div class="invalid-feedback">
+                              Voer een geboortedatum in.
+                            </div>
+                          </div>
+                              <div class="form-group col-md-2">
+                              <label for="inputGeslacht">Geslacht</label>
+                              <select name="rGeslacht" class="form-control" id="inputGeslacht" value="<?php if($_POST) { echo $_POST['rGeboorte'];} ?>" required>
+                                <option> - </option>
+                                <option> Man </option>
+                                <option> Vrouw </option>
+                              </select>
+                          </div>
+                        </div>
                     <div class="form-row">
                         <div class="form-group col-md-6">
                       <?php  echo resetVragen(); ?>
-                      </div>
+                        </div>
                   </div>
                   <div class="form-row">
                       <div class="form-group col-md-6">
                           <label for="inputGeheimAntwoord">Geheim Antwoord</label>
-                          <input type="text" name="rGeheimA" class="form-control" id="inputGeheimAntwoord" placeholder="Geheim Antwoord">
+                          <input type="text" name="rGeheimA" class="form-control" id="inputGeheimAntwoord" placeholder="Geheim Antwoord"
+                          value="<?php if (isset($_POST['rGeheimA'])) echo $_POST['rGeheimA']; ?>" required>
+                          <div class="invalid-feedback">
+                          Voer een antwoord in.
+                          </div>
                       </div>
                   </div>
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             <label for="inputStraatnaam">Straatnaam</label>
-                            <input type="text" name="rStraat" class="form-control" id="inputStraatnaam" placeholder="Straatnaam">
+                            <input type="text" name="rStraat" class="form-control" id="inputStraatnaam" placeholder="Straatnaam"
+                            value="<?php if (isset($_POST['rStraat'])) echo $_POST['rStraat']; ?>" required>
+                            <div class="invalid-feedback">
+                            Voer een straatnaam in.
+                            </div>
                         </div>
                         <div class="form-group col-md-2">
                             <label for="inputHuisnummer">Huisnummer</label>
-                            <input type="text" name="rHuisnr" class="form-control" id="inputHuisnummer" placeholder="Huisnummer">
+                            <input type="number" name="rHuisnr" class="form-control" id="inputHuisnummer" placeholder="Huisnummer"
+                            value="<?php if (isset($_POST['rHuisnr'])) echo $_POST['rHuisnr']; ?>" required>
+                            <div class="invalid-feedback">
+                            Voer een huisnummer in.
+                            </div>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             <label for="inputPlaats">Postcode</label>
-                            <input type="text" name="rPostcode" class="form-control" id="inputPlaats" placeholder="Postcode">
+                            <input type="text" name="rPostcode" class="form-control" id="inputPlaats" placeholder="Postcode"
+                            value="<?php if (isset($_POST['rPostcode'])) echo $_POST['rPostcode']; ?>"  required>
+                            <div class="invalid-feedback">
+                            Voer een postcode in.
+                            </div>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             <label for="inputPlaats">Plaats</label>
-                            <input type="text" name="rPlaats" class="form-control" id="inputPlaats" placeholder="Plaats">
+                            <input type="text" name="rPlaats" class="form-control" id="inputPlaats" placeholder="Plaats"
+                            value="<?php if (isset($_POST['rPlaats'])) echo $_POST['rPlaats']; ?>" required>
+                            <div class="invalid-feedback">
+                            Voer een plaats in.
+                            </div>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-6">
-                            <?php//  echo Landen(); ?>
-                            dropdown list landen
+                            <?php  echo Landen(); ?>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="gridCheck">
-                                <label class="form-check-label" for="gridCheck">
-                                    Algemene voorwaarden
-                                </label>
+                          <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="Check" required>
+                            <label class="form-check-label" for="Check">
+                              Ga akkoord met de algemene voorwaarden.
+                            </label>
+                            <div class="invalid-feedback">
+                              U moet akkoord gaan met onze algemene voorwaarden voordat u kan registreren.
                             </div>
+                          </div>
                         </div>
                     </div>
-                    <button type="button" name="validatie" class="btn btn-primary" data-toggle="modal" data-target="#validatiemodal">
+                    <button type="submit" name="rVolgende" class="btn btn-primary">
                       Volgende
                     </button>
                 </form>
             </div>
         </div>
 
-        <!-- Modal -->
-        <div class="modal fade" id="validatiemodal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
-          <div class="modal-dialog" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="ModalLabel">Valideren</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-              <div class="modal-body">
-                <h3> Er is een code gestuurd naar het ingevoerde e-mail adres.</h3>
+    <?php
 
-                <label for="validatiecode">vul hier uw validatie code in:</label>
-                <input type="text" name="validatiecode" class="form-control" id="inputVoornaam">
-
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" name="registeren" class="btn btn-primary">Registreren</button>
-              </div>
-            </div>
-          </div>
-        </div>
-    </div>
+     include 'includes/footer.php' ?>
 
     <?php include'includes/footer.php' ?>
