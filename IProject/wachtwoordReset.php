@@ -1,8 +1,5 @@
 <?php
-require_once '../core/dbconnection.php';
-include '../includes/header.php';
-include '../includes/functies.php';
-
+include 'includes/header.php';
 $error = false;
 
 if (isset($_POST['Volgende'])){
@@ -60,4 +57,4 @@ $GebruikerArray = haalGebruikerOp($Gebruikersnaam);
 
 <?php
 
-include '../includes/footer.php' ?>
+include 'includes/footer.php' ?>

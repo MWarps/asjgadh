@@ -1,17 +1,22 @@
+
 <?php
 session_start();
-require 'functies.php';
-$ingelogd;
+
+//require_once '../core/dbconnection.php';
+include 'functies.php';
+require_once 'core/dbconnection.php';
+//require_once '../core/dbconnection.php';
+
+
+
+
 
 if (isset($_SESSION['gebruikersnaam'])){
-  $ingelogd = true;
+  $_SESSION ['ingelogd'] = true;
+} else {
+   $_SESSION ['ingelogd'] = false;
 }
-
-else {
-  $ingelogd = false;
-}
-
- ?>
+?>
 <!doctype html>
 <html lang="nl">
     <head>
@@ -37,10 +42,11 @@ else {
                     <div class="navbar-collapse collapse">
                         <ul class="navbar-nav mr-auto">
                             <li class="nav-items">
-                                <a class="nav-link" href="../index.php">Home<span class="sr-only">(current)</span></a>
+                                <a class="nav-link" href="index.php">Home<span class="sr-only">(current)</span></a>
                             </li>
                         </ul>
-                        <?php knoppenFunctie($ingelogd);
+                        <?
+                        php knoppenFunctie(); 
                         ?>
                     </div>
                 </div>
@@ -49,7 +55,7 @@ else {
                 <form class="form-inline my-2 my-md-0">
                     <ul class="navbar-nav">
                         <li class="navbar-item p-2">
-                            <input class="form-control" type="text" placeholder="Zoeken" aria-label="Search">
+                            <input class="form-control" type="text" placeholder="Product Naam" aria-label="Search">
                         </li>
                     </ul>
                     <ul class="navbar-nav">

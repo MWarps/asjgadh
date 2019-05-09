@@ -3,7 +3,7 @@
 function bestaatGebruikersnaam($gebruikersnaam)
 {
     try {
-        require('../core/dbconnection.php');
+        require('core/dbconnection.php');
         $sqlSelect = $dbh->prepare("select gebruikersnaam from Gebruiker where gebruikersnaam=:gebruikersnaam");
 
         $sqlSelect->execute(
@@ -14,7 +14,8 @@ function bestaatGebruikersnaam($gebruikersnaam)
         $records = $sqlSelect->fetch(PDO::FETCH_ASSOC);
         return $records;
 
-    } catch (PDOexception $e) {
+    }
+    catch (PDOexception $e) {
         echo "er ging iets mis error: {$e->getMessage()}";
     }
 }
@@ -23,7 +24,7 @@ function bestaatGebruikersnaam($gebruikersnaam)
 function bestaatEmailadres($email)
 {
     try{
-        require('../core/dbconnection.php');
+        require('core/dbconnection.php');
         $sqlSelect = $dbh->prepare("select email from Gebruiker where email=:email");
 
         $sqlSelect->execute(
@@ -43,7 +44,7 @@ function bestaatEmailadres($email)
 function resetVragen()
 {
     try {
-        require('../core/dbconnection.php');
+        require('core/dbconnection.php');
         $sqlSelect = $dbh->query("select vraagnr, vraag from vragen");
 
         echo '<label for="inputGeheimeVraag">Geheime Vraag</label>';
@@ -79,7 +80,7 @@ function vragenOphalen() { // haalt alleen de veiligheidsvragen op
 function landen()
 {
     try {
-        require('../core/dbconnection.php');
+        require('core/dbconnection.php');
         $sqlSelect = $dbh->query("select Id, Name from Countries");
 
         echo '<label for="inputLanden">Land</label>';
@@ -133,16 +134,13 @@ function StuurRegistreerEmail($rVoornaam, $rEmail){
 }
 
 function WordtVerkoper() {
-    $Gebruiker = $_SESSION[""];
+    $Gebruiker = $_SESSION["gebruikersnaam"];
     try{
         require('../core/dbconnection.php');
-        $sql = "";
+        $sql = "EXEC dbo.verificatie_toevoegen @gebruiker = :Gebruiker @type = 'post'";
         $sqlSelect = $dbh->prepare($sql);
-        $sqlSelect->execute(
-            array(
-                    ':Gebruiker' => $Gebruiker,
-                ));
-        $records = $sqlSelect->fetch(PDO::FETCH_ASSOC);
+
+        $sqlSelect->execute(array(':Gebruiker' => $Gebruiker));
 
         MaakVerkoperBrief($Gebruiker);
 
@@ -157,14 +155,15 @@ function MaakVerkoperBrief($Gebruiker){
     try{
         require('../core/dbconnection.php');
 
-        $sql = "SELECT voornaam, achternaam, geslacht, adresregel1, adresrege2, postcode, plaatsnaam, land, verificatiecode, eindtijd FROM Gebruiker INNER JOIN Verificatie ON Gebruiker.gebruikersnaam = Verificatie.gebruikersnaam WHERE type = 'post' AND gebruikersnaam = :gebruiker";
-        $sqlSelect = $dbh->prepare($sql);
+        $sql = "SELECT voornaam, achternaam, geslacht, adresregel1, adresregel2, postcode, plaatsnaam, land, verificatiecode, eindtijd FROM Gebruiker INNER JOIN Verificatie ON Gebruiker.gebruikersnaam = Verificatie.gebruikersnaam WHERE type = 'post' AND Gebruiker.gebruikersnaam = :gebruiker";
+        $sth = $dbh->prepare($sql);
 
-        $sqlSelect->execute(
-            array(
-                ':Gebruiker' => $Gebruiker
-            ));
-        $records = $sqlSelect->fetch(PDO::FETCH_ASSOC);
+        $parameters = array(':Gebruiker' => $Gebruiker);
+        $sth->execute($parameters);
+
+        $records = $sth->fetchall(PDO::FETCH_ASSOC);
+        require('brief.php');
+        Brief($records);
     }
     catch (PDOexception $e) {
             echo "er ging iets mis error: {$e->getMessage()}";
@@ -374,25 +373,26 @@ function haalVideosOp($rubriek)
 
  function knoppenFunctie($ingelogd){
      // functie kijkt of de sessie active is en past de knoppen rechtsboven in de header gepast aan.
-    if ($ingelogd){
-      echo '<ul class="navbar-nav">
+    if ( $_SESSION["ingelogd"] == false){
+        echo '
+        <ul class="navbar-nav">
                             <li class="nav-item">
-                                <a class="nav-link" href="../pages/login.php">Mijn account</a>
+                                <a class="nav-link" href="">Mijn account</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="../pages/uitloggen.php">Uitloggen</a>
+                                <a class="nav-link" href="uitloggen.php">Uitloggen</a>
                             </li>
                         </ul>
         ';
 
     } // einde if session actief is
-    if ($ingelogd == false){
-      echo'<ul class="navbar-nav">
+    if ($_SESSION["ingelogd"] == true){
+        echo'<ul class="navbar-nav">
                             <li class="nav-item">
-                                <a class="nav-link" href="../pages/login.php">Login</a>
+                                <a class="nav-link" href="login.php">Login</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="../pages/register.php">Register</a>
+                                <a class="nav-link" href="register.php">Register</a>
                             </li>
                         </ul>
                         ';

@@ -1,7 +1,5 @@
 <?php
-include ('../includes/header.php');
-require_once ('../core/dbconnection.php');
-require ('../includes/functies.php');
+include 'includes/header.php';
 
 if (!isset($_SESSION['gebruikersnaam'])){
 $Validatie = false;
@@ -69,8 +67,8 @@ if (isset($_POST['loginKnop'])) {
 <?php
 }
 else {
-  include '../includes/404error.php';
+  include 'includes/404error.php';
   // unset($_SESSION['gebruikersnaam']);
 }
-  include '../includes/footer.php'
+  include 'includes/footer.php'
  ?>
