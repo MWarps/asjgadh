@@ -132,6 +132,40 @@ function StuurRegistreerEmail($rVoornaam, $rEmail){
     }
 }
 
+function StuurRegistreerBrief($rVoornaam, $rEmail){
+
+    try{
+        require('../core/dbconnection.php');
+        $sqlSelect = $dbh->prepare("EXEC verificatie_toevoegen @gebruiker = @gebruikersnaam @type = 'post'");
+
+        $sqlSelect->execute(
+            array(
+                ':gebruikersnaam' => $gebruikersnaam,
+            ));
+        $records = $sqlSelect->fetch(PDO::FETCH_ASSOC);
+
+
+        ini_set( 'display_errors', 1 );
+        error_reporting( E_ALL );
+        $from = "no-reply@iconcepts.nl";
+        $to = $rEmail;
+        $subject = "Validatie code account registreren";
+        $message = 'Hallo '.$rVoornaam.',
+            <br>
+            <br>
+            Bedankt voor het registreren. Hieronder staat de code die ingevoerd
+            moet worden om het registeren te voltooien:
+            <br>
+            <h1>'. $voornaam.' ';
+        $headers = "From:" .$from;
+        mail($to,$subject,$message, $headers);
+
+    }
+    catch (PDOexception $e) {
+        echo "er ging iets mis error: {$e->getMessage()}";
+    }
+}
+
 function geslacht()
 {
 
