@@ -1,6 +1,4 @@
 <?php
-session_start();
-
 require_once '../core/dbconnection.php';
 include '../includes/header.php';
 include '../includes/functies.php';
