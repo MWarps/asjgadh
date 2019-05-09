@@ -226,14 +226,16 @@ if (isset($_POST['rVolgende'])) {
                     <div class="form-row">
                         <div class="form-group">
                           <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="Check" required>
-                            <label class="form-check-label" for="Check">
+                            <div class="custom-control custom-checkbox">
+                            <input class="custom-control-input" type="checkbox" value="" id="defaultUnchecked" required>
+                            <label class="custom-control-label" for="defaultUnchecked">
                               Ga akkoord met de algemene voorwaarden.
                             </label>
                             <div class="invalid-feedback">
                               U moet akkoord gaan met onze algemene voorwaarden voordat u kan registreren.
                             </div>
                           </div>
+                        </div>
                         </div>
                     </div>
                     <button type="submit" name="rVolgende" class="btn bg-flame">
@@ -242,6 +244,9 @@ if (isset($_POST['rVolgende'])) {
                 </form>
             </div>
         </div>
+      </div>
+
+
 
     <?php }
     else {
@@ -271,7 +276,7 @@ if (isset($_POST['rVolgende'])) {
       </div>
 
     <?php
-  
+
     }
 
      include 'includes/footer.php' ?>

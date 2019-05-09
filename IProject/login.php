@@ -56,7 +56,7 @@ if (isset($_POST['loginKnop'])) {
                 <div class="invalid-feedback">
                   Voer een wachtwoord in.
                 </div>
-                <a href="wachtwoordReset.php" class="register-link">Wachtwoord vergeten?</a>
+                <a href="wachtwoordReset.php" class="register-link">Wachtwoord vergeten? Klik hier!</a>
                 <button class="btn btn-lg btn-block bg-flame" type="submit" value="loginKnop" id="loginKnop" name="loginKnop">Inloggen</button>
                 <a href="register.php" class="register-link">Nog geen account? Registreer hier!</a>
             </form>
