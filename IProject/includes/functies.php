@@ -132,6 +132,45 @@ function StuurRegistreerEmail($rVoornaam, $rEmail){
     }
 }
 
+function WordtVerkoper() {
+    $Gebruiker = $_SESSION[""];
+    try{
+        require('../core/dbconnection.php');
+        $sql = "";
+        $sqlSelect = $dbh->prepare($sql);
+        $sqlSelect->execute(
+            array(
+                    ':Gebruiker' => $Gebruiker,
+                ));
+        $records = $sqlSelect->fetch(PDO::FETCH_ASSOC);
+
+        MaakVerkoperBrief($Gebruiker);
+
+    }
+    catch (PDOexception $e) {
+        echo "er ging iets mis error: {$e->getMessage()}";
+
+    }
+}
+
+function MaakVerkoperBrief($Gebruiker){
+    try{
+        require('../core/dbconnection.php');
+
+        $sql = "SELECT voornaam, achternaam, geslacht, adresregel1, adresrege2, postcode, plaatsnaam, land, verificatiecode, eindtijd FROM Gebruiker INNER JOIN Verificatie ON Gebruiker.gebruikersnaam = Verificatie.gebruikersnaam WHERE type = 'post' AND gebruikersnaam = :gebruiker";
+        $sqlSelect = $dbh->prepare($sql);
+
+        $sqlSelect->execute(
+            array(
+                ':Gebruiker' => $Gebruiker;
+            ));
+        $records = $sqlSelect->fetch(PDO::FETCH_ASSOC);
+    }
+    catch (PDOexception $e) {
+            echo "er ging iets mis error: {$e->getMessage()}";
+    }
+}
+
 function geslacht()
 {
 
@@ -335,7 +374,7 @@ function haalVideosOp($rubriek)
 
  function knoppenFunctie(){ 
      // functie kijkt of de sessie active is en past de knoppen rechtsboven in de header gepast aan.
-    if (session_status() == PHP_SESSION_ACTIVE){
+    if ( $_SESSION["ingelogd"] == false){
         echo '
         <ul class="navbar-nav">
                             <li class="nav-item">
@@ -348,7 +387,7 @@ function haalVideosOp($rubriek)
         ';
             
     } // einde if session actief is
-    if (session_status() == PHP_SESSION_NONE){
+    if ($_SESSION["ingelogd"] == true){
         echo'<ul class="navbar-nav">
                             <li class="nav-item">
                                 <a class="nav-link" href="../pages/login.php">Login</a>
@@ -362,7 +401,7 @@ function haalVideosOp($rubriek)
  }// einde functie
 
 function uitloggen(){
-    if (session_status() == PHP_SESSION_ACTIVE){
+    if ($_SESSION["ingelogd"] == true){
     session_unset(); // verwijderd alle variabelen in de serssie
     session_destroy(); // verwijderd de sessie en alle variabelen.
     naarIndexSturen();
