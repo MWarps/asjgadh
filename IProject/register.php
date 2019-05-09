@@ -1,7 +1,6 @@
 <?php
 include 'includes/header.php';
 
-
 if (!isset($_SESSION['gebruikersnaam'])){
 
 $Gbestaat = False;
@@ -23,13 +22,13 @@ if (isset($_POST['rVolgende'])) {
     $rPostcode = $_POST['rPostcode'];;
     $rLand = $_POST['rLand'];
     $rGeslacht = $_POST['rGeslacht'];
-    $rVerkoper = 0;
+
 
     $input = array($rGebruikersnaam, $rVoornaam, $rAchternaam, $rGeslacht,
     $rWachtwoord, $rStraat, $rStraat1, $rPostcode, $rPlaats, $rLand,
-    $rGeboorte,  $rEmail, $rGeheimV, $rGeheimA, $rVerkoper);
+    $rGeboorte,  $rEmail, $rGeheimV, $rGeheimA);
 
-    array_push($input, 0, 'mail');
+    array_push($input, 0, 0, 'mail');
 
    // controleert of gebruikersnaam bestaat
   if(!empty(bestaatGebruikersnaam($_POST['rGebruikersnaam']))) {
@@ -237,7 +236,7 @@ if (isset($_POST['rVolgende'])) {
                           </div>
                         </div>
                     </div>
-                    <button type="submit" name="rVolgende" class="btn btn-primary" data-toggle="modal" data-target="#Modal">
+                    <button type="submit" name="rVolgende" class="btn bg-flame">
                       Volgende
                     </button>
                 </form>
@@ -272,7 +271,7 @@ if (isset($_POST['rVolgende'])) {
       </div>
 
     <?php
-    unset($_SESSION['gebruikersnaam']);
+  
     }
 
      include 'includes/footer.php' ?>

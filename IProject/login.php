@@ -14,7 +14,7 @@ if (isset($_POST['loginKnop'])) {
    if($gebruikersnaam == $gebruiker['gebruikersnaam'] && $wachtwoord == password_verify($wachtwoord,$gebruiker['wachtwoord'])){
       $_SESSION['gebruikersnaam'] = $gebruikersnaam;
       $Validatie = true;
-      header("Refresh:5 ; url=../index.php");
+      header("Refresh:5 ; url=index.php");
 
     }
     else {

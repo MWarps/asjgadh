@@ -11,13 +11,16 @@ $input = array($Gebruikersnaam, $Veiligheidsvraag, $AntwoordVeiligheidsvraag);
 
 $GebruikerArray = haalGebruikerOp($Gebruikersnaam);
 
-  if (!empty($GebruikerArray) &&
-  $Veiligheidsvraag == $GebruikerArray['vraag'] && $AntwoordVeiligheidsvraag == $GebruikerArray['antwoordtekst']
-){
+  if (
+  !empty($GebruikerArray) &&
+  $Veiligheidsvraag == $GebruikerArray['vraag'] &&
+  $AntwoordVeiligheidsvraag == $GebruikerArray['antwoordtekst']
+  )
+  {
   $_SESSION['reset'] = true;
    header("Location: wachtwoordReset2.php");
-
   }
+  
   else{
   $error = true;
   }
