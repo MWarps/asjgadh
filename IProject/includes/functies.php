@@ -132,6 +132,38 @@ function StuurRegistreerEmail($rVoornaam, $rEmail){
     }
 }
 
+
+}
+    }
+        echo "er ging iets mis error: {$e->getMessage()}";
+    }
+    catch (PDOexception $e) {
+
+        $sql = "SELECT voornaam, achternaam, geslacht, adresregel1, adresrege2, postcode, plaatsnaam, land, verificatiecode, eindtijd FROM Gebruiker INNER JOIN Verificatie ON Gebruiker.gebruikersnaam = Verificatie.gebruikersnaam WHERE type = 'post' AND gebruikersnaam = :gebruiker";
+    try{
+        require('../core/dbconnection.php');
+
+function MaakVerkoperBrief($Gebruiker){
+
+}
+    }
+        echo "er ging iets mis error: {$e->getMessage()}";
+    catch (PDOexception $e) {
+    }
+        MaakVerkoperBrief($Gebruiker);
+
+        $records = $sqlSelect->fetch(PDO::FETCH_ASSOC);
+            ));
+                ':Gebruiker' => $Gebruiker,
+            array(
+        $sqlSelect->execute(
+
+        $sqlSelect = $dbh->prepare($sql);
+        $sql = "EXEC verificatie_toevoegen @gebruiker = :Gebruiker @type = 'post'";
+    try{
+        require('../core/dbconnection.php');
+    $Gebruiker = $_SESSION[""];
+function WordtVerkoper() {
 function geslacht()
 {
 
