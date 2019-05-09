@@ -1,4 +1,134 @@
 <?php
+function haalGebruikerOp($Gebruikersnaam){
+  try {
+      require('../core/dbconnection.php');
+      $sqlSelect = $dbh->prepare("SELECT gebruikersnaam, vraag, antwoordtekst
+        FROM Gebruiker WHERE gebruikersnaam = ':gebruikersnaam'");
+
+      $sqlSelect->execute(
+          array(
+              ':gebruikersnaam' => $Gebruikersnaam
+          ));
+          $records = $sqlSelect->fetch(PDO::FETCH_ASSOC);
+
+          return $records;
+
+  } catch (PDOexception $e) {
+      echo "er ging iets mis error: {$e->getMessage()}";
+  }
+
+}
+
+function updateGebruikerVerificatie($input){
+  try {
+      require('../core/dbconnection.php');
+      $sqlSelect = $dbh->prepare("UPDATE Gebruiker SET verifieerd = 1
+        WHERE gebruikersnaam = :gebruikersnaam");
+
+      $sqlSelect->execute(
+          array(
+              ':gebruikersnaam' => $input['0']
+          ));
+
+  } catch (PDOexception $e) {
+      echo "er ging iets mis error: {$e->getMessage()}";
+  }
+
+}
+
+function deleteVerificatieRij($input){
+  try {
+      require('../core/dbconnection.php');
+      $sqlSelect = $dbh->prepare("delete from Verificatie where gebruikersnaam = :gebruikersnaam");
+
+      $sqlSelect->execute(
+          array(
+              ':gebruikersnaam' => $input['0']
+          ));
+
+  } catch (PDOexception $e) {
+      echo "er ging iets mis error: {$e->getMessage()}";
+  }
+
+}
+
+function HaalVerficatiecodeOp($input){
+
+  try {
+      require('../core/dbconnection.php');
+      $sqlSelect = $dbh->prepare("select verificatiecode, eindtijd from Verificatie where gebruikersnaam = :gebruikersnaam
+      And type = :type ");
+
+      $sqlSelect->execute(
+          array(
+              ':gebruikersnaam' => $input['0'],
+              ':type' => $input['16']
+          ));
+
+          $records = $sqlSelect->fetch(PDO::FETCH_ASSOC);
+
+          return $records;
+
+  } catch (PDOexception $e) {
+      echo "er ging iets mis error: {$e->getMessage()}";
+  }
+}
+
+function VerificatieCodeProcedure($input){
+  try {
+      require('../core/dbconnection.php');
+      $sqlSelect = $dbh->prepare("EXEC verificatie_toevoegen @gebruiker = :gebruikersnaam,
+      @type = :type");
+
+      $sqlSelect->execute(
+          array(
+              ':gebruikersnaam' => $input['0'],
+              ':type' => $input['16']
+          )
+      );
+  } catch (PDOexception $e) {
+      echo "er ging iets mis error: {$e->getMessage()}";
+  }
+}
+
+function InsertGebruiker($input){
+  $hashedWachtwoord = password_hash($input['4'], PASSWORD_DEFAULT);
+try {
+  // SQL insert statement
+  require('../core/dbconnection.php');
+    $sqlInsert = $dbh->prepare("INSERT INTO Gebruiker (
+       gebruikersnaam, voornaam, achternaam, geslacht, adresregel1, adresregel2,
+       postcode, plaatsnaam, land, geboortedatum, email,
+       wachtwoord, vraag, antwoordtekst, verkoper, verifieerd)
+      values (
+        :rGebruikersnaam, :rVoornaam, :rAchternaam, :rGeslacht, :rAdresregel1, :rAdresregel2,
+        :rPostcode, :rPlaatsnaam, :rLand, :rGeboortedatum, :rEmail,
+        :rWachtwoord, :rVraag, :rAntwoordtekst, :rVerkoper, :rVerifieerd)");
+
+    $sqlInsert->execute(
+        array(
+            ':rGebruikersnaam' => $input['0'],
+            ':rVoornaam' => $input['1'],
+            ':rAchternaam' => $input['2'],
+            ':rGeslacht' => $input['3'],
+            ':rAdresregel1' => $input['5'],
+            ':rAdresregel2' => $input['6'],
+            ':rPostcode' => $input['7'],
+            ':rPlaatsnaam' => $input['8'],
+            ':rLand' => $input['9'],
+            ':rGeboortedatum' => $input['10'],
+            ':rEmail' => $input['11'],
+            ':rWachtwoord' => $hashedWachtwoord,
+            ':rVraag' => $input['12'],
+            ':rAntwoordtekst' => $input['13'],
+            ':rVerkoper' => $input['14'],
+            ':rVerifieerd' => $input['15']
+        ));
+      }
+    catch (PDOexception $e) {
+    echo "er ging iets mis insert {$e->getMessage()}";
+  }
+}
 
 /* Is er al een gebruiker aangemeld met hetzelfde gebruikersnaam */
 function bestaatGebruikersnaam($gebruikersnaam)
@@ -40,6 +170,21 @@ function bestaatEmailadres($email)
     }
 }
 
+
+function vragenOphalen() { // haalt alleen de veiligheidsvragen op
+    try {
+        require('../core/dbconnection.php');
+        $sqlvragenOphalen = $dbh-> prepare ("SELECT vraagnr, vraag FROM vragen");
+
+        while ($vraag = $sqlvragenOphalen->fetch()) {//PDO::FETCH_ASSOC
+        } // einde while loop
+            echo '<option value="'.$vraag['vraagnr'].'">'.$vraag['vraagnr'].'.&nbsp'.$vraag['vraag'].'</option>';
+
+    } catch (PDOexception $e) {
+      echo "er ging iets mis error: {$e->getMessage()}";
+    }// einde catch exeption $e
+}// einde functie vragenOphalen
+
 /*registeren vragen ophalen */
 function resetVragen()
 {
@@ -48,7 +193,7 @@ function resetVragen()
         $sqlSelect = $dbh->query("select vraagnr, vraag from vragen");
 
         echo '<label for="inputGeheimeVraag">Geheime Vraag</label>';
-        echo '<select name="rGeheimV" class="form-control" id="inputGeheimeVraag">'; // Open your drop down box
+        echo '<select name="rGeheimV" class="form-control" id="inputGeheimeVraag" require>'; // Open your drop down box
 
         // Loop through the query results, outputing the options one by one
         while ($row = $sqlSelect->fetch(PDO::FETCH_ASSOC)) {
@@ -60,34 +205,22 @@ function resetVragen()
         echo "er ging iets mis error: {$e->getMessage()}";
     }
 }
-function vragenOphalen() { // haalt alleen de veiligheidsvragen op
-    try {
-        require('../core/dbconnection.php');
-        $sqlvragenOphalen = $dbh-> prepare ("SELECT vraagnr, vraag FROM vragen");
-
-        while ($vraag = $sqlvragenOphalen->fetch()) {//PDO::FETCH_ASSOC
-        } // einde while loop
-            echo '<option value="'.$vraag['vraagnr'].'">'.$vraag['vraagnr'].'.&nbsp'.$vraag['vraag'].'</option>';
-        echo "er ging iets mis error: {$e->getMessage()}";
-    } catch (PDOexception $e) {
-    }// einde catch exeption $e
-}// einde functie vragenOphalen
 
 /* haal landen op */
 function landen()
 {
     try {
         require('../core/dbconnection.php');
-        $sqlSelect = $dbh->query("select Id, Name from Countries");
+        $sqlSelect = $dbh->query("SELECT Id, Name FROM Landen");
 
         echo '<label for="inputLanden">Land</label>';
-        echo '<select name="rLand" class="form-control" id="inputLanden" required>';
+        echo '<select name="rLand" class="form-control" id="inputLanden" require>';
         // Open your drop down box
 
         // Loop through the query results, outputing the options one by one
         while ($row = $sqlSelect->fetch(PDO::FETCH_ASSOC)) {
-          }
           echo '<option value="'.$row['Id'].'">'.$row['Name'].'</option>';
+          }
           echo '</select>';// Close your drop down box
 
     } catch (PDOexception $e) {
@@ -95,40 +228,18 @@ function landen()
     }
 }
 
-function StuurRegistreerEmail($rVoornaam, $rEmail){
-    $code = rand(1000,9999);
-
-    try{
-        require('../core/dbconnection.php');
-        $sqlSelect = $dbh->prepare("insert into verificatie (gebruikersnaam) ");
-
-        $sqlSelect->execute(
-            array(
-                ':gebruikersnaam' => $gebruikersnaam,
-            ));
-        $records = $sqlSelect->fetch(PDO::FETCH_ASSOC);
-
+function StuurRegistreerEmail($rVoornaam, $rEmail, $code){
 
         ini_set( 'display_errors', 1 );
         error_reporting( E_ALL );
         $from = "no-reply@iconcepts.nl";
         $to = $rEmail;
         $subject = "Validatie code account registreren";
-        $message = 'Hallo '.$rVoornaam.',
-            <br>
-            <br>
-            Bedankt voor het registreren. Hieronder staat de code die ingevoerd
-            moet worden om het registeren te voltooien:
-            <br>
-            <h1>'. $voornaam.' ';
+        $message = include('../includes/email.php');
         $headers = "From:" .$from;
-        mail($to,$subject,$message, $headers);
-
-    }
-    catch (PDOexception $e) {
-        echo "er ging iets mis error: {$e->getMessage()}";
-    }
+        //mail($to,$subject,$message, $headers);
 }
+
 
 function geslacht()
 {
@@ -183,7 +294,7 @@ function emailResetWachtwoord($gebruikersnaam)
                   en overweeg ook om uw e-mailwachtwoord te wijzigen om uw
                   accountbeveiliging te garanderen.';
         $headers = "From:" .$from;
-        mail($to,$subject,$message, $headers);
+        //mail($to,$subject,$message, $headers);
         ;
 
     }
