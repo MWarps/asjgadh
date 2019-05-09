@@ -5,7 +5,7 @@ require_once '../core/dbconnection.php';
 include '../includes/header.php';
 include '../includes/functies.php';
 
-if(isset($_SESSION['gebruikersnaam'])){
+
 
 $error = false;
 
@@ -18,15 +18,17 @@ $AntwoordVeiligheidsvraag = $_POST ['wGeheimA'];
 $input = array($Gebruikersnaam, $Veiligheidsvraag, $AntwoordVeiligheidsvraag);
 
 $GebruikerArray = haalGebruikerOp($Gebruikersnaam);
-print_r($GebruikerArray);
 
-  if (empty($GebruikerArray['gebruikersnaam']) || $Veiligheidsvraag != $GebruikerArray['vraag'] || $Veiligheidsvraag != $GebruikerArray['antwoordtekst'] ){
-  /**/
-    $error = true;
+
+  if (!empty($GebruikerArray) &&
+  $Veiligheidsvraag == $GebruikerArray['vraag'] && $AntwoordVeiligheidsvraag == $GebruikerArray['antwoordtekst']
+){
+  $_SESSION['reset'] = true;
+   header("Location: wachtwoordReset2.php");
+
   }
   else{
-    $_SESSION['reset'] = true;
-    header("Location: wachtwoordReset2.php");
+  $error = true;
   }
 }
 ?>
@@ -35,6 +37,7 @@ print_r($GebruikerArray);
     <div class="offset-3 col-md-6 mt-4">
       <div class="jumbotron bg-dark text-white" style="padding: 2rem">
       <form class="needs-validation" novalidate action='wachtwoordReset.php' method="post">
+        <div class="form-row">
         <?php if ($error){
           echo '<div class="form-row">
                   <div class="alert alert-warning" role="alert">
@@ -55,13 +58,12 @@ print_r($GebruikerArray);
                     <input type="text" class="form-control mb-2" name="wGeheimA" id="antwoordVeiligheidsvraag" placeholder="Antwoord" required>
             <!-- hier wordt de reset button gemaakt. -->
                     <button  type="submit" name="Volgende" class="btn bg-flame mt-2">Reset Wachtwoord</button>
+                  </div>
         </form>
       </div>
     </div>
 </div>
 
-<?php }
-else {
-  include '../includes/404error.php';
-}
+<?php
+
 include '../includes/footer.php' ?>
