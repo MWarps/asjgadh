@@ -1,7 +1,5 @@
 <?php
-require_once '../core/dbconnection.php';
 include '../includes/header.php';
-include '../includes/functies.php';
 ?>
 <div class="container">
     <div class="offset-2 col-md-8 mt-4">

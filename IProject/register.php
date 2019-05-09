@@ -1,8 +1,6 @@
 <?php
+include 'includes/header.php';
 
-include '../includes/header.php';
-require_once '../core/dbconnection.php';
-require '../includes/functies.php';
 
 if (!isset($_SESSION['gebruikersnaam'])){
 
@@ -277,4 +275,4 @@ if (isset($_POST['rVolgende'])) {
     unset($_SESSION['gebruikersnaam']);
     }
 
-     include '../includes/footer.php' ?>
+     include 'includes/footer.php' ?>

@@ -1,7 +1,5 @@
 <?php
-require_once '../core/dbconnection.php';
 include '../includes/header.php';
-include '../includes/functies.php';
 
 if(isset($_SESSION['reset'])){
 

@@ -4,7 +4,7 @@
 function bestaatGebruikersnaam($gebruikersnaam)
 {
     try {
-        require('../core/dbconnection.php');
+        require('core/dbconnection.php');
         $sqlSelect = $dbh->prepare("select gebruikersnaam from Gebruiker where gebruikersnaam=:gebruikersnaam");
 
         $sqlSelect->execute(
@@ -25,7 +25,7 @@ function bestaatGebruikersnaam($gebruikersnaam)
 function bestaatEmailadres($email)
 {
     try{
-        require('../core/dbconnection.php');
+        require('core/dbconnection.php');
         $sqlSelect = $dbh->prepare("select email from Gebruiker where email=:email");
 
         $sqlSelect->execute(
@@ -45,7 +45,7 @@ function bestaatEmailadres($email)
 function resetVragen()
 {
     try {
-        require('../core/dbconnection.php');
+        require('core/dbconnection.php');
         $sqlSelect = $dbh->query("select vraagnr, vraag from vragen");
 
         echo '<label for="inputGeheimeVraag">Geheime Vraag</label>';
@@ -80,7 +80,7 @@ function vragenOphalen() { // haalt alleen de veiligheidsvragen op
 function landen()
 {
     try {
-        require('../core/dbconnection.php');
+        require('core/dbconnection.php');
         $sqlSelect = $dbh->query("select Id, Name from Countries");
 
         echo '<label for="inputLanden">Land</label>';
@@ -380,7 +380,7 @@ function haalVideosOp($rubriek)
                                 <a class="nav-link" href="">Mijn account</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="pages/uitloggen.php">Uitloggen</a>
+                                <a class="nav-link" href="uitloggen.php">Uitloggen</a>
                             </li>
                         </ul> 
         ';
@@ -389,10 +389,10 @@ function haalVideosOp($rubriek)
     if ($_SESSION["ingelogd"] == false){
         echo'<ul class="navbar-nav">
                             <li class="nav-item">
-                                <a class="nav-link" href="pages/login.php">Login</a>
+                                <a class="nav-link" href="login.php">Login</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="pages/register.php">Register</a>
+                                <a class="nav-link" href="register.php">Register</a>
                             </li>
                         </ul> 
                         ';

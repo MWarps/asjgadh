@@ -1,9 +1,15 @@
 
 <?php
+session_start();
+
 //require_once '../core/dbconnection.php';
 include 'functies.php';
+require_once 'core/dbconnection.php';
+//require_once '../core/dbconnection.php';
 
-session_start();
+
+
+
 
 if (isset($_SESSION['gebruikersnaam'])){
   $_SESSION ['ingelogd'] = true;

@@ -1,7 +1,5 @@
 <?php
 include '../includes/header.php';
-require_once '../core/dbconnection.php';
-require '../includes/functies.php';
 
 if(isset($_SESSION['validatie'])){
 
