@@ -15,7 +15,8 @@ function bestaatGebruikersnaam($gebruikersnaam)
         $records = $sqlSelect->fetch(PDO::FETCH_ASSOC);
         return $records;
 
-    } catch (PDOexception $e) {
+    }
+    catch (PDOexception $e) {
         echo "er ging iets mis error: {$e->getMessage()}";
     }
 }
