@@ -154,13 +154,15 @@ function MaakVerkoperBrief($Gebruiker){
     try{
         require('../core/dbconnection.php');
 
-        $sql = "SELECT voornaam, achternaam, geslacht, adresregel1, adresrege2, postcode, plaatsnaam, land, verificatiecode, eindtijd FROM Gebruiker INNER JOIN Verificatie ON Gebruiker.gebruikersnaam = Verificatie.gebruikersnaam WHERE type = 'post' AND gebruikersnaam = :gebruiker";
+        $sql = "SELECT voornaam, achternaam, geslacht, adresregel1, adresregel2, postcode, plaatsnaam, land, verificatiecode, eindtijd FROM Gebruiker INNER JOIN Verificatie ON Gebruiker.gebruikersnaam = Verificatie.gebruikersnaam WHERE type = 'post' AND Gebruiker.gebruikersnaam = :gebruiker";
         $sth = $dbh->prepare($sql);
 
         $parameters = array(':Gebruiker' => $Gebruiker);
         $sth->execute($parameters);
 
         $records = $sth->fetchall(PDO::FETCH_ASSOC);
+        require('brief.php');
+        Brief($records);
     }
     catch (PDOexception $e) {
             echo "er ging iets mis error: {$e->getMessage()}";
@@ -370,26 +372,26 @@ function haalVideosOp($rubriek)
 
  function knoppenFunctie(){ 
      // functie kijkt of de sessie active is en past de knoppen rechtsboven in de header gepast aan.
-    if ( $_SESSION["ingelogd"] == false){
+    if ( $_SESSION["ingelogd"] == true){
         echo '
         <ul class="navbar-nav">
                             <li class="nav-item">
-                                <a class="nav-link" href="../pages/login.php">Mijn account</a>
+                                <a class="nav-link" href="">Mijn account</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="../pages/uitloggen.php">Uitloggen</a>
+                                <a class="nav-link" href="pages/uitloggen.php">Uitloggen</a>
                             </li>
                         </ul> 
         ';
             
     } // einde if session actief is
-    if ($_SESSION["ingelogd"] == true){
+    if ($_SESSION["ingelogd"] == false){
         echo'<ul class="navbar-nav">
                             <li class="nav-item">
-                                <a class="nav-link" href="../pages/login.php">Login</a>
+                                <a class="nav-link" href="pages/login.php">Login</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="../pages/register.php">Register</a>
+                                <a class="nav-link" href="pages/register.php">Register</a>
                             </li>
                         </ul> 
                         ';
