@@ -1,11 +1,7 @@
 <?php
-session_start();
-
 require_once '../core/dbconnection.php';
 include '../includes/header.php';
 include '../includes/functies.php';
-
-
 
 $error = false;
 
@@ -14,11 +10,9 @@ $Gebruikersnaam = $_POST['gebruikersnaam'];
 $Veiligheidsvraag = $_POST['rGeheimV'];
 $AntwoordVeiligheidsvraag = $_POST ['wGeheimA'];
 
-
 $input = array($Gebruikersnaam, $Veiligheidsvraag, $AntwoordVeiligheidsvraag);
 
 $GebruikerArray = haalGebruikerOp($Gebruikersnaam);
-
 
   if (!empty($GebruikerArray) &&
   $Veiligheidsvraag == $GebruikerArray['vraag'] && $AntwoordVeiligheidsvraag == $GebruikerArray['antwoordtekst']

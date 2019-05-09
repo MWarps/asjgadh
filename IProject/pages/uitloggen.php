@@ -12,8 +12,7 @@ include '../includes/functies.php';
         </div>
     </div>
 </div>
-<?php uitloggen(); ?>
+<?php uitloggen();
 
-<?php 
-include '../includes/footer.php'    
+include '../includes/footer.php'
 ?>
