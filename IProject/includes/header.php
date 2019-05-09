@@ -1,11 +1,14 @@
-session_start();
+
 <?php
-$ingelogd;
+//require_once '../core/dbconnection.php';
+include 'functies.php';
+
+session_start();
 
 if (isset($_SESSION['gebruikersnaam'])){
-  $ingelogd = true;
+  $_SESSION ['ingelogd'] = true;
 } else {
-  $ingelogd = false;
+   $_SESSION ['ingelogd'] = false;
 }
 ?>
 <!doctype html>
@@ -36,8 +39,8 @@ if (isset($_SESSION['gebruikersnaam'])){
                                 <a class="nav-link" href="../index.php">Home<span class="sr-only">(current)</span></a>
                             </li>
                         </ul>
-                        <?
-                        php knoppenFunctie(); 
+                        <?php 
+                        knoppenFunctie(); 
                         ?>
                     </div>
                 </div>
