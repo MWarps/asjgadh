@@ -5,16 +5,22 @@ require_once '../core/dbconnection.php';
 include '../includes/header.php';
 include '../includes/functies.php';
 
+if(isset($_SESSION['reset'])){
+
+$Validatie = false;
 
 if (isset($_POST['VeranderWachtwoord'])){
 $nWachtwoord1 = $_POST ['nWachtwoord1'];
 
+
 $input = array($Gebruikersnaam)
+$Validatie = true;
+unset($_SESSION['validatie']);
+updateWachtwoord($_SESSION['gebruikersnaam']);
 
-
-
-
+header("Refresh:5 ; url=index.php");
 }
+
 ?>
 
 <div class="container">
@@ -22,6 +28,14 @@ $input = array($Gebruikersnaam)
       <div class="jumbotron bg-dark text-white" style="padding: 2rem">
       <form class="needs-validation" novalidate action='wachtwoordReset.php' method="post"
       oninput='nWachtwoord1.setCustomValidity(nWachtwoord1.value != nWachtwoord2.value ? "Passwords do not match." : "")'>
+      <?php if($Validatie){
+        echo '<div class="form-row">
+                <div class="alert alert-success" role="alert">
+                  <strong>U wachtwoord is gewijzigd</strong> U wordt doorgestuurd naar de hoofdpagina.
+                  </div>
+                </div>
+              ';}
+      ?>
             <h1 class="h3 mb-3 mt-3 font-weight-normal>">Wachtwoord resetten</h1>
             <!-- hieronder wordt het nieuwe wachtwoord gegeven (X2) -->
             <div class="form-row">
@@ -55,4 +69,10 @@ $input = array($Gebruikersnaam)
   </div>
 </div>
 
-<?php include '../includes/footer.php' ?>
+<?php
+}
+
+else {
+  include '../includes/404error.php';
+}
+include '../includes/footer.php'; ?>
