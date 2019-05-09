@@ -78,12 +78,12 @@ include '../includes/functies.php';
 //        $dbVvraag = $data['vraag'];
 //        $dbVantwoord = $data['antwoordtekst'];
 //        if ($gebruikersnaamPHP == $dbgebruikersnaam ){
-//            echo "<h1> gebruikersnaam is correct, maar de gekozen veiligheidsvraag niet.</h1>";
+//            echo '<h1> gebruikersnaam is correct, maar de gekozen veiligheidsvraag niet.</h1>';
 //            if ($antwoordVeiligheidsvraag == $dbVvraag){
-//                echo"<h1>de gebruikersnaam en de gekozen veiligheidsvraag is correct, maar het antwoord niet.</h1>";
+//                echo'<h1>de gebruikersnaam en de gekozen veiligheidsvraag is correct, maar het antwoord niet.</h1>';
 //                if ($antwoordVeiligheidsvraag == $dbVantwoord){
-//                    echo"<h1>de gebruikersnaam,veiighiedsvraag en het antwoord is correct. gegevens worden gewijzigd.</h1>";
-//                    echo  "<h1> Het werkt</h1>";
+//                    echo'<h1>de gebruikersnaam,veiighiedsvraag en het antwoord is correct. gegevens worden gewijzigd.</h1>';
+//                    echo  '<h1> Het werkt</h1>';
 //
 //                }
 //            }
