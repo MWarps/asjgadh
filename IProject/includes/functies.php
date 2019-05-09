@@ -133,16 +133,13 @@ function StuurRegistreerEmail($rVoornaam, $rEmail){
 }
 
 function WordtVerkoper() {
-    $Gebruiker = $_SESSION[""];
+    $Gebruiker = $_SESSION["gebruikersnaam"];
     try{
         require('../core/dbconnection.php');
-        $sql = "";
+        $sql = "EXEC dbo.verificatie_toevoegen @gebruiker = :Gebruiker @type = 'post'";
         $sqlSelect = $dbh->prepare($sql);
-        $sqlSelect->execute(
-            array(
-                    ':Gebruiker' => $Gebruiker,
-                ));
-        $records = $sqlSelect->fetch(PDO::FETCH_ASSOC);
+
+        $sqlSelect->execute(array(':Gebruiker' => $Gebruiker));
 
         MaakVerkoperBrief($Gebruiker);
 
@@ -158,13 +155,12 @@ function MaakVerkoperBrief($Gebruiker){
         require('../core/dbconnection.php');
 
         $sql = "SELECT voornaam, achternaam, geslacht, adresregel1, adresrege2, postcode, plaatsnaam, land, verificatiecode, eindtijd FROM Gebruiker INNER JOIN Verificatie ON Gebruiker.gebruikersnaam = Verificatie.gebruikersnaam WHERE type = 'post' AND gebruikersnaam = :gebruiker";
-        $sqlSelect = $dbh->prepare($sql);
+        $sth = $dbh->prepare($sql);
 
-        $sqlSelect->execute(
-            array(
-                ':Gebruiker' => $Gebruiker;
-            ));
-        $records = $sqlSelect->fetch(PDO::FETCH_ASSOC);
+        $parameters = array(':Gebruiker' => $Gebruiker);
+        $sth->execute($parameters);
+
+        $records = $sth->fetchall(PDO::FETCH_ASSOC);
     }
     catch (PDOexception $e) {
             echo "er ging iets mis error: {$e->getMessage()}";
