@@ -49,7 +49,7 @@ if (isset($_SESSION['gebruikersnaam'])){
                 <form class="form-inline my-2 my-md-0">
                     <ul class="navbar-nav">
                         <li class="navbar-item p-2">
-                            <input class="form-control" type="text" placeholder="Zoeken" aria-label="Search">
+                            <input class="form-control" type="text" placeholder="Product Naam" aria-label="Search">
                         </li>
                     </ul>
                     <ul class="navbar-nav">
