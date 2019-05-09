@@ -1,3 +1,17 @@
+<?php
+session_start();
+require 'functies.php';
+$ingelogd;
+
+if (isset($_SESSION['gebruikersnaam'])){
+  $ingelogd = true;
+}
+
+else {
+  $ingelogd = false;
+}
+
+ ?>
 <!doctype html>
 <html lang="nl">
     <head>
@@ -26,8 +40,7 @@
                                 <a class="nav-link" href="../index.php">Home<span class="sr-only">(current)</span></a>
                             </li>
                         </ul>
-                        <?
-                        php knoppenFunctie(); 
+                        <?php knoppenFunctie($ingelogd);
                         ?>
                     </div>
                 </div>
@@ -62,6 +75,3 @@
                 </form>
             </nav>
         </header>
-
-
-

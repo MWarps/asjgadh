@@ -1,5 +1,4 @@
 <?php
-
 /* Is er al een gebruiker aangemeld met hetzelfde gebruikersnaam */
 function bestaatGebruikersnaam($gebruikersnaam)
 {
@@ -9,7 +8,7 @@ function bestaatGebruikersnaam($gebruikersnaam)
 
         $sqlSelect->execute(
             array(
-                ':gebruikersnaam' => $gebruikersnaam,
+                ':gebruikersnaam' => $gebruikersnaam
             )
         );
         $records = $sqlSelect->fetch(PDO::FETCH_ASSOC);
@@ -60,6 +59,7 @@ function resetVragen()
         echo "er ging iets mis error: {$e->getMessage()}";
     }
 }
+
 function vragenOphalen() { // haalt alleen de veiligheidsvragen op
     try {
         require('../core/dbconnection.php');
@@ -162,7 +162,7 @@ function MaakVerkoperBrief($Gebruiker){
 
         $sqlSelect->execute(
             array(
-                ':Gebruiker' => $Gebruiker;
+                ':Gebruiker' => $Gebruiker
             ));
         $records = $sqlSelect->fetch(PDO::FETCH_ASSOC);
     }
@@ -372,45 +372,39 @@ function haalVideosOp($rubriek)
 }
 */
 
- function knoppenFunctie(){ 
+ function knoppenFunctie($ingelogd){
      // functie kijkt of de sessie active is en past de knoppen rechtsboven in de header gepast aan.
-    if ( $_SESSION["ingelogd"] == false){
-        echo '
-        <ul class="navbar-nav">
+    if ($ingelogd){
+      echo '<ul class="navbar-nav">
                             <li class="nav-item">
                                 <a class="nav-link" href="../pages/login.php">Mijn account</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="../pages/uitloggen.php">Uitloggen</a>
                             </li>
-                        </ul> 
+                        </ul>
         ';
-            
+
     } // einde if session actief is
-    if ($_SESSION["ingelogd"] == true){
-        echo'<ul class="navbar-nav">
+    if ($ingelogd == false){
+      echo'<ul class="navbar-nav">
                             <li class="nav-item">
                                 <a class="nav-link" href="../pages/login.php">Login</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="../pages/register.php">Register</a>
                             </li>
-                        </ul> 
+                        </ul>
                         ';
     }// einde if session NIET actief is.
+
  }// einde functie
 
 function uitloggen(){
-    if ($_SESSION["ingelogd"] == true){
     session_unset(); // verwijderd alle variabelen in de serssie
     session_destroy(); // verwijderd de sessie en alle variabelen.
-    naarIndexSturen();
-    }
+    header("Refresh:10; Location: ../index.php");
+
 }// einde functie Uitloggen
 
-function naarIndexSturen(){
-    
-      header("Refresh:10; Location: ../index.php");
-    exit();
-}// einde functie naarIndexSturen
 ?>

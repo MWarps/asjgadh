@@ -2,6 +2,8 @@
 require_once '../core/dbconnection.php';
 include '../includes/header.php';
 include '../includes/functies.php';
+
+if (isset($_SESSION['gebruikersnaam'])){
 ?>
 <div class="container">
     <div class="offset-2 col-md-8 mt-4">
@@ -12,7 +14,14 @@ include '../includes/functies.php';
         </div>
     </div>
 </div>
-<?php uitloggen();
+<?php
+
+uitloggen();
+}
+
+else { include '../includes/404error.php';
+}
+
 
 include '../includes/footer.php'
 ?>
