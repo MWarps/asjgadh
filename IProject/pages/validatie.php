@@ -31,6 +31,7 @@ if (isset($_POST['registreren'])){
       deleteVerificatieRij($input);
 
       header("Refresh:5 ; url=index.php");
+
     }
 
   }
