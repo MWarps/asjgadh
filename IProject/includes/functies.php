@@ -132,38 +132,45 @@ function StuurRegistreerEmail($rVoornaam, $rEmail){
     }
 }
 
-
-}
-    }
-        echo "er ging iets mis error: {$e->getMessage()}";
-    }
-    catch (PDOexception $e) {
-
-        $sql = "SELECT voornaam, achternaam, geslacht, adresregel1, adresrege2, postcode, plaatsnaam, land, verificatiecode, eindtijd FROM Gebruiker INNER JOIN Verificatie ON Gebruiker.gebruikersnaam = Verificatie.gebruikersnaam WHERE type = 'post' AND gebruikersnaam = :gebruiker";
+function WordtVerkoper() {
+    $Gebruiker = $_SESSION[""];
     try{
         require('../core/dbconnection.php');
+        $sql = "";
+        $sqlSelect = $dbh->prepare($sql);
+        $sqlSelect->execute(
+            array(
+                    ':Gebruiker' => $Gebruiker,
+                ));
+        $records = $sqlSelect->fetch(PDO::FETCH_ASSOC);
 
-function MaakVerkoperBrief($Gebruiker){
-
-}
-    }
-        echo "er ging iets mis error: {$e->getMessage()}";
-    catch (PDOexception $e) {
-    }
         MaakVerkoperBrief($Gebruiker);
 
-        $records = $sqlSelect->fetch(PDO::FETCH_ASSOC);
-            ));
-                ':Gebruiker' => $Gebruiker,
-            array(
-        $sqlSelect->execute(
+    }
+    catch (PDOexception $e) {
+        echo "er ging iets mis error: {$e->getMessage()}";
 
-        $sqlSelect = $dbh->prepare($sql);
-        $sql = "EXEC verificatie_toevoegen @gebruiker = :Gebruiker @type = 'post'";
+    }
+}
+
+function MaakVerkoperBrief($Gebruiker){
     try{
         require('../core/dbconnection.php');
-    $Gebruiker = $_SESSION[""];
-function WordtVerkoper() {
+
+        $sql = "SELECT voornaam, achternaam, geslacht, adresregel1, adresrege2, postcode, plaatsnaam, land, verificatiecode, eindtijd FROM Gebruiker INNER JOIN Verificatie ON Gebruiker.gebruikersnaam = Verificatie.gebruikersnaam WHERE type = 'post' AND gebruikersnaam = :gebruiker";
+        $sqlSelect = $dbh->prepare($sql);
+
+        $sqlSelect->execute(
+            array(
+                ':Gebruiker' => $Gebruiker;
+            ));
+        $records = $sqlSelect->fetch(PDO::FETCH_ASSOC);
+    }
+    catch (PDOexception $e) {
+            echo "er ging iets mis error: {$e->getMessage()}";
+    }
+}
+
 function geslacht()
 {
 
