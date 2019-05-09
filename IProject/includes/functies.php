@@ -266,7 +266,8 @@ function StuurRegistreerEmail($rVoornaam, $rEmail, $code){
         //mail($to,$subject,$message, $headers);
 }
 
-function WordtVerkoper($Gebruiker) {
+function WordtVerkoper() {
+    $Gebruiker = $_SESSION[""];
     try{
         require('../core/dbconnection.php');
         $sql = "EXEC verificatie_toevoegen @gebruiker = :Gebruiker @type = 'post'";
