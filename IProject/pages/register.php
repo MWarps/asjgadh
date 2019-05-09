@@ -1,7 +1,11 @@
 <?php
+
 include '../includes/header.php';
 require_once '../core/dbconnection.php';
 require '../includes/functies.php';
+
+if (!isset($_SESSION['gebruikersnaam'])){
+
 $Gbestaat = False;
 $Ebestaat = False;
 
@@ -23,11 +27,13 @@ if (isset($_POST['rVolgende'])) {
     $rGeslacht = $_POST['rGeslacht'];
     $rVerkoper = 0;
 
-    $input = array($rGebruikersnaam, $rVoornaam, $rAchternaam, $rWachtwoord,
-    $rEmail, $rGeboorte, $rGeheimV, $rGeheimA, $rStraat, $rPlaats, $rPostcode,
-    $rLand, $rVerkoper);
+    $input = array($rGebruikersnaam, $rVoornaam, $rAchternaam, $rGeslacht,
+    $rWachtwoord, $rStraat, $rStraat1, $rPostcode, $rPlaats, $rLand,
+    $rGeboorte,  $rEmail, $rGeheimV, $rGeheimA, $rVerkoper);
 
-   // controleert of gebruikrsnaam bestaat
+    array_push($input, 0, 'mail');
+
+   // controleert of gebruikersnaam bestaat
   if(!empty(bestaatGebruikersnaam($_POST['rGebruikersnaam']))) {
       $Gbestaat = True;
       }
@@ -38,45 +44,14 @@ if (isset($_POST['rVolgende'])) {
 
   // controleert of er geen error's zijn
   if($Ebestaat == false && $Gbestaat == false){
-    //header("Refresh: 1; url=validatie.php");
-    //$_SESSION['input'] = $input;
-    $hashedWachtwoord = password_hash($rWachtwoord, PASSWORD_DEFAULT);
-
-    try {
-      // SQL insert statement
-        $sqlInsert = $dbh->prepare("INSERT INTO Gebruiker (
-           gebruikersnaam, voornaam, achternaam, geslacht, adresregel1, adresregel2,
-           postcode, plaatsnaam, land, geboortedatum, email,
-           wachtwoord, vraag, antwoordtekst, verkoper)
-          values (
-            :rGebruikersnaam, :rVoornaam, :rAchternaam, :rGeslacht, :rAdresregel1, :rAdresregel2,
-            :rPostcode, :rPlaatsnaam, :rLand, :rGeboortedatum, :rEmail,
-            :rWachtwoord, :rVraag, :rAntwoordtekst, :rVerkoper)");
-
-        $sqlInsert->execute(
-            array(
-                ':rGebruikersnaam' => $rGebruikersnaam,
-                ':rVoornaam' => $rVoornaam,
-                ':rAchternaam' => $rAchternaam,
-                ':rGeslacht' => $rGeslacht,
-                ':rAdresregel1' => $rStraat,
-                ':rAdresregel2' => $rStraat1,
-                ':rPostcode' => $rPostcode,
-                ':rPlaatsnaam' => $rPlaats,
-                ':rLand' => $rLand,
-                ':rGeboortedatum' => $rGeboorte,
-                ':rEmail' => $rEmail,
-                ':rWachtwoord' => $hashedWachtwoord,
-                ':rVraag' => $rGeheimV,
-                ':rAntwoordtekst' => $rGeheimA,
-                ':rVerkoper' => $rVerkoper
-
-            ));
-          }
-        catch (PDOexception $e) {
-        echo "er ging iets mis {$e->getMessage()}";
-      }
-
+    $_SESSION['pogingen'] = 0;
+    $_SESSION['input'] = $input;
+    $_SESSION['validatie'] = True;
+    InsertGebruiker($input);
+    VerificatieCodeProcedure($input);
+    $_SESSION['code'] = HaalVerficatiecodeOp($input);
+    // StuurRegistreerEmail($input['1'], $input['11'], $_SESSION['code']['verificatiecode']);
+    header("Location: validatie.php");
     }
   }
 
@@ -93,15 +68,16 @@ if (isset($_POST['rVolgende'])) {
                                 <div class="alert alert-warning" role="alert">
                                   <strong>De gebruikersnaam bestaat al!</strong>
                                 </div>
-                              </div>';
+                               </div>';
                       }
                       if($Ebestaat){
                         echo  '<div class="form-row">
-                              <div class="alert alert-warning" role="alert">
+                                <div class="alert alert-warning" role="alert">
                                   <strong>Het ingevoerde email adres wordt al gebruikt!</strong>
                                 </div>
                                </div>';
                       }
+
                     ?>
                         <div class="form-row">
                           <div class="form-group col-md-4">
@@ -150,7 +126,7 @@ if (isset($_POST['rVolgende'])) {
                             <input type="password" name="rWachtwoord" class="form-control" id="inputWachtwoord"
                             pattern="(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$" placeholder="Wachtwoord" required>
                             <div class="invalid-feedback">
-                              Voer een wachtwoord in met minimaal 8 tekens.
+                              Voer een wachtwoord in met minimaal 8 tekens, 1 kleine letter, 1 hoofdletter en 1 teken.
                             </div>
                         </div>
                         <div class="form-group col-md-4">
@@ -247,7 +223,7 @@ if (isset($_POST['rVolgende'])) {
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-6">
-                            <?php  echo Landen(); ?>
+                            <?php  echo landen(); ?>
                         </div>
                     </div>
                     <div class="form-row">
@@ -263,13 +239,42 @@ if (isset($_POST['rVolgende'])) {
                           </div>
                         </div>
                     </div>
-                    <button type="submit" name="rVolgende" class="btn btn-primary">
+                    <button type="submit" name="rVolgende" class="btn btn-primary" data-toggle="modal" data-target="#Modal">
                       Volgende
                     </button>
                 </form>
             </div>
         </div>
 
+    <?php }
+    else {
+    ?>  <div class="container">
+          <div class="offset-3 col-md-6 mt-4 text-center">
+            <div class="jumbotron bg-dark text-white" style="padding: 2rem">
+              <h3 class="h3 mb-4 text-center "> OOPS! Sorry... </h3>
+                <p> Log eerst uit als u een account wilt registreren.
+                  <button type="button" class="btn btn-lg bg-flame mt-3" name="LogUit" data-toggle="modal" data-target="#Modal" >
+                    Log uit
+                  </button>
+            </div>
+          </div>
+      </div>
+
+      <div class="modal fade" id="Modal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header" style="background: #EFF1F2" >
+            <h5 class="modal-title"> Nog niet gemaakt </h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          </div>
+        </div>
+      </div>
+
     <?php
+    unset($_SESSION['gebruikersnaam']);
+    }
 
      include '../includes/footer.php' ?>

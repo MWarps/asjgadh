@@ -4,7 +4,6 @@ $dbname = 'iproject';
 $username = 'testgebruiker';
 $password = 'test123';
 
-
 try {
     global $dbh;
 

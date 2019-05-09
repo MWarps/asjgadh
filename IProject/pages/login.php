@@ -1,75 +1,76 @@
 <?php
-include('../includes/header.php');
-require_once('../core/dbconnection.php');
-require('../includes/functies.php');
+include ('../includes/header.php');
+require_once ('../core/dbconnection.php');
+require ('../includes/functies.php');
+
+if (!isset($_SESSION['gebruikersnaam'])){
+$Validatie = false;
+$error = false;
 
 if (isset($_POST['loginKnop'])) {
     $gebruikersnaam = $_POST['gebruikersnaam'];
     $wachtwoord = $_POST['wachtwoord'];
-    $loginKnop = $_POST['loginKnop'];
 
-        try {
-            $sqlSelect = $dbh->prepare("select gebruikersnaam, wachtwoord from
-            Gebruiker where gebruikersnaam=:gebruikersnaam group by gebruikersnaam, wachtwoord");
+    $gebruiker = haalGebruikerOp($gebruikersnaam);
 
-            $sqlSelect->execute(
-                array(
-                    ':gebruikersnaam' => $gebruikersnaam,
-                ));
-            $records = $sqlSelect->fetch(PDO::FETCH_ASSOC);
+   if($gebruikersnaam == $gebruiker['gebruikersnaam'] && $wachtwoord == password_verify($wachtwoord,$gebruiker['wachtwoord'])){
+      $_SESSION['gebruikersnaam'] = $gebruikersnaam;
+      $Validatie = true;
+      header("Refresh:5 ; url=../index.php");
 
-            if (!$records) {
-                echo 'Gebruikersnaam of Wachtwoord incorrect';
-                header("Refresh: 2; url=login.php");
-                die();
-            }
-            if (password_verify($wachtwoord, $records['wachtwoord'])) {
-                $_SESSION['gebruikersnaam'] = $gebruikersnaam;
-                header("refresh:0; url=index.php");
-            } else {
-                echo 'Gebruikersnaam of Wachtwoord incorrect';
-                header("Refresh: 2; url=login.php");
-                die();
-            }
+    }
+    else {
+      $error = true;
 
-        } catch (PDOexception $e) {
-            echo "er ging iets mis error: {$e->getMessage()}";
-        }
     }
 
-
+}
  ?>
-    <div class="container-fluid">
-        <div class="row">
-            <form method="post" action="login.php" class="form-signin">
-                <h1 class="h3 mb-3 mt-3 font-weight-normal text-center">Login</h1>
+ <div class="container">
+   <div class="row">
+       <div class="offset-3 col-md-6 mt-4">
+            <div class="jumbotron bg-dark text-white" style="padding: 2rem">
+            <form class="needs-validation" novalidate method="post" action="login.php">
+                <h1 class="h3 mb-3 font-weight-normal text-center">Login</h1>
+                <?php if($Validatie){
+                  echo '<div class="form-row">
+                          <div class="alert alert-success" role="alert">
+                            <strong>U bent ingelogd!</strong> U wordt doorgestuurd naar de hoofdpagina.
+                            </div>
+                          </div>
+                        ';}
+
+                 if($error){
+                  echo '<div class="form-row">
+                          <div class="alert alert-warning" role="alert">
+                            <strong>Fout!</strong> Gebruikersnaam of wachtwoord klopt niet.
+                            </div>
+                          </div>
+                        ';}
+                ?>
                 <label for="inputEmail" class="sr-only">Gebruikersnaam</label>
-                <input type="text" name="gebruikersnaam" id="inputEmail" class="form-control" placeholder="Gebruikersnaam" required autofocus>
+                <input type="text" name="gebruikersnaam" id="inputEmail" class="form-control mb-2" placeholder="Gebruikersnaam" required>
+                <div class="invalid-feedback">
+                  Voer een gebruikersnaam in.
+                </div>
                 <label for="inputPassword" class="sr-only">Password</label>
                 <input type="password" name="wachtwoord" id="inputPassword" class="form-control" placeholder="Wachtwoord" required>
-                <a href="register.php" class="register-link">Nog geen account? Registreer hier!</a>
-                <button class="btn btn-lg btn-block bg-flame" type="submit" value="Login" name="loginKnop">Inloggen</button>
-            </form>
-        </div>
-    </div>
-    <div class="footercolor">
-        <footer class="footer-login">
-            <div class="container py-2">
-                <div class="row">
-                    <div class="col-md-6">
-                        <h5>Copyright</h5>
-                        <small class="d-block mb-3 text-muted">&copy; Project Groep 34 / 2019</small>
-                    </div>
-                    <div class="col-md-6">
-                        <h5>Over ons</h5>
-                        <ul class="list-unstyled text-small">
-                            <li><a class="text-muted" href="#">Contact</a></li>
-                            <li><a class="text-muted" href="#">Algemene voorwaardes</a></li>
-                            <li><a class="text-muted" href="#">Privacy</a></li>
-                        </ul>
-                    </div>
+                <div class="invalid-feedback">
+                  Voer een wachtwoord in.
                 </div>
-            </div>
-        </footer>
+                <a href="wachtwoordReset.php" class="register-link">Wachtwoord vergeten?</a>
+                <button class="btn btn-lg btn-block bg-flame" type="submit" value="loginKnop" id="loginKnop" name="loginKnop">Inloggen</button>
+                <a href="register.php" class="register-link">Nog geen account? Registreer hier!</a>
+            </form>
+          </div>
+        </div>
+      </div>
     </div>
-</body>
+<?php
+}
+else {
+  include '../includes/404error.php';
+  // unset($_SESSION['gebruikersnaam']);
+}
+  include '../includes/footer.php'
+ ?>

@@ -7,50 +7,51 @@
 DROP TABLE IF EXISTS Verificatie, Verificatietypen, Verkoper, Gebruiker, Landen, Vragen;
 
 CREATE TABLE Vragen (  
-vraagnr Tinyint NOT NULL,  
-vraag VARCHAR(80) NOT NULL,  
+vraagnr		Tinyint		NOT NULL,  
+vraag		VARCHAR(80) NOT NULL,  
 CONSTRAINT pk_vraagnr PRIMARY KEY(vraagnr)  
 ) 
 
 --Landen aan de hand van https://gist.github.com/abroadbent/6233480
 CREATE TABLE Landen (
-Id  INT IDENTITY(1,1) NOT NULL,
-Iso  VARCHAR(2) NOT NULL,
-Name  VARCHAR(80) NOT NULL,
-Iso3  VARCHAR(3) NULL,
-NumCode INT  NULL,
-PhoneCode INT NOT NULL,
+Id			INT IDENTITY(1,1)	NOT NULL,
+Iso			VARCHAR(2)			NOT NULL,
+Name		VARCHAR(80)			NOT NULL,
+Iso3		VARCHAR(3)			NULL,
+NumCode		INT					NULL,
+PhoneCode	INT					NOT NULL,
 CONSTRAINT [PK_Landen] PRIMARY KEY CLUSTERED ([Id] ASC),
 CONSTRAINT [uc_Landen_Iso] UNIQUE NONCLUSTERED ([Iso] ASC)
 );
 
 CREATE TABLE Gebruiker (
-gebruikersnaam VARCHAR(50) NOT NULL,
-voornaam VARCHAR(50) NOT NULL,
-achternaam VARCHAR(51) NOT NULL,
-geslacht char(1) NOT NULL,
-adresregel1 VARCHAR(71) NOT NULL,
-adresregel2 VARCHAR(71) NULL,
-postcode CHAR(7) NOT NUll,
-plaatsnaam VARCHAR(28) NOT NUll,
-land INT NOT NULL,
-geboortedatum Date NOT NULL,
-email VARCHAR(254) NOT NULL UNIQUE,
-wachtwoord VARCHAR(100) NOT NULL,
-vraag Tinyint NOT NULL,
+gebruikersnaam		VARCHAR(50)		NOT NULL,
+voornaam			VARCHAR(50)		NOT NULL,
+achternaam			VARCHAR(51)		NOT NULL,
+geslacht			char(1)			NOT NULL,
+adresregel1			VARCHAR(71)		NOT NULL,
+adresregel2			VARCHAR(71)		NULL,
+postcode			CHAR(7)			NOT NUll,
+plaatsnaam			VARCHAR(28)		NOT NUll,
+land				INT				NOT NULL,
+geboortedatum		Date			NOT NULL,
+email				VARCHAR(254)	NOT NULL,
+wachtwoord			VARCHAR(100)	NOT NULL,
+vraag				Tinyint			NOT NULL,
 antwoordtekst VARCHAR(50) NOT NULL,
 verkoper bit NOT NUll,
 verifieerd bit NOT NULL,
 CONSTRAINT PK_Gebruiker PRIMARY KEY (gebruikersnaam),
-CONSTRAINT CK_gerbruiker_geslacht CHECK (geslacht IN ( 'M','F','X') )
+CONSTRAINT CK_gebruiker_geslacht CHECK (geslacht IN ( 'M','F','X') ),
+CONSTRAINT UQ_gebruiker_email UNIQUE(email)
 );
 
 CREATE TABLE Verkoper (
-gebruikersnaam VARCHAR(50) NOT NULL,
-bank CHAR(4) NULL,
-bankrekeningnummer CHAR(18) NULL,
+gebruikersnaam		VARCHAR(50) NOT NULL,
+bank				CHAR(4)		NULL,
+bankrekeningnummer	CHAR(18)	NULL,
 --controle optie nog niet duidelijk
-creditcard CHAR(19) NULL,
+creditcard			CHAR(19)	NULL,
 CONSTRAINT PK_Verkoper PRIMARY KEY (gebruikersnaam)
 );
 
@@ -60,10 +61,10 @@ CONSTRAINT PK_Verificatietypen PRIMARY KEY (verificatietype)
 );
 
 CREATE TABLE Verificatie (
-gebruikersnaam VARCHAR(50) NOT NULL,
-type CHAR(4) NOT NULL,
-verificatiecode CHAR(6) NOT NULL,
-eindtijd Smalldatetime NOT NULL,
+gebruikersnaam	VARCHAR(50)			NOT NULL,
+type			CHAR(4)				NOT NULL,
+verificatiecode CHAR(6)				NOT NULL,
+eindtijd		Smalldatetime		NOT NULL,
 CONSTRAINT PK_Verificatie PRIMARY KEY (gebruikersnaam)
 );
 
@@ -78,32 +79,36 @@ CONSTRAINT FK_Land
 	ON DELETE NO ACTION,
 CONSTRAINT chk_Email check (email like'%_@__%.__%'),
 --CONSTRAINT CK_gerbruiker_geslacht CHECK (geslacht IN ( 'M','F','X') ),
-CONSTRAINT CK_voornaam CHECK ( voornaam not like '%[0-9]%'),
-CONSTRAINT CK_achternaam CHECK ( achternaam not like '%[0-9]%'),
-CONSTRAINT CK_plaatsnaam CHECK ( plaatsnaam not like '%[0-9]%')
+CONSTRAINT CK_voornaam		CHECK ( voornaam not like	'%[0-9]%'),
+CONSTRAINT CK_achternaam	CHECK ( achternaam not like '%[0-9]%'),
+CONSTRAINT CK_plaatsnaam	CHECK ( plaatsnaam not like '%[0-9]%')
+go
 
 ALTER TABLE Verkoper ADD
 CONSTRAINT FK_Gebruiker
 	FOREIGN KEY (gebruikersnaam) REFERENCES Gebruiker(gebruikersnaam)
 	ON UPDATE CASCADE
 	ON DELETE CASCADE
+go
 
 ALTER TABLE Verificatie ADD
 CONSTRAINT FK_Verificatietype
 	FOREIGN KEY (type) REFERENCES Verificatietypen(verificatietype)
 	ON UPDATE CASCADE
 	ON DELETE CASCADE
+go
 
 ALTER TABLE Verificatie ADD
 CONSTRAINT FK_GebruikersVerificatie
 	FOREIGN KEY (gebruikersnaam) REFERENCES Gebruiker(gebruikersnaam)
 	ON UPDATE CASCADE
 	ON DELETE CASCADE
+go
 
 --Landen insert
 
 SET IDENTITY_INSERT Landen ON
-
+go
 --
 -- Dumping data for table `Countries`
 --
@@ -348,4 +353,5 @@ INSERT INTO Landen (Id, Iso, Name, Iso3, Numcode, PhoneCode) VALUES
 (238, 'ZM', 'Zambia', 'ZMB', 894, 260),
 (239, 'ZW', 'Zimbabwe', 'ZWE', 716, 263);
 
+go
 SET IDENTITY_INSERT Landen Off
