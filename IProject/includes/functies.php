@@ -154,7 +154,7 @@ function MaakVerkoperBrief($Gebruiker){
     try{
         require('../core/dbconnection.php');
 
-        $sql = "SELECT voornaam, achternaam, geslacht, adresregel1, adresrege2, postcode, plaatsnaam, land, verificatiecode, eindtijd FROM Gebruiker INNER JOIN Verificatie ON Gebruiker.gebruikersnaam = Verificatie.gebruikersnaam WHERE type = 'post' AND gebruikersnaam = :gebruiker";
+        $sql = "SELECT voornaam, achternaam, geslacht, adresregel1, adresregel2, postcode, plaatsnaam, land, verificatiecode, eindtijd FROM Gebruiker INNER JOIN Verificatie ON Gebruiker.gebruikersnaam = Verificatie.gebruikersnaam WHERE type = 'post' AND Gebruiker.gebruikersnaam = :gebruiker";
         $sth = $dbh->prepare($sql);
 
         $parameters = array(':Gebruiker' => $Gebruiker);
