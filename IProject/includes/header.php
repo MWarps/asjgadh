@@ -26,9 +26,7 @@
                                 <a class="nav-link" href="../index.php">Home<span class="sr-only">(current)</span></a>
                             </li>
                         </ul>
-                        <?
-                        php knoppenFunctie(); 
-                        ?>
+                        <?php //knoppenFunctie(); ?>
                     </div>
                 </div>
             </nav>
@@ -36,7 +34,7 @@
                 <form class="form-inline my-2 my-md-0">
                     <ul class="navbar-nav">
                         <li class="navbar-item p-2">
-                            <input class="form-control" type="text" placeholder="Zoeken" aria-label="Search">
+                            <input class="form-control" type="text" placeholder="Product Naam" aria-label="Search">
                         </li>
                     </ul>
                     <ul class="navbar-nav">
