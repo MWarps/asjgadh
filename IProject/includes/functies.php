@@ -374,10 +374,10 @@ function haalVideosOp($rubriek)
         echo '
         <ul class="navbar-nav">
                             <li class="nav-item">
-                                <a class="nav-link" href="../pages/login.php">Mijn account</a>
+                                <a class="nav-link" href="">Mijn account</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="../pages/uitloggen.php">Uitloggen</a>
+                                <a class="nav-link" href="pages/uitloggen.php">Uitloggen</a>
                             </li>
                         </ul> 
         ';
@@ -386,10 +386,10 @@ function haalVideosOp($rubriek)
     if ($_SESSION["ingelogd"] == false){
         echo'<ul class="navbar-nav">
                             <li class="nav-item">
-                                <a class="nav-link" href="../pages/login.php">Login</a>
+                                <a class="nav-link" href="pages/login.php">Login</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="../pages/register.php">Register</a>
+                                <a class="nav-link" href="pages/register.php">Register</a>
                             </li>
                         </ul> 
                         ';
