@@ -36,7 +36,7 @@ if (isset($_SESSION['gebruikersnaam'])){
                     <div class="navbar-collapse collapse">
                         <ul class="navbar-nav mr-auto">
                             <li class="nav-items">
-                                <a class="nav-link" href="../index.php">Home<span class="sr-only">(current)</span></a>
+                                <a class="nav-link" href="index.php">Home<span class="sr-only">(current)</span></a>
                             </li>
                         </ul>
                         <?php 
