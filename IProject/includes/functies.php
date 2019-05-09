@@ -132,11 +132,12 @@ function StuurRegistreerEmail($rVoornaam, $rEmail){
     }
 }
 
-function StuurRegistreerBrief($rVoornaam, $rEmail){
+function StuurRegistreerBrief($Gebruiker){
 
     try{
         require('../core/dbconnection.php');
-        $sqlSelect = $dbh->prepare("EXEC verificatie_toevoegen @gebruiker = @gebruikersnaam @type = 'post'");
+        $sql = "EXEC verificatie_toevoegen @gebruiker = :Gebruiker @type = 'post'";
+        $sqlSelect = $dbh->prepare($sql);
 
         $sqlSelect->execute(
             array(
