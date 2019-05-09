@@ -1,11 +1,11 @@
-session_start();
+
 <?php
-$ingelogd;
+session_start();
 
 if (isset($_SESSION['gebruikersnaam'])){
-  $ingelogd = true;
+  $_SESSION ['ingelogd'] = true;
 } else {
-  $ingelogd = false;
+   $_SESSION ['ingelogd'] = false;
 }
 ?>
 <!doctype html>
