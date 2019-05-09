@@ -132,8 +132,6 @@ function StuurRegistreerEmail($rVoornaam, $rEmail){
     }
 }
 
-
-}
     }
         echo "er ging iets mis error: {$e->getMessage()}";
     }
