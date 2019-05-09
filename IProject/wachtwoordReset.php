@@ -17,10 +17,10 @@ $GebruikerArray = haalGebruikerOp($Gebruikersnaam);
   $AntwoordVeiligheidsvraag == $GebruikerArray['antwoordtekst']
   )
   {
-  $_SESSION['reset'] = true;
+  $_SESSION['reset'] = $Gebruikersnaam;
    header("Location: wachtwoordReset2.php");
   }
-  
+
   else{
   $error = true;
   }
@@ -42,7 +42,7 @@ $GebruikerArray = haalGebruikerOp($Gebruikersnaam);
             <h1 class="h3 mb-3 mt-3 font-weight-normal>">Wachtwoord resetten</h1>
             <!-- hieronder wordt de tekst en invulveld voor de gebruikersnaam gemaakt -->
                   <label for="inputGebruikersnaam">Gebruikersnaam</label>
-                  <input type="text" class="form-control mb-2" value="<?php echo $_SESSION['gebruikersnaam']; ?>" name="gebruikersnaam" id="gebruikersnaam" placeholder="Gebruikersnaam" required>
+                  <input type="text" class="form-control mb-2" value="<?php if(isset($_SESSION['gebruikersnaam'])){echo $_SESSION['gebruikersnaam'];} ?>" name="gebruikersnaam" id="gebruikersnaam" placeholder="Gebruikersnaam" required>
             <!-- hieronder wordt de veiliheidsvraag geselecteerd -->
                       <?php
                           echo resetVragen();

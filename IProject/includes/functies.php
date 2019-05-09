@@ -503,9 +503,10 @@ function haalVideosOp($rubriek)
 }
 */
 
- function knoppenFunctie($ingelogd){
+ function knoppenFunctie(){
      // functie kijkt of de sessie active is en past de knoppen rechtsboven in de header gepast aan.
-    if ( $_SESSION["ingelogd"] == false){
+    if ($_SESSION["ingelogd"]){
+
         echo '
         <ul class="navbar-nav">
                             <li class="nav-item">
@@ -518,7 +519,7 @@ function haalVideosOp($rubriek)
         ';
 
     } // einde if session actief is
-    if ($_SESSION["ingelogd"] == true){
+    if ($_SESSION["ingelogd"] == false){
         echo'<ul class="navbar-nav">
                             <li class="nav-item">
                                 <a class="nav-link" href="login.php">Login</a>
@@ -535,8 +536,8 @@ function haalVideosOp($rubriek)
 function uitloggen(){
     session_unset(); // verwijderd alle variabelen in de serssie
     session_destroy(); // verwijderd de sessie en alle variabelen.
-    header("Refresh:10; Location: index.php");
 
+    header("Refresh:10; url=index.php");
 }// einde functie Uitloggen
 
 ?>

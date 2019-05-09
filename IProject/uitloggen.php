@@ -1,5 +1,6 @@
 <?php
 include 'includes/header.php';
+uitloggen();
 ?>
 <div class="container">
     <div class="offset-2 col-md-8 mt-4">
@@ -10,7 +11,7 @@ include 'includes/header.php';
         </div>
     </div>
 </div>
-<?php uitloggen();
+<?php
 
 include 'includes/footer.php'
 ?>
