@@ -266,8 +266,7 @@ function StuurRegistreerEmail($rVoornaam, $rEmail, $code){
         //mail($to,$subject,$message, $headers);
 }
 
-function StuurRegistreerBrief($Gebruiker){
-
+function WordtVerkoper($Gebruiker) {
     try{
         require('../core/dbconnection.php');
         $sql = "EXEC verificatie_toevoegen @gebruiker = :Gebruiker @type = 'post'";
@@ -275,25 +274,22 @@ function StuurRegistreerBrief($Gebruiker){
 
         $sqlSelect->execute(
             array(
-                ':gebruikersnaam' => $gebruikersnaam,
+                ':Gebruiker' => $Gebruiker,
             ));
         $records = $sqlSelect->fetch(PDO::FETCH_ASSOC);
 
+        MaakVerkoperBrief($Gebruiker);
+    }
+    catch (PDOexception $e) {
+        echo "er ging iets mis error: {$e->getMessage()}";
+    }
+}
 
-        ini_set( 'display_errors', 1 );
-        error_reporting( E_ALL );
-        $from = "no-reply@iconcepts.nl";
-        $to = $rEmail;
-        $subject = "Validatie code account registreren";
-        $message = 'Hallo '.$rVoornaam.',
-            <br>
-            <br>
-            Bedankt voor het registreren. Hieronder staat de code die ingevoerd
-            moet worden om het registeren te voltooien:
-            <br>
-            <h1>'. $voornaam.' ';
-        $headers = "From:" .$from;
-        mail($to,$subject,$message, $headers);
+function MaakVerkoperBrief($Gebruiker){
+
+    try{
+        require('../core/dbconnection.php');
+        $sql = "SELECT voornaam, achternaam, geslacht, adresregel1, adresrege2, postcode, plaatsnaam, land, verificatiecode, eindtijd FROM Gebruiker INNER JOIN Verificatie ON Gebruiker.gebruikersnaam = Verificatie.gebruikersnaam WHERE type = 'post' AND gebruikersnaam = :gebruiker";
 
     }
     catch (PDOexception $e) {
