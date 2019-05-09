@@ -362,9 +362,11 @@ function haalVideosOp($rubriek)
  }// einde functie
 
 function uitloggen(){
+    if (session_status() == PHP_SESSION_ACTIVE){
     session_unset(); // verwijderd alle variabelen in de serssie
     session_destroy(); // verwijderd de sessie en alle variabelen.
     naarIndexSturen();
+    }
 }// einde functie Uitloggen
 
 function naarIndexSturen(){
