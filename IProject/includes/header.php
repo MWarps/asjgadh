@@ -1,3 +1,13 @@
+session_start();
+<?php
+$ingelogd;
+
+if (isset($_SESSION['gebruikersnaam'])){
+  $ingelogd = true;
+} else {
+  $ingelogd = false;
+}
+?>
 <!doctype html>
 <html lang="nl">
     <head>
