@@ -367,7 +367,7 @@ function haalVideosOp($rubriek)
 
  function knoppenFunctie(){ 
      // functie kijkt of de sessie active is en past de knoppen rechtsboven in de header gepast aan.
-    if ( $_SESSION["ingelogd"] == false){
+    if ( $_SESSION["ingelogd"] == true){
         echo '
         <ul class="navbar-nav">
                             <li class="nav-item">
@@ -380,7 +380,7 @@ function haalVideosOp($rubriek)
         ';
             
     } // einde if session actief is
-    if ($_SESSION["ingelogd"] == true){
+    if ($_SESSION["ingelogd"] == false){
         echo'<ul class="navbar-nav">
                             <li class="nav-item">
                                 <a class="nav-link" href="../pages/login.php">Login</a>
