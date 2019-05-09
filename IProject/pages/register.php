@@ -1,5 +1,4 @@
 <?php
-session_start();
 
 include '../includes/header.php';
 require_once '../core/dbconnection.php';

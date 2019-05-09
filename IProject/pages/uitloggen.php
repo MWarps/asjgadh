@@ -10,8 +10,7 @@ include '../includes/functies.php';
   <p class="mb-0">U wordt terug gestuurd naar de homepage, Ogenblik geduld alstublieft</p>
 </div>
 
-<?php uitloggen(); ?>
+<?php uitloggen();
 
-<?php 
-include '../includes/footer.php'    
+include '../includes/footer.php'
 ?>

@@ -1,15 +1,15 @@
 <?php
-session_start();
 include '../includes/header.php';
 require_once '../core/dbconnection.php';
 require '../includes/functies.php';
+
 if(isset($_SESSION['validatie'])){
 
 echo strval($_SESSION['code']['verificatiecode']);
 
 $input = $_SESSION['input'];
 
-$error = '';
+$error;
 $overEindtijd = false;
 $pogingen = false;
 $Validatie = false;
