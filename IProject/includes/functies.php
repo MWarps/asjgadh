@@ -161,6 +161,8 @@ function MaakVerkoperBrief($Gebruiker){
         $sth->execute($parameters);
 
         $records = $sth->fetchall(PDO::FETCH_ASSOC);
+        require('brief.php');
+        Brief($records);
     }
     catch (PDOexception $e) {
             echo "er ging iets mis error: {$e->getMessage()}";
