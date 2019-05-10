@@ -68,11 +68,11 @@ CONSTRAINT PK_Verificatietypen PRIMARY KEY (verificatietype)
 );
 
 CREATE TABLE Verificatie (
-gebruikersnaam	VARCHAR(50)			NOT NULL,
+email	VARCHAR(2540)			NOT NULL,
 type			CHAR(4)				NOT NULL,
 verificatiecode CHAR(6)				NOT NULL,
 eindtijd		Smalldatetime		NOT NULL,
-CONSTRAINT PK_Verificatie PRIMARY KEY (gebruikersnaam)
+CONSTRAINT PK_Verificatie PRIMARY KEY (email)
 );
 
 ALTER TABLE Gebruiker ADD 
@@ -108,13 +108,6 @@ go
 ALTER TABLE Verificatie ADD
 CONSTRAINT FK_Verificatietype
 	FOREIGN KEY (type) REFERENCES Verificatietypen(verificatietype)
-	ON UPDATE CASCADE
-	ON DELETE CASCADE
-go
-
-ALTER TABLE Verificatie ADD
-CONSTRAINT FK_GebruikersVerificatie
-	FOREIGN KEY (gebruikersnaam) REFERENCES Gebruiker(gebruikersnaam)
 	ON UPDATE CASCADE
 	ON DELETE CASCADE
 go
