@@ -13,7 +13,7 @@
         <div class="row mt-3 mb-3">
             <div class="col-md-7">
                 <h3>Hoe registreer ik mezelf?</h3>
-                <p>Om gebruik te maken van EenmaalAndermaal is het gebruikelijk dat u zich eerst registreert. Door rechtsboven op de knop "Registreren" te drukken wordt
+                <p>Om gebruik te maken van EenmaalAndermaal is het gebruikelijk dat u zich eerst registreert. Door rechtsboven op de knop <a href="register.php">"Registreren"</a> te drukken wordt
                     u naar het registratieformulier meegenomen. Hier moet u het formulier invullen. Zodra u het formulier heeft verzonden
                     heeft u een account.</p>
             </div>
