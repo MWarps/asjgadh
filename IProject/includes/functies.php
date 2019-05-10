@@ -18,14 +18,15 @@ function updateGebruikerVerificatie($input){
 }
 
 /* deleting verificatie code*/
-function deleteVerificatieRij($input){
+function deleteVerificatieRij($email, $type){
   try {
       require('core/dbconnection.php');
-      $sqlSelect = $dbh->prepare("delete from Verificatie where gebruikersnaam = :gebruikersnaam");
+      $sqlSelect = $dbh->prepare("delete from Verificatie where email = :email and type = :type");
 
       $sqlSelect->execute(
           array(
-              ':gebruikersnaam' => $input['0']
+              ':email' => $email,
+              ':type' => $type
           ));
 
   } catch (PDOexception $e) {
@@ -39,7 +40,7 @@ function HaalGebruikerOp($gebruikersnaam){
 
   try {
       require('core/dbconnection.php');
-      $sqlSelect = $dbh->prepare("select gebruikersnaam, wachtwoord, vraag, antwoordtekst from Gebruiker
+      $sqlSelect = $dbh->prepare("select gebruikersnaam, wahtwoord, vraag, antwoordtekst from Gebruiker
       where gebruikersnaam = :gebruikersnaam");
 
       $sqlSelect->execute(
@@ -57,17 +58,17 @@ function HaalGebruikerOp($gebruikersnaam){
 }
 
 /* Ophalen van verficatie code */
-function HaalVerficatiecodeOp($input){
+function HaalVerficatiecodeOp($email, $type){
 
   try {
       require('core/dbconnection.php');
-      $sqlSelect = $dbh->prepare("select verificatiecode, eindtijd from Verificatie where gebruikersnaam = :gebruikersnaam
+      $sqlSelect = $dbh->prepare("select verificatiecode, eindtijd from Verificatie where email = :email
       And type = :type ");
 
       $sqlSelect->execute(
           array(
-              ':gebruikersnaam' => $input['0'],
-              ':type' => $input['16']
+              ':email' => $email,
+              ':type' => $type
           ));
 
           $records = $sqlSelect->fetch(PDO::FETCH_ASSOC);
@@ -80,16 +81,16 @@ function HaalVerficatiecodeOp($input){
 }
 
 /* Verificate code en eindtijd aanmaken*/
-function VerificatieCodeProcedure($input){
+function VerificatieCodeProcedure($email, $type){
   try {
       require('core/dbconnection.php');
-      $sqlSelect = $dbh->prepare("EXEC verificatie_toevoegen @gebruiker = :gebruikersnaam,
+      $sqlSelect = $dbh->prepare("EXEC verificatie_toevoegen @email = :email,
       @type = :type");
 
       $sqlSelect->execute(
           array(
-              ':gebruikersnaam' => $input['0'],
-              ':type' => $input['16']
+              ':email' => $email,
+              ':type' => $type
           )
       );
   } catch (PDOexception $e) {
@@ -118,6 +119,7 @@ try {
             ':rVoornaam' => $input['1'],
             ':rAchternaam' => $input['2'],
             ':rGeslacht' => $input['3'],
+            ':rWachtwoord' => $hashedWachtwoord,
             ':rAdresregel1' => $input['5'],
             ':rAdresregel2' => $input['6'],
             ':rPostcode' => $input['7'],
@@ -125,11 +127,10 @@ try {
             ':rLand' => $input['9'],
             ':rGeboortedatum' => $input['10'],
             ':rEmail' => $input['11'],
-            ':rWachtwoord' => $hashedWachtwoord,
             ':rVraag' => $input['12'],
             ':rAntwoordtekst' => $input['13'],
-            ':rVerkoper' => $input['14'],
-            ':rVerifieerd' => $input['15']
+            ':rVerkoper' => $input['14']
+
         ));
       }
     catch (PDOexception $e) {
@@ -236,33 +237,17 @@ function landen()
     }
 }
 
-function StuurRegistreerEmail($rVoornaam, $rEmail, $rCode){
-    $code = rand(1000,9999);
-
-    try{
-        require('core/dbconnection.php');
-        $sqlSelect = $dbh->prepare("insert into verificatie (gebruikersnaam) ");
-
-        $sqlSelect->execute(
-            array(
-                ':gebruikersnaam' => $gebruikersnaam,
-            ));
-        $records = $sqlSelect->fetch(PDO::FETCH_ASSOC);
-
+function StuurRegistreerEmail($Email, $Code){
 
         ini_set( 'display_errors', 1 );
         error_reporting( E_ALL );
         $from = "no-reply@iconcepts.nl";
-        $to = $rEmail;
+        $to = $Email;
         $subject = "Validatie code account registreren";
-        $message = include 'includes/mail.php';
+        $message = include 'includes/email.php';
         $headers = "From:" .$from;
         mail($to,$subject,$message, $headers);
 
-    }
-    catch (PDOexception $e) {
-        echo "er ging iets mis error: {$e->getMessage()}";
-    }
 }
 
 function WordtVerkoper() {
