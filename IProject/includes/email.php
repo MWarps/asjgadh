@@ -324,7 +324,7 @@
     </style>
   </head>
   <body class="">
-    <span class="preheader">Verificatie email EenmaalAndermaal</span>
+    <span class="preheader">Verificatieemail EenmaalAndermaal</span>
     <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="body">
       <tr>
         <td>&nbsp;</td>
@@ -343,7 +343,7 @@
                         <p>Hallo,</p>
                         <p>Bedankt voor het registreren. Hieronder staat de code die ingevoerd
                         moet worden om het registeren te voltooien:</p>
-                        <h2><?php $Code; ?></h2>
+                        <h2><?php echo $Code; ?></h2>
                         <p>Als u deze e-mail per ongeluk ontvangt, kunt u deze verwijderen en zijn er geen conseqenties.</p>
                         <p>Met vriendelijke groet, <br>
                            EenmaalAndermaal</p>
