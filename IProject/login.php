@@ -27,8 +27,7 @@ if (isset($_POST['loginKnop'])) {
  <div class="container">
    <div class="row">
        <div class="offset-3 col-md-6 mt-4">
-            <div class="jumbotron bg-dark text-white" style="padding: 2rem">
-            <form class="needs-validation" novalidate method="post" action="login.php">
+            <form class="needs-validation form-signin" novalidate method="post" action="login.php">
                 <h1 class="h3 mb-3 font-weight-normal text-center">Login</h1>
                 <?php if($Validatie){
                   echo '<div class="form-row">
@@ -60,15 +59,14 @@ if (isset($_POST['loginKnop'])) {
                 <button class="btn btn-lg btn-block bg-flame" type="submit" value="loginKnop" id="loginKnop" name="loginKnop">Inloggen</button>
                 <a href="register.php" class="register-link">Nog geen account? Registreer hier!</a>
             </form>
-          </div>
         </div>
       </div>
     </div>
-<?php
-}
-else {
-  include 'includes/404error.php';
-  // unset($_SESSION['gebruikersnaam']);
-}
-  include 'includes/footer.php'
- ?>
+    <?php
+    }
+    else {
+      include 'includes/404error.php';
+      // unset($_SESSION['gebruikersnaam']);
+    }
+     ?>
+
