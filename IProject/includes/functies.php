@@ -244,14 +244,11 @@ function StuurRegistreerEmail($Email, $Code){
         $from = "no-reply@iconcepts.nl";
         $to = $Email;
         $subject = "Validatie code account registreren";
-        $message = '<p>Hallo,</p>
-        <p>Bedankt voor het registreren. Hieronder staat de code die ingevoerd
-        moet worden om het registeren te voltooien:</p>
-        <h2>'.$Code.'</h2>
-        <p>Als u deze e-mail per ongeluk ontvangt, kunt u deze verwijderen en zijn er geen conseqenties.</p>
-        <p>Met vriendelijke groet, <br>
-           EenmaalAndermaal</p>';
-        $headers = "From:" .$from;
+        $message = file_get_contents('include/email.php')
+
+        $headers = "From:" .$from."/r/n";
+        $headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
+
         mail($to,$subject,$message, $headers);
 
 }
