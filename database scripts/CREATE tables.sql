@@ -4,7 +4,7 @@
 
 --kolom met gebruikersnaam als foreign key altijd genoemd gebruikersnaam
 
-DROP TABLE IF EXISTS Verificatie, Verificatietypen, Verkoper, Gebruiker, Landen, Vragen;
+DROP TABLE IF EXISTS Verificatie, Verificatietypen, Verkoper, Gebruikerstelefoon, Gebruiker, Landen, Vragen;
 
 CREATE TABLE Vragen (  
 vraagnr		Tinyint		NOT NULL,  
@@ -94,6 +94,13 @@ go
 
 ALTER TABLE Verkoper ADD
 CONSTRAINT FK_Gebruiker
+	FOREIGN KEY (gebruikersnaam) REFERENCES Gebruiker(gebruikersnaam)
+	ON UPDATE CASCADE
+	ON DELETE CASCADE
+go
+
+ALTER TABLE Gebruikerstelefoon ADD
+CONSTRAINT FK_Gebruikerstelefoon
 	FOREIGN KEY (gebruikersnaam) REFERENCES Gebruiker(gebruikersnaam)
 	ON UPDATE CASCADE
 	ON DELETE CASCADE
