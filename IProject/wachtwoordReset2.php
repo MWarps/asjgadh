@@ -60,4 +60,4 @@ header("Location: index.php");
 else {
   include 'includes/404error.php';
 }
-include 'includes/footer.php'; ?>
+include 'includes/footer-fixed.php'; ?>

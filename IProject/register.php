@@ -61,5 +61,5 @@ if (isset($_POST['registreren'])){
 else{
   include 'includes/404error.php';
 }
-include 'includes/footer.php';
+include 'includes/footer-fixed.php';
 ?>

@@ -9,6 +9,7 @@ if (isset($_SESSION['gebruikersnaam'])){
 } else {
    $_SESSION ['ingelogd'] = false;
 }
+
 ?>
 <!doctype html>
 <html lang="nl">

@@ -251,32 +251,7 @@ if (isset($_POST['rVolgende'])) {
 
     <?php }
     else {
-    ?>  <div class="container">
-          <div class="offset-3 col-md-6 mt-4 text-center">
-            <div class="jumbotron bg-dark text-white" style="padding: 2rem">
-              <h3 class="h3 mb-4 text-center "> OOPS! Sorry... </h3>
-                <p> Log eerst uit als u een account wilt registreren.
-                  <button type="button" class="btn btn-lg bg-flame mt-3" name="LogUit" data-toggle="modal" data-target="#Modal" >
-                    Log uit
-                  </button>
-            </div>
-          </div>
-      </div>
-
-      <div class="modal fade" id="Modal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header" style="background: #EFF1F2" >
-            <h5 class="modal-title"> Nog niet gemaakt </h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          </div>
-        </div>
-      </div>
-
-    <?php
+    include 'includes/404error.php'
 
     }
 
