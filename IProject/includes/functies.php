@@ -245,7 +245,7 @@ function StuurRegistreerEmail($Email, $Code){
         $from = "no-reply@iconcepts.nl";
         $to = $Email;
         $subject = "Validatie code account registreren";
-        $message = require 'includes/email.php';
+        $message = echo file_get_contents('includes/email.php');
         $headers = "From:" .$from;
         mail($to,$subject,$message, $headers);
 
