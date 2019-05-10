@@ -507,16 +507,18 @@ function haalVideosOp($rubriek)
      // functie kijkt of de sessie active is en past de knoppen rechtsboven in de header gepast aan.
     if ($_SESSION["ingelogd"]){
 
-        echo '
-        <ul class="navbar-nav">
-                            <li class="nav-item">
-                                <a class="nav-link" href="">Mijn account</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="uitloggen.php">Uitloggen</a>
-                            </li>
-                        </ul>
-        ';
+        echo '<ul class="navbar-nav">
+                <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="accountbeheer" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</a>
+                <div class="dropdown-menu" aria-labelledby="accountbeheer">
+                    <a class="nav-link" href="#">Mijn account</a>
+                    <a class="dropdown-item" href="#">Beheer</a>
+                    <a class="dropdown-item" href="../informeren.php">FAQ</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="uitloggen.php">Uitloggen</a>
+                </li>
+              </ul>';
 
     } // einde if session actief is
     if ($_SESSION["ingelogd"] == false){
@@ -528,6 +530,7 @@ function haalVideosOp($rubriek)
                                 <a class="nav-link" href="register.php">Register</a>
                             </li>
                         </ul>
+                        
                         ';
     }// einde if session NIET actief is.
 
