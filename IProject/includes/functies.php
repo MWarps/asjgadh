@@ -535,10 +535,11 @@ function knoppenFunctie(){
 }// einde functie
 
 function uitloggen(){
+    if ($_SESSION["ingelogd"]){
     session_unset(); // verwijderd alle variabelen in de serssie
     session_destroy(); // verwijderd de sessie en alle variabelen.
-
-    header("Refresh:10; url=index.php");
+    }
+   //header("Refresh:5; url=index.php");
 }// einde functie Uitloggen
 
 ?>

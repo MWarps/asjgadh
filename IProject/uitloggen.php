@@ -11,6 +11,10 @@ include 'includes/header.php';
             <h4 class="alert-heading"></h4>
             <p>U wordt uitgelogd.</p>
             <p class="mb-2">U wordt terug gestuurd naar de homepage, Ogenblik geduld alstublieft.</p>
+            <? php uitloggen();  
+            header("Refresh:5; url=index.php");
+            ?>
+ 
         </div>
     </div>
 </div>
