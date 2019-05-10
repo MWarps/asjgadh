@@ -1,4 +1,4 @@
-CREATE PROCEDURE verificatie_toevoegen @gebruiker varchar(50), @type char(4)
+CREATE PROCEDURE verificatie_toevoegen @mail varchar(254), @type char(4)
 AS
 BEGIN
 DECLARE @code CHAR(6) = CAST(RAND() * 1000000 AS CHAR(6))
@@ -14,5 +14,5 @@ IF (@type = 'post')
 	END
 
 insert into Verificatie
-values(@gebruiker, @type, @code, @eindtijd);
+values(@mail, @type, @code, @eindtijd);
 END 
