@@ -1,9 +1,9 @@
 <?php
-require_once '../core/dbconnection.php';
-include '../includes/header.php';
-include '../includes/functies.php';
+include 'includes/header.php';
 
-if (isset($_SESSION['gebruikersnaam'])){
+
+//if (isset($_SESSION['gebruikersnaam'])){
+
 ?>
 <div class="container">
     <div class="offset-2 col-md-8 mt-4">
@@ -15,13 +15,13 @@ if (isset($_SESSION['gebruikersnaam'])){
     </div>
 </div>
 <?php
-
 uitloggen();
-}
 
-else { include '../includes/404error.php';
-}
+//}
+//
+//else { include 'includes/404error.php';
+//}
+//
 
-
-include '../includes/footer.php'
+include 'includes/footer.php'
 ?>
