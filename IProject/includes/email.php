@@ -1,4 +1,8 @@
-<html>
+<?php
+function email($code)
+{
+    $tekst = ' 
+ <html>
   <head>
     <meta name="viewport" content="width=device-width" />
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -343,7 +347,7 @@
                         <p>Hallo,</p>
                         <p>Bedankt voor het registreren. Hieronder staat de code die ingevoerd
                         moet worden om het registeren te voltooien:</p>
-                        <h2><?php echo $Code; ?></h2>
+                        <h2>'.$code.'</h2>
                         <p>Als u deze e-mail per ongeluk ontvangt, kunt u deze verwijderen en zijn er geen conseqenties.</p>
                         <p>Met vriendelijke groet, <br>
                            EenmaalAndermaal</p>
@@ -378,4 +382,8 @@
       </tr>
     </table>
   </body>
-</html>
+</html>';
+
+    return $tekst;
+}
+
