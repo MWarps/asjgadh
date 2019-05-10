@@ -1,19 +1,19 @@
 <?php
 /* update gebruiker naar geverifieerd */
 function updateGebruikerVerificatie($input){
-  try {
-      require('core/dbconnection.php');
-      $sqlSelect = $dbh->prepare("UPDATE Gebruiker SET verifieerd = 1
+    try {
+        require('core/dbconnection.php');
+        $sqlSelect = $dbh->prepare("UPDATE Gebruiker SET verifieerd = 1
         WHERE gebruikersnaam = :gebruikersnaam");
 
-      $sqlSelect->execute(
-          array(
-              ':gebruikersnaam' => $input['0']
-          ));
+        $sqlSelect->execute(
+            array(
+                ':gebruikersnaam' => $input['0']
+            ));
 
-  } catch (PDOexception $e) {
-      echo "er ging iets mis error: {$e->getMessage()}";
-  }
+    } catch (PDOexception $e) {
+        echo "er ging iets mis error: {$e->getMessage()}";
+    }
 
 }
 
@@ -29,9 +29,9 @@ function deleteVerificatieRij($email, $type){
               ':type' => $type
           ));
 
-  } catch (PDOexception $e) {
-      echo "er ging iets mis error: {$e->getMessage()}";
-  }
+    } catch (PDOexception $e) {
+        echo "er ging iets mis error: {$e->getMessage()}";
+    }
 
 }
 
@@ -40,21 +40,21 @@ function HaalGebruikerOp($gebruikersnaam){
 
   try {
       require('core/dbconnection.php');
-      $sqlSelect = $dbh->prepare("select gebruikersnaam, wahtwoord, vraag, antwoordtekst from Gebruiker
+      $sqlSelect = $dbh->prepare("select gebruikersnaam, wachtwoord, vraag, antwoordtekst from Gebruiker
       where gebruikersnaam = :gebruikersnaam");
 
-      $sqlSelect->execute(
-          array(
-              ':gebruikersnaam' => $gebruikersnaam
-          ));
+        $sqlSelect->execute(
+            array(
+                ':gebruikersnaam' => $gebruikersnaam
+            ));
 
-          $records = $sqlSelect->fetch(PDO::FETCH_ASSOC);
+        $records = $sqlSelect->fetch(PDO::FETCH_ASSOC);
 
-          return $records;
+        return $records;
 
-  } catch (PDOexception $e) {
-      echo "er ging iets mis error: {$e->getMessage()}";
-  }
+    } catch (PDOexception $e) {
+        echo "er ging iets mis error: {$e->getMessage()}";
+    }
 }
 
 /* Ophalen van verficatie code */
@@ -62,35 +62,35 @@ function HaalVerficatiecodeOp($email, $type){
 
   try {
       require('core/dbconnection.php');
-      $sqlSelect = $dbh->prepare("select verificatiecode, eindtijd from Verificatie where email = :email
+      $sqlSelect = $dbh->prepare("select verificatiecode, eindtijd from Verificatie where gebruikersnaam = :gebruikersnaam
       And type = :type ");
 
       $sqlSelect->execute(
           array(
-              ':email' => $email,
-              ':type' => $type
+              ':gebruikersnaam' => $input['0'],
+              ':type' => $input['16']
           ));
 
-          $records = $sqlSelect->fetch(PDO::FETCH_ASSOC);
+        $records = $sqlSelect->fetch(PDO::FETCH_ASSOC);
 
-          return $records;
+        return $records;
 
-  } catch (PDOexception $e) {
-      echo "er ging iets mis error: {$e->getMessage()}";
-  }
+    } catch (PDOexception $e) {
+        echo "er ging iets mis error: {$e->getMessage()}";
+    }
 }
 
 /* Verificate code en eindtijd aanmaken*/
-function VerificatieCodeProcedure($email, $type){
+function VerificatieCodeProcedure($input){
   try {
       require('core/dbconnection.php');
-      $sqlSelect = $dbh->prepare("EXEC verificatie_toevoegen @email = :email,
+      $sqlSelect = $dbh->prepare("EXEC verificatie_toevoegen @gebruiker = :gebruikersnaam,
       @type = :type");
 
       $sqlSelect->execute(
           array(
-              ':email' => $email,
-              ':type' => $type
+              ':gebruikersnaam' => $input['0'],
+              ':type' => $input['16']
           )
       );
   } catch (PDOexception $e) {
@@ -100,11 +100,11 @@ function VerificatieCodeProcedure($email, $type){
 
 /* Voeg gebruiker toe aan database */
 function InsertGebruiker($input){
-  $hashedWachtwoord = password_hash($input['4'], PASSWORD_DEFAULT);
-try {
-  // SQL insert statement
-  require('core/dbconnection.php');
-    $sqlInsert = $dbh->prepare("INSERT INTO Gebruiker (
+    $hashedWachtwoord = password_hash($input['4'], PASSWORD_DEFAULT);
+    try {
+        // SQL insert statement
+        require('core/dbconnection.php');
+        $sqlInsert = $dbh->prepare("INSERT INTO Gebruiker (
        gebruikersnaam, voornaam, achternaam, geslacht, adresregel1, adresregel2,
        postcode, plaatsnaam, land, geboortedatum, email,
        wachtwoord, vraag, antwoordtekst, verkoper, verifieerd)
@@ -119,7 +119,6 @@ try {
             ':rVoornaam' => $input['1'],
             ':rAchternaam' => $input['2'],
             ':rGeslacht' => $input['3'],
-            ':rWachtwoord' => $hashedWachtwoord,
             ':rAdresregel1' => $input['5'],
             ':rAdresregel2' => $input['6'],
             ':rPostcode' => $input['7'],
@@ -127,15 +126,16 @@ try {
             ':rLand' => $input['9'],
             ':rGeboortedatum' => $input['10'],
             ':rEmail' => $input['11'],
+            ':rWachtwoord' => $hashedWachtwoord,
             ':rVraag' => $input['12'],
             ':rAntwoordtekst' => $input['13'],
-            ':rVerkoper' => $input['14']
-
+            ':rVerkoper' => $input['14'],
+            ':rVerifieerd' => $input['15']
         ));
       }
     catch (PDOexception $e) {
-    echo "er ging iets mis insert {$e->getMessage()}";
-  }
+        echo "er ging iets mis insert {$e->getMessage()}";
+    }
 }
 
 /* Is er al een gebruiker aangemeld met hetzelfde gebruikersnaam */
@@ -220,7 +220,8 @@ function landen()
 {
     try {
         require('core/dbconnection.php');
-        $sqlSelect = $dbh->query("select Id, Name from Landen");
+        $sqlSelect = $dbh-> prepare ("select Id, Name from Landen");
+        $sqlSelect  -> execute();
 
         echo '<label for="inputLanden">Land</label>';
         echo '<select name="rLand" class="form-control" id="inputLanden">';
@@ -231,7 +232,7 @@ function landen()
 
             echo '<option value="'.$row['Id'].'">'.$row['Name'].'</option>';
         }
-          echo '</select>';// Close your drop down box
+        echo '</select>';// Close your drop down box
     } catch (PDOexception $e) {
         echo "er ging iets mis error: {$e->getMessage()}";
     }
@@ -283,7 +284,7 @@ function MaakVerkoperBrief($Gebruiker){
         Brief($records);
     }
     catch (PDOexception $e) {
-            echo "er ging iets mis error: {$e->getMessage()}";
+        echo "er ging iets mis error: {$e->getMessage()}";
     }
 }
 
@@ -292,8 +293,8 @@ function geslacht()
 
     try {
         require('core/dbconnection.php');
-        $sqlSelect = $dbh->query("select geslacht from Geslacht");
-
+        $sqlSelect = $dbh-> prepare("select geslacht from Geslacht");
+        $sqlSelect -> execute();
         echo '<label for="inputGeslacht">Geslacht</label>';
         echo '<select name="rGeslacht" class="form-control" id="inputGeslacht" required>';
         // Open your drop down box
@@ -488,21 +489,21 @@ function haalVideosOp($rubriek)
 }
 */
 
- function knoppenFunctie(){
-     // functie kijkt of de sessie active is en past de knoppen rechtsboven in de header gepast aan.
+function knoppenFunctie(){
+    // functie kijkt of de sessie active is en past de knoppen rechtsboven in de header gepast aan.
     if ($_SESSION["ingelogd"]){
-
-        echo '
-        <ul class="navbar-nav">
-                            <li class="nav-item">
-                                <a class="nav-link" href="">Mijn account</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="uitloggen.php">Uitloggen</a>
-                            </li>
-                        </ul>
-        ';
-
+        echo '<ul class="navbar-nav">
+                <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="accountbeheer" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</a>
+                <div class="dropdown-menu" aria-labelledby="accountbeheer">
+                    <a class="nav-link" href="#">Mijn account</a>
+                    <a class="dropdown-item" href="#">Beheer</a>
+                    <a class="dropdown-item" href="../informeren.php">FAQ</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="uitloggen.php">Uitloggen</a>
+                </li>
+              </ul>';
     } // einde if session actief is
     if ($_SESSION["ingelogd"] == false){
         echo'<ul class="navbar-nav">
@@ -513,10 +514,10 @@ function haalVideosOp($rubriek)
                                 <a class="nav-link" href="register.php">Register</a>
                             </li>
                         </ul>
+
                         ';
     }// einde if session NIET actief is.
-
- }// einde functie
+}// einde functie
 
 function uitloggen(){
     session_unset(); // verwijderd alle variabelen in de serssie

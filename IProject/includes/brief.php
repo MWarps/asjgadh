@@ -12,7 +12,7 @@ function Brief($records) {
     }
 
     $txt = (
-    $naam."\n".$records['adresregel1']."\n".$records['adresregel2']
+    $naam."\n".$records['adresregel1']."\n".$records['adresregel2']."\n".$records['postcode']." ".$records['plaatsnaam']."\n\n\n
     Geachte ".$aanhef.",\n
     Bedankt voor uw aanvraag om verkoper te worden op EenmaalAndermaal. Uw verificatiecode is: \n".$records['verificatiecode']."\n
     De code is geldig tot: \n".$records['eindtijd']."\n U kunt de code invoeren op: \n /*webadress*/ \n
