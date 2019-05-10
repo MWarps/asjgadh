@@ -371,3 +371,8 @@ insert into dbo.vragen(vraagnr,vraag)
            (5,'Wat is de naam van uw favoriete film?'),  
            (6,'What is uw favoriete kleur'),  
            (7,'In welke straat groeide uw op?') 
+
+insert into dbo.Verificatietypen
+values 
+	('post'),
+	('mail')
