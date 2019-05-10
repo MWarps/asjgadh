@@ -4,7 +4,7 @@
 
 --kolom met gebruikersnaam als foreign key altijd genoemd gebruikersnaam
 
-DROP TABLE IF EXISTS Verificatie, Verificatietypen, Verkoper, Gebruiker, Landen, Vragen;
+DROP TABLE IF EXISTS Verificatie, Verificatietypen, Verkoper, Gebruikerstelefoon, Gebruiker, Landen, Vragen;
 
 CREATE TABLE Vragen (  
 vraagnr		Tinyint		NOT NULL,  
@@ -55,6 +55,14 @@ creditcard			CHAR(19)	NULL,
 CONSTRAINT PK_Verkoper PRIMARY KEY (gebruikersnaam)
 );
 
+CREATE TABLE Gebruikerstelefoon (
+volgnr INT(2) NOT NULL,
+gebruikersnaam VARCHAR(50) NOT NULL,
+telefoon VARCHAR(15) NOT NULL,
+CONSTRAINT PK_Gebruikerstelefoon PRIMARY KEY (volgnr, gebruikersnaam),
+CONSTRAINT CK_telefoon CHECK (telefoon NOT LIKE '%[a-z]%')
+);
+
 CREATE TABLE Verificatietypen (
 verificatietype CHAR(4) NOT NULL,
 CONSTRAINT PK_Verificatietypen PRIMARY KEY (verificatietype)
@@ -86,6 +94,13 @@ go
 
 ALTER TABLE Verkoper ADD
 CONSTRAINT FK_Gebruiker
+	FOREIGN KEY (gebruikersnaam) REFERENCES Gebruiker(gebruikersnaam)
+	ON UPDATE CASCADE
+	ON DELETE CASCADE
+go
+
+ALTER TABLE Gebruikerstelefoon ADD
+CONSTRAINT FK_Gebruikerstelefoon
 	FOREIGN KEY (gebruikersnaam) REFERENCES Gebruiker(gebruikersnaam)
 	ON UPDATE CASCADE
 	ON DELETE CASCADE
