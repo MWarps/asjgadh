@@ -16,12 +16,7 @@ include 'includes/header.php';
 </div>
 <?php
 uitloggen();
-
+//} else { include 'includes/404error.php';
 //}
-//
-//else { include 'includes/404error.php';
-//}
-//
-
 include 'includes/footer.php'
 ?>
