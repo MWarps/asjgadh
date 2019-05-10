@@ -239,13 +239,12 @@ function landen()
 }
 
 function StuurRegistreerEmail($Email, $Code){
-
         ini_set( 'display_errors', 1 );
         error_reporting( E_ALL );
         $from = "no-reply@iconcepts.nl";
         $to = $Email;
         $subject = "Validatie code account registreren";
-        $message = echo file_get_contents('includes/email.php');
+        $message = file_get_contents('includes/email.php');
         $headers = "From:" .$from;
         mail($to,$subject,$message, $headers);
 
