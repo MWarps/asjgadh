@@ -21,7 +21,7 @@ if(!isset($_SESSION['gebruikersnaam'])){
             $_SESSION['code'] = $code;
             $_SESSION['pogingen'] = 0;
 
-            // StuurRegistreerEmail($email, $code['verificatiecode']);
+            StuurRegistreerEmail($email, $code['verificatiecode']);
 
             header("Location: validatie.php");
         }
@@ -59,7 +59,7 @@ if(!isset($_SESSION['gebruikersnaam'])){
 <?php
 }
 else{
-  //unset($_SESSION['gebruikersnaam']);
+
     include 'includes/404error.php';
 }
 include 'includes/footer-fixed.php';

@@ -62,7 +62,7 @@ if(isset($_SESSION['email']) && !isset($_SESSION['gebruikersnaam'])){
         deleteVerificatieRij($email,$type);
         VerificatieCodeProcedure($email, $type);
         $code = HaalVerficatiecodeOp($email, $type);
-        // StuurRegistreerEmail($email, $code);
+        StuurRegistreerEmail($email, $code);
     }
 ?>
 
