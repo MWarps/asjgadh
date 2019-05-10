@@ -1,5 +1,5 @@
 <?php
-include '../includes/header.php';
+include 'includes/header.php';
 
 if(isset($_SESSION['validatie'])){
 
@@ -16,7 +16,8 @@ $codeVerzonden = false;
 if (isset($_POST['registreren'])){
 
     if(strval($_SESSION['code']['verificatiecode']) == $_POST['validatie'] && $_SESSION['pogingen'] < 3){
-      if(date("H:i:s") > date("H:i:s", strtotime($_SESSION['code']['eindtijd']))){
+
+      if(date("d:H:i:s") > date("d:H:i:s", strtotime($_SESSION['code']['eindtijd'])) ){
         $overEindtijd = True;
 
       }
@@ -136,6 +137,7 @@ if (isset($_POST['registreren'])){
 <?php
       }
 else{
-  include '../includes/404error.php';
+  include 'includes/404error.php';
 }
-include '../includes/footer.php'?>
+include 'includes/footer.php';
+?>

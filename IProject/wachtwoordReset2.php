@@ -1,18 +1,18 @@
 <?php
-include '../includes/header.php';
+include 'includes/header.php';
 
 if(isset($_SESSION['reset'])){
-
+echo $_SESSION['reset'];
 $Validatie = false;
 
 if (isset($_POST['veranderWachtwoord'])){
-$nWachtwoord1 = $_POST ['nWachtwoord1'];
+$hashedWachtwoord = password_hash($_POST['nWachtwoord1'], PASSWORD_DEFAULT);
 
 $Validatie = true;
-unset($_SESSION['validatie']);
-updateWachtwoord($_SESSION['gebruikersnaam']);
+veranderWachtwoord($_SESSION['reset'], $hashedWachtwoord);
+unset($_SESSION['reset']);
 
-header("Refresh:5 ; url=index.php");
+header("Refresh:5; url=index.php");
 }
 
 ?>
@@ -57,6 +57,6 @@ header("Refresh:5 ; url=index.php");
 }
 
 else {
-  include '../includes/404error.php';
+  include 'includes/404error.php';
 }
-include '../includes/footer.php'; ?>
+include 'includes/footer.php'; ?>

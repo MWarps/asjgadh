@@ -1,15 +1,8 @@
-
 <?php
 session_start();
 
-//require_once '../core/dbconnection.php';
 include 'functies.php';
 require_once 'core/dbconnection.php';
-//require_once '../core/dbconnection.php';
-
-
-
-
 
 if (isset($_SESSION['gebruikersnaam'])){
   $_SESSION ['ingelogd'] = true;
@@ -35,7 +28,7 @@ if (isset($_SESSION['gebruikersnaam'])){
         <header>
             <nav class="navbar navbar-expand-lg navbar-light bg-flame">
                 <div class="container">
-                    <a class="navbar-brand" href="#">Navbar</a>
+                    <a class="navbar-brand" href="#"><img src="assets/img/EenmaalAndermaal.png" width="40" height="40" title="EenmaalAndermaal" alt="EenmaalAndermaal"></a>
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
@@ -45,8 +38,7 @@ if (isset($_SESSION['gebruikersnaam'])){
                                 <a class="nav-link" href="index.php">Home<span class="sr-only">(current)</span></a>
                             </li>
                         </ul>
-                        <?php 
-                        knoppenFunctie(); 
+                        <?php knoppenFunctie();
                         ?>
                     </div>
                 </div>
@@ -81,6 +73,3 @@ if (isset($_SESSION['gebruikersnaam'])){
                 </form>
             </nav>
         </header>
-
-
-

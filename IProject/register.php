@@ -1,7 +1,6 @@
 <?php
 include 'includes/header.php';
 
-
 if (!isset($_SESSION['gebruikersnaam'])){
 
 $Gbestaat = False;
@@ -23,13 +22,13 @@ if (isset($_POST['rVolgende'])) {
     $rPostcode = $_POST['rPostcode'];;
     $rLand = $_POST['rLand'];
     $rGeslacht = $_POST['rGeslacht'];
-    $rVerkoper = 0;
+
 
     $input = array($rGebruikersnaam, $rVoornaam, $rAchternaam, $rGeslacht,
     $rWachtwoord, $rStraat, $rStraat1, $rPostcode, $rPlaats, $rLand,
-    $rGeboorte,  $rEmail, $rGeheimV, $rGeheimA, $rVerkoper);
+    $rGeboorte,  $rEmail, $rGeheimV, $rGeheimA);
 
-    array_push($input, 0, 'mail');
+    array_push($input, 0, 0, 'mail');
 
    // controleert of gebruikersnaam bestaat
   if(!empty(bestaatGebruikersnaam($_POST['rGebruikersnaam']))) {
@@ -227,8 +226,9 @@ if (isset($_POST['rVolgende'])) {
                     <div class="form-row">
                         <div class="form-group">
                           <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="Check" required>
-                            <label class="form-check-label" for="Check">
+                            <div class="custom-control custom-checkbox">
+                            <input class="custom-control-input" type="checkbox" value="" id="defaultUnchecked" required>
+                            <label class="custom-control-label" for="defaultUnchecked">
                               Ga akkoord met de algemene voorwaarden.
                             </label>
                             <div class="invalid-feedback">
@@ -236,13 +236,17 @@ if (isset($_POST['rVolgende'])) {
                             </div>
                           </div>
                         </div>
+                        </div>
                     </div>
-                    <button type="submit" name="rVolgende" class="btn btn-primary" data-toggle="modal" data-target="#Modal">
+                    <button type="submit" name="rVolgende" class="btn bg-flame">
                       Volgende
                     </button>
                 </form>
             </div>
         </div>
+      </div>
+
+
 
     <?php }
     else {
@@ -272,7 +276,7 @@ if (isset($_POST['rVolgende'])) {
       </div>
 
     <?php
-    unset($_SESSION['gebruikersnaam']);
+
     }
 
      include 'includes/footer.php' ?>
