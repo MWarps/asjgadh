@@ -220,7 +220,7 @@ function landen()
     try {
         require('core/dbconnection.php');
         $sqlSelect = $dbh-> prepare ("select Id, Name from Landen");
-        $sqlSelect = -> execute();
+        $sqlSelect  -> execute();
 
         echo '<label for="inputLanden">Land</label>';
         echo '<select name="rLand" class="form-control" id="inputLanden">';
