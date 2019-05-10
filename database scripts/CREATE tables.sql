@@ -40,7 +40,6 @@ wachtwoord			VARCHAR(100)	NOT NULL,
 vraag				Tinyint			NOT NULL,
 antwoordtekst VARCHAR(50) NOT NULL,
 verkoper bit NOT NUll,
-verifieerd bit NOT NULL,
 CONSTRAINT PK_Gebruiker PRIMARY KEY (gebruikersnaam),
 CONSTRAINT CK_gebruiker_geslacht CHECK (geslacht IN ( 'M','F','X') ),
 CONSTRAINT UQ_gebruiker_email UNIQUE(email)
@@ -56,7 +55,7 @@ CONSTRAINT PK_Verkoper PRIMARY KEY (gebruikersnaam)
 );
 
 CREATE TABLE Gebruikerstelefoon (
-volgnr INT(2) NOT NULL,
+volgnr INT NOT NULL,
 gebruikersnaam VARCHAR(50) NOT NULL,
 telefoon VARCHAR(15) NOT NULL,
 CONSTRAINT PK_Gebruikerstelefoon PRIMARY KEY (volgnr, gebruikersnaam),
