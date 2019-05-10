@@ -15,13 +15,9 @@ if (isset($_POST['loginKnop'])) {
       $_SESSION['gebruikersnaam'] = $gebruikersnaam;
       $Validatie = true;
       header("Refresh:5 ; url=index.php");
-
-    }
-    else {
+    } else {
       $error = true;
-
     }
-
 }
  ?>
  <div class="container">
@@ -63,8 +59,7 @@ if (isset($_POST['loginKnop'])) {
       </div>
     </div>
     <?php
-    }
-    else {
+    } else {
       include 'includes/404error.php';
       // unset($_SESSION['gebruikersnaam']);
     }
