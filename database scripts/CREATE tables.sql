@@ -68,7 +68,7 @@ CONSTRAINT PK_Verificatietypen PRIMARY KEY (verificatietype)
 );
 
 CREATE TABLE Verificatie (
-email	VARCHAR(2540)			NOT NULL,
+email	VARCHAR(254)			NOT NULL,
 type			CHAR(4)				NOT NULL,
 verificatiecode CHAR(6)				NOT NULL,
 eindtijd		Smalldatetime		NOT NULL,
@@ -120,7 +120,7 @@ go
 -- Dumping data for table `Countries`
 --
 INSERT INTO Landen (Id, Iso, Name, Iso3, Numcode, PhoneCode) VALUES
-(1, 'AF', 'Afghanistan', 'AFG', 4, 93),
+(1, 'NL', 'Netherlands', 'NLD', 528, 31),
 (2, 'AL', 'Albania', 'ALB', 8, 355),
 (3, 'DZ', 'Algeria', 'DZA', 12, 213),
 (4, 'AS', 'American Samoa', 'ASM', 16, 1684),
@@ -269,7 +269,7 @@ INSERT INTO Landen (Id, Iso, Name, Iso3, Numcode, PhoneCode) VALUES
 (147, 'NA', 'Namibia', 'NAM', 516, 264),
 (148, 'NR', 'Nauru', 'NRU', 520, 674),
 (149, 'NP', 'Nepal', 'NPL', 524, 977),
-(150, 'NL', 'Netherlands', 'NLD', 528, 31),
+(150, 'AF', 'Afghanistan', 'AFG', 4, 93),
 (151, 'AN', 'Netherlands Antilles', 'ANT', 530, 599),
 (152, 'NC', 'New Caledonia', 'NCL', 540, 687),
 (153, 'NZ', 'New Zealand', 'NZL', 554, 64),
