@@ -219,7 +219,8 @@ function landen()
 {
     try {
         require('core/dbconnection.php');
-        $sqlSelect = $dbh->query("select Id, Name from Landen");
+        $sqlSelect = $dbh-> prepare ("select Id, Name from Landen");
+        $sqlSelect  -> execute();
 
         echo '<label for="inputLanden">Land</label>';
         echo '<select name="rLand" class="form-control" id="inputLanden">';
@@ -307,8 +308,8 @@ function geslacht()
 
     try {
         require('core/dbconnection.php');
-        $sqlSelect = $dbh->query("select geslacht from Geslacht");
-
+        $sqlSelect = $dbh-> prepare("select geslacht from Geslacht");
+        $sqlSelect -> execute();
         echo '<label for="inputGeslacht">Geslacht</label>';
         echo '<select name="rGeslacht" class="form-control" id="inputGeslacht" required>';
         // Open your drop down box
