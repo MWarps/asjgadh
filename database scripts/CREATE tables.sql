@@ -362,3 +362,12 @@ INSERT INTO Landen (Id, Iso, Name, Iso3, Numcode, PhoneCode) VALUES
 
 go
 SET IDENTITY_INSERT Landen Off
+
+insert into dbo.vragen(vraagnr,vraag)  
+    values (1,'Wat was de naam van uw eerste huisdier?'),  
+           (2,'Welke kleur was uw eerste auto?'),  
+           (3,'Wat was de naam van uw eerste school waar uw op zat?'),  
+           (4,'In welke stad bent u geboren?'),  
+           (5,'Wat is de naam van uw favoriete film?'),  
+           (6,'What is uw favoriete kleur'),  
+           (7,'In welke straat groeide uw op?') 
