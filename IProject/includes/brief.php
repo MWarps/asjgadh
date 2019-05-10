@@ -3,8 +3,17 @@ function Brief($records) {
     $naam = ($records['voornaam'].' '.$records['achternaam']);
     $myfile = fopen("../brieven/".$naam.".txt", "x") or die("Unable to open file!");
 
+    $aanhef = 'heer, mevrouw';
+
+    if($records['geslacht'] = 'M') {
+        $aanhef = 'heer';
+    } else if($records['geslacht'] = 'V'){
+        $aanhef = 'mevrouw';
+    }
+
     $txt = (
-    "Geachte heer/mevrouw,\n 
+    $naam."\n".$records['adresregel1']."\n".$records['adresregel2']
+    Geachte ".$aanhef.",\n
     Bedankt voor uw aanvraag om verkoper te worden op EenmaalAndermaal. Uw verificatiecode is: \n".$records['verificatiecode']."\n
     De code is geldig tot: \n".$records['eindtijd']."\n U kunt de code invoeren op: \n /*webadress*/ \n
     Of via uw profiel -> Mijn verkoop pagina. \n 
