@@ -244,7 +244,13 @@ function StuurRegistreerEmail($Email, $Code){
         $from = "no-reply@iconcepts.nl";
         $to = $Email;
         $subject = "Validatie code account registreren";
-        $message = $Code;
+        $message = echo '<p>Hallo,</p>
+        <p>Bedankt voor het registreren. Hieronder staat de code die ingevoerd
+        moet worden om het registeren te voltooien:</p>
+        <h2>'.echo $Code.'</h2>
+        <p>Als u deze e-mail per ongeluk ontvangt, kunt u deze verwijderen en zijn er geen conseqenties.</p>
+        <p>Met vriendelijke groet, <br>
+           EenmaalAndermaal</p>';
         $headers = "From:" .$from;
         mail($to,$subject,$message, $headers);
 
