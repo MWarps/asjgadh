@@ -55,6 +55,14 @@ creditcard			CHAR(19)	NULL,
 CONSTRAINT PK_Verkoper PRIMARY KEY (gebruikersnaam)
 );
 
+CREATE TABLE Gebruikerstelefoon (
+volgnr INT(2) NOT NULL,
+gebruikersnaam VARCHAR(50) NOT NULL,
+telefoon VARCHAR(15) NOT NULL,
+CONSTRAINT PK_Gebruikerstelefoon PRIMARY KEY (volgnr, gebruikersnaam),
+CONSTRAINT CK_telefoon CHECK (telefoon NOT LIKE '%[a-z]%')
+);
+
 CREATE TABLE Verificatietypen (
 verificatietype CHAR(4) NOT NULL,
 CONSTRAINT PK_Verificatietypen PRIMARY KEY (verificatietype)
