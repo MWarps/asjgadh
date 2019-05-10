@@ -18,12 +18,12 @@
                     heeft u een account.</p>
             </div>
             <div class="col-md-5">
-                <img class="img-responsive" src="http://placehold.it/350x200" alt="Foto Registreren">
+                <a href="register.php"><img class="img-responsive" src="http://placehold.it/350x200" alt="Foto Registreren"></a>
             </div>
         </div>
         <div class="row mt-3 mb-3">
             <div class="col-md-5">
-                <img class="img-responsive" src="http://placehold.it/350x200" alt="Foto Inloggen">
+                <a href="inloggen"><img class="img-responsive" src="http://placehold.it/350x200" alt="Foto Inloggen"></a>
             </div>
             <div class="col-md-7">
                 <h3>Hoe Kan ik inloggen?</h3>
@@ -41,12 +41,12 @@
                 </p>
             </div>
             <div class="col-md-5">
-                <img class="img-responsive" src="http://placehold.it/350x200" alt="Specifiek product">
+                <a href="#"><img class="img-responsive" src="http://placehold.it/350x200" alt="Specifiek product"></a>
             </div>
         </div>
         <div class="row mt-3 mb-3">
             <div class="col-md-5">
-                <img class="img-responsive" src="http://placehold.it/350x200" alt="Bod doen">
+                <a href="#"><img class="img-responsive" src="http://placehold.it/350x200" alt="Bod doen"></a>
             </div>
             <div class="col-md-7">
                 <h2>Ik wil graag een bod doen op een product, hoe doe ik dat?</h2>
@@ -70,7 +70,7 @@
                 </p>
             </div>
             <div class="col-md-5">
-                <img class="img-responsive" src="http://placehold.it/350x200" alt="Verkoper worden">
+                <a href="#"><img class="img-responsive" src="http://placehold.it/350x200" alt="Verkoper worden"></a>
             </div>
         </div>
     </div>
