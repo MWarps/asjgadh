@@ -88,7 +88,7 @@ CONSTRAINT FK_Land
 	FOREIGN KEY (Land) REFERENCES Landen(Id)
 	ON UPDATE CASCADE
 	ON DELETE NO ACTION,
-CONSTRAINT chk_Email check (email like'%_@__%.__%'),
+CONSTRAINT chk_Email check (email like'%_@_%._%'),
 --CONSTRAINT CK_gerbruiker_geslacht CHECK (geslacht IN ( 'M','F','X') ),
 CONSTRAINT CK_voornaam		CHECK ( voornaam not like	'%[0-9]%'),
 CONSTRAINT CK_achternaam	CHECK ( achternaam not like '%[0-9]%'),
