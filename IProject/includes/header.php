@@ -32,7 +32,7 @@ if (isset($_SESSION['gebruikersnaam'])){
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
-                    <div class="navbar-collapse collapse">
+                    <div class="navbar-collapse collapse " id="navbarNavDropdown">
                         <ul class="navbar-nav mr-auto">
                             <li class="nav-items">
                                 <a class="nav-link" href="index.php">Home<span class="sr-only">(current)</span></a>

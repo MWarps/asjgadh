@@ -341,10 +341,10 @@
                   <table role="presentation" border="0" cellpadding="0" cellspacing="0">
                     <tr>
                       <td>
-                        <p>Hallo <?php echo ' '.$rVoornaam; ?> ,</p>
+                        <p>Hallo,</p>
                         <p>Bedankt voor het registreren. Hieronder staat de code die ingevoerd
                         moet worden om het registeren te voltooien:</p>
-                        <h2><?php echo $rCode; ?></h2>
+                        <h2><?php echo $Code; ?></h2>
                         <p>Als u deze e-mail per ongeluk ontvangt, kunt u deze verwijderen en zijn er geen conseqenties.</p>
                         <p>Met vriendelijke groet, <br>
                            EenmaalAndermaal</p>

@@ -1,11 +1,13 @@
 <?php
 include 'includes/header.php';
 
-if(isset($_SESSION['validatie'])){
+if(isset($_SESSION['email']) && !isset($_SESSION['gebruikersnaam'])){
 
-echo strval($_SESSION['code']['verificatiecode']);
+$email = $_SESSION['email'];
+$type = $_SESSION['type'];
+$code = $_SESSION['code']['verificatiecode'];
+$eindtijd = $_SESSION['code']['eindtijd'];
 
-$input = $_SESSION['input'];
 
 $error;
 $overEindtijd = false;
@@ -15,24 +17,16 @@ $codeVerzonden = false;
 
 if (isset($_POST['registreren'])){
 
-    if(strval($_SESSION['code']['verificatiecode']) == $_POST['validatie'] && $_SESSION['pogingen'] < 3){
+    if(strval($code) == $_POST['validatie'] && $_SESSION['pogingen'] < 3){
 
-      if(date("d:H:i:s") > date("d:H:i:s", strtotime($_SESSION['code']['eindtijd'])) ){
+      if(date("d:H:i:s") > date("d:H:i:s", strtotime($eindtijd)) ){
         $overEindtijd = True;
-
       }
-       else{
-      $_SESSION['gebruikersnaam'] = $input['0'];
-      unset($_SESSION['validatie']);
-      $Validatie = true;
 
-      updateGebruikerVerificatie($input);
-      deleteVerificatieRij($input);
-
-      header("Refresh:5 ; url=index.php");
-
+    else{
+      $_SESSION['register'] = true;
+      header("Location: register2.php");
     }
-
   }
 
     else{
@@ -65,27 +59,18 @@ if (isset($_POST['registreren'])){
   if (isset($_POST['verzendCode'])){
     $codeVerzonden = true;
     $_SESSION['pogingen'] = 0;
-    deleteVerificatieRij($input);
-    VerificatieCodeProcedure($input);
-    $_SESSION['code'] = HaalVerficatiecodeOp($input);
-    // StuurRegistreerEmail($input['1'], $input['11'], $_SESSION['code']['verificatiecode']);
+    deleteVerificatieRij($email,$type);
+    VerificatieCodeProcedure($email, $type);
+    $code = HaalVerficatiecodeOp($email, $type);
+    // StuurRegistreerEmail($email, $code);
   }
 ?>
 
 <div class="container">
   <div class="row">
-      <div class="offset-3 col-md-6 mt-4">
-        <div class="jumbotron bg-dark text-white" style="padding: 2rem">
-          <form class="needs-validation" novalidate action='validatie.php' method="post">
-            <?php if($Validatie){
-              echo '<div class="form-row">
-                      <div class="alert alert-success" role="alert">
-                        <strong>U bent geristreerd!</strong> U wordt doorgestuurd naar de hoofdpagina.
-                        </div>
-                      </div>
-                    ';}
-            ?>
-              <h1 class="h3 mb-4 text-center "> Validatie </h1>
+      <div class="offset-3 col-md-6 mt-4 border border-dark rounded">
+          <form class="needs-validation " novalidate action='validatie.php' method="post">
+                        <h1 class="h3 mb-4 mt-2 text-center "> Validatie </h1>
                   <p>  Er wordt een validatie code verstuurd naar het ingevoerde emailadres. <br> <br>
                   Voer hier de validatie code in om uw registratie te voltooien: </p>
                   <?php
@@ -128,7 +113,7 @@ if (isset($_POST['registreren'])){
           </form>
 
 
-          </div>
+
         </div>
       </div>
   </div>
