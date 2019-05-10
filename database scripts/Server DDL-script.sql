@@ -1,6 +1,10 @@
+USE iproject34
+go
+-- ========================================================================
+-- uitgevoerd op: -- 10-05-2019 
+-- tijd: 14:12
+-- ========================================================================
 
---USE iproject
---go
 
 --kolom met gebruikersnaam als foreign key altijd genoemd gebruikersnaam
 
@@ -68,11 +72,11 @@ CONSTRAINT PK_Verificatietypen PRIMARY KEY (verificatietype)
 );
 
 CREATE TABLE Verificatie (
-email	VARCHAR(254)			NOT NULL,
+gebruikersnaam	VARCHAR(50)			NOT NULL,
 type			CHAR(4)				NOT NULL,
 verificatiecode CHAR(6)				NOT NULL,
 eindtijd		Smalldatetime		NOT NULL,
-CONSTRAINT PK_Verificatie PRIMARY KEY (email)
+CONSTRAINT PK_Verificatie PRIMARY KEY (gebruikersnaam)
 );
 
 ALTER TABLE Gebruiker ADD 
@@ -112,6 +116,13 @@ CONSTRAINT FK_Verificatietype
 	ON DELETE CASCADE
 go
 
+ALTER TABLE Verificatie ADD
+CONSTRAINT FK_GebruikersVerificatie
+	FOREIGN KEY (gebruikersnaam) REFERENCES Gebruiker(gebruikersnaam)
+	ON UPDATE CASCADE
+	ON DELETE CASCADE
+go
+
 --Landen insert
 
 SET IDENTITY_INSERT Landen ON
@@ -120,7 +131,7 @@ go
 -- Dumping data for table `Countries`
 --
 INSERT INTO Landen (Id, Iso, Name, Iso3, Numcode, PhoneCode) VALUES
-(1, 'NL', 'Netherlands', 'NLD', 528, 31),
+(1, 'AF', 'Afghanistan', 'AFG', 4, 93),
 (2, 'AL', 'Albania', 'ALB', 8, 355),
 (3, 'DZ', 'Algeria', 'DZA', 12, 213),
 (4, 'AS', 'American Samoa', 'ASM', 16, 1684),
@@ -269,7 +280,7 @@ INSERT INTO Landen (Id, Iso, Name, Iso3, Numcode, PhoneCode) VALUES
 (147, 'NA', 'Namibia', 'NAM', 516, 264),
 (148, 'NR', 'Nauru', 'NRU', 520, 674),
 (149, 'NP', 'Nepal', 'NPL', 524, 977),
-(150, 'AF', 'Afghanistan', 'AFG', 4, 93),
+(150, 'NL', 'Netherlands', 'NLD', 528, 31),
 (151, 'AN', 'Netherlands Antilles', 'ANT', 530, 599),
 (152, 'NC', 'New Caledonia', 'NCL', 540, 687),
 (153, 'NZ', 'New Zealand', 'NZL', 554, 64),
@@ -362,3 +373,12 @@ INSERT INTO Landen (Id, Iso, Name, Iso3, Numcode, PhoneCode) VALUES
 
 go
 SET IDENTITY_INSERT Landen Off
+go
+insert into dbo.vragen(vraagnr,vraag) 
+    values (1,'Wat was de naam van uw eerste huisdier?'), 
+           (2,'Welke kleur was uw eerste auto?'), 
+           (3,'Wat was de naam van uw eerste school waar uw op zat?'), 
+           (4,'In welke stad bent u geboren?'), 
+           (5,'Wat is de naam van uw favoriete film?'), 
+           (6,'What is uw favoriete kleur'), 
+           (7,'In welke straat groeide uw op?') 

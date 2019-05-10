@@ -501,7 +501,7 @@ function knoppenFunctie(){
                     <a class="dropdown-item" href="../informeren.php">FAQ</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="uitloggen.php">Uitloggen</a>
+                    <a class="nav-link" href="status.php?uitlog=uitlog">Uitloggen</a>
                 </li>
               </ul>';
     } // einde if session actief is

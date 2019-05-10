@@ -2,7 +2,7 @@
 include 'includes/header.php';
 
 if (!isset($_SESSION['gebruikersnaam'])){
-    $Validatie = false;
+
     $error = false;
 
     if (isset($_POST['loginKnop'])) {
@@ -14,7 +14,8 @@ if (!isset($_SESSION['gebruikersnaam'])){
         if($gebruikersnaam == $gebruiker['gebruikersnaam'] && $wachtwoord == password_verify($wachtwoord,$gebruiker['wachtwoord'])){
             $_SESSION['gebruikersnaam'] = $gebruikersnaam;
             $_SESSION['status'] = 'login';
-            $Validatie = true;
+
+
             header("Location: url=index.php");
             exit;
         } else {
@@ -27,13 +28,7 @@ if (!isset($_SESSION['gebruikersnaam'])){
         <div class="offset-3 col-md-6 mt-4">
             <form class="needs-validation form-signin" novalidate method="post" action="login.php">
                 <h1 class="h3 mb-3 font-weight-normal text-center">Login</h1>
-                <?php if($Validatie){
-        echo '<div class="form-row">
-                          <div class="alert alert-success" role="alert">
-                            <strong>U bent ingelogd!</strong> U wordt doorgestuurd naar de hoofdpagina.
-                            </div>
-                          </div>
-                        ';}
+                <?php
 
     if($error){
         echo '<div class="form-row">
