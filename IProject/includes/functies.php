@@ -244,7 +244,7 @@ function StuurRegistreerEmail($Email, $Code){
         $from = "no-reply@iconcepts.nl";
         $to = $Email;
         $subject = "Validatie code account registreren";
-        $message = file_get_contents('includes/email.php');
+        $message = include('includes/email.php');
 
         $headers = 'MIME-Version: 1.0' . "\r\n";
         $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
