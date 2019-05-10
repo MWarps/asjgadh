@@ -13,8 +13,10 @@ if (!isset($_SESSION['gebruikersnaam'])){
 
         if($gebruikersnaam == $gebruiker['gebruikersnaam'] && $wachtwoord == password_verify($wachtwoord,$gebruiker['wachtwoord'])){
             $_SESSION['gebruikersnaam'] = $gebruikersnaam;
+            $_SESSION['status'] = 'login';
             $Validatie = true;
-            header("Refresh:5 ; url=index.php");
+            header("Location: url=index.php");
+            exit;
         } else {
             $error = true;
         }
@@ -65,4 +67,3 @@ if (!isset($_SESSION['gebruikersnaam'])){
 }
 include 'includes/footer-fixed.php';
 ?>
-

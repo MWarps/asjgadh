@@ -45,6 +45,7 @@ if (isset($_POST['rVolgende'])) {
     unset($_SESSION['validatie']);
     unset($_SESSION['type']);
 
+    $_SESSION['gebruikersnaam'] = $rGebruikersnaam;
     $_SESSION['status'] = 'registreren';
     InsertGebruiker($input);
 
