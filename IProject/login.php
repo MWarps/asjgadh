@@ -68,5 +68,6 @@ if (isset($_POST['loginKnop'])) {
       include 'includes/404error.php';
       // unset($_SESSION['gebruikersnaam']);
     }
+    include 'includes/footer-fixed.php';
      ?>
 
