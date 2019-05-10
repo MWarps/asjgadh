@@ -1,7 +1,7 @@
 <?php
 include 'includes/header.php';
 
-if(isset($_SESSION['reset'])){
+if(isset($_SESSION['reset'] )){
 echo $_SESSION['reset'];
 $Validatie = false;
 
@@ -11,8 +11,9 @@ $hashedWachtwoord = password_hash($_POST['nWachtwoord1'], PASSWORD_DEFAULT);
 $Validatie = true;
 veranderWachtwoord($_SESSION['reset'], $hashedWachtwoord);
 unset($_SESSION['reset']);
+$_SESSION['status'] = 'wachtwoordreset';
 
-header("Refresh:5; url=index.php");
+header("Location: index.php");
 }
 
 ?>
