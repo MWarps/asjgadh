@@ -3,7 +3,7 @@ $hostname = 'localhost';
 $dbname = 'iproject';
 $username = 'testgebruiker';
 $password = 'test123';
-
+// dit zijn nep gegevens!
 try {
     global $dbh;
 
