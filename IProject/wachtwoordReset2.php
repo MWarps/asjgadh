@@ -2,7 +2,6 @@
 include 'includes/header.php';
 
 if(isset($_SESSION['reset'] )){
-echo $_SESSION['reset'];
 $Validatie = false;
 
 if (isset($_POST['veranderWachtwoord'])){

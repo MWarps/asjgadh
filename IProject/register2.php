@@ -49,7 +49,7 @@ if (isset($_POST['rVolgende'])) {
     $_SESSION['status'] = 'registreren';
     InsertGebruiker($input);
 
-    header("Location: index.php");
+    header("Location: status.php");
     }
   }
 
@@ -109,15 +109,7 @@ if (isset($_POST['rVolgende'])) {
                               Voer een gebruikersnaam in.
                             </div>
                         </div>
-                        <div class="form-group col-md-8">
-                            <label for="inputEmailR">Email</label>
-                            <input type="email" name="rEmail" class="form-control" id="inputEmailR" placeholder="Email"
-                             maxlength="254" value="<?php if($_POST) { echo $_POST['rEmail'];} ?>" required>
-                            <div class="invalid-feedback">
-                              Voer een email adres in.
-                            </div>
                         </div>
-                    </div>
                     <div class="form-row">
                         <div class="form-group col-md-4">
                             <label for="inputWachtwoord">Wachtwoord</label>
@@ -251,7 +243,7 @@ if (isset($_POST['rVolgende'])) {
 
     <?php }
     else {
-    include 'includes/404error.php'
+    include 'includes/404error.php';
 
     }
 

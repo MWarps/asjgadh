@@ -39,8 +39,7 @@ if (isset($_SESSION['gebruikersnaam'])){
                                 <a class="nav-link" href="index.php">Home<span class="sr-only">(current)</span></a>
                             </li>
                         </ul>
-                        <?php knoppenFunctie();
-                        ?>
+                        <?php echo knoppenFunctie(); ?>
                     </div>
                 </div>
             </nav>

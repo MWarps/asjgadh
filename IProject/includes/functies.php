@@ -62,13 +62,13 @@ function HaalVerficatiecodeOp($email, $type){
 
   try {
       require('core/dbconnection.php');
-      $sqlSelect = $dbh->prepare("select verificatiecode, eindtijd from Verificatie where gebruikersnaam = :gebruikersnaam
+      $sqlSelect = $dbh->prepare("select verificatiecode, eindtijd from Verificatie where email = :email
       And type = :type ");
 
       $sqlSelect->execute(
           array(
-              ':gebruikersnaam' => $input['0'],
-              ':type' => $input['16']
+              ':email' => $email,
+              ':type' => $type
           ));
 
         $records = $sqlSelect->fetch(PDO::FETCH_ASSOC);
@@ -81,16 +81,16 @@ function HaalVerficatiecodeOp($email, $type){
 }
 
 /* Verificate code en eindtijd aanmaken*/
-function VerificatieCodeProcedure($input){
+function VerificatieCodeProcedure($email, $type){
   try {
       require('core/dbconnection.php');
-      $sqlSelect = $dbh->prepare("EXEC verificatie_toevoegen @gebruiker = :gebruikersnaam,
+      $sqlSelect = $dbh->prepare("EXEC verificatie_toevoegen @mail = :email,
       @type = :type");
 
       $sqlSelect->execute(
           array(
-              ':gebruikersnaam' => $input['0'],
-              ':type' => $input['16']
+              ':email' => $email,
+              ':type' => $type
           )
       );
   } catch (PDOexception $e) {
@@ -107,11 +107,11 @@ function InsertGebruiker($input){
         $sqlInsert = $dbh->prepare("INSERT INTO Gebruiker (
        gebruikersnaam, voornaam, achternaam, geslacht, adresregel1, adresregel2,
        postcode, plaatsnaam, land, geboortedatum, email,
-       wachtwoord, vraag, antwoordtekst, verkoper, verifieerd)
+       wachtwoord, vraag, antwoordtekst, verkoper)
       values (
         :rGebruikersnaam, :rVoornaam, :rAchternaam, :rGeslacht, :rAdresregel1, :rAdresregel2,
         :rPostcode, :rPlaatsnaam, :rLand, :rGeboortedatum, :rEmail,
-        :rWachtwoord, :rVraag, :rAntwoordtekst, :rVerkoper, :rVerifieerd)");
+        :rWachtwoord, :rVraag, :rAntwoordtekst, :rVerkoper)");
 
     $sqlInsert->execute(
         array(
@@ -130,7 +130,7 @@ function InsertGebruiker($input){
             ':rVraag' => $input['12'],
             ':rAntwoordtekst' => $input['13'],
             ':rVerkoper' => $input['14'],
-            ':rVerifieerd' => $input['15']
+
         ));
       }
     catch (PDOexception $e) {
@@ -184,7 +184,7 @@ function resetVragen()
 {
     try {
         require('core/dbconnection.php');
-        $sqlSelect = $dbh->query("select vraagnr, vraag from vragen");
+        $sqlSelect = $dbh->query("select vraagnr, vraag from Vragen");
 
         echo '<label for="inputGeheimeVraag">Geheime Vraag</label>';
         echo '<select name="rGeheimV" class="form-control" id="inputGeheimeVraag">'; // Open your drop down box
@@ -491,7 +491,7 @@ function haalVideosOp($rubriek)
 
 function knoppenFunctie(){
     // functie kijkt of de sessie active is en past de knoppen rechtsboven in de header gepast aan.
-    if ($_SESSION["ingelogd"]){
+    if ($_SESSION['ingelogd']){
         echo '<ul class="navbar-nav">
                 <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="accountbeheer" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</a>
@@ -505,7 +505,7 @@ function knoppenFunctie(){
                 </li>
               </ul>';
     } // einde if session actief is
-    if ($_SESSION["ingelogd"] == false){
+    if ($_SESSION['ingelogd'] == false){
         echo'<ul class="navbar-nav">
                             <li class="nav-item">
                                 <a class="nav-link" href="login.php">Login</a>
@@ -513,18 +513,9 @@ function knoppenFunctie(){
                             <li class="nav-item">
                                 <a class="nav-link" href="register.php">Register</a>
                             </li>
-                        </ul>
-
-                        ';
+                        </ul>';
     }// einde if session NIET actief is.
 }// einde functie
 
-function uitloggen(){
-    if ($_SESSION["ingelogd"]){
-    session_unset(); // verwijderd alle variabelen in de serssie
-    session_destroy(); // verwijderd de sessie en alle variabelen.
-    }
-   //header("Refresh:5; url=index.php");
-}// einde functie Uitloggen
 
 ?>

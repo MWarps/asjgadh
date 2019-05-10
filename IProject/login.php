@@ -16,7 +16,7 @@ if (!isset($_SESSION['gebruikersnaam'])){
             $_SESSION['status'] = 'login';
 
 
-            header("Location: url=index.php");
+            header("Location: status.php");
             exit;
         } else {
             $error = true;
@@ -60,5 +60,5 @@ if (!isset($_SESSION['gebruikersnaam'])){
     include 'includes/404error.php';
     // unset($_SESSION['gebruikersnaam']);
 }
-include 'includes/footer-fixed.php';
+include 'includes/footer.php';
 ?>
