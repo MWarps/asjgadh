@@ -67,7 +67,7 @@ require_once 'core/dbconnection.php';
                 </div>
             </nav>
             <nav class="navbar navbar-expand-lg navbar-light bg-orange2 spacing justify-content-md-center">
-                <form class="form-inline my-2 my-md-0">
+                <form class="form-inline my-2 my-md-0" action="catalogus.php">
                     <ul class="navbar-nav">
                         <li class="navbar-item p-2">
                             <input class="form-control" type="text" placeholder="Product Naam" aria-label="Search">

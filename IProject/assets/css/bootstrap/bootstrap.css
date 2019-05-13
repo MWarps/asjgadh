@@ -4595,6 +4595,7 @@ input[type="button"].btn-block {
 
 .card-text:last-child {
   margin-bottom: 0;
+  border-right: 1px solid rgba(0, 0, 0, 0.125);
 }
 
 .card-link:hover {
@@ -4610,6 +4611,8 @@ input[type="button"].btn-block {
   margin-bottom: 0;
   background-color: rgba(0, 0, 0, 0.03);
   border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+  border-right: 1px solid rgba(0, 0, 0, 0.125);
+
 }
 
 .card-header:first-child {
