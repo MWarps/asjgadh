@@ -7,9 +7,8 @@ if(!isset($_SESSION['gebruikersnaam'])){
     if (isset($_POST['registreren'])){
         $email = $_POST['email'];
 
-
         // controleert of emailadres bestaat
-        if(!empty(bestaatEmailadres($email))) {
+        if(!empty(bestaatEmailadres($email)) || !empty(bestaatValidatie($email))) {
             $Ebestaat = True;
         }
 
@@ -59,7 +58,7 @@ if(!isset($_SESSION['gebruikersnaam'])){
 <?php
 }
 else{
-
+  unset($_SESSION['gebruikersnaam']);
     include 'includes/404error.php';
 }
 include 'includes/footer-fixed.php';

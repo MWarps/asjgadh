@@ -1,7 +1,6 @@
 <?php
 include 'includes/header.php';
 require_once 'core/dbconnection.php';
-//require '../includes/functies.php';
 if(isset($_SESSION['gebruikersnaam'])){
 
 $stuurMail = false;
@@ -13,8 +12,8 @@ if (isset($_POST['rVolgende'])) {
 
   $input = array($bank, $bankrekeningnr, $creditcard);
 
-  $stuurMail = true;
-
+  $_SESSION['status'] = 'verkoper';
+  header('location: status.php');
 }
 
 ?>
@@ -24,17 +23,7 @@ if (isset($_POST['rVolgende'])) {
             <div class="jumbotron bg-dark text-white" style="padding: 2rem">
                 <form class="needs-validation" novalidate action='verkoper.php' method="post">
                     <h1 class="h3 mb-3 text-center">Registreer je hier als verkoper!</h1>
-                    <?php
-                    if ($stuurMail){
-                      echo '<div class="form-row">
-                              <div class="alert alert-success" role="alert">
-                                <strong>U bent geristreerd!</strong> U wordt doorgestuurd naar de hoofdpagina.
-                                </div>
-                              </div>
-                            ';
-                    }
-                    ?>
-                        <div class="form-row">
+                                            <div class="form-row">
                             <label for="inputVoornaam">Bank (optioneel)</label>
                             <input type="text" name="bank" class="form-control" id="inputBank"
                             pattern="[a-zA-Z]*" maxlength="50" placeholder="Bank" value="<?php if($_POST) { echo $_POST['bank'];} ?>" >
@@ -58,7 +47,7 @@ if (isset($_POST['rVolgende'])) {
 
     <?php
   }
-    {
+    else {
         include 'includes/404error.php';
     }
 

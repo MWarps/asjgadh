@@ -12,11 +12,11 @@ veranderWachtwoord($_SESSION['reset'], $hashedWachtwoord);
 unset($_SESSION['reset']);
 $_SESSION['status'] = 'wachtwoordreset';
 
-header("Location: index.php");
+header("Location: status.php");
+exit;
 }
 
 ?>
-
 <div class="container">
     <div class="offset-3 col-md-6 mt-4">
       <div class="jumbotron bg-dark text-white" style="padding: 2rem">
