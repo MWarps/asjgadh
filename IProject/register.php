@@ -18,7 +18,7 @@ if(!isset($_SESSION['gebruikersnaam'])){
             VerificatieCodeProcedure($email, $_SESSION['type']);
             $code = HaalVerficatiecodeOp($email, $_SESSION['type']);
             $_SESSION['code'] = $code;
-            
+
 
             StuurRegistreerEmail($email, $code['verificatiecode']);
         }
@@ -30,6 +30,7 @@ if(!isset($_SESSION['gebruikersnaam'])){
         <div class="offset-3 col-md-6 mt-4">
             <form class="needs-validation" novalidate action='register.php' method="post">
                 <h1 class="h3 mb-4 text-center "> Voer uw emailadres in! </h1>
+                <p> Er wordt een email verstuurd naar het ingevoerde emailadres. Klik de link in de mail op door te gaan met registreren.</p>
                 <?php
     if($Ebestaat){
         echo  '<div class="form-row">
