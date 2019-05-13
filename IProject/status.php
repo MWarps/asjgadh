@@ -8,26 +8,21 @@ $_SESSION['status'] = $_GET['uitlog'];
 
 switch ($_SESSION['status']) {
   case 'login':
-          $status = 'U bent ingelogd!';
-          //header("Refresh:5; url=index.php");
-
+        $status = 'U bent ingelogd!';
     break;
   case 'registreren':
         $status = 'U bent geregistreerd!';
-        //  header("Refresh:5; url=index.php");
     break;
   case 'uitlog':
         $status = 'U bent uitgelogd!';
         session_unset();
         session_destroy();
-        // verwijderd alle variabelen in de sessie
-
-        //header("Refresh:5; url=index.php");
     break;
   case 'wachtwoordreset':
         $status = 'U wachtwoord is veranderd!';
-        //  header("Refresh:5; url=index.php");
     break;
+    case 'verkoper'
+    $status = 'U bent geristreerd!';
   default:
     // code...
     break;

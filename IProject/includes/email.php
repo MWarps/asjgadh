@@ -1,7 +1,7 @@
 <?php
 function email($code)
 {
-    $tekst = ' 
+    $tekst = '
  <html>
   <head>
     <meta name="viewport" content="width=device-width" />
@@ -345,9 +345,8 @@ function email($code)
                     <tr>
                       <td>
                         <p>Hallo,</p>
-                        <p>Bedankt voor het registreren. Hieronder staat de code die ingevoerd
-                        moet worden om het registeren te voltooien:</p>
-                        <h2>'.$code.'</h2>
+                        <p>Bedankt voor het registreren. Hieronder staat de een link die u naar de registratie pagina brengt:</p>
+                        <a target="_blank" href="register.php?id='.$_SESSION['code']['verificatiecode'].'">Uitloggen</a>
                         <p>Als u deze e-mail per ongeluk ontvangt, kunt u deze verwijderen en zijn er geen conseqenties.</p>
                         <p>Met vriendelijke groet, <br>
                            EenmaalAndermaal</p>
@@ -386,4 +385,3 @@ function email($code)
 
     return $tekst;
 }
-

@@ -162,6 +162,26 @@ function bestaatGebruikersnaam($gebruikersnaam)
 }
 
 /* Is er al een gebruiker aangemeld met hetzelfde emailadres */
+function bestaatValidatie($email)
+{
+    try{
+        require('core/dbconnection.php');
+        $sqlSelect = $dbh->prepare("select email from Verificatie where email =:email");
+
+        $sqlSelect->execute(
+            array(
+                ':email' => $email,
+            ));
+        $records = $sqlSelect->fetch(PDO::FETCH_ASSOC);
+        return $records;
+
+    }
+    catch (PDOexception $e) {
+        echo "er ging iets mis error19: {$e->getMessage()}";
+    }
+}
+
+/* Is er al een gebruiker aangemeld met hetzelfde emailadres */
 function bestaatEmailadres($email)
 {
     try{
@@ -241,6 +261,7 @@ function landen()
 }
 
 function StuurRegistreerEmail($Email, $Code){
+
         ini_set( 'display_errors', 1 );
         error_reporting( E_ALL );
         $from = "no-reply@iconcepts.nl";
@@ -499,12 +520,14 @@ function knoppenFunctie(){
     if ($_SESSION['ingelogd']){
         echo '<ul class="navbar-nav">
                 <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="accountbeheer" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Mijn account </a>
+                <a class="nav-link dropdown-toggle" href="#" id="accountbeheer" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                '. $_SESSION['gebruikersnaam'] .'</a>
                 <div class="dropdown-menu" aria-labelledby="accountbeheer">
                     <a class="nav-link" href="#">Mijn account</a>
                     <a class="dropdown-item" href="#">Beheer</a>
                     <a class="dropdown-item" href="#">Meldingen</a>
                     <a class="dropdown-item" href="../informeren.php">FAQ</a>
+                    <a class="dropdown-item" href="verkoper.php">Verkoper worden</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="status.php?uitlog=uitlog">Uitloggen</a>

@@ -8,7 +8,6 @@ if(isset($_SESSION['email']) && !isset($_SESSION['gebruikersnaam'])){
     $code = $_SESSION['code']['verificatiecode'];
     $eindtijd = $_SESSION['code']['eindtijd'];
 
-
     $error;
     $overEindtijd = false;
     $pogingen = false;
@@ -71,7 +70,7 @@ if(isset($_SESSION['email']) && !isset($_SESSION['gebruikersnaam'])){
         <div class="offset-3 col-md-6 mt-4 border border-dark rounded">
             <form class="needs-validation " novalidate action='validatie.php' method="post">
                 <h1 class="h3 mb-4 mt-2 text-center "> Validatie </h1>
-                <p>  Er wordt een validatiecode verstuurd naar het ingevoerde emailadres. <br> <br>
+                <p> Er wordt een validatiecode verstuurd naar het ingevoerde emailadres. <br> <br>
                     Voer hier de validatiecode in om uw registratie te voltooien: </p>
                 <?php
     if($codeVerzonden){
