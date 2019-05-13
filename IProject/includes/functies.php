@@ -1,5 +1,6 @@
 <?php
 include 'email.php';
+include 'email2.php';
 /* update gebruiker naar geverifieerd */
 function updateGebruikerVerificatie($input){
     try {
@@ -259,13 +260,31 @@ function landen()
     }
 }
 
+function StuurWachtwoordResetMailEmail($Email, $Code){
+
+
+    ini_set( 'display_errors', 1 );
+    error_reporting( E_ALL );
+    $from = "no-reply@iconcepts.nl";
+    $to = $Email;
+    $subject = "Wachtwoord reset EenmaalAndermaal";
+    $message = email2($Code);
+
+    $headers = 'MIME-Version: 1.0' . "\r\n";
+    $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+    $headers .= "From:" .$from;
+
+    mail($to,$subject,$message, $headers);
+
+}
+
 function StuurRegistreerEmail($Email, $Code){
 
     ini_set( 'display_errors', 1 );
     error_reporting( E_ALL );
     $from = "no-reply@iconcepts.nl";
     $to = $Email;
-    $subject = "Validatie code account registreren";
+    $subject = "Validatie link account registreren";
     $message = email($Code);
 
     $headers = 'MIME-Version: 1.0' . "\r\n";
@@ -513,7 +532,7 @@ function haalVideosOp($rubriek)
         echo "er ging iets mis error: {$e->getMessage()}";
     }
 }
-
+*/
 
 function gegevensIngevuld (){
     if(isset($_SESSION['gebruikersnaam'])){

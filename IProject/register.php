@@ -16,11 +16,11 @@ if(!isset($_SESSION['gebruikersnaam'])){
           $mailVerstuurd = true;
             $_SESSION['email'] = $email;
             $_SESSION['type'] = 'mail';
+            
             VerificatieCodeProcedure($email, $_SESSION['type']);
             $code = HaalVerficatiecodeOp($email, $_SESSION['type']);
             $_SESSION['code'] = $code;
-
-
+            
             StuurRegistreerEmail($email, $code['verificatiecode']);
         }
     }

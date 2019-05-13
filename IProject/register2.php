@@ -49,6 +49,7 @@ if (isset($_POST['rVolgende'])) {
     deleteVerificatieRij($rEmail,$_SESSION['type']);
     
     echo '<script language="javascript">window.location.href ="'.$url.'"</script>';
+    exit();
     }
   }
 }

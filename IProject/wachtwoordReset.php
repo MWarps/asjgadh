@@ -1,63 +1,58 @@
 <?php
 include 'includes/header.php';
-$error = false;
+$mailVerstuurd = false;
+$Ebestaat = false;
 
 if (isset($_POST['Volgende'])){
-$Gebruikersnaam = $_POST['gebruikersnaam'];
-$Veiligheidsvraag = $_POST['rGeheimV'];
-$AntwoordVeiligheidsvraag = $_POST ['wGeheimA'];
+  $email = $_POST['email'];
 
-$input = array($Gebruikersnaam, $Veiligheidsvraag, $AntwoordVeiligheidsvraag);
-
-$GebruikerArray = haalGebruikerOp($Gebruikersnaam);
-
-  if (
-  !empty($GebruikerArray) &&
-  $Veiligheidsvraag == $GebruikerArray['vraag'] &&
-  $AntwoordVeiligheidsvraag == $GebruikerArray['antwoordtekst']
-  )
-  {
-  $_SESSION['reset'] = $Gebruikersnaam;
-   header("Location: wachtwoordReset2.php");
+  if (empty(bestaatEmailadres($email))) {
+    $Ebestaat = true;
   }
 
   else{
-  $error = true;
+  $mailVerstuurd = true;
+  $Code = rand(10000,99999);
+  StuurWachtwoordResetMail($email, $Code);
   }
 }
 ?>
 
 <div class="container">
-    <div class="offset-3 col-md-6 mt-4">
-      <div class="jumbotron bg-dark text-white" style="padding: 2rem">
-      <form class="needs-validation" novalidate action='wachtwoordReset.php' method="post">
-        <div class="form-row">
-        <?php if ($error){
-          echo '<div class="form-row">
-                  <div class="alert alert-warning" role="alert">
-                    <strong> FOUT! </strong> De gebruikersnaam, veiligheidsvraag of veiligheidsantwoord is komen niet overeen.
+    <div class="row">
+        <div class="offset-3 col-md-6 mt-4">
+            <form class="needs-validation" novalidate action='register.php' method="post">
+                <h1 class="h3 mb-4 text-center "> Voer uw emailadres in! </h1>
+                <p> Er wordt een email verstuurd naar het ingevoerde emailadres. Klik de link in de mail op door te gaan met het resetten van uw wachtwoord.</p>
+                <?php
+                if($Ebestaat){
+                    echo  '<div class="form-row">
+                                      <div class="alert alert-warning" role="alert">
+                                        <strong>Het ingevoerde emailadres bestaat niet!</strong> Voer het correcte adres in.
+                                      </div>
+                                     </div>';}
+    if($mailVerstuurd){
+         echo '<div class="form-row">
+              <div class="alert alert-success" role="alert">
+              <strong>Email is verzonden!</strong> Er is een mail verzonden naar het emailadres met een link om door te gaan met registreren.
+                </div>
+               </div>';}
+                ?>
+                <div class="form-row">
+                    <input type="email" name="email" class="form-control" id="email" placeholder="Voer hier uw email in"
+                           maxlength="254" required>
+                    <div class="invalid-feedback">
+                        Voer een emailadres in.
                     </div>
-                  </div>'; }
-          ?>
-            <h1 class="h3 mb-3 mt-3 font-weight-normal>">Wachtwoord resetten</h1>
-            <!-- hieronder wordt de tekst en invulveld voor de gebruikersnaam gemaakt -->
-                  <label for="inputGebruikersnaam">Gebruikersnaam</label>
-                  <input type="text" class="form-control mb-2" value="<?php if(isset($_SESSION['gebruikersnaam'])){echo $_SESSION['gebruikersnaam'];} ?>" name="gebruikersnaam" id="gebruikersnaam" placeholder="Gebruikersnaam" required>
-            <!-- hieronder wordt de veiliheidsvraag geselecteerd -->
-                      <?php
-                          echo resetVragen();
-                          ?>
-            <!-- hieronder wordt de veiliheidsvraag beantwoord -->
-                    <label for="antwoordVeiligheidsvraag">Antwoord op veiligheidsvraag</label>
-                    <input type="text" class="form-control mb-2" name="wGeheimA" id="antwoordVeiligheidsvraag" placeholder="Antwoord" required>
-            <!-- hier wordt de reset button gemaakt. -->
-                    <button  type="submit" name="Volgende" class="btn bg-flame mt-2">Reset Wachtwoord</button>
-                  </div>
-        </form>
-      </div>
+                    <button class="btn btn-lg bg-flame btn-block mb-5 mt-3" id="Volgende" type="submit" name="Volgende" value="Volgende"> Stuur mail </button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 
-<?php
 
-include 'includes/footer.php' ?>
+<?php
+include 'includes/footer.php';
+?>
+

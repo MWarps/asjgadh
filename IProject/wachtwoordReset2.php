@@ -1,19 +1,20 @@
 <?php
 include 'includes/header.php';
 
-if(isset($_SESSION['reset'] )){
-$Validatie = false;
+if (isset($_GET['id'])){
+
+  if($_GET['id'] == $_SESSION['code']['verificatiecode']){
 
 if (isset($_POST['veranderWachtwoord'])){
 $hashedWachtwoord = password_hash($_POST['nWachtwoord1'], PASSWORD_DEFAULT);
 
 $Validatie = true;
 veranderWachtwoord($_SESSION['reset'], $hashedWachtwoord);
-unset($_SESSION['reset']);
 $_SESSION['status'] = 'wachtwoordreset';
-
-header("Location: index.php");
-exit;
+$url = 'index.php';
+echo '<script language="javascript">window.location.href ="'.$url.'"</script>';
+exit();
+}
 }
 
 ?>
