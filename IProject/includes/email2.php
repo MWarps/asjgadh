@@ -326,8 +326,8 @@ function email2($code)
                     <tr>
                       <td>
                         <p>Hallo,</p>
-                        <p>Hieronder staat de een link die u naar de pagina brengt om uw wachtwoord te veranderen:</p>
-                        <a class="button" target="_blank" href="http://iproject34.icasites.nl/wachtwoordReset2.php?id='.$Code.'">Reset Wachtwoord</a>
+                        <p>Bedankt voor het registreren. Hieronder staat de een link die u naar de registratie pagina brengt:</p>
+                        <a class="button" target="_blank" href="http://iproject34.icasites.nl/register2.php?id='.$_SESSION['code']['verificatiecode'].'">Registreer!</a>
                         <p>Als u deze e-mail per ongeluk ontvangt, kunt u deze verwijderen en zijn er geen conseqenties.</p>
                         <p>Met vriendelijke groet, <br>
                            EenmaalAndermaal</p>
