@@ -149,46 +149,27 @@ function email($code)
       }
 
       /* -------------------------------------
-          BUTTONS
+          LINKS
       ------------------------------------- */
-      .btn {
-        box-sizing: border-box;
-        width: 100%; }
-        .btn > tbody > tr > td {
-          padding-bottom: 15px; }
-        .btn table {
-          width: auto;
-      }
-        .btn table td {
-          background-color: #ffffff;
-          border-radius: 5px;
-          text-align: center;
-      }
-        .btn a {
-          background-color: #ffffff;
-          border: solid 1px #3498db;
-          border-radius: 5px;
-          box-sizing: border-box;
-          color: #3498db;
-          cursor: pointer;
-          display: inline-block;
-          font-size: 14px;
-          font-weight: bold;
-          margin: 0;
-          padding: 12px 25px;
-          text-decoration: none;
-          text-transform: capitalize;
+
+      .button:hover {
+    background-color: #F2552C;
+    color: white;
+        }
+
+    .button {
+    background-color: #F2552C;
+    color: #FFFFFF;
+    border-color: #F2552C;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin-bottom: 10px;
+    margin-top: 10 px
       }
 
-      .btn-primary table td {
-        background-color: #3498db;
-      }
-
-      .btn-primary a {
-        background-color: #3498db;
-        border-color: #3498db;
-        color: #ffffff;
-      }
 
       /* -------------------------------------
           OTHER STYLES THAT MIGHT BE USEFUL
@@ -346,7 +327,7 @@ function email($code)
                       <td>
                         <p>Hallo,</p>
                         <p>Bedankt voor het registreren. Hieronder staat de een link die u naar de registratie pagina brengt:</p>
-                        <a target="_blank" href="register.php?id='.$_SESSION['code']['verificatiecode'].'">Uitloggen</a>
+                        <a class="button" target="_blank" href="http://iproject34.icasites.nl/register2.php?id='.$_SESSION['code']['verificatiecode'].'">Registreer!</a>
                         <p>Als u deze e-mail per ongeluk ontvangt, kunt u deze verwijderen en zijn er geen conseqenties.</p>
                         <p>Met vriendelijke groet, <br>
                            EenmaalAndermaal</p>
