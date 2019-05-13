@@ -1,17 +1,9 @@
 <?php
 session_start();
-
-include 'functies.php';
+require 'includes/functies.php';
 require_once 'core/dbconnection.php';
-
-if (isset($_SESSION['gebruikersnaam'])){
-  $_SESSION ['ingelogd'] = true;
-} else {
-   $_SESSION ['ingelogd'] = false;
-}
-
 ?>
-<!doctype html>
+<!DOCTYPE HTML>
 <html lang="nl">
     <head>
         <meta charset="utf-8">
@@ -40,8 +32,38 @@ if (isset($_SESSION['gebruikersnaam'])){
                                 <a class="nav-link" href="index.php">Home<span class="sr-only">(current)</span></a>
                             </li>
                         </ul>
-                        <?php echo knoppenFunctie(); ?>
-                    </div>
+
+                        <?php
+                        if (isset($_SESSION['gebruikersnaam'])){
+                              echo '<ul class="navbar-nav">
+                                      <li class="nav-item dropdown">
+                                      <a class="nav-link dropdown-toggle" href="#" id="accountbeheer" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                      '. $_SESSION['gebruikersnaam'] .'</a>
+                                      <div class="dropdown-menu" aria-labelledby="accountbeheer">
+                                          <a class="nav-link" href="#">Mijn account</a>
+                                          <a class="dropdown-item" href="#">Beheer</a>
+                                          <a class="dropdown-item" href="#">Meldingen</a>
+                                          <a class="dropdown-item" href="../informeren.php">FAQ</a>
+                                          <a class="dropdown-item" href="verkoper.php">Verkoper worden</a>
+                                      </li>
+                                      <li class="nav-item">
+                                          <a class="nav-link" href="index.php?uitlog=uitlog">Uitloggen</a>
+                                      </li>
+                                    </ul>
+                                    </div>
+                                    </div>';
+                          } // einde if session actief is
+                          else{
+                              echo'<ul class="navbar-nav">
+                                                  <li class="nav-item">
+                                                      <a class="nav-link" href="login.php">Login</a>
+                                                  </li>
+                                                  <li class="nav-item">
+                                                      <a class="nav-link" href="register.php">Register</a>
+                                                  </li>
+                                              </ul>';
+                          } ?>
+                      </div>
                 </div>
             </nav>
             <nav class="navbar navbar-expand-lg navbar-light bg-orange2 spacing justify-content-md-center">

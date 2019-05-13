@@ -12,7 +12,7 @@ veranderWachtwoord($_SESSION['reset'], $hashedWachtwoord);
 unset($_SESSION['reset']);
 $_SESSION['status'] = 'wachtwoordreset';
 
-header("Location: status.php");
+header("Location: index.php");
 exit;
 }
 

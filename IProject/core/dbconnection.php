@@ -15,4 +15,3 @@ try {
 } catch (PDOexception $e) {
     echo "something went wrong {$e->getMessage()}";
 }
-?>

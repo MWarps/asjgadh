@@ -14,14 +14,15 @@ if (!isset($_SESSION['gebruikersnaam'])){
         if($gebruikersnaam == $gebruiker['gebruikersnaam'] && $wachtwoord == password_verify($wachtwoord,$gebruiker['wachtwoord'])){
             $_SESSION['gebruikersnaam'] = $gebruikersnaam;
             $_SESSION['status'] = 'login';
-
-
-            header("Location: status.php");
-            exit;
+            $url = 'index.php';
+            echo '<script language="javascript">window.location.href ="'.$url.'"</script>';
+          
         } else {
             $error = true;
         }
     }
+
+
 ?>
 <div class="container">
     <div class="row">
@@ -58,7 +59,7 @@ if (!isset($_SESSION['gebruikersnaam'])){
 <?php
 } else {
     include 'includes/404error.php';
-    // unset($_SESSION['gebruikersnaam']);
+     unset($_SESSION['gebruikersnaam']);
 }
 include 'includes/footer.php';
 ?>

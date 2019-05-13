@@ -3,7 +3,7 @@ include 'includes/header.php';
 
 if(!isset($_SESSION['gebruikersnaam'])){
     $Ebestaat = false;
-
+    $mailVerstuurd = false;
     if (isset($_POST['registreren'])){
         $email = $_POST['email'];
 
@@ -13,6 +13,7 @@ if(!isset($_SESSION['gebruikersnaam'])){
         }
 
         else{
+          $mailVerstuurd = true;
             $_SESSION['email'] = $email;
             $_SESSION['type'] = 'mail';
             VerificatieCodeProcedure($email, $_SESSION['type']);
@@ -37,8 +38,13 @@ if(!isset($_SESSION['gebruikersnaam'])){
                           <div class="alert alert-warning" role="alert">
                             <strong>Het ingevoerde email adres is al in gebruik!</strong>
                           </div>
-                         </div>';
-    }
+                         </div>';}
+    if($mailVerstuurd){
+         echo '<div class="form-row">
+              <div class="alert alert-success" role="alert">
+              <strong>Email is verzonden!</strong> Er is een mail verzonden naar het emailadres met een link om door te gaan met registreren.
+                </div>
+               </div>';}
                 ?>
                 <div class="form-row">
                     <input type="email" name="email" class="form-control" id="email" placeholder="Voer hier uw email in"
@@ -60,5 +66,5 @@ else{
   unset($_SESSION['gebruikersnaam']);
     include 'includes/404error.php';
 }
-include 'includes/footer-fixed.php';
+include 'includes/footer.php';
 ?>

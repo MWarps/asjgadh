@@ -1,5 +1,4 @@
 <?php
-
 include 'email.php';
 /* update gebruiker naar geverifieerd */
 function updateGebruikerVerificatie($input){
@@ -415,7 +414,8 @@ function controleVraag($vraag){
 
 
 }
-/* Komen de wachtwoorden overeen bij het registreren en wachtwoord reset
+/*
+Komen de wachtwoorden overeen bij het registreren en wachtwoord reset
 function controleerWachtwoord($rWachtwoord, $rHerhaalWachtwoord)
 {
     if ($rWachtwoord == $rHerhaalWachtwoord) {
@@ -424,9 +424,9 @@ function controleerWachtwoord($rWachtwoord, $rHerhaalWachtwoord)
         return false;
     }
 }
-*/
 
-/* function haalPostsOp($rubriek)
+
+function haalPostsOp($rubriek)
 {
     if (empty($rubriek) || $rubriek == 'Alle rubrieken') {
         $query = 'select * from posts order by unixtijd desc';
@@ -513,38 +513,34 @@ function haalVideosOp($rubriek)
         echo "er ging iets mis error: {$e->getMessage()}";
     }
 }
-*/
-
-function knoppenFunctie(){
-    // functie kijkt of de sessie active is en past de knoppen rechtsboven in de header gepast aan.
-    if ($_SESSION['ingelogd']){
-        echo '<ul class="navbar-nav">
-                <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="accountbeheer" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                '. $_SESSION['gebruikersnaam'] .'</a>
-                <div class="dropdown-menu" aria-labelledby="accountbeheer">
-                    <a class="nav-link" href="#">Mijn account</a>
-                    <a class="dropdown-item" href="#">Beheer</a>
-                    <a class="dropdown-item" href="#">Meldingen</a>
-                    <a class="dropdown-item" href="../informeren.php">FAQ</a>
-                    <a class="dropdown-item" href="verkoper.php">Verkoper worden</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="status.php?uitlog=uitlog">Uitloggen</a>
-                </li>
-              </ul>';
-    } // einde if session actief is
-    if ($_SESSION['ingelogd'] == false){
-        echo'<ul class="navbar-nav">
-                            <li class="nav-item">
-                                <a class="nav-link" href="login.php">Login</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="register.php">Register</a>
-                            </li>
-                        </ul>';
-    }// einde if session NIET actief is.
-}// einde functie
 
 
-?>
+if (isset($_SESSION['gebruikersnaam'])){
+      echo '<ul class="navbar-nav">
+              <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="accountbeheer" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              '. $_SESSION['gebruikersnaam'] .'</a>
+              <div class="dropdown-menu" aria-labelledby="accountbeheer">
+                  <a class="nav-link" href="#">Mijn account</a>
+                  <a class="dropdown-item" href="#">Beheer</a>
+                  <a class="dropdown-item" href="#">Meldingen</a>
+                  <a class="dropdown-item" href="../informeren.php">FAQ</a>
+                  <a class="dropdown-item" href="verkoper.php">Verkoper worden</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" href="index.php?uitlog=uitlog">Uitloggen</a>
+              </li>
+            </ul>
+            </div>
+            </div>';
+  } // einde if session actief is
+  else{
+      echo'<ul class="navbar-nav">
+                          <li class="nav-item">
+                              <a class="nav-link" href="login.php">Login</a>
+                          </li>
+                          <li class="nav-item">
+                              <a class="nav-link" href="register.php">Register</a>
+                          </li>
+                      </ul>';
+  }// einde if session NIET actief is.*/

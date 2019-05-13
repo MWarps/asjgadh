@@ -1,7 +1,55 @@
-    <?php include 'includes/header.php'
-    
-    ?>
+    <?php
+include 'includes/header.php';
 
+    if (isset($_GET['uitlog'])){
+      $_SESSION['status'] = $_GET['uitlog'];
+      session_unset();
+      session_destroy();
+      $url = 'index.php';
+      echo '<script language="javascript">window.location.href ="'.$url.'"</script>';
+      die();
+            }
+
+ if(isset($_SESSION['status'])){
+
+    switch ($_SESSION['status']) {
+      case 'login':
+            $status = 'U bent ingelogd!';
+        break;
+      case 'registreren':
+            $status = 'U bent geregistreerd!';
+        break;
+      case 'wachtwoordreset':
+            $status = 'U wachtwoord is veranderd!';
+        break;
+        case 'verkoper':
+        $status = 'U bent geristreerd als verkoper';
+      default:
+        // code...
+        break;
+    }
+
+    unset($_SESSION['status']);
+
+
+    echo '<div class="container">
+            <div class="h-100 row align-items-center">
+              <div class="col">
+                        <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
+                          <strong>'.$status.'</strong> U kunt op het kruisje klikken om deze melding te sluiten.
+                          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                            </div>
+                            </div>
+                          </div>
+                       </div>
+                      ';
+}
+
+
+
+    ?>
     <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
         <ol class="carousel-indicators">
             <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>

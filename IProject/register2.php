@@ -41,13 +41,14 @@ if (isset($_POST['rVolgende'])) {
     unset($_SESSION['email']);
     unset($_SESSION['type']);
     unset($_GET['id']);
-    
+
     $_SESSION['gebruikersnaam'] = $rGebruikersnaam;
     $_SESSION['status'] = 'registreren';
 
     InsertGebruiker($input);
-
-    header("Location: status.php");
+    deleteVerificatieRij($rEmail,$_SESSION['type']);
+    
+    echo '<script language="javascript">window.location.href ="'.$url.'"</script>';
     }
   }
 }
