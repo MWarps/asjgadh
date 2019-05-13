@@ -261,7 +261,7 @@ function landen()
 }
 
 function StuurRegistreerEmail($Email, $Code){
-  
+
         ini_set( 'display_errors', 1 );
         error_reporting( E_ALL );
         $from = "no-reply@iconcepts.nl";

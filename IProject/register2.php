@@ -1,7 +1,9 @@
 <?php
 include 'includes/header.php';
 
-if (isset($_SESSION['email']) && !isset($_SESSION['gebruikersnaam'])){
+if (isset($_GET['id'])){
+
+  if($_GET['id'] == $_SESSION['code']['verificatiecode']){
 
 $Gbestaat = False;
 $Ebestaat = False;
@@ -33,26 +35,22 @@ if (isset($_POST['rVolgende'])) {
   if(!empty(bestaatGebruikersnaam($rGebruikersnaam))) {
       $Gbestaat = True;
       }
-  // controleert of emailadres bestaat
-  if(!empty(bestaatEmailadres($rEmail))) {
-      $Ebestaat = True;
-      }
 
   // controleert of er geen error's zijn
   if($Ebestaat == false && $Gbestaat == false){
-    unset ($_SESSION['pogingen']);
     unset($_SESSION['email']);
-    unset($_SESSION['validatie']);
     unset($_SESSION['type']);
-
+    unset($_GET['id']);
+    
     $_SESSION['gebruikersnaam'] = $rGebruikersnaam;
     $_SESSION['status'] = 'registreren';
+
     InsertGebruiker($input);
 
     header("Location: status.php");
     }
   }
-
+}
 ?>
     <div class="container-fluid h-100">
         <div class="row h-100">

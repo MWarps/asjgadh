@@ -18,11 +18,9 @@ if(!isset($_SESSION['gebruikersnaam'])){
             VerificatieCodeProcedure($email, $_SESSION['type']);
             $code = HaalVerficatiecodeOp($email, $_SESSION['type']);
             $_SESSION['code'] = $code;
-            $_SESSION['pogingen'] = 0;
+            
 
             StuurRegistreerEmail($email, $code['verificatiecode']);
-
-            header("Location: validatie.php");
         }
     }
 ?>
