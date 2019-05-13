@@ -20,15 +20,15 @@ function updateGebruikerVerificatie($input){
 
 /* deleting verificatie code*/
 function deleteVerificatieRij($email, $type){
-  try {
-      require('core/dbconnection.php');
-      $sqlSelect = $dbh->prepare("delete from Verificatie where email = :email and type = :type");
+    try {
+        require('core/dbconnection.php');
+        $sqlSelect = $dbh->prepare("delete from Verificatie where email = :email and type = :type");
 
-      $sqlSelect->execute(
-          array(
-              ':email' => $email,
-              ':type' => $type
-          ));
+        $sqlSelect->execute(
+            array(
+                ':email' => $email,
+                ':type' => $type
+            ));
 
     } catch (PDOexception $e) {
         echo "er ging iets mis error: {$e->getMessage()}";
@@ -39,9 +39,9 @@ function deleteVerificatieRij($email, $type){
 /* Ophalen van verficatie code */
 function HaalGebruikerOp($gebruikersnaam){
 
-  try {
-      require('core/dbconnection.php');
-      $sqlSelect = $dbh->prepare("select gebruikersnaam, wachtwoord, vraag, antwoordtekst from Gebruiker
+    try {
+        require('core/dbconnection.php');
+        $sqlSelect = $dbh->prepare("select gebruikersnaam, wachtwoord, vraag, antwoordtekst from Gebruiker
       where gebruikersnaam = :gebruikersnaam");
 
         $sqlSelect->execute(
@@ -61,16 +61,16 @@ function HaalGebruikerOp($gebruikersnaam){
 /* Ophalen van verficatie code */
 function HaalVerficatiecodeOp($email, $type){
 
-  try {
-      require('core/dbconnection.php');
-      $sqlSelect = $dbh->prepare("select verificatiecode, eindtijd from Verificatie where email = :email
+    try {
+        require('core/dbconnection.php');
+        $sqlSelect = $dbh->prepare("select verificatiecode, eindtijd from Verificatie where email = :email
       And type = :type ");
 
-      $sqlSelect->execute(
-          array(
-              ':email' => $email,
-              ':type' => $type
-          ));
+        $sqlSelect->execute(
+            array(
+                ':email' => $email,
+                ':type' => $type
+            ));
 
         $records = $sqlSelect->fetch(PDO::FETCH_ASSOC);
 
@@ -83,20 +83,20 @@ function HaalVerficatiecodeOp($email, $type){
 
 /* Verificate code en eindtijd aanmaken*/
 function VerificatieCodeProcedure($email, $type){
-  try {
-      require('core/dbconnection.php');
-      $sqlSelect = $dbh->prepare("EXEC verificatie_toevoegen @mail = :email,
+    try {
+        require('core/dbconnection.php');
+        $sqlSelect = $dbh->prepare("EXEC verificatie_toevoegen @mail = :email,
       @type = :type");
 
-      $sqlSelect->execute(
-          array(
-              ':email' => $email,
-              ':type' => $type
-          )
-      );
-  } catch (PDOexception $e) {
-      echo "er ging iets mis error: {$e->getMessage()}";
-  }
+        $sqlSelect->execute(
+            array(
+                ':email' => $email,
+                ':type' => $type
+            )
+        );
+    } catch (PDOexception $e) {
+        echo "er ging iets mis error: {$e->getMessage()}";
+    }
 }
 
 /* Voeg gebruiker toe aan database */
@@ -114,26 +114,26 @@ function InsertGebruiker($input){
         :rPostcode, :rPlaatsnaam, :rLand, :rGeboortedatum, :rEmail,
         :rWachtwoord, :rVraag, :rAntwoordtekst, :rVerkoper)");
 
-    $sqlInsert->execute(
-        array(
-            ':rGebruikersnaam' => $input['0'],
-            ':rVoornaam' => $input['1'],
-            ':rAchternaam' => $input['2'],
-            ':rGeslacht' => $input['3'],
-            ':rAdresregel1' => $input['5'],
-            ':rAdresregel2' => $input['6'],
-            ':rPostcode' => $input['7'],
-            ':rPlaatsnaam' => $input['8'],
-            ':rLand' => $input['9'],
-            ':rGeboortedatum' => $input['10'],
-            ':rEmail' => $input['11'],
-            ':rWachtwoord' => $hashedWachtwoord,
-            ':rVraag' => $input['12'],
-            ':rAntwoordtekst' => $input['13'],
-            ':rVerkoper' => $input['14'],
+        $sqlInsert->execute(
+            array(
+                ':rGebruikersnaam' => $input['0'],
+                ':rVoornaam' => $input['1'],
+                ':rAchternaam' => $input['2'],
+                ':rGeslacht' => $input['3'],
+                ':rAdresregel1' => $input['5'],
+                ':rAdresregel2' => $input['6'],
+                ':rPostcode' => $input['7'],
+                ':rPlaatsnaam' => $input['8'],
+                ':rLand' => $input['9'],
+                ':rGeboortedatum' => $input['10'],
+                ':rEmail' => $input['11'],
+                ':rWachtwoord' => $hashedWachtwoord,
+                ':rVraag' => $input['12'],
+                ':rAntwoordtekst' => $input['13'],
+                ':rVerkoper' => $input['14'],
 
-        ));
-      }
+            ));
+    }
     catch (PDOexception $e) {
         echo "er ging iets mis insert {$e->getMessage()}";
     }
@@ -261,18 +261,18 @@ function landen()
 
 function StuurRegistreerEmail($Email, $Code){
 
-        ini_set( 'display_errors', 1 );
-        error_reporting( E_ALL );
-        $from = "no-reply@iconcepts.nl";
-        $to = $Email;
-        $subject = "Validatie code account registreren";
-        $message = email($Code);
+    ini_set( 'display_errors', 1 );
+    error_reporting( E_ALL );
+    $from = "no-reply@iconcepts.nl";
+    $to = $Email;
+    $subject = "Validatie code account registreren";
+    $message = email($Code);
 
-        $headers = 'MIME-Version: 1.0' . "\r\n";
-        $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-        $headers .= "From:" .$from;
+    $headers = 'MIME-Version: 1.0' . "\r\n";
+    $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+    $headers .= "From:" .$from;
 
-        mail($to,$subject,$message, $headers);
+    mail($to,$subject,$message, $headers);
 
 }
 
@@ -515,32 +515,30 @@ function haalVideosOp($rubriek)
 }
 
 
-if (isset($_SESSION['gebruikersnaam'])){
-      echo '<ul class="navbar-nav">
-              <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="accountbeheer" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              '. $_SESSION['gebruikersnaam'] .'</a>
-              <div class="dropdown-menu" aria-labelledby="accountbeheer">
-                  <a class="nav-link" href="#">Mijn account</a>
-                  <a class="dropdown-item" href="#">Beheer</a>
-                  <a class="dropdown-item" href="#">Meldingen</a>
-                  <a class="dropdown-item" href="../informeren.php">FAQ</a>
-                  <a class="dropdown-item" href="verkoper.php">Verkoper worden</a>
-              </li>
-              <li class="nav-item">
-                  <a class="nav-link" href="index.php?uitlog=uitlog">Uitloggen</a>
-              </li>
-            </ul>
-            </div>
-            </div>';
-  } // einde if session actief is
-  else{
-      echo'<ul class="navbar-nav">
-                          <li class="nav-item">
-                              <a class="nav-link" href="login.php">Login</a>
-                          </li>
-                          <li class="nav-item">
-                              <a class="nav-link" href="register.php">Register</a>
-                          </li>
-                      </ul>';
-  }// einde if session NIET actief is.*/
+function gegevensIngevuld (){
+    if(isset($_SESSION['gebruikersnaam'])){
+        try {
+            require('core/dbconnection.php');
+            $sqlSelect = $dbh->prepare("SELECT gebruikersnaam FROM Verificatie
+WHERE type = 'post' AND gebruikersnaam = :gebruikersnaam ");
+            $sqlSelect->execute(
+                array (
+                    ':gebruikersnaam' => $_SESSION['gebruikersnaam'],
+                ));
+
+            $verkoperVerificatie = $sqlSelect->fetchAll(PDO::FETCH_ASSOC);
+
+        } catch (PDOexception $e) {
+            echo "er ging iets mis error: {$e->getMessage()}";
+        }
+    }   
+
+    if ( empty( $verkoperVerificatie['gebruikersnaam']) == true){
+        $antwoord = false;
+    } else {
+        $antwoord = true;
+    }
+        return $antwoord;
+        }
+
+?>
