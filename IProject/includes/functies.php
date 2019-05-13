@@ -523,8 +523,9 @@ function knoppenFunctie(){
                 <a class="nav-link dropdown-toggle" href="#" id="accountbeheer" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 '. $_SESSION['gebruikersnaam'] .'</a>
                 <div class="dropdown-menu" aria-labelledby="accountbeheer">
-                    <a class="nav-link" href="index.php">Mijn account</a>
-                    <a class="dropdown-item" href="index.php">Beheer</a>
+                    <a class="nav-link" href="#">Mijn account</a>
+                    <a class="dropdown-item" href="#">Beheer</a>
+                    <a class="dropdown-item" href="#">Meldingen</a>
                     <a class="dropdown-item" href="../informeren.php">FAQ</a>
                     <a class="dropdown-item" href="verkoper.php">Verkoper worden</a>
                 </li>
