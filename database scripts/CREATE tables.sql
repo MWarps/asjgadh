@@ -47,8 +47,8 @@ CONSTRAINT UQ_gebruiker_email UNIQUE(email)
 
 CREATE TABLE Verkoper (
 gebruikersnaam		VARCHAR(50) NOT NULL,
-bank				CHAR(4)		NULL,
-bankrekeningnummer	CHAR(18)	NULL,
+bank				CHAR(4)		NOT NULL,
+bankrekeningnummer	CHAR(18)	NOT NULL,
 --controle optie nog niet duidelijk
 creditcard			CHAR(19)	NULL,
 CONSTRAINT PK_Verkoper PRIMARY KEY (gebruikersnaam)
@@ -68,7 +68,7 @@ CONSTRAINT PK_Verificatietypen PRIMARY KEY (verificatietype)
 );
 
 CREATE TABLE Verificatie (
-email	VARCHAR(254)			NOT NULL,
+email	   VARCHAR(254)		      	NOT NULL,
 type			CHAR(4)				NOT NULL,
 verificatiecode CHAR(6)				NOT NULL,
 eindtijd		Smalldatetime		NOT NULL,
