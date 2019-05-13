@@ -16,8 +16,10 @@ if (isset($_SESSION['gebruikersnaam'])){
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <meta name="Homepage" content="online koop en verkoop van 2e handsgoederen">
+        <meta name="Homepage" content="Online koop en verkoop van 2e handsgoederen">
         <title>EenmaalAndermaal</title>
+        <marquee scrollamount="30"><p style='font-family: "Comic Sans MS", cursive, sans-serif; color: purple;'>Online koop en verkoop van 2e handsgoederen</p></marquee>
+
         <!-- Bootstrap core CSS -->
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
         <link href="/assets/css/bootstrap/bootstrap.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
