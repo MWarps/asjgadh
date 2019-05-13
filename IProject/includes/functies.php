@@ -499,10 +499,11 @@ function knoppenFunctie(){
     if ($_SESSION['ingelogd']){
         echo '<ul class="navbar-nav">
                 <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="accountbeheer" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</a>
+                <a class="nav-link dropdown-toggle" href="#" id="accountbeheer" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Mijn account </a>
                 <div class="dropdown-menu" aria-labelledby="accountbeheer">
                     <a class="nav-link" href="#">Mijn account</a>
                     <a class="dropdown-item" href="#">Beheer</a>
+                    <a class="dropdown-item" href="#">Meldingen</a>
                     <a class="dropdown-item" href="../informeren.php">FAQ</a>
                 </li>
                 <li class="nav-item">
