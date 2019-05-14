@@ -38,16 +38,15 @@ if (isset($_POST['rVolgende'])) {
 
   // controleert of er geen error's zijn
   if($Ebestaat == false && $Gbestaat == false){
-    unset($_SESSION['email']);
-    unset($_SESSION['type']);
-    unset($_GET['id']);
-
     $_SESSION['gebruikersnaam'] = $rGebruikersnaam;
     $_SESSION['status'] = 'registreren';
 
     InsertGebruiker($input);
-    deleteVerificatieRij($rEmail,$_SESSION['type']);
+    deleteVerificatieRij($rEmail,$email['type']);
     
+    unset($_SESSION['email']);
+    unset($_GET['id']);
+    $url = 'index.php'
     echo '<script language="javascript">window.location.href ="'.$url.'"</script>';
     exit();
     }

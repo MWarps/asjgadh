@@ -1,21 +1,22 @@
 <?php
 include 'includes/header.php';
 
-if (isset($_GET['id'])){
+if (isset($_GET['id']) && !empty(haalCodeOp($_GET['id'])) && ){
+  $email = haalCodeOp($_GET['id']);
 
-  if($_GET['id'] == $_SESSION['code']['verificatiecode']){
+    if (isset($_POST['veranderWachtwoord'])){
+      $hashedWachtwoord = password_hash($_POST['nWachtwoord1'], PASSWORD_DEFAULT);
 
-if (isset($_POST['veranderWachtwoord'])){
-$hashedWachtwoord = password_hash($_POST['nWachtwoord1'], PASSWORD_DEFAULT);
-
-$Validatie = true;
-veranderWachtwoord($_SESSION['reset'], $hashedWachtwoord);
-$_SESSION['status'] = 'wachtwoordreset';
-$url = 'index.php';
-echo '<script language="javascript">window.location.href ="'.$url.'"</script>';
-exit();
+      $Validatie = true;
+      veranderWachtwoord($email['email'], $hashedWachtwoord);
+      $_SESSION['status'] = 'wachtwoordreset';
+      deleteVerificatieRij($rEmail,$email['type']);
+      
+      $url = 'index.php';
+      echo '<script language="javascript">window.location.href ="'.$url.'"</script>';
+      exit();
 }
-}
+
 
 ?>
 <div class="container">

@@ -15,12 +15,11 @@ if(!isset($_SESSION['gebruikersnaam'])){
         else{
           $mailVerstuurd = true;
             $_SESSION['email'] = $email;
-            $_SESSION['type'] = 'mail';
+            $type = 'email';
             
-            VerificatieCodeProcedure($email, $_SESSION['type']);
-            $code = HaalVerficatiecodeOp($email, $_SESSION['type']);
-            $_SESSION['code'] = $code;
-            
+            VerificatieCodeProcedure($email, $type);
+            $code = HaalVerficatiecodeOp($email, $type);
+                        
             print_r($code);
             StuurRegistreerEmail($email, $code['verificatiecode']);
         }

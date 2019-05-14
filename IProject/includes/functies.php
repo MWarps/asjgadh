@@ -6,7 +6,7 @@ include 'email2.php';
 function haalCodeOp($id){
     try {
         require('core/dbconnection.php');
-        $sqlSelect = $dbh->prepare("select email from Verificatie where verificatiecode = :id");
+        $sqlSelect = $dbh->prepare("select email, type from Verificatie where verificatiecode = :id");
 
         $sqlSelect->execute(
             array(
@@ -415,17 +415,17 @@ function emailResetWachtwoord($gebruikersnaam)
 }
 
 /* Reseten van wachtwoord */
-function veranderWachtwoord($gebruikersnaam,$wachtwoord)
+function veranderWachtwoord($email,$wachtwoord)
 {
     try{
         require('core/dbconnection.php');
-        $sqlSelect = $dbh->prepare("update gebruiker set wachtwoord = :wachtwoord
-                                  where gebruikersnaam = :gebruikersnaam");
+        $sqlSelect = $dbh->prepare("update Gebruiker set wachtwoord = :wachtwoord
+                                  where email = :email");
 
         $sqlSelect->execute(
             array(
                 ':wachtwoord' => $wachtwoord,
-                ':gebruikersnaam' => $gebruikersnaam,
+                ':email' => $email,
             ));
     }
     catch (PDOexception $e) {

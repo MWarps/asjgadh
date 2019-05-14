@@ -1,5 +1,6 @@
 <?php
 include 'includes/header.php';
+
 $mailVerstuurd = false;
 $Ebestaat = false;
 
@@ -12,10 +13,15 @@ if (isset($_POST['Volgende'])){
 
   else{
   $mailVerstuurd = true;
-  $Code = rand(10000,99999);
-  StuurWachtwoordResetMail($email, $Code);
+  $type = 'email';
+  VerificatieCodeProcedure($email, $type);
+  $code = HaalVerficatiecodeOp($email, $type);
+  
+  
+  StuurWachtwoordResetMail($email, $code['verificatiecode']);
   }
 }
+
 ?>
 
 <div class="container">
