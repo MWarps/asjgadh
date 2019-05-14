@@ -38,13 +38,13 @@ require_once 'core/dbconnection.php';
                               echo '<ul class="navbar-nav">
                                       <li class="nav-item dropdown">
                                       <a class="nav-link dropdown-toggle" href="#" id="accountbeheer" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                      '. $_SESSION['gebruikersnaam'] .'</a>
+                                      '.$_SESSION['gebruikersnaam'].'</a>
                                       <div class="dropdown-menu" aria-labelledby="accountbeheer">
                                           <a class="nav-link" href="#">Mijn account</a>
                                           <a class="dropdown-item" href="#">Beheer</a>
                                           <a class="dropdown-item" href="#">Meldingen</a>
                                           <a class="dropdown-item" href="../informeren.php">FAQ</a>
-                                          <a class="dropdown-item" href="verkoper.php">Verkoper worden</a>
+                                          '.gegevensIngevuld().'
                                       </li>
                                       <li class="nav-item">
                                           <a class="nav-link" href="index.php?uitlog=uitlog">Uitloggen</a>

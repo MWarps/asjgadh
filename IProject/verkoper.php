@@ -1,22 +1,33 @@
 <?php
 include 'includes/header.php';
 require_once 'core/dbconnection.php';
+
 if(isset($_SESSION['gebruikersnaam'])){
-
-    if (gegevensIngevuld() == true){
-       header('location: verkoperValidatie.php');
-    }
-$stuurMail = false;
-
-if (isset($_POST['rVolgende'])) {
+  
+    //gegevensIngevuld()
+      
+  
+    
+  if (isset($_POST['rVolgende'])) {
   $bank = $_POST['bank'];
   $bankrekeningnr = $_POST['bankrekeningnr'];
   $creditcard = $_POST['creditcard'];
+  $type = 'brief';
+  
+  $input = array($_SESSION['gebruikersnaam'], $bank, $bankrekeningnr, $creditcard);
 
-  $input = array($bank, $bankrekeningnr, $creditcard);
-
-  //$_SESSION['status'] = 'verkoper';
-  header('location: status.php');
+  $mailVerstuurd = true;
+  
+  $gebruiker = HaalGebruikerOp($_SESSION['gebruikersnaam']);
+  insertVerkoper($input);
+  VerificatieCodeProcedure($gebruiker['email'], $type);
+  $code = HaalVerficatiecodeOp($gebruiker['email'], $type);
+  
+  MaakVerkoperBrief($_SESSION['gebruikersnaam']);
+  
+  $_SESSION['beschrijving'] = true;
+  echo '<script language="javascript">window.location.href ="verkoperValidatie.php"</script>';
+  exit();
 }
 
 ?>
@@ -39,7 +50,7 @@ if (isset($_POST['rVolgende'])) {
                             <input type="text" name="creditcard" class="form-control" id="inputcreditcard" placeholder="Creditcard"
                             pattern="[A-Za-z]*" maxlength="41" value="<?php if($_POST) { echo $_POST['creditcard'];} ?>" >
                     </div>
-                    <button type="submit" name="rVolgende" class="btn btn-lg bg-flame btn-block mt-3">
+                    <button type="submit" name="rVolgende" id="rVolgende" class="btn btn-lg bg-flame btn-block mt-3">
                       Volgende
                     </button>
                 </form>

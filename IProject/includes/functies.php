@@ -62,7 +62,7 @@ function HaalGebruikerOp($gebruikersnaam){
 
     try {
         require('core/dbconnection.php');
-        $sqlSelect = $dbh->prepare("select gebruikersnaam, wachtwoord, vraag, antwoordtekst from Gebruiker
+        $sqlSelect = $dbh->prepare("select * from Gebruiker
       where gebruikersnaam = :gebruikersnaam");
 
         $sqlSelect->execute(
@@ -116,6 +116,25 @@ function VerificatieCodeProcedure($email, $type){
         );
     } catch (PDOexception $e) {
         echo "er ging iets mis error: {$e->getMessage()}";
+    }
+}
+
+function insertVerkoper($input){
+    try {
+        require('core/dbconnection.php');
+        $sqlSelect = $dbh->prepare("insert into Verkoper (gebruikersnaam, bank, bankrekeningnummer, creditcard)
+                                    values (:gebruikersnaam, :bank, :bankrekeningnr, :creditcard)");
+
+        $sqlSelect->execute(
+            array(
+                ':gebruikersnaam' => $input['0'],
+                ':bank' => $input['1'],
+                ':bankrekeningnr' => $input['2'],
+                ':creditcard' => $input['3']
+            )
+        );
+    } catch (PDOexception $e) {
+        echo "er ging iets mis insert: {$e->getMessage()}";
     }
 }
 
@@ -315,40 +334,26 @@ function StuurRegistreerEmail($Email, $Code){
 
 }
 
-function WordtVerkoper() {
-    $Gebruiker = $_SESSION["gebruikersnaam"];
-    try{
+
+function MaakVerkoperBrief($gebruiker){
+    try{    
         require('core/dbconnection.php');
-        $sql = "EXEC dbo.verificatie_toevoegen @gebruiker = :Gebruiker @type = 'post'";
-        $sqlSelect = $dbh->prepare($sql);
+        $sqlSelect = $dbh->prepare("SELECT voornaam, achternaam, geslacht, adresregel1, adresregel2, postcode, plaatsnaam, land, verificatiecode, 
+        eindtijd FROM Gebruiker INNER JOIN Verificatie ON Gebruiker.email = Verificatie.email WHERE type = 'brief' 
+        AND Gebruiker.gebruikersnaam = :gebruiker");
+        
+        $sqlSelect->execute(
+            array(
+                ':gebruiker' => $_SESSION['gebruikersnaam']
+            ));
 
-        $sqlSelect->execute(array(':Gebruiker' => $Gebruiker));
-
-        MaakVerkoperBrief($Gebruiker);
-
-    }
-    catch (PDOexception $e) {
-        echo "er ging iets mis error: {$e->getMessage()}";
-
-    }
-}
-
-function MaakVerkoperBrief($Gebruiker){
-    try{
-        require('core/dbconnection.php');
-
-        $sql = "SELECT voornaam, achternaam, geslacht, adresregel1, adresregel2, postcode, plaatsnaam, land, verificatiecode, eindtijd FROM Gebruiker INNER JOIN Verificatie ON Gebruiker.gebruikersnaam = Verificatie.gebruikersnaam WHERE type = 'post' AND Gebruiker.gebruikersnaam = :gebruiker";
-        $sth = $dbh->prepare($sql);
-
-        $parameters = array(':Gebruiker' => $Gebruiker);
-        $sth->execute($parameters);
-
-        $records = $sth->fetchall(PDO::FETCH_ASSOC);
-        require('brief.php');
+            $records = $sqlSelect->fetch(PDO::FETCH_ASSOC);
+            return $records;
+        
         Brief($records);
     }
     catch (PDOexception $e) {
-        echo "er ging iets mis error: {$e->getMessage()}";
+        echo "er ging iets mis erroreqrre: {$e->getMessage()}";
     }
 }
 
@@ -555,11 +560,11 @@ function haalVideosOp($rubriek)
 */
 
 function gegevensIngevuld (){
-    if(isset($_SESSION['gebruikersnaam'])){
         try {
             require('core/dbconnection.php');
-            $sqlSelect = $dbh->prepare("SELECT gebruikersnaam FROM Verificatie
-WHERE type = 'post' AND gebruikersnaam = :gebruikersnaam ");
+            $sqlSelect = $dbh->prepare("SELECT verkoper FROM Gebruiker
+              WHERE verkoper = 1 AND gebruikersnaam = :gebruikersnaam ");
+              
             $sqlSelect->execute(
                 array (
                     ':gebruikersnaam' => $_SESSION['gebruikersnaam'],
@@ -570,14 +575,11 @@ WHERE type = 'post' AND gebruikersnaam = :gebruikersnaam ");
         } catch (PDOexception $e) {
             echo "er ging iets mis error: {$e->getMessage()}";
         }
-    }   
+    
 
-    if ( empty( $verkoperVerificatie['gebruikersnaam']) == true){
-        $antwoord = false;
-    } else {
-        $antwoord = true;
-    }
-        return $antwoord;
+    if (empty($verkoperVerificatie['gebruikersnaam'])){
+        return '<a class="dropdown-item" href="verkoper.php">Verkoper worden</a>';
+    }  
         }
 
 function parentDirectorieVinden(){
