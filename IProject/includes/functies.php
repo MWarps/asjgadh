@@ -106,8 +106,7 @@ function HaalVerficatiecodeOp($email, $type){
 function VerificatieCodeProcedure($email, $type){
     try {
         require('core/dbconnection.php');
-        $sqlSelect = $dbh->prepare("EXEC verificatie_toevoegen @mail = :email 
-        @type = :type");
+        $sqlSelect = $dbh->prepare("EXEC verificatie_toevoegen @mail = :email, @type = :type");
 
         $sqlSelect->execute(
             array(
