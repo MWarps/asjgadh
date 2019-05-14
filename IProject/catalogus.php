@@ -52,7 +52,7 @@ include 'includes/header.php';
                              <img src="https://dummyimage.com/170x170/55595c/fff">
                           </div>                  
                              <div class="col-md-8 border-right pr-0">               
-                                <h4 class="card-header"><a href='#'>Lorem ipsum dolor sit amet<a></h4> 
+                                 <h4 class="card-header"><a href='#'>Lorem ipsum dolor sit amet</a>a></h4> 
                                 <p class="card-text pl-2">Consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi </p>                          
                              </div>
                              <div class="col-md-2 pl-0">                 
