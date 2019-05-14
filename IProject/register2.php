@@ -1,10 +1,10 @@
 <?php
 include 'includes/header.php';
 
-if (isset($_GET['id'])){
+if (isset($_GET['id']) && !empty(haalCodeOp($_GET['id']))) {
 
-  if($_GET['id'] == $_SESSION['code']['verificatiecode']){
-
+$email = haalCodeOp($_GET['id']);
+$email['email'];
 $Gbestaat = False;
 $Ebestaat = False;
 
@@ -14,7 +14,7 @@ if (isset($_POST['rVolgende'])) {
     $rAchternaam = $_POST['rTussen'] . ' ' . $_POST['rAchternaam'];
     $rWachtwoord = $_POST['rWachtwoord'];
     $rHerhaalWachtwoord = $_POST['rHerhaalWachtwoord'];
-    $rEmail = $_SESSION['email'];
+    $rEmail = haalCodeOp($_GET['id']);
     $rGeboorte = $_POST['rGeboorte'];
     $rGeheimV = (int)$_POST['rGeheimV'];
     $rGeheimA = $_POST['rGeheimA'];
@@ -52,7 +52,7 @@ if (isset($_POST['rVolgende'])) {
     exit();
     }
   }
-}
+
 ?>
     <div class="container-fluid h-100">
         <div class="row h-100">
@@ -109,7 +109,14 @@ if (isset($_POST['rVolgende'])) {
                               Voer een gebruikersnaam in.
                             </div>
                         </div>
-                        </div>
+                        
+                      
+                            <div class="form-group col-md-4">
+                                <label for="inputGebruikersNaam">Email</label>
+                                <input type="text" name="rEmail" class="form-control" id="rEmail" placeholder="<?php $email['email']; ?>"
+                                 readonly>
+                            </div>
+                    </div>
                     <div class="form-row">
                         <div class="form-group col-md-4">
                             <label for="inputWachtwoord">Wachtwoord</label>

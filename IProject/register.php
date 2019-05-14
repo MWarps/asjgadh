@@ -21,6 +21,7 @@ if(!isset($_SESSION['gebruikersnaam'])){
             $code = HaalVerficatiecodeOp($email, $_SESSION['type']);
             $_SESSION['code'] = $code;
             
+            print_r($code);
             StuurRegistreerEmail($email, $code['verificatiecode']);
         }
     }

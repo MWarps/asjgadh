@@ -1,6 +1,26 @@
 <?php
 include 'email.php';
 include 'email2.php';
+
+/* deleting verificatie code*/
+function haalCodeOp($id){
+    try {
+        require('core/dbconnection.php');
+        $sqlSelect = $dbh->prepare("select email from Verificatie where verificatiecode = :id");
+
+        $sqlSelect->execute(
+            array(
+                ':id' => $id              
+            ));
+            $records = $sqlSelect->fetch(PDO::FETCH_ASSOC);
+    
+            return $records;
+
+    } catch (PDOexception $e) {
+        echo "er ging iets mis error: {$e->getMessage()}";
+    }
+
+}
 /* update gebruiker naar geverifieerd */
 function updateGebruikerVerificatie($input){
     try {
