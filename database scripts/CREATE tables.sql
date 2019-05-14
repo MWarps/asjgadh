@@ -63,7 +63,7 @@ CONSTRAINT CK_telefoon CHECK (telefoon NOT LIKE '%[a-z]%')
 );
 
 CREATE TABLE Verificatietypen (
-verificatietype CHAR(4) NOT NULL,
+verificatietype CHAR(5) NOT NULL,
 CONSTRAINT PK_Verificatietypen PRIMARY KEY (verificatietype)
 );
 
@@ -374,5 +374,6 @@ insert into dbo.vragen(vraagnr,vraag)
 
 insert into dbo.Verificatietypen
 values 
-	('post'),
-	('mail')
+	('brief'),
+	('email'),
+	('reset')
