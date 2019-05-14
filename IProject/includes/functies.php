@@ -181,15 +181,16 @@ function bestaatGebruikersnaam($gebruikersnaam)
 }
 
 /* Is er al een gebruiker aangemeld met hetzelfde emailadres */
-function bestaatValidatie($email)
+function bestaatValidatie($email, $type)
 {
     try{
         require('core/dbconnection.php');
-        $sqlSelect = $dbh->prepare("select email from Verificatie where email =:email");
+        $sqlSelect = $dbh->prepare("select email from Verificatie where email =:email AND type = :type");
 
         $sqlSelect->execute(
             array(
                 ':email' => $email,
+                ':type' => $type
             ));
         $records = $sqlSelect->fetch(PDO::FETCH_ASSOC);
         return $records;

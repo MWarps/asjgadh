@@ -42,7 +42,7 @@ if (isset($_POST['rVolgende'])) {
     $_SESSION['gebruikersnaam'] = $rGebruikersnaam;
     $_SESSION['status'] = 'registreren';
     InsertGebruiker($input);
-    deleteVerificatieRij($rEmail,$_SESSION['verificatie']['type']);
+    deleteVerificatieRij($_SESSION['validatie']['email'], $_SESSION['validatie']['type']);
     
    unset($_SESSION['validatie']);
        
