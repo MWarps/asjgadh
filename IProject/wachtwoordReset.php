@@ -3,6 +3,7 @@ include 'includes/header.php';
 
 $mailVerstuurd = false;
 $Ebestaat = false;
+$type = 'reset';
 
 if (isset($_POST['Volgende'])){
   $email = $_POST['email'];
@@ -13,12 +14,11 @@ if (isset($_POST['Volgende'])){
 
   else{
   $mailVerstuurd = true;
-  $type = 'email';
+  
   VerificatieCodeProcedure($email, $type);
   $code = HaalVerficatiecodeOp($email, $type);
+  StuurWachtwoordResetMailEmail($email, $code['verificatiecode']);
   
-  
-  StuurWachtwoordResetMail($email, $code['verificatiecode']);
   }
 }
 
@@ -27,7 +27,7 @@ if (isset($_POST['Volgende'])){
 <div class="container">
     <div class="row">
         <div class="offset-3 col-md-6 mt-4">
-            <form class="needs-validation" novalidate action='register.php' method="post">
+            <form class="needs-validation" novalidate action='wachtwoordReset.php' method="post">
                 <h1 class="h3 mb-4 text-center "> Voer uw emailadres in! </h1>
                 <p> Er wordt een email verstuurd naar het ingevoerde emailadres. Klik de link in de mail op door te gaan met het resetten van uw wachtwoord.</p>
                 <?php
@@ -40,7 +40,7 @@ if (isset($_POST['Volgende'])){
     if($mailVerstuurd){
          echo '<div class="form-row">
               <div class="alert alert-success" role="alert">
-              <strong>Email is verzonden!</strong> Er is een mail verzonden naar het emailadres met een link om door te gaan met registreren.
+              <strong>Email is verzonden!</strong> Er is een mail verzonden naar het emailadres met een link om door te gaan met het veranderen van uw wachtwoord.
                 </div>
                </div>';}
                 ?>

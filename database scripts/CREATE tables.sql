@@ -70,7 +70,7 @@ CONSTRAINT PK_Verificatietypen PRIMARY KEY (verificatietype)
 CREATE TABLE Verificatie (
 email	   VARCHAR(254)		      	NOT NULL,
 type			CHAR(5)				NOT NULL,
-verificatiecode CHAR(10)			NOT NULL,
+verificatiecode int			NOT NULL,
 eindtijd		Smalldatetime		NOT NULL,
 CONSTRAINT PK_Verificatie PRIMARY KEY (email)
 );

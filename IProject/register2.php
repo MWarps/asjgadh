@@ -1,12 +1,13 @@
 <?php
 include 'includes/header.php';
-
-if (isset($_GET['id']) && !empty(haalCodeOp($_GET['id']))) {
-
-$email = haalCodeOp($_GET['id']);
-$email['email'];
 $Gbestaat = False;
-$Ebestaat = False;
+
+if (isset($_GET['id']) || isset($_POST['rVolgende'])) {
+// empty(haalCodeOp($_GET['id']))
+if (isset($_GET['id'])) {
+  $_SESSION['validatie'] = haalCodeOp($_GET['id']);
+}    
+
 
 if (isset($_POST['rVolgende'])) {
     $rGebruikersnaam = $_POST['rGebruikersnaam'];
@@ -14,7 +15,7 @@ if (isset($_POST['rVolgende'])) {
     $rAchternaam = $_POST['rTussen'] . ' ' . $_POST['rAchternaam'];
     $rWachtwoord = $_POST['rWachtwoord'];
     $rHerhaalWachtwoord = $_POST['rHerhaalWachtwoord'];
-    $rEmail = haalCodeOp($_GET['id']);
+    $rEmail = $_POST['rEmail'];
     $rGeboorte = $_POST['rGeboorte'];
     $rGeheimV = (int)$_POST['rGeheimV'];
     $rGeheimA = $_POST['rGeheimA'];
@@ -24,7 +25,7 @@ if (isset($_POST['rVolgende'])) {
     $rPostcode = $_POST['rPostcode'];;
     $rLand = $_POST['rLand'];
     $rGeslacht = $_POST['rGeslacht'];
-
+        
     $input = array($rGebruikersnaam, $rVoornaam, $rAchternaam, $rGeslacht,
     $rWachtwoord, $rAdres1, $rAdres2, $rPostcode, $rPlaats, $rLand,
     $rGeboorte,  $rEmail, $rGeheimV, $rGeheimA);
@@ -37,17 +38,16 @@ if (isset($_POST['rVolgende'])) {
       }
 
   // controleert of er geen error's zijn
-  if($Ebestaat == false && $Gbestaat == false){
+  if($Ebestaat == false){
     $_SESSION['gebruikersnaam'] = $rGebruikersnaam;
     $_SESSION['status'] = 'registreren';
-
     InsertGebruiker($input);
-    deleteVerificatieRij($rEmail,$email['type']);
+    deleteVerificatieRij($_SESSION['validatie']['email'], $_SESSION['validatie']['type']);
     
-    unset($_SESSION['email']);
-    unset($_GET['id']);
-    $url = 'index.php'
-    echo '<script language="javascript">window.location.href ="'.$url.'"</script>';
+   unset($_SESSION['validatie']);
+       
+    $url = 'index.php';
+    echo '<script language="javascript">window.location.href ="index.php"</script>';
     exit();
     }
   }
@@ -56,7 +56,7 @@ if (isset($_POST['rVolgende'])) {
     <div class="container-fluid h-100">
         <div class="row h-100">
             <div class="offset-2 col-md-8">
-                <form class="needs-validation" novalidate action='register2.php' method="post"
+                <form class="needs-validation" novalidate action="register2.php" method="POST"
                 oninput='rHerhaalWachtwoord.setCustomValidity(rHerhaalWachtwoord.value != rWachtwoord.value ? "Passwords do not match." : "")'>
                     <h1 class="h3 mb-3 text-center">Registreer je hier!</h1>
                     <?php
@@ -67,14 +67,7 @@ if (isset($_POST['rVolgende'])) {
                                 </div>
                                </div>';
                       }
-                      if($Ebestaat){
-                        echo  '<div class="form-row">
-                                <div class="alert alert-warning" role="alert">
-                                  <strong>Het ingevoerde email adres wordt al gebruikt!</strong>
-                                </div>
-                               </div>';
-                      }
-
+                  
                     ?>
                         <div class="form-row">
                           <div class="form-group col-md-4">
@@ -108,11 +101,9 @@ if (isset($_POST['rVolgende'])) {
                               Voer een gebruikersnaam in.
                             </div>
                         </div>
-                        
-                      
                             <div class="form-group col-md-4">
                                 <label for="inputGebruikersNaam">Email</label>
-                                <input type="text" name="rEmail" class="form-control" id="rEmail" placeholder="<?php $email['email']; ?>"
+                                <input type="text" name="rEmail" class="form-control" id="rEmail" value="<?php echo $_SESSION['validatie']['email']; ?>" placeholder="<?php echo $email['email']; ?>"
                                  readonly>
                             </div>
                     </div>
@@ -237,7 +228,7 @@ if (isset($_POST['rVolgende'])) {
                         </div>
                         </div>
                     </div>
-                    <button type="submit" name="rVolgende" class="btn bg-flame">
+                    <button type="submit" name="rVolgende" id="rVolgende" class="btn bg-flame">
                       Volgende
                     </button>
                 </form>
@@ -245,9 +236,8 @@ if (isset($_POST['rVolgende'])) {
         </div>
       </div>
 
-
-
-    <?php }
+    <?php 
+   }
     else {
     include 'includes/404error.php';
 

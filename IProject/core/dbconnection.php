@@ -1,8 +1,8 @@
 <?php
-$hostname = 'localhost';
-$dbname = 'iproject';
-$username = 'testgebruiker';
-$password = 'test123';
+$hostname = 'mssql2.iproject.icasites.nl';
+$dbname = 'iproject34';
+$username = 'iproject34';
+$password = '263MsBEvp8vS';
 // dit zijn nep gegevens!
 try {
     global $dbh;
@@ -15,3 +15,4 @@ try {
 } catch (PDOexception $e) {
     echo "something went wrong {$e->getMessage()}";
 }
+?>

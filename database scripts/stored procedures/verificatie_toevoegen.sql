@@ -1,7 +1,8 @@
-CREATE PROCEDURE verificatie_toevoegen @mail varchar(254), @type char(4)
+
+CREATE PROCEDURE verificatie_toevoegen @mail varchar(254), @type char(5)
 AS
 BEGIN
-DECLARE @code CHAR(6) = CAST(RAND() * 1000000000 AS CHAR(10))
+DECLARE @code CHAR(8) = CAST(RAND() * 1000000 AS INT)
 DECLARE @eindtijd smalldatetime
 
 IF (@type = 'brief') 

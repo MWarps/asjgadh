@@ -4,23 +4,22 @@ include 'includes/header.php';
 if(!isset($_SESSION['gebruikersnaam'])){
     $Ebestaat = false;
     $mailVerstuurd = false;
+    $type = 'email'; 
+    
     if (isset($_POST['registreren'])){
         $email = $_POST['email'];
 
         // controleert of emailadres bestaat
-        if(!empty(bestaatEmailadres($email)) || !empty(bestaatValidatie($email))) {
+        if(!empty(bestaatEmailadres($email)) && empty(bestaatValidatie($email, $type))) {
             $Ebestaat = True;
         }
 
         else{
           $mailVerstuurd = true;
-            $_SESSION['email'] = $email;
-            $type = 'email';
-            
+                 
             VerificatieCodeProcedure($email, $type);
             $code = HaalVerficatiecodeOp($email, $type);
-                        
-            print_r($code);
+                      
             StuurRegistreerEmail($email, $code['verificatiecode']);
         }
     }
