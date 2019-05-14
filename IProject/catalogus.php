@@ -18,7 +18,7 @@ if (isset($_GET['id'])){
         <div class="col">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
-                    <?php catogorieSpoort(); ?>
+                    <?php catogorieSoort(); ?>
                 </ol>
             </nav>
         </div>

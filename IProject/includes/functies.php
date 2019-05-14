@@ -587,7 +587,7 @@ function setupCatogorien(){
     // print_r ( $_SESSION['catogorie']); test om de array de var_dumpen
 }
 
-function catogorieSpoort (){
+function catogorieSoort (){
     foreach($_SESSION['catogorie'] as $level => $id){
         echo '  <li class="breadcrumb-item"><a href="catalogus.php?id='.$id.'">'.$level.'</a></li>';
     }        
