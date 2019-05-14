@@ -327,11 +327,10 @@ function email($code)
                       <td>
                         <p>Hallo,</p>
                         <p>Bedankt voor het registreren. Hieronder staat de een link die u naar de registratie pagina brengt:</p>
-                        <a class="button" target="_blank" href="http://iproject34.icasites.nl/register2.php?id='.$_SESSION['code']['verificatiecode'].'">Registreer!</a>
+                        <a class="button" target="_blank" href="http://iproject34.icasites.nl/register2.php?id='.$code.'">Registreer!</a>
                         <p>Als u deze e-mail per ongeluk ontvangt, kunt u deze verwijderen en zijn er geen conseqenties.</p>
                         <p>Met vriendelijke groet, <br>
                            EenmaalAndermaal</p>
-
                       </td>
                     </tr>
                   </table>

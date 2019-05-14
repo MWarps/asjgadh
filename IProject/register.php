@@ -20,7 +20,7 @@ if(!isset($_SESSION['gebruikersnaam'])){
             VerificatieCodeProcedure($email, $type);
             $code = HaalVerficatiecodeOp($email, $type);
                         
-            print_r($code);
+            print_r($code);      
             StuurRegistreerEmail($email, $code['verificatiecode']);
         }
     }
