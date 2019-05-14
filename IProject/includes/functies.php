@@ -580,4 +580,20 @@ WHERE type = 'post' AND gebruikersnaam = :gebruikersnaam ");
         return $antwoord;
         }
 
+function parentDirectorieVinden(){
+     try {
+            require('core/dbconnection.php');
+            $hoofdcatogorien = $dbh->prepare("select * from Categorieen where parent = -1 ");
+            $hoofdcatogorien -> execute(
+                array (
+                    ':gebruikersnaam' => $_SESSION['gebruikersnaam'],
+                ));
+
+            $verkoperVerificatie = $sqlSelect->fetchAll(PDO::FETCH_ASSOC);
+
+        } catch (PDOexception $e) {
+            echo "er ging iets mis error: {$e->getMessage()}";
+        }
+}
+
 ?>
