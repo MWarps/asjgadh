@@ -12,9 +12,9 @@ function haalCodeOp($id){
             array(
                 ':id' => $id              
             ));
-            $records = $sqlSelect->fetch(PDO::FETCH_ASSOC);
-    
-            return $records;
+        $records = $sqlSelect->fetch(PDO::FETCH_ASSOC);
+
+        return $records;
 
     } catch (PDOexception $e) {
         echo "er ging iets mis error: {$e->getMessage()}";
@@ -582,20 +582,41 @@ function gegevensIngevuld (){
     }  
         }
 
-function parentDirectorieVinden(){
-     try {
-            require('core/dbconnection.php');
-            $hoofdcatogorien = $dbh->prepare("select * from Categorieen where parent = -1 ");
-            $hoofdcatogorien -> execute(
-                array (
-                    ':gebruikersnaam' => $_SESSION['gebruikersnaam'],
-                ));
-
-            $verkoperVerificatie = $sqlSelect->fetchAll(PDO::FETCH_ASSOC);
-
-        } catch (PDOexception $e) {
-            echo "er ging iets mis error: {$e->getMessage()}";
-        }
+function setupCatogorien(){
+    $_SESSION['catogorie'] = array("Home"=>"-1");
+    // print_r ( $_SESSION['catogorie']); test om de array de var_dumpen
 }
+
+function catogorieSpoort (){
+    foreach($_SESSION['catogorie'] as $level => $id){
+        echo '  <li class="breadcrumb-item"><a href="catalogus.php?id='.$id.'">'.$level.'</a></li>';
+    }        
+}
+
+
+function directorieVinden(){
+    $id = (end($_SESSION['catogorie']) );
+    $teller = 0;
+    try {
+        require('core/dbconnection.php');
+        $catogorien = $dbh->prepare("select * from Categorieen where parent = :id ");
+        $catogorien -> execute(
+            array(
+                ':id' =>  $id,
+            )
+        );
+
+        $print = $catogorien->fetchAll(PDO::FETCH_ASSOC);
+        foreach ( $print  as $Name => $id){
+            echo '<a class="btn btn-outline-dark"  
+            href="catalogus.php?id='.$print[$teller]['ID'].'&naam='.$print[$teller]['Name'].'" 
+            role="button">'.$print[$teller]['Name'].'</a>';
+            $teller++ ;
+        }
+    } catch (PDOexception $e) {
+        echo "er ging iets mis error: {$e->getMessage()}";
+    }
+}
+
 
 ?>
