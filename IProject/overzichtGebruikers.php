@@ -13,22 +13,6 @@ include 'includes/header.php';
                 <a class="list-group-item list-group-item-action" href="overzichtVeilingen.php">Overzicht actieve veilingen</a>
             </ul>
         </div>
-         </div><!--/row-->
-    <div class="row">
-        <form>
-            <div class="form-group">
-                <div class="offset-3 col-md-10 mt-1">
-                    <div class="form-group col-md-4">
-                        <!---<label for="inputState">Land</label>-->
-                        <select id="inputState" class="form-control">
-                            <option selected>Land</option>
-                            <option>...</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
-        </form>
     </div><!--/row-->
 </div> <!--/.container-->
 <?php
