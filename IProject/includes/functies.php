@@ -341,15 +341,15 @@ function MaakVerkoperBrief($gebruiker){
         $sqlSelect = $dbh->prepare("SELECT voornaam, achternaam, geslacht, adresregel1, adresregel2, postcode, plaatsnaam, land, verificatiecode, 
         eindtijd FROM Gebruiker INNER JOIN Verificatie ON Gebruiker.email = Verificatie.email WHERE type = 'brief' 
         AND Gebruiker.gebruikersnaam = :gebruiker");
-        
+
         $sqlSelect->execute(
             array(
                 ':gebruiker' => $_SESSION['gebruikersnaam']
             ));
 
-            $records = $sqlSelect->fetch(PDO::FETCH_ASSOC);
-            return $records;
-        
+        $records = $sqlSelect->fetch(PDO::FETCH_ASSOC);
+        return $records;
+
         Brief($records);
     }
     catch (PDOexception $e) {
@@ -560,39 +560,58 @@ function haalVideosOp($rubriek)
 */
 
 function gegevensIngevuld (){
-        try {
-            require('core/dbconnection.php');
-            $sqlSelect = $dbh->prepare("SELECT verkoper FROM Gebruiker
+    try {
+        require('core/dbconnection.php');
+        $sqlSelect = $dbh->prepare("SELECT verkoper FROM Gebruiker
               WHERE verkoper = 1 AND gebruikersnaam = :gebruikersnaam ");
-              
-            $sqlSelect->execute(
-                array (
-                    ':gebruikersnaam' => $_SESSION['gebruikersnaam'],
-                ));
 
-            $verkoperVerificatie = $sqlSelect->fetchAll(PDO::FETCH_ASSOC);
+        $sqlSelect->execute(
+            array (
+                ':gebruikersnaam' => $_SESSION['gebruikersnaam'],
+            ));
 
-        } catch (PDOexception $e) {
-            echo "er ging iets mis error: {$e->getMessage()}";
-        }
-    
+        $verkoperVerificatie = $sqlSelect->fetchAll(PDO::FETCH_ASSOC);
+
+    } catch (PDOexception $e) {
+        echo "er ging iets mis error: {$e->getMessage()}";
+    }
+
 
     if (empty($verkoperVerificatie['gebruikersnaam'])){
         return '<a class="dropdown-item" href="verkoper.php">Verkoper worden</a>';
     }  
-        }
+}
 
 function setupCatogorien(){
     $_SESSION['catogorie'] = array("Home"=>"-1");
     // print_r ( $_SESSION['catogorie']); test om de array de var_dumpen
 }
 
+function catogorieToevoeging (){
+    $lengte =  sizeof($_SESSION['catogorie']);
+    echo $lengte ; echo '<br>';
+    //    $lengte ++;
+    $array2 = array( $_GET['naam'] =>$_GET['id'] );
+    if ($id = (end($_SESSION['catogorie']) ) != $_GET['id']){
+        foreach($_SESSION['catogorie'] as $level => $id){
+            //$array1 = array ( $_SESSION['catogorie']);
+            $array1 = array ( $level => $id );
+        }
+        print_r($array1);
+        echo '<br>';
+        print_r($array2); 
+        echo '<br>';
+        foreach  ($_SESSION['catogorie'] as $key=>$value)
+
+        $_SESSION['catogorie'] = $_SESSION['catogorie']  + $array2; 
+    }
+}// einde functie
+
 function catogorieSoort (){
     foreach($_SESSION['catogorie'] as $level => $id){
-        echo '  <li class="breadcrumb-item"><a href="catalogus.php?id='.$id.'">'.$level.'</a></li>';
-    }        
+        echo '<li class="breadcrumb-item"><a href="catalogus.php?id='.$id.'&naam='.$level.' " >'.$level.'</a></li>';
+    }       
 }
-
 
 function directorieVinden(){
     $id = (end($_SESSION['catogorie']) );
