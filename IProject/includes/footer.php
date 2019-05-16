@@ -1,3 +1,4 @@
+  <hr>
   <div class="footercolor">
     <footer class="footer">
         <div class="container py-2">
