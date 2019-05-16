@@ -3,13 +3,9 @@ include 'includes/header.php';
 setupCatogorien();
 
 if (isset($_GET['id'])){
-    $teller = 0;
-    while (isset ($_SESSION['catogorie'][$teller])){
-        $teller++;
-    }
-    $_SESSION['catogorie'][$teller] = $_GET['id'];
-
-    //  print_r( $_SESSION['catogorie']); // terug gaan werk vie pijlen niet via bradcrumb
+    catogorieToevoeging ();
+    print_r( $_SESSION['catogorie']); // terug gaan werk via pijlen niet via bradcrumb
+    
 }
 ?>
 
@@ -70,5 +66,5 @@ if (isset($_GET['id'])){
 
 
         <?php 
-    include 'includes/footer.php' 
+    include 'includes/footer-fixed.php' 
         ?>
