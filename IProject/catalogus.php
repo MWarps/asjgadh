@@ -4,7 +4,7 @@ setupCatogorien();
 
 if (isset($_GET['id'])){
     catogorieToevoeging ();
-    print_r( $_SESSION['catogorie']); // terug gaan werk via pijlen niet via bradcrumb
+    //print_r( $_SESSION['catogorie']); // terug gaan werk via pijlen niet via bradcrumb
     
 }
 ?>
