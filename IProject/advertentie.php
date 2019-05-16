@@ -84,7 +84,7 @@ include 'includes/header.php';
         <a href="#">Lucas Schaars</a> <br>
         <a href="#">Reviews (6)</a>
     </div>  
-    <button type="button" class="btn btn-primary btn-lg btn-block">Stuur bericht!</button>
+    <button type="button" class="btn btn-primary btn-lg btn-block"><a style="color: white;" href="stuurbericht.php">Stuur bericht!</a></button>
     		</aside>
     		<aside class="col-md-7">
     <article class="card-body px-5">
