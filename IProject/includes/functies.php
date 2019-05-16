@@ -588,28 +588,29 @@ function setupCatogorien(){
 }
 
 function catogorieToevoeging (){
-    $lengte =  sizeof($_SESSION['catogorie']);
-    echo $lengte ; echo '<br>';
+    //    $lengte =  sizeof($_SESSION['catogorie']);
+    //    echo $lengte ; echo '<br>';
     //    $lengte ++;
     $array2 = array( $_GET['naam'] =>$_GET['id'] );
-    if ($id = (end($_SESSION['catogorie']) ) != $_GET['id']){
-        foreach($_SESSION['catogorie'] as $level => $id){
-            //$array1 = array ( $_SESSION['catogorie']);
-            $array1 = array ( $level => $id );
-        }
-        print_r($array1);
-        echo '<br>';
-        print_r($array2); 
-        echo '<br>';
-        foreach  ($_SESSION['catogorie'] as $key=>$value)
-
-        $_SESSION['catogorie'] = $_SESSION['catogorie']  + $array2; 
-    }
+    //    if ($id = (end($_SESSION['catogorie']) ) != $_GET['id']){
+    //        foreach($_SESSION['catogorie'] as $level => $id){
+    //            //$array1 = array ( $_SESSION['catogorie']);
+    //            $array1 = array ( $level => $id );
+    //        }
+    //        print_r($array1);
+    //        echo '<br>';
+    //        print_r($array2); 
+    //       echo '<br>';   
+    $_SESSION['catogorie'] = $_SESSION['catogorie']  + $array2; 
 }// einde functie
 
 function catogorieSoort (){
+    $teller =0;
     foreach($_SESSION['catogorie'] as $level => $id){
+        if ($teller ==0){
         echo '<li class="breadcrumb-item"><a href="catalogus.php?id='.$id.'&naam='.$level.' " >'.$level.'</a></li>';
+      $teller++;
+      }
     }       
 }
 
