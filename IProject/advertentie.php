@@ -24,27 +24,60 @@ include 'includes/header.php';
     <div class="card m-3" style="background-color: #f7f7f6;">
     	<div class="row">
     		<aside class="col-md-5 border-right pr-0">
+          
     <article class="gallery-wrap border-bottom" >
-      <div class="img-big-wrap"><img  id="myImg" alt="Motor" src="assets/img/motor.jpg"></div>
-      <!-- The Modal -->
-<div id="myModal" class="modal">
-  <!-- The Close Button -->
-  <span class="close">&times;</span>
-  <!-- Modal Content (The Image) -->
-  <img class="modal-content" id="img01">
-</div>
-     <!-- slider-product.// -->
-    <div class="img-small-wrap">
-      <div class="item-gallery"> <img src="assets/img/motor2.jpg"> </div>
-      <div class="item-gallery"> <img src="assets/img/motor.jpg"> </div>
-      <div class="item-gallery"> <img src="assets/img/motor.jpg"> </div>
-      <div class="item-gallery"> <img src="assets/img/motor.jpg"> </div>
-    </div> <!-- slider-nav.// -->
+      <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+        <!-- Indicators -->
+        <ol class="carousel-indicators">
+          <li data-target="#carousel-example-generic" data-slide-to="0" class="active"><img  src="assets/img/motor.jpg" alt="..."></li>
+          <li data-target="#carousel-example-generic" data-slide-to="1"><img src="assets/img/motor2.jpg" alt="..."></li>
+          <li data-target="#carousel-example-generic" data-slide-to="2"><img src="assets/img/motor.jpg" alt="..."></li>
+        </ol>
+        <!-- The Modal -->
+        <div id="myModal" class="modal">
+        <!-- The Close Button -->
+        <span class="close">&times;</span>
+        <!-- Modal Content (The Image) -->
+        <img class="modal-content" id="img01">
+        </div>
+        <!-- slider-product.// -->
+        <!-- Wrapper for slides -->
+        <div class="carousel-inner" role="listbox">
+          <div class="carousel-item active">
+            <div class="img-big-wrap">
+              <img id="myImg" src="assets/img/motor.jpg" alt="...">
+            </div>
+                    
+         </div>
+          <div class="carousel-item">
+              <div class="img-big-wrap">
+            <img src="assets/img/motor2.jpg" alt="...">
+              </div>
+            
+          </div>
+          <div class="carousel-item">
+            <div class="img-big-wrap">
+            <img src="assets/img/motor.jpg" alt="...">
+          </div>
+          </div>
+        </div>
+  
+        <!-- Controls -->
+        <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+          <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+          <span class="sr-only">Previous</span>
+        </a>
+        <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+          <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+          <span class="sr-only">Next</span>
+        </a>
+      </div>
+      
     </article> <!-- gallery-wrap .end// -->
     <div class="status p-3 border-bottom">
         <div class="icon-product">
-          <img src="assets/img/oog.jpg"></img>100 x gezien
-          <img src="assets/img/clock.jpg"></img>sinds 14 mei '19, 14:00  
+          <img src="assets/img/oog.jpg"></img>  100 x gezien
+          <img src="assets/img/clock.jpg"></img>  sinds 14 mei '19, 14:00  
         </div>
     </div>
     <div class="item-property p-3">
@@ -54,7 +87,7 @@ include 'includes/header.php';
     <button type="button" class="btn btn-primary btn-lg btn-block">Stuur bericht!</button>
     		</aside>
     		<aside class="col-md-7">
-    <article class="card-body p-5">
+    <article class="card-body px-5">
     	<h3 class="title mb-3">Productnaam</h3>
 
         <dl class="item-property">
@@ -78,20 +111,34 @@ include 'includes/header.php';
 
     <hr>
     	<div class="row">
-    		<div class="col-sm-5">
+    		<div class="col-sm-6">
+          <div class="form-group col-md-8">
     			<dl class="param param-inline">
-    			  <dt>Bieden: </dt>
+    			  <dt>Bieden:</dt> (vanaf: 1000,00)
     			  <dd>
               <form class="needs-validation" novalidate action='register.php' method="post">
               <input type="number" name="bod" class="form-control" id="bod" placeholder="" required>
-              <button class="btn btn-lg btn-primary mb-5 mt-3" id="bieden" type="submit" name="bieden" value="bieden"> Biedt! </button>
+              <button class="btn btn-lg btn-primary mb-5 mt-3" id="bieden" type="submit" name="bieden" value="bieden"> Plaats bod </button>
               </form>
     			  </dd>
-    			</dl>  <!-- item-property .// -->
+    			</dl> 
+        </div> <!-- item-property .// -->
     		</div> <!-- col.// -->
-    		<div class="col-sm-7">
-    			
-    		</div> <!-- col.// -->
+    		<div class="col-sm-6">
+          <div class="card">
+        
+  <div class="card-header">
+    Biedingen
+  </div>
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item"><a href="#">€6500,00 Lucas</a></li>
+    <li class="list-group-item"><a href="#">€6000,00 Roy</a></li>
+    <li class="list-group-item"><a href="#">€5800,00 Merlijn</a></li>
+    <li class="list-group-item"><a href="#">€5500,00 Sandra</a></li>
+  </ul>
+</div>
+
+	</div> <!-- col.// -->
     	</div> <!-- row.// -->
     	
     </article> <!-- card-body.// -->
