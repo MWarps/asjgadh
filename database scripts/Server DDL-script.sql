@@ -42,8 +42,9 @@ geboortedatum		Date			NOT NULL,
 email				VARCHAR(254)	NOT NULL,
 wachtwoord			VARCHAR(100)	NOT NULL,
 vraag				Tinyint			NOT NULL,
-antwoordtekst VARCHAR(50) NOT NULL,
-verkoper bit NOT NUll,
+antwoordtekst		VARCHAR(50)		NOT NULL,
+verkoper			bit				NOT NUll,
+beheerder			bit				DEFAULT 0,
 CONSTRAINT PK_Gebruiker PRIMARY KEY (gebruikersnaam),
 CONSTRAINT CK_gebruiker_geslacht CHECK (geslacht IN ( 'M','F','X') ),
 CONSTRAINT UQ_gebruiker_email UNIQUE(email)
@@ -59,15 +60,15 @@ CONSTRAINT PK_Verkoper PRIMARY KEY (gebruikersnaam)
 );
 
 CREATE TABLE Gebruikerstelefoon (
-volgnr INT NOT NULL,
-gebruikersnaam VARCHAR(50) NOT NULL,
-telefoon VARCHAR(15) NOT NULL,
+volgnr				INT				NOT NULL,
+gebruikersnaam		VARCHAR(50)		NOT NULL,
+telefoon			VARCHAR(15)		NOT NULL,
 CONSTRAINT PK_Gebruikerstelefoon PRIMARY KEY (volgnr, gebruikersnaam),
 CONSTRAINT CK_telefoon CHECK (telefoon NOT LIKE '%[a-z]%')
 );
 
 CREATE TABLE Verificatietypen (
-verificatietype CHAR(4) NOT NULL,
+verificatietype		CHAR(4)		NOT NULL,
 CONSTRAINT PK_Verificatietypen PRIMARY KEY (verificatietype)
 );
 
