@@ -75,6 +75,36 @@ eindtijd		Smalldatetime		NOT NULL,
 CONSTRAINT PK_Verificatie PRIMARY KEY (email)
 );
 
+CREATE TABLE Voorwerp (
+voorwerpnr			bigint			NOT NULL,
+titel				varchar(100)	NOT NULL,
+beschrijving		varchar(max)	NOT NULL,
+startprijs			varchar(9)		NOT NULL,
+betalingswijze		varchar(20)		NOT NULL,
+betalingsinstructie	varchar(70)		NULL,
+plaatsnaam			varchar(28)		NOT NULL,
+Land				int				NOT NULL,
+looptijd			tinyint			NOT NULL,
+looptijdbegindagtijdstip datetime	NOT NULL,
+verzendkosten		varchar(9)		NULL,
+verzendinstructies	varchar(70)		NULL,
+verkoper			varchar(50)		NOT NULL,
+koper				varchar(50)		NULL,
+lopotijdeindedagtijdstip datetime	NOT NULL,
+veilinggesloten		bit				NOT NULL,
+verkoopprijs		varchar(9)		NULL
+CONSTRAINT PK_voorwerpnr PRIMARY KEY (voorwerpnr)
+CONSTRAINT FK_voorwerpland		 FOREIGN KEY (land) REFERENCES Landen(Id)
+);
+
+CREATE TABLE Rubrieken (
+rubrieknummer		int			NOT NULL,
+rubrieknaam			varchar(100)NOT NULL,
+superrubriek		int			NULL,
+volgnr				tinyint		NOT NULL
+CONSTRAINT PK_rubrieknummer PRIMARY KEY (rubrieknummer)
+);
+
 ALTER TABLE Gebruiker ADD 
 CONSTRAINT FK_Vraag 
 	FOREIGN KEY (vraag) REFERENCES Vragen(vraagnr)
@@ -111,6 +141,7 @@ CONSTRAINT FK_Verificatietype
 	ON UPDATE CASCADE
 	ON DELETE CASCADE
 go
+
 
 --Landen insert
 

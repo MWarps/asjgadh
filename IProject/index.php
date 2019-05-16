@@ -1,6 +1,6 @@
     <?php
 include 'includes/header.php';
-
+// Kijkt er geklikt is op de knop uitloggen
     if (isset($_GET['uitlog'])){
       $_SESSION['status'] = $_GET['uitlog'];
       session_unset();
@@ -10,6 +10,7 @@ include 'includes/header.php';
       die();
             }
 
+// Geeft een melding a.d.h.v de status
  if(isset($_SESSION['status'])){
 
     switch ($_SESSION['status']) {
@@ -28,10 +29,10 @@ include 'includes/header.php';
         // code...
         break;
     }
-
+    
     unset($_SESSION['status']);
-
-
+    
+// laat melding zien aan gebruiker
     echo '<div class="container">
             <div class="h-100 row align-items-center">
               <div class="col">
