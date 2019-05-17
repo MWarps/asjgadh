@@ -281,7 +281,7 @@ function landen()
 {
     try {
         require('core/dbconnection.php');
-        $sqlSelect = $dbh-> prepare ("select Id, Name from Landen");
+        $sqlSelect = $dbh-> prepare ("GBA_CODE, NAAM_LAND from Landen");
         $sqlSelect  -> execute();
 
         echo '<label for="inputLanden">Land</label>';
