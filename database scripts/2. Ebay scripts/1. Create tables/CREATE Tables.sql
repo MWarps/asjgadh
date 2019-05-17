@@ -1,4 +1,6 @@
+DROP TABLE IF EXISTS  Users, Items, Illustratie, Categorieen;
 
+go 
 
 CREATE TABLE Users
 ( 
@@ -36,11 +38,11 @@ CREATE TABLE Items
 	CONSTRAINT FK_Items_In_Categorie FOREIGN KEY (Categorie) REFERENCES Categorieen (ID)
 )
 
-CREATE TABLE Illustraties
+CREATE TABLE Illustratie
 (
 	ItemID bigint NOT NULL,
 	IllustratieFile varchar(100) NOT NULL,
-    CONSTRAINT PK_ItemPlaatjes PRIMARY KEY (ItemID, IllustratieFile),
+    CONSTRAINT PK_ItemPlaatjes2 PRIMARY KEY (ItemID, IllustratieFile),
 	CONSTRAINT [ItemsVoorPlaatje] FOREIGN KEY(ItemID) REFERENCES Items (ID)
 )
 

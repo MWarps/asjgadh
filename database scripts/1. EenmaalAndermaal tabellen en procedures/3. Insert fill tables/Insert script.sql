@@ -1,23 +1,4 @@
-use eBay
-use IProject
-
-DROP TABLE IF EXISTS Landen
-
-GO
-CREATE TABLE Landen
-(
-  GBA_CODE CHAR(4) NOT NULL,
-  NAAM_LAND VARCHAR(40) NOT NULL,
-  BEGINDATUM DATE NULL,
-  EINDDATUM DATE NULL,
-  EER_Lid BIT NOT NULL DEFAULT 0,
-  CONSTRAINT PK_Landen PRIMARY KEY (NAAM_LAND),
-  CONSTRAINT UQ_Landen UNIQUE (GBA_CODE),
-  CONSTRAINT CHK_CODE CHECK ( LEN(GBA_CODE) = 4 ),
-  CONSTRAINT CHK_DATUM CHECK ( BEGINDATUM < EINDDATUM )
-)
-
-GO
+--Landen insert
 
 INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('0000','Onbekend',NULL,NULL,'0')
 INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5001','Canada','Jul  1 1867 12:00AM',NULL,'0')
@@ -406,3 +387,22 @@ INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] )
 INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5110','Sint Maarten','Oct 10 2010 12:00AM',NULL,'1')
 INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5111','Zuid-Soedan','Jul  9 2012 12:00AM',NULL,'0')
 
+go
+
+-- reset vragen 
+insert into dbo.vragen(vraagnr,vraag)  
+    values (1,'Wat was de naam van uw eerste huisdier?'),  
+           (2,'Welke kleur was uw eerste auto?'),  
+           (3,'Wat was de naam van uw eerste school waar uw op zat?'),  
+           (4,'In welke stad bent u geboren?'),  
+           (5,'Wat is de naam van uw favoriete film?'),  
+           (6,'What is uw favoriete kleur'),  
+           (7,'In welke straat groeide uw op?')
+go		    
+
+-- Verificatie typen
+insert into dbo.Verificatietypen
+values 
+	('brief'),
+	('email'),
+	('reset')

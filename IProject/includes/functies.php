@@ -292,7 +292,7 @@ function landen()
         // Loop through the query results, outputing the options one by one
         while ($row = $sqlSelect->fetch(PDO::FETCH_ASSOC)) {
 
-            echo '<option value="'.$row['Id'].'">'.$row['Name'].'</option>';
+            echo '<option value="'.$row['GBA_CODE'].'">'.$row['NAAM_LAND'].'</option>';
         }
         echo '</select>';// Close your drop down box
     } catch (PDOexception $e) {
