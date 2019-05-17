@@ -1,7 +1,6 @@
 <?php 
 include 'includes/header.php';
 //if (isset ($_SESSION['beheerder']) && $_SESSION['beheerder'] == true){     // veranderen naar admin variabel. 
-
 ?>
 
 <div class="container">

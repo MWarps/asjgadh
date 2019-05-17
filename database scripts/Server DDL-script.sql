@@ -45,6 +45,7 @@ vraag				Tinyint			NOT NULL,
 antwoordtekst		VARCHAR(50)		NOT NULL,
 verkoper			bit				NOT NUll,
 beheerder			bit				DEFAULT 0,
+geblokeerd			bit				DEFAULT 0,
 CONSTRAINT PK_Gebruiker PRIMARY KEY (gebruikersnaam),
 CONSTRAINT CK_gebruiker_geslacht CHECK (geslacht IN ( 'M','F','X') ),
 CONSTRAINT UQ_gebruiker_email UNIQUE(email)
