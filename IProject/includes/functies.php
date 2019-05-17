@@ -1,6 +1,7 @@
 <?php
 include 'email.php';
 include 'email2.php';
+include 'emailBericht.php';
 
 /* deleting verificatie code*/
 function haalCodeOp($id){
@@ -281,7 +282,7 @@ function landen()
 {
     try {
         require('core/dbconnection.php');
-        $sqlSelect = $dbh-> prepare ("select Id, Name from Landen");
+        $sqlSelect = $dbh-> prepare ("GBA_CODE, NAAM_LAND from Landen");
         $sqlSelect  -> execute();
 
         echo '<label for="inputLanden">Land</label>';
@@ -291,7 +292,7 @@ function landen()
         // Loop through the query results, outputing the options one by one
         while ($row = $sqlSelect->fetch(PDO::FETCH_ASSOC)) {
 
-            echo '<option value="'.$row['Id'].'">'.$row['Name'].'</option>';
+            echo '<option value="'.$row['GBA_CODE'].'">'.$row['NAAM_LAND'].'</option>';
         }
         echo '</select>';// Close your drop down box
     } catch (PDOexception $e) {
@@ -411,7 +412,7 @@ function emailResetWachtwoord($gebruikersnaam)
                   accountbeveiliging te garanderen.';
         $headers = "From:" .$from;
         mail($to,$subject,$message, $headers);
-        ;
+        
 
     }
     catch (PDOexception $e) {
@@ -455,9 +456,24 @@ function controleVraag($vraag){
     catch (PDOexception $e) {
         echo "er ging iets mis error: {$e->getMessage()}";
     }
-
-
 }
+
+function stuurbericht($titel, $bericht, $Verzender, $Ontvanger){
+  
+  ini_set( 'display_errors', 1 );
+  error_reporting( E_ALL );
+  $from = "no-reply@iconcepts.nl";
+  $to = $Ontvanger['email'];
+  $subject = "$titel";
+  $message = emailBericht($bericht, $Verzender, $Ontvanger);
+
+  $headers = 'MIME-Version: 1.0' . "\r\n";
+  $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+  $headers .= "From:" .$from;
+  mail($to,$subject,$message, $headers);
+  
+}
+
 /*
 Komen de wachtwoorden overeen bij het registreren en wachtwoord reset
 function controleerWachtwoord($rWachtwoord, $rHerhaalWachtwoord)

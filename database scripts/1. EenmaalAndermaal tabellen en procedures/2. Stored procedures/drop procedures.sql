@@ -1,0 +1,1 @@
+DROP PROCEDURE IF EXISTS verificatie_toevoegen, verificatie_geldig, delete_gebruiker, delete_verificatie;
