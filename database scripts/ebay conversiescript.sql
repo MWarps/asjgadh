@@ -1,6 +1,6 @@
 
 INSERT INTO EenmaalAndermaal.dbo.Gebruiker
-SELECT LEFT(Username, 50) AS gebruikersnaam,
+SELECT DISTINCT LEFT(Username, 50) AS gebruikersnaam,
 ' ' AS voornaam, -- is niet bekend bij ebay
 ' ' AS achternaam, -- is niet bekend bij ebay
 'X' AS geslacht,
@@ -17,3 +17,11 @@ Location AS antwoordtekst, -- locatie als antwoord
 1 AS verkoper,
 0 AS beheerder
 FROM ebay.dbo.Users
+
+INSERT INTO EenmaalAndermaal.dbo.Rubrieken
+SELECT ID AS rubrieknummer,
+Name AS rubrieknaam,
+Parent AS superrubriek,
+ID AS volgnr
+FROM ebay.dbo.Categorieen
+

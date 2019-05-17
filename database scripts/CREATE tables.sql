@@ -3,7 +3,7 @@ go
 
 --kolom met gebruikersnaam als foreign key altijd genoemd gebruikersnaam
 
-DROP TABLE IF EXISTS Verificatie, Verificatietypen, Verkoper, Gebruikerstelefoon, Gebruiker, Landen, Vragen;
+DROP TABLE IF EXISTS Voorwerp,Verificatie, Verificatietypen, Verkoper, Gebruikerstelefoon, Gebruiker, Landen, Vragen, Rubrieken;
 
 CREATE TABLE Vragen (  
 vraagnr		Tinyint		NOT NULL,  
@@ -42,6 +42,7 @@ vraag				Tinyint			NOT NULL,
 antwoordtekst		VARCHAR(50)		NOT NULL,
 verkoper			bit				NOT NUll,
 beheerder			bit				DEFAULT 0,
+geblokeerd			bit				DEFAULT 0,
 CONSTRAINT PK_Gebruiker PRIMARY KEY (gebruikersnaam),
 CONSTRAINT CK_gebruiker_geslacht CHECK (geslacht IN ( 'M','F','X') ),
 CONSTRAINT UQ_gebruiker_email UNIQUE(email)
@@ -114,7 +115,7 @@ CREATE TABLE Rubrieken (
 rubrieknummer		int			NOT NULL,
 rubrieknaam			varchar(100)NOT NULL,
 superrubriek		int			NULL,
-volgnr				tinyint		NOT NULL
+volgnr				int		NOT NULL
 CONSTRAINT PK_rubrieknummer PRIMARY KEY (rubrieknummer)
 );
 
