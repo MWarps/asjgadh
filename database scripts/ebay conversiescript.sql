@@ -1,6 +1,6 @@
 
 INSERT INTO EenmaalAndermaal.dbo.Gebruiker
-SELECT LEFT(Username, 50) AS gebruikersnaam,
+SELECT DISTINCT LEFT(Username, 50) AS gebruikersnaam,
 ' ' AS voornaam, -- is niet bekend bij ebay
 ' ' AS achternaam, -- is niet bekend bij ebay
 'X' AS geslacht,
