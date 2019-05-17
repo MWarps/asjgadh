@@ -103,7 +103,7 @@ CREATE TABLE Rubrieken (
 rubrieknummer		int			NOT NULL,
 rubrieknaam			varchar(100)NOT NULL,
 superrubriek		int			NULL,
-volgnr				tinyint		NOT NULL
+volgnr				int		NOT NULL
 CONSTRAINT PK_rubrieknummer PRIMARY KEY (rubrieknummer)
 );
 
