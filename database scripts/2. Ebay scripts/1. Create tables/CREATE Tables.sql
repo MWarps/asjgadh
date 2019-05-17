@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS  Users, Items, Illustratie, Categorieen;
+DROP TABLE IF EXISTS  Users,  Items, Illustraties,   Categorieen, Items;
 
 go 
 
@@ -38,7 +38,7 @@ CREATE TABLE Items
 	CONSTRAINT FK_Items_In_Categorie FOREIGN KEY (Categorie) REFERENCES Categorieen (ID)
 )
 
-CREATE TABLE Illustratie
+CREATE TABLE Illustraties
 (
 	ItemID bigint NOT NULL,
 	IllustratieFile varchar(100) NOT NULL,

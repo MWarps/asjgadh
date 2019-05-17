@@ -1,3 +1,6 @@
+DROP PROCEDURE if exists verificatie_toevoegen;
+
+go
 
 CREATE PROCEDURE verificatie_toevoegen @mail varchar(254), @type char(5)
 AS
