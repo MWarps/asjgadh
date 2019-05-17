@@ -11,7 +11,6 @@ vraag		VARCHAR(80) NOT NULL,
 CONSTRAINT pk_vraagnr PRIMARY KEY(vraagnr)  
 ) 
 
---Landen aan de hand van https://gist.github.com/abroadbent/6233480
 CREATE TABLE Landen
 (
   GBA_CODE CHAR(4) NOT NULL,
