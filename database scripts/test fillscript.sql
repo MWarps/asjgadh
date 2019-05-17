@@ -11,8 +11,10 @@ insert into dbo.vragen(vraagnr,vraag)
            (7,'In welke straat groeide uw op?') 
 ; 
 
-INSERT INTO Gebruiker
-VALUES ('MWarps', 'Merlijn', 'Warps', 'M','testadres', NULL, '1234 AB', 'Nijmegen', 'Nederland','20000101', 'merlijn@warps.nu', 'hashed', 5, 'test antwoord', 0, 1);
-
-INSERT INTO Gebruiker
-VALUES ('test2', 'testvoornaam', 'testachternaam', 'X','testadres', NULL, '1234 AB', 'testplaats', 'testland','20000101', 'test@email.test', 'hashed', 5, 'test antwoord', 0, 1);
+insert into Gebruiker
+ values 
+	('MWarps', 'Merlijn', 'Warps', 'M','testadres', NULL, '1234 AB', 'Nijmegen', 1 ,'20000101', 'merlijn@warps.nu', 'hashed', 5, 'test antwoord', 0, 1, 0);
+	
+	insert into Gebruiker
+ values 
+	('sjonnie', 'Merlijn', 'Warps', 'M','testadres', NULL, '1234 AB', 'Nijmegen', 1 ,'20000101', 'roygerrits7@gmail.com', 'hashed', 5, 'test antwoord', 0, 0, 0);
