@@ -2,12 +2,17 @@
 include 'includes/header.php';
 $gebruikersnaam = "";
 //if (isset ($_SESSION['beheerder']) && $_SESSION['beheerder'] == true){     // veranderen naar admin variabel. 
-                    if (isset($_POST['zoeken'])){
-                        $gebruikersnaam = $_POST['zoekopdracht'];
-                        echo 'ingevulde naam = ';
-                        echo $gebruikersnaam;
-                        
-                    }
+if (isset($_POST['zoeken'])){
+    $gebruikersnaam = "";
+    $gebruikersnaam = $_POST['zoekopdracht'];
+    //                        echo 'ingevulde naam = ';
+    //                        echo $gebruikersnaam;
+
+}
+
+if (isset( $_GET['id'])){
+    gebruikerblok();
+}
 ?>
 
 <div class="container">
@@ -36,7 +41,7 @@ $gebruikersnaam = "";
         </div><!--/row-->
     </form>
     <div class="row">
-        <div class="offset-0 col-md-10">
+        <div class="offset-0 col-md-12">
             <h1 class="h3 offset-2 mb-3 font-weight-normal text-center">Resultaten:</h1>
             <table class="table">
                 <thead class="thead-dark">
@@ -52,11 +57,15 @@ $gebruikersnaam = "";
                         <th scope="col">email</th>
                         <th scope="col">Verkoper</th>
                         <th scope="col">Geblokeerd</th>
+                        <th scope="col">Vink aan:</th>
                     </tr>
                 </thead>
                 <tbody>
-                   <?php
-                    gebruikersvinden($gebruikersnaam); ?>
+                    <?php
+                    if (isset($_POST['zoeken'])){
+                        gebruikersvinden($gebruikersnaam); 
+                    }
+                    ?>
                 </tbody>
             </table>
         </div>
@@ -66,5 +75,5 @@ $gebruikersnaam = "";
 //}else{
 //   include 'includes/404error.php';
 //}
-include 'includes/footer-fixed.php'
+//include 'includes/footer-fixed.php'
 ?>
