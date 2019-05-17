@@ -11,6 +11,7 @@ select distinct
 	GETDATE() as looptijdbegindagtijdstip,
 	Verkoper as verkoper,
 	DATEADD(day, 7, CURRENT_TIMESTAMP) as looptijdeindedagtijdstip, -- Moet nog aangepast worden zodat alle items niet tegelijk worden verwijderd
+	DATEADD(second, CAST(RAND() * 10 AS INT,looptijdeindedagtijdstip) as looptijdeindedagtijdstip,
 	0 as veilinggesloten
 	from dbo.Items
 
