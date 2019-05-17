@@ -3,7 +3,7 @@ go
 
 --kolom met gebruikersnaam als foreign key altijd genoemd gebruikersnaam
 
-DROP TABLE IF EXISTS Verificatie, Verificatietypen, Verkoper, Gebruikerstelefoon, Gebruiker, Landen, Vragen;
+DROP TABLE IF EXISTS Vragen, Landen, Verificatie, Verificatietypen, Verkoper, Gebruikerstelefoon, Gebruiker, Voorwerp, Illustraties, Rubrieken;
 
 CREATE TABLE Vragen (  
 vraagnr		Tinyint		NOT NULL,  
@@ -85,18 +85,18 @@ startprijs			varchar(9)		NOT NULL,
 betalingswijze		varchar(20)		NOT NULL,
 betalingsinstructie	varchar(70)		NULL,
 plaatsnaam			varchar(28)		NOT NULL,
-Land				int				NOT NULL,
+land				CHAR(4)				NOT NULL,
 looptijd			tinyint			NOT NULL,
 looptijdbegindagtijdstip datetime	NOT NULL,
 verzendkosten		varchar(9)		NULL,
 verzendinstructies	varchar(70)		NULL,
 verkoper			varchar(50)		NOT NULL,
 koper				varchar(50)		NULL,
-lopotijdeindedagtijdstip datetime	NOT NULL,
+looptijdeindedagtijdstip datetime	NOT NULL,
 veilinggesloten		bit				NOT NULL,
 verkoopprijs		varchar(9)		NULL
 CONSTRAINT PK_voorwerpnr PRIMARY KEY (voorwerpnr)
-CONSTRAINT FK_voorwerpland		 FOREIGN KEY (land) REFERENCES Landen(Id)
+
 );
 
 CREATE TABLE Illustraties
@@ -118,13 +118,20 @@ volgnr				tinyint		NOT NULL
 CONSTRAINT PK_rubrieknummer PRIMARY KEY (rubrieknummer)
 );
 
+ALTER TABLE Voorwerp ADD
+CONSTRAINT FK_voorwerpland 
+	FOREIGN KEY (land) REFERENCES Landen(GBA_CODE)
+	ON UPDATE CASCADE
+	ON DELETE NO ACTION,
+
+
 ALTER TABLE Gebruiker ADD 
 CONSTRAINT FK_Vraag 
 	FOREIGN KEY (vraag) REFERENCES Vragen(vraagnr)
 	ON UPDATE CASCADE
 	ON DELETE NO ACTION,
 CONSTRAINT FK_Land 
-	FOREIGN KEY (Land) REFERENCES Landen(Id)
+	FOREIGN KEY (Land) REFERENCES Landen(GBA_CODE)
 	ON UPDATE CASCADE
 	ON DELETE NO ACTION,
 CONSTRAINT chk_Email check (email like'%_@__%.__%'),
