@@ -1,10 +1,9 @@
 use eBay
 use IProject
 
-DROP TABLE Landen
+DROP TABLE IF EXISTS Landen
 
 GO
-
 CREATE TABLE Landen
 (
   GBA_CODE CHAR(4) NOT NULL,
