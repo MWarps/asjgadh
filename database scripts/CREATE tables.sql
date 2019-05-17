@@ -1,6 +1,5 @@
-
---USE iproject
---go
+USE iproject
+go
 
 --kolom met gebruikersnaam als foreign key altijd genoemd gebruikersnaam
 
@@ -13,15 +12,17 @@ CONSTRAINT pk_vraagnr PRIMARY KEY(vraagnr)
 ) 
 
 --Landen aan de hand van https://gist.github.com/abroadbent/6233480
-CREATE TABLE Landen (
-Id			INT IDENTITY(1,1)	NOT NULL,
-Iso			VARCHAR(2)			NOT NULL,
-Name		VARCHAR(80)			NOT NULL,
-Iso3		VARCHAR(3)			NULL,
-NumCode		INT					NULL,
-PhoneCode	INT					NOT NULL,
-CONSTRAINT [PK_Landen] PRIMARY KEY CLUSTERED ([Id] ASC),
-CONSTRAINT [uc_Landen_Iso] UNIQUE NONCLUSTERED ([Iso] ASC)
+CREATE TABLE Landen
+(
+  GBA_CODE CHAR(4) NOT NULL,
+  NAAM_LAND VARCHAR(40) NOT NULL,
+  BEGINDATUM DATE NULL,
+  EINDDATUM DATE NULL,
+  EER_Lid BIT NOT NULL DEFAULT 0,
+  CONSTRAINT PK_Landen PRIMARY KEY (NAAM_LAND),
+  CONSTRAINT UQ_Landen UNIQUE (GBA_CODE),
+  CONSTRAINT CHK_CODE CHECK ( LEN(GBA_CODE) = 4 ),
+  CONSTRAINT CHK_DATUM CHECK ( BEGINDATUM < EINDDATUM )
 );
 
 CREATE TABLE Gebruiker (
@@ -33,7 +34,7 @@ adresregel1			VARCHAR(71)		NOT NULL,
 adresregel2			VARCHAR(71)		NULL,
 postcode			CHAR(7)			NOT NUll,
 plaatsnaam			VARCHAR(28)		NOT NUll,
-land				INT				NOT NULL,
+land				int				NOT NULL,
 geboortedatum		Date			NOT NULL,
 email				VARCHAR(254)	NOT NULL,
 wachtwoord			VARCHAR(100)	NOT NULL,
@@ -98,6 +99,17 @@ CONSTRAINT PK_voorwerpnr PRIMARY KEY (voorwerpnr)
 CONSTRAINT FK_voorwerpland		 FOREIGN KEY (land) REFERENCES Landen(Id)
 );
 
+CREATE TABLE Illustraties
+(
+	ItemID bigint NOT NULL,
+	IllustratieFile varchar(100) NOT NULL,
+    CONSTRAINT PK_ItemPlaatjes PRIMARY KEY (ItemID, IllustratieFile),
+	CONSTRAINT [ItemsVoorPlaatje] FOREIGN KEY(ItemID) REFERENCES Voorwerp (voorwerpnr)
+)
+
+--CREATE INDEX IX_Items_Categorie ON Items (Categorie)			Tabel Rubriek
+--CREATE INDEX IX_Categorieen_Parent ON Categorieen (Parent)	Tabel Rubriek
+
 CREATE TABLE Rubrieken (
 rubrieknummer		int			NOT NULL,
 rubrieknaam			varchar(100)NOT NULL,
@@ -143,254 +155,397 @@ CONSTRAINT FK_Verificatietype
 	ON DELETE CASCADE
 go
 
-
 --Landen insert
 
 SET IDENTITY_INSERT Landen ON
 go
 --
--- Dumping data for table `Countries`
---
-INSERT INTO Landen (Id, Iso, Name, Iso3, Numcode, PhoneCode) VALUES
-(1, 'NL', 'Netherlands', 'NLD', 528, 31),
-(2, 'AL', 'Albania', 'ALB', 8, 355),
-(3, 'DZ', 'Algeria', 'DZA', 12, 213),
-(4, 'AS', 'American Samoa', 'ASM', 16, 1684),
-(5, 'AD', 'Andorra', 'AND', 20, 376),
-(6, 'AO', 'Angola', 'AGO', 24, 244),
-(7, 'AI', 'Anguilla', 'AIA', 660, 1264),
-(8, 'AQ', 'Antarctica', NULL, NULL, 0),
-(9, 'AG', 'Antigua and Barbuda', 'ATG', 28, 1268),
-(10, 'AR', 'Argentina', 'ARG', 32, 54),
-(11, 'AM', 'Armenia', 'ARM', 51, 374),
-(12, 'AW', 'Aruba', 'ABW', 533, 297),
-(13, 'AU', 'Australia', 'AUS', 36, 61),
-(14, 'AT', 'Austria', 'AUT', 40, 43),
-(15, 'AZ', 'Azerbaijan', 'AZE', 31, 994),
-(16, 'BS', 'Bahamas', 'BHS', 44, 1242),
-(17, 'BH', 'Bahrain', 'BHR', 48, 973),
-(18, 'BD', 'Bangladesh', 'BGD', 50, 880),
-(19, 'BB', 'Barbados', 'BRB', 52, 1246),
-(20, 'BY', 'Belarus', 'BLR', 112, 375),
-(21, 'BE', 'Belgium', 'BEL', 56, 32),
-(22, 'BZ', 'Belize', 'BLZ', 84, 501),
-(23, 'BJ', 'Benin', 'BEN', 204, 229),
-(24, 'BM', 'Bermuda', 'BMU', 60, 1441),
-(25, 'BT', 'Bhutan', 'BTN', 64, 975),
-(26, 'BO', 'Bolivia', 'BOL', 68, 591),
-(27, 'BA', 'Bosnia and Herzegovina', 'BIH', 70, 387),
-(28, 'BW', 'Botswana', 'BWA', 72, 267),
-(29, 'BV', 'Bouvet Island', NULL, NULL, 0),
-(30, 'BR', 'Brazil', 'BRA', 76, 55),
-(31, 'IO', 'British Indian Ocean Territory', NULL, NULL, 246),
-(32, 'BN', 'Brunei Darussalam', 'BRN', 96, 673),
-(33, 'BG', 'Bulgaria', 'BGR', 100, 359),
-(34, 'BF', 'Burkina Faso', 'BFA', 854, 226),
-(35, 'BI', 'Burundi', 'BDI', 108, 257),
-(36, 'KH', 'Cambodia', 'KHM', 116, 855),
-(37, 'CM', 'Cameroon', 'CMR', 120, 237),
-(38, 'CA', 'Canada', 'CAN', 124, 1),
-(39, 'CV', 'Cape Verde', 'CPV', 132, 238),
-(40, 'KY', 'Cayman Islands', 'CYM', 136, 1345),
-(41, 'CF', 'Central African Republic', 'CAF', 140, 236),
-(42, 'TD', 'Chad', 'TCD', 148, 235),
-(43, 'CL', 'Chile', 'CHL', 152, 56),
-(44, 'CN', 'China', 'CHN', 156, 86),
-(45, 'CX', 'Christmas Island', NULL, NULL, 61),
-(46, 'CC', 'Cocos (Keeling) Islands', NULL, NULL, 672),
-(47, 'CO', 'Colombia', 'COL', 170, 57),
-(48, 'KM', 'Comoros', 'COM', 174, 269),
-(49, 'CG', 'Congo', 'COG', 178, 242),
-(50, 'CD', 'Congo, the Democratic Republic of the', 'COD', 180, 242),
-(51, 'CK', 'Cook Islands', 'COK', 184, 682),
-(52, 'CR', 'Costa Rica', 'CRI', 188, 506),
-(53, 'CI', 'Cote D''Ivoire', 'CIV', 384, 225),
-(54, 'HR', 'Croatia', 'HRV', 191, 385),
-(55, 'CU', 'Cuba', 'CUB', 192, 53),
-(56, 'CY', 'Cyprus', 'CYP', 196, 357),
-(57, 'CZ', 'Czech Republic', 'CZE', 203, 420),
-(58, 'DK', 'Denmark', 'DNK', 208, 45),
-(59, 'DJ', 'Djibouti', 'DJI', 262, 253),
-(60, 'DM', 'Dominica', 'DMA', 212, 1767),
-(61, 'DO', 'Dominican Republic', 'DOM', 214, 1809),
-(62, 'EC', 'Ecuador', 'ECU', 218, 593),
-(63, 'EG', 'Egypt', 'EGY', 818, 20),
-(64, 'SV', 'El Salvador', 'SLV', 222, 503),
-(65, 'GQ', 'Equatorial Guinea', 'GNQ', 226, 240),
-(66, 'ER', 'Eritrea', 'ERI', 232, 291),
-(67, 'EE', 'Estonia', 'EST', 233, 372),
-(68, 'ET', 'Ethiopia', 'ETH', 231, 251),
-(69, 'FK', 'Falkland Islands (Malvinas)', 'FLK', 238, 500),
-(70, 'FO', 'Faroe Islands', 'FRO', 234, 298),
-(71, 'FJ', 'Fiji', 'FJI', 242, 679),
-(72, 'FI', 'Finland', 'FIN', 246, 358),
-(73, 'FR', 'France', 'FRA', 250, 33),
-(74, 'GF', 'French Guiana', 'GUF', 254, 594),
-(75, 'PF', 'French Polynesia', 'PYF', 258, 689),
-(76, 'TF', 'French Southern Territories', NULL, NULL, 0),
-(77, 'GA', 'Gabon', 'GAB', 266, 241),
-(78, 'GM', 'Gambia', 'GMB', 270, 220),
-(79, 'GE', 'Georgia', 'GEO', 268, 995),
-(80, 'DE', 'Germany', 'DEU', 276, 49),
-(81, 'GH', 'Ghana', 'GHA', 288, 233),
-(82, 'GI', 'Gibraltar', 'GIB', 292, 350),
-(83, 'GR', 'Greece', 'GRC', 300, 30),
-(84, 'GL', 'Greenland', 'GRL', 304, 299),
-(85, 'GD', 'Grenada', 'GRD', 308, 1473),
-(86, 'GP', 'Guadeloupe', 'GLP', 312, 590),
-(87, 'GU', 'Guam', 'GUM', 316, 1671),
-(88, 'GT', 'Guatemala', 'GTM', 320, 502),
-(89, 'GN', 'Guinea', 'GIN', 324, 224),
-(90, 'GW', 'Guinea-Bissau', 'GNB', 624, 245),
-(91, 'GY', 'Guyana', 'GUY', 328, 592),
-(92, 'HT', 'Haiti', 'HTI', 332, 509),
-(93, 'HM', 'Heard Island and Mcdonald Islands', NULL, NULL, 0),
-(94, 'VA', 'Holy See (Vatican City State)', 'VAT', 336, 39),
-(95, 'HN', 'Honduras', 'HND', 340, 504),
-(96, 'HK', 'Hong Kong', 'HKG', 344, 852),
-(97, 'HU', 'Hungary', 'HUN', 348, 36),
-(98, 'IS', 'Iceland', 'ISL', 352, 354),
-(99, 'IN', 'India', 'IND', 356, 91),
-(100, 'ID', 'Indonesia', 'IDN', 360, 62),
-(101, 'IR', 'Iran, Islamic Republic of', 'IRN', 364, 98),
-(102, 'IQ', 'Iraq', 'IRQ', 368, 964),
-(103, 'IE', 'Ireland', 'IRL', 372, 353),
-(104, 'IL', 'Israel', 'ISR', 376, 972),
-(105, 'IT', 'Italy', 'ITA', 380, 39),
-(106, 'JM', 'Jamaica', 'JAM', 388, 1876),
-(107, 'JP', 'Japan', 'JPN', 392, 81),
-(108, 'JO', 'Jordan', 'JOR', 400, 962),
-(109, 'KZ', 'Kazakhstan', 'KAZ', 398, 7),
-(110, 'KE', 'Kenya', 'KEN', 404, 254),
-(111, 'KI', 'Kiribati', 'KIR', 296, 686),
-(112, 'KP', 'Korea, Democratic People''s Republic of', 'PRK', 408, 850),
-(113, 'KR', 'Korea, Republic of', 'KOR', 410, 82),
-(114, 'KW', 'Kuwait', 'KWT', 414, 965),
-(115, 'KG', 'Kyrgyzstan', 'KGZ', 417, 996),
-(116, 'LA', 'Lao People''s Democratic Republic', 'LAO', 418, 856),
-(117, 'LV', 'Latvia', 'LVA', 428, 371),
-(118, 'LB', 'Lebanon', 'LBN', 422, 961),
-(119, 'LS', 'Lesotho', 'LSO', 426, 266),
-(120, 'LR', 'Liberia', 'LBR', 430, 231),
-(121, 'LY', 'Libyan Arab Jamahiriya', 'LBY', 434, 218),
-(122, 'LI', 'Liechtenstein', 'LIE', 438, 423),
-(123, 'LT', 'Lithuania', 'LTU', 440, 370),
-(124, 'LU', 'Luxembourg', 'LUX', 442, 352),
-(125, 'MO', 'Macao', 'MAC', 446, 853),
-(126, 'MK', 'Macedonia, the Former Yugoslav Republic of', 'MKD', 807, 389),
-(127, 'MG', 'Madagascar', 'MDG', 450, 261),
-(128, 'MW', 'Malawi', 'MWI', 454, 265),
-(129, 'MY', 'Malaysia', 'MYS', 458, 60),
-(130, 'MV', 'Maldives', 'MDV', 462, 960),
-(131, 'ML', 'Mali', 'MLI', 466, 223),
-(132, 'MT', 'Malta', 'MLT', 470, 356),
-(133, 'MH', 'Marshall Islands', 'MHL', 584, 692),
-(134, 'MQ', 'Martinique', 'MTQ', 474, 596),
-(135, 'MR', 'Mauritania', 'MRT', 478, 222),
-(136, 'MU', 'Mauritius', 'MUS', 480, 230),
-(137, 'YT', 'Mayotte', NULL, NULL, 269),
-(138, 'MX', 'Mexico', 'MEX', 484, 52),
-(139, 'FM', 'Micronesia, Federated States of', 'FSM', 583, 691),
-(140, 'MD', 'Moldova, Republic of', 'MDA', 498, 373),
-(141, 'MC', 'Monaco', 'MCO', 492, 377),
-(142, 'MN', 'Mongolia', 'MNG', 496, 976),
-(143, 'MS', 'Montserrat', 'MSR', 500, 1664),
-(144, 'MA', 'Morocco', 'MAR', 504, 212),
-(145, 'MZ', 'Mozambique', 'MOZ', 508, 258),
-(146, 'MM', 'Myanmar', 'MMR', 104, 95),
-(147, 'NA', 'Namibia', 'NAM', 516, 264),
-(148, 'NR', 'Nauru', 'NRU', 520, 674),
-(149, 'NP', 'Nepal', 'NPL', 524, 977),
-(150, 'AF', 'Afghanistan', 'AFG', 4, 93),
-(151, 'AN', 'Netherlands Antilles', 'ANT', 530, 599),
-(152, 'NC', 'New Caledonia', 'NCL', 540, 687),
-(153, 'NZ', 'New Zealand', 'NZL', 554, 64),
-(154, 'NI', 'Nicaragua', 'NIC', 558, 505),
-(155, 'NE', 'Niger', 'NER', 562, 227),
-(156, 'NG', 'Nigeria', 'NGA', 566, 234),
-(157, 'NU', 'Niue', 'NIU', 570, 683),
-(158, 'NF', 'Norfolk Island', 'NFK', 574, 672),
-(159, 'MP', 'Northern Mariana Islands', 'MNP', 580, 1670),
-(160, 'NO', 'Norway', 'NOR', 578, 47),
-(161, 'OM', 'Oman', 'OMN', 512, 968),
-(162, 'PK', 'Pakistan', 'PAK', 586, 92),
-(163, 'PW', 'Palau', 'PLW', 585, 680),
-(164, 'PS', 'Palestinian Territory, Occupied', NULL, NULL, 970),
-(165, 'PA', 'Panama', 'PAN', 591, 507),
-(166, 'PG', 'Papua New Guinea', 'PNG', 598, 675),
-(167, 'PY', 'Paraguay', 'PRY', 600, 595),
-(168, 'PE', 'Peru', 'PER', 604, 51),
-(169, 'PH', 'Philippines', 'PHL', 608, 63),
-(170, 'PN', 'Pitcairn', 'PCN', 612, 0),
-(171, 'PL', 'Poland', 'POL', 616, 48),
-(172, 'PT', 'Portugal', 'PRT', 620, 351),
-(173, 'PR', 'Puerto Rico', 'PRI', 630, 1787),
-(174, 'QA', 'Qatar', 'QAT', 634, 974),
-(175, 'RE', 'Reunion', 'REU', 638, 262),
-(176, 'RO', 'Romania', 'ROM', 642, 40),
-(177, 'RU', 'Russian Federation', 'RUS', 643, 70),
-(178, 'RW', 'Rwanda', 'RWA', 646, 250),
-(179, 'SH', 'Saint Helena', 'SHN', 654, 290),
-(180, 'KN', 'Saint Kitts and Nevis', 'KNA', 659, 1869),
-(181, 'LC', 'Saint Lucia', 'LCA', 662, 1758),
-(182, 'PM', 'Saint Pierre and Miquelon', 'SPM', 666, 508),
-(183, 'VC', 'Saint Vincent and the Grenadines', 'VCT', 670, 1784),
-(184, 'WS', 'Samoa', 'WSM', 882, 684),
-(185, 'SM', 'San Marino', 'SMR', 674, 378),
-(186, 'ST', 'Sao Tome and Principe', 'STP', 678, 239),
-(187, 'SA', 'Saudi Arabia', 'SAU', 682, 966),
-(188, 'SN', 'Senegal', 'SEN', 686, 221),
-(189, 'CS', 'Serbia and Montenegro', NULL, NULL, 381),
-(190, 'SC', 'Seychelles', 'SYC', 690, 248),
-(191, 'SL', 'Sierra Leone', 'SLE', 694, 232),
-(192, 'SG', 'Singapore', 'SGP', 702, 65),
-(193, 'SK', 'Slovakia', 'SVK', 703, 421),
-(194, 'SI', 'Slovenia', 'SVN', 705, 386),
-(195, 'SB', 'Solomon Islands', 'SLB', 90, 677),
-(196, 'SO', 'Somalia', 'SOM', 706, 252),
-(197, 'ZA', 'South Africa', 'ZAF', 710, 27),
-(198, 'GS', 'South Georgia and the South Sandwich Islands', NULL, NULL, 0),
-(199, 'ES', 'Spain', 'ESP', 724, 34),
-(200, 'LK', 'Sri Lanka', 'LKA', 144, 94),
-(201, 'SD', 'Sudan', 'SDN', 736, 249),
-(202, 'SR', 'Suriname', 'SUR', 740, 597),
-(203, 'SJ', 'Svalbard and Jan Mayen', 'SJM', 744, 47),
-(204, 'SZ', 'Swaziland', 'SWZ', 748, 268),
-(205, 'SE', 'Sweden', 'SWE', 752, 46),
-(206, 'CH', 'Switzerland', 'CHE', 756, 41),
-(207, 'SY', 'Syrian Arab Republic', 'SYR', 760, 963),
-(208, 'TW', 'Taiwan, Province of China', 'TWN', 158, 886),
-(209, 'TJ', 'Tajikistan', 'TJK', 762, 992),
-(210, 'TZ', 'Tanzania, United Republic of', 'TZA', 834, 255),
-(211, 'TH', 'Thailand', 'THA', 764, 66),
-(212, 'TL', 'Timor-Leste', NULL, NULL, 670),
-(213, 'TG', 'Togo', 'TGO', 768, 228),
-(214, 'TK', 'Tokelau', 'TKL', 772, 690),
-(215, 'TO', 'Tonga', 'TON', 776, 676),
-(216, 'TT', 'Trinidad and Tobago', 'TTO', 780, 1868),
-(217, 'TN', 'Tunisia', 'TUN', 788, 216),
-(218, 'TR', 'Turkey', 'TUR', 792, 90),
-(219, 'TM', 'Turkmenistan', 'TKM', 795, 7370),
-(220, 'TC', 'Turks and Caicos Islands', 'TCA', 796, 1649),
-(221, 'TV', 'Tuvalu', 'TUV', 798, 688),
-(222, 'UG', 'Uganda', 'UGA', 800, 256),
-(223, 'UA', 'Ukraine', 'UKR', 804, 380),
-(224, 'AE', 'United Arab Emirates', 'ARE', 784, 971),
-(225, 'GB', 'United Kingdom', 'GBR', 826, 44),
-(226, 'US', 'United States', 'USA', 840, 1),
-(227, 'UM', 'United States Minor Outlying Islands', NULL, NULL, 1),
-(228, 'UY', 'Uruguay', 'URY', 858, 598),
-(229, 'UZ', 'Uzbekistan', 'UZB', 860, 998),
-(230, 'VU', 'Vanuatu', 'VUT', 548, 678),
-(231, 'VE', 'Venezuela', 'VEN', 862, 58),
-(232, 'VN', 'Viet Nam', 'VNM', 704, 84),
-(233, 'VG', 'Virgin Islands, British', 'VGB', 92, 1284),
-(234, 'VI', 'Virgin Islands, U.s.', 'VIR', 850, 1340),
-(235, 'WF', 'Wallis and Futuna', 'WLF', 876, 681),
-(236, 'EH', 'Western Sahara', 'ESH', 732, 212),
-(237, 'YE', 'Yemen', 'YEM', 887, 967),
-(238, 'ZM', 'Zambia', 'ZMB', 894, 260),
-(239, 'ZW', 'Zimbabwe', 'ZWE', 716, 263);
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('0000','Onbekend',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5001','Canada','Jul  1 1867 12:00AM',NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5002','Frankrijk',NULL,NULL,'1')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5003','Zwitserland',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5004','Rhodesië','Nov 11 1965 12:00AM','Jun  1 1979 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5005','Malawi','Jul  6 1964 12:00AM',NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5006','Cuba',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5007','Suriname',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5008','Tunesië',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5009','Oostenrijk',NULL,NULL,'1')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5010','België',NULL,NULL,'1')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5011','Botswana','Sep 30 1966 12:00AM',NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5012','Iran',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5013','Nieuwzeeland',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5014','Zuidafrika',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5015','Denemarken',NULL,NULL,'1')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5016','Noordjemen',NULL,'May 22 1990 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5017','Hongarije',NULL,NULL,'1')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5018','Saoediarabië',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5019','Liberia','Jul 26 1847 12:00AM',NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5020','Etiopië',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5021','Chili',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5022','Marokko',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5023','Togo',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5024','Ghana','Mar  6 1957 12:00AM',NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5025','Laos',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5026','Angola',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5027','Filipijnen',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5028','Zambia','Oct 24 1964 12:00AM',NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5029','Mali','Jun 20 1960 12:00AM',NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5030','Ivoorkust',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5031','Burma',NULL,'Jun 18 1989 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5032','Monaco',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5033','Colombia',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5034','Albanië',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5035','Kameroen','Jan  1 1960 12:00AM',NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5036','Zuidviëtnam',NULL,'Jul  2 1976 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5037','Singapore',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5038','Paraguay',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5039','Zweden',NULL,NULL,'1')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5040','Cyprus',NULL,NULL,'1')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5041','Australisch Nieuwguinea',NULL,'Sep 16 1975 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5042','Brunei',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5043','Irak',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5044','Mauritius',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5045','Vaticaanstad','Feb 11 1929 12:00AM',NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5046','Kashmir',NULL,'Jun  1 1991 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5047','Myanmar','Jun 18 1989 12:00AM',NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5048','Jemen','May 22 1990 12:00AM',NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5049','Slovenië','Jan 15 1992 12:00AM',NULL,'1')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5050','Zaïre','Oct 27 1971 12:00AM','Jul 15 1997 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5051','Kroatië','Jan 15 1992 12:00AM',NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5052','Taiwan',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5053','Rusland','Dec 31 1991 12:00AM',NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5054','Armenië','Dec 31 1991 12:00AM',NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5055','Ascension',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5056','Azoren',NULL,NULL,'1')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5057','Bahrein',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5058','Bhutan',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5059','Britse Antillen','Feb  1 1962 12:00AM','Nov  1 1981 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5060','Comoren',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5061','Falklandeilanden',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5062','Frans Guyana',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5063','Frans Somaliland',NULL,'Jun 27 1977 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5064','Gilbert- en Ellice-eilanden',NULL,'Oct  1 1975 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5065','Groenland',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5066','Guadeloupe',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5067','Kaapverdische Eilanden',NULL,'Jul  5 1975 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5068','Macau',NULL,'Dec 20 1999 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5069','Martinique',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5070','Mozambique','Jun 25 1975 12:00AM',NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5071','Pitcairneilanden',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5072','Guinee Bissau',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5073','Réunion',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5074','Saint Pierre en Miquelon',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5075','Seychellen en Amiranten',NULL,'Jun  1 1991 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5076','Tonga',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5077','Wallis en Futuna',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5078','Zuidwest Afrika',NULL,'Mar 21 1990 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5079','Frans Indië',NULL,'Jun  1 1991 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5080','Johnston',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5081','Kedah',NULL,'Apr  1 1946 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5082','Kelantan',NULL,'Apr  1 1946 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5083','Malakka',NULL,'Sep 16 1963 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5084','Mayotte',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5085','Negri Sembilan',NULL,'Apr  1 1946 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5086','Pahang',NULL,'Apr  1 1946 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5087','Perak',NULL,'Apr  1 1946 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5088','Perlis',NULL,'Apr  1 1946 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5089','Portugees Indië',NULL,'Dec 18 1961 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5090','Selangor',NULL,'Apr  1 1946 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5091','Sikkim',NULL,'Jun  1 1991 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5092','Sint Vincent en de Grenadinen','Oct 27 1979 12:00AM',NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5093','Spitsbergen',NULL,'Jun  1 1991 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5094','Trengganu',NULL,'Apr  1 1946 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5095','Aruba','Jan  1 1986 12:00AM',NULL,'1')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5096','Burkina Faso','Aug  4 1984 12:00AM',NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5097','Azerbajdsjan','Dec 31 1991 12:00AM',NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5098','Belarus (Wit-Rusland)','Dec 31 1991 12:00AM',NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5099','Kazachstan','Dec 31 1991 12:00AM',NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5100','Macedonië','Apr 19 1993 12:00AM',NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5101','Timor Leste','May 20 2002 12:00AM',NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5102','Servië en Montenegro','Feb  4 2003 12:00AM','Jun  3 2006 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5103','Servië','Jun  3 2006 12:00AM',NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5104','Montenegro','Jun  3 2006 12:00AM',NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5105','Kosovo','Feb 17 2008 12:00AM',NULL,'1')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('6000','Moldavië','Dec 31 1991 12:00AM',NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('6001','Burundi','Jul  1 1962 12:00AM',NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('6002','Finland',NULL,NULL,'1')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('6003','Griekenland',NULL,NULL,'1')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('6004','Guatemala',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('6005','Nigeria',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('6006','Libië',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('6007','Ierland',NULL,NULL,'1')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('6008','Brazilië',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('6009','Rwanda','Jul  1 1962 12:00AM',NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('6010','Venezuela',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('6011','IJsland',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('6012','Liechtenstein',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('6013','Somalia','Jul  1 1960 12:00AM',NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('6014','Verenigde Staten van Amerika',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('6015','Bolivia',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('6016','Australië',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('6017','Jamaica',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('6018','Luxemburg',NULL,NULL,'1')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('6019','Tsjaad',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('6020','Mauritanië',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('6021','Kyrgyzstan','Dec 31 1991 12:00AM',NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('6022','China',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('6023','Afghanistan',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('6024','Indonesië','Dec 27 1949 12:00AM',NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('6025','Guyana','May 26 1966 12:00AM',NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('6026','Noordviëtnam','Sep  2 1945 12:00AM','Jul  2 1976 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('6027','Noorwegen',NULL,NULL,'1')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('6028','San Marino',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('6029','Duitsland',NULL,'Jun  1 1991 12:00AM','1')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('6030','Nederland',NULL,NULL,'1')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('6031','Kambodja',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('6032','Fiji',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('6033','Bahama-eilanden',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('6034','Israël','May 14 1948 12:00AM',NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('6035','Nepal',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('6036','Zuidkorea',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('6037','Spanje',NULL,NULL,'1')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('6038','Oekraine','Dec 31 1991 12:00AM',NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('6039','Grootbrittannië',NULL,NULL,'1')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('6040','Niger',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('6041','Haïti',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('6042','Jordanië',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('6043','Turkije',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('6044','Trinidad en Tobago',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('6045','Joegoslavië',NULL,'Jun  1 1996 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('6046','Bovenvolta',NULL,'Aug  4 1984 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('6047','Algerije',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('6048','Gabon',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('6049','Noordkorea','Sep  6 1945 12:00AM',NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('6050','Oezbekistan','Dec 31 1991 12:00AM',NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('6051','Sierra Leone',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('6052','Brits Honduras',NULL,'Jun  1 1973 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('6053','Canarische eilanden',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('6054','Frans Polynesië',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('6055','Gibraltar',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('6056','Portugees Timor',NULL,'Jul 17 1976 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('6057','Tadzjikistan','Dec 31 1991 12:00AM',NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('6058','Britse Salomons-eilanden',NULL,'Jul  7 1978 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('6059','São Tomé en Principe',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('6060','Sint Helena',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('6061','Tristan Da Cunha',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('6062','Westsamoa',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('6063','Toerkmenistan','Dec 31 1991 12:00AM',NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('6064','Georgië','Dec 31 1991 12:00AM',NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('6065','Bosnië-Herzegovina','Apr  6 1992 12:00AM',NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('6066','Tsjechië','Jan  1 1993 12:00AM',NULL,'1')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('6067','Slowakije','Jan  1 1993 12:00AM',NULL,'1')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('6068','Federale Republiek Joegoslavië','Apr 27 1992 12:00AM','Feb  1 2004 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('6069','Democratische Republiek Congo','May 17 1997 12:00AM',NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('7001','Uganda',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('7002','Kenya','Dec 12 1963 12:00AM',NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('7003','Malta',NULL,NULL,'1')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('7004','Barbados',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('7005','Andorra',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('7006','Mexico',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('7007','Costa Rica',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('7008','Gambia',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('7009','Syrië',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('7011','Nederlandse Antillen',NULL,'Oct 10 2010 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('7012','Zuidjemen','Nov 27 1967 12:00AM','May 22 1990 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('7014','Egypte',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('7015','Argentinië',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('7016','Lesotho','Oct  4 1966 12:00AM',NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('7017','Honduras',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('7018','Nicaragua',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('7020','Pakistan',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('7021','Senegal',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('7023','Dahomey',NULL,'Nov 30 1975 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('7024','Bulgarije',NULL,NULL,'1')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('7026','Maleisië','Sep 16 1963 12:00AM',NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('7027','Dominicaanse Republiek',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('7028','Polen',NULL,NULL,'1')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('7029','Rusland (oud)',NULL,'Nov  7 1917 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('7030','Britse Maagdeneilanden',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('7031','Tanzania','Apr 27 1964 12:00AM',NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('7032','El Salvador',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('7033','Sri Lanka','May 22 1972 12:00AM',NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('7034','Soedan',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('7035','Japan',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('7036','Hongkong',NULL,'Jul  1 1997 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('7037','Panama',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('7038','Uruguay',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('7039','Ecuador',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('7040','Guinee',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('7041','Maldiven',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('7042','Thailand',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('7043','Libanon',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('7044','Italië',NULL,NULL,'1')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('7045','Koeweit',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('7046','India',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('7047','Roemenië',NULL,NULL,'1')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('7048','Tsjechoslowakije',NULL,'Jan  1 1993 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('7049','Peru',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('7050','Portugal',NULL,NULL,'1')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('7051','Oman','Aug  9 1970 12:00AM',NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('7052','Mongolië',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('7054','Verenigde Arabische Emiraten','Dec  2 1971 12:00AM',NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('7055','Tibet',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('7057','Nauru',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('7058','Nederlands Nieuwguinea',NULL,'Oct  1 1962 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('7059','Tanganyika',NULL,'Apr 27 1964 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('7060','Palestina',NULL,'May 14 1948 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('7062','Brits Westindië',NULL,'Feb  1 1962 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('7063','Portugees Afrika',NULL,'Jun  1 1991 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('7064','Letland','Nov 18 1918 12:00AM',NULL,'1')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('7065','Estland',NULL,NULL,'1')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('7066','Litouwen','Feb 16 1918 12:00AM',NULL,'1')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('7067','Brits Afrika',NULL,'Jun  1 1991 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('7068','Belgisch Congo',NULL,'Jun 30 1960 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('7070','Brits Indië',NULL,'Aug 15 1947 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('7071','Noordrhodesië',NULL,'Oct 24 1964 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('7072','Zuidrhodesië',NULL,'Nov 11 1965 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('7073','Saarland',NULL,'Jun  1 1991 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('7074','Frans Indo China',NULL,'Jun  1 1991 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('7075','Brits Westborneo',NULL,'Sep 16 1963 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('7076','Goudkust',NULL,'Mar  6 1957 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('7077','Ras-El-Cheima',NULL,'Jun  1 1991 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('7079','Frans Congo',NULL,'Aug 15 1960 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('7080','Siam',NULL,'Jun  1 1991 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('7082','Brits Oostafrika',NULL,'Dec 12 1963 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('7083','Brits Noordborneo',NULL,'Sep 16 1963 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('7084','Bangladesh','Dec 16 1971 12:00AM',NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('7085','Duitse Democratische Republiek','Oct  7 1949 12:00AM','Oct  3 1990 12:00AM','1')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('7087','Madeira-eilanden',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('7088','Amerikaanse Maagdeneilanden',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('7089','Australische Salomonseilanden',NULL,'Sep 16 1975 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('7091','Spaanse Sahara',NULL,'Feb 26 1976 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('7092','Caymaneilanden',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('7093','Caicoseilanden',NULL,'Jun  1 1991 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('7094','Turkseilanden',NULL,'Jun  1 1991 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('7095','Brits Territorium in Antarctica',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('7096','Brits Territorium in de Indische Oceaan',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('7097','Cookeilanden',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('7098','Tokelau-eilanden',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('7099','Nieuwcaledonië',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('8000','Hawaii-eilanden',NULL,'Jun  1 1991 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('8001','Guam',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('8002','Amerikaans Samoa',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('8003','Midway',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('8004','Ryukyueilanden',NULL,'Jun  1 1991 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('8005','Wake',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('8006','Pacific eilanden',NULL,'Jun  1 1991 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('8008','Grenada',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('8009','Marianen',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('8010','Cabinda',NULL,'Jun  1 1991 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('8011','Canton en Enderbury',NULL,'Jun  1 1991 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('8012','Christmaseiland',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('8013','Cocoseilanden',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('8014','Faeröer',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('8015','Montserrat',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('8016','Norfolk',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('8017','Belize',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('8018','Tasmanië',NULL,'Jun  1 1991 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('8019','Turks- en Caicoseilanden',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('8020','Puerto Rico',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('8021','Papua-Nieuwguinea','Sep 16 1975 12:00AM',NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('8022','Solomoneilanden','Jul  7 1978 12:00AM',NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('8023','Benin','Nov 30 1975 12:00AM',NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('8024','Viëtnam',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('8025','Kaapverdië',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('8026','Seychellen',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('8027','Kiribati','Jul 12 1979 12:00AM',NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('8028','Tuvalu','Oct  1 1975 12:00AM',NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('8029','Sint Lucia',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('8030','Dominica',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('8031','Zimbabwe','Jun  1 1979 12:00AM',NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('8032','Doebai',NULL,'Jun  1 1991 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('8033','Nieuwehebriden',NULL,'Jul 30 1980 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('8034','Kanaaleilanden',NULL,NULL,'1')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('8035','Man',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('8036','Anguilla',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('8037','Saint Kitts-Nevis',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('8038','Antigua',NULL,'Nov  1 1981 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('8039','Sint Vincent',NULL,'Oct 27 1979 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('8040','Gilberteilanden',NULL,'Jul 12 1979 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('8041','Panamakanaalzone',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('8042','Saint Kitts-Nevis-Anguilla','Feb 27 1967 12:00AM','Dec 19 1980 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('8043','Belau',NULL,'Oct  1 1994 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('8044','Republiek van Palau','Oct  1 1994 12:00AM',NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('8045','Antigua en Barbuda','Nov  1 1981 12:00AM',NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('9000','Newfoundland',NULL,'Jun  1 1991 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('9001','Nyasaland',NULL,'Jul  6 1964 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('9003','Eritrea',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('9005','Ifni',NULL,'Jan  6 1969 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('9006','Brits Kameroen',NULL,'Oct  1 1961 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('9007','Kaiser Wilhelmsland',NULL,'Jun  1 1991 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('9008','Kongo','Aug 15 1960 12:00AM',NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('9009','Kongo Kinshasa',NULL,'Oct 27 1971 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('9010','Madagaskar',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('9013','Kongo Brazzaville',NULL,'Aug 15 1960 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('9014','Leewardeilanden',NULL,'Jun  1 1991 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('9015','Windwardeilanden',NULL,'Jun  1 1991 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('9016','Frans gebied van Afars en Issa''s',NULL,'Jun 27 1977 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('9017','Phoenixeilanden',NULL,'Jun  1 1991 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('9020','Portugees Guinee',NULL,'Sep 10 1974 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('9022','Duits Zuidwestafrika',NULL,'Jun  1 1991 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('9023','Namibië','Jan 31 1968 12:00AM',NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('9027','Brits Somaliland',NULL,'Jul  1 1960 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('9028','Italiaans Somaliland',NULL,'Jul  1 1960 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('9030','Nederlands Indië',NULL,'Dec 27 1949 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('9031','Brits Guyana',NULL,'May 26 1966 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('9036','Swaziland',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('9037','Katar',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('9041','Aden',NULL,'Jun  1 1991 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('9042','Zuidarabische Federatie','Feb 11 1959 12:00AM','Nov 27 1967 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('9043','Equatoriaalguinee',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('9044','Spaans Guinee',NULL,'Jun  1 1991 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('9047','Verenigde Arabische Republiek','Feb 22 1958 12:00AM','Sep 28 1961 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('9048','Bermuda',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('9049','Sovjetunie','Nov  7 1917 12:00AM','Dec 31 1991 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('9050','Duits Oostafrika',NULL,'Jun  1 1991 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('9051','Zanzibar',NULL,'Apr 27 1964 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('9052','Ceylon',NULL,'May 22 1972 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('9053','Muscat en Oman',NULL,'Aug  9 1970 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('9054','Trucial Oman',NULL,'Dec  2 1971 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('9055','Indo China',NULL,'Jun  1 1991 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('9056','Marshalleilanden',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('9057','Sarawak',NULL,'Jun  1 1991 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('9058','Brits Borneo',NULL,'Sep 16 1963 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('9060','Sabah',NULL,'Jun  1 1991 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('9061','Aboe Dhabi',NULL,'Jun  1 1991 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('9062','Adjman',NULL,'Jun  1 1991 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('9063','Basoetoland',NULL,'Oct  4 1966 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('9064','Bechuanaland',NULL,'Sep 30 1966 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('9065','Foedjaira',NULL,'Jun  1 1991 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('9066','Frans Kameroen',NULL,'Jan  1 1960 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('9067','Johore',NULL,'Apr  1 1946 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('9068','Korea',NULL,'Jun  1 1991 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('9069','Labuan',NULL,'Jun  1 1991 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('9070','Oem el Koewein',NULL,'Jun  1 1991 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('9071','Oostenrijk-Hongarije',NULL,'Jun  1 1991 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('9072','Portugees Oost Afrika',NULL,'Jun 25 1975 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('9073','Portugees West Afrika',NULL,'Nov 11 1975 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('9074','Sjardja',NULL,'Jun  1 1991 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('9075','Straits Settlements',NULL,'Apr  1 1946 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('9076','Abessinië',NULL,'Jun  1 1991 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('9077','Frans West Afrika',NULL,'Jun  1 1991 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('9078','Frans Equatoriaal Afrika',NULL,'Jun  1 1991 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('9081','Oeroendi',NULL,'Jun  1 1991 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('9082','Roeanda-Oeroendi',NULL,'Jul  1 1962 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('9084','Goa',NULL,'Dec 18 1961 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('9085','Dantzig',NULL,'Sep  1 1939 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('9086','Centrafrika',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('9087','Djibouti','Jun 27 1977 12:00AM',NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('9088','Transjordanië','May 15 1923 12:00AM','Jun  1 1991 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('9089','Bondsrepubliek Duitsland','Aug  1 1949 12:00AM',NULL,'1')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('9090','Vanuatu','Jul 30 1980 12:00AM',NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('9091','Niue',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('9092','Spaans Noordafrika',NULL,'Jun  1 1991 12:00AM','0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('9093','Westelijke Sahara','Feb 26 1976 12:00AM',NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('9094','Micronesia',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('9095','Svalbardeilanden',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('9999','Internationaal gebied',NULL,NULL,'0')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5106','Bonaire','Oct 10 2010 12:00AM',NULL,'1')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5107','Curaçao','Oct 10 2010 12:00AM',NULL,'1')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5108','Saba','Oct 10 2010 12:00AM',NULL,'1')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5109','Sint Eustatius','Oct 10 2010 12:00AM',NULL,'1')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5110','Sint Maarten','Oct 10 2010 12:00AM',NULL,'1')
+INSERT INTO Landen ( [GBA_CODE],[NAAM_LAND],[BEGINDATUM],[EINDDATUM],[EER_Lid] ) VALUES ('5111','Zuid-Soedan','Jul  9 2012 12:00AM',NULL,'0')
 
 go
 SET IDENTITY_INSERT Landen Off

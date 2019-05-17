@@ -282,7 +282,7 @@ function landen()
 {
     try {
         require('core/dbconnection.php');
-        $sqlSelect = $dbh-> prepare ("select Id, Name from Landen");
+        $sqlSelect = $dbh-> prepare ("GBA_CODE, NAAM_LAND from Landen");
         $sqlSelect  -> execute();
 
         echo '<label for="inputLanden">Land</label>';
@@ -624,9 +624,9 @@ function catogorieSoort (){
     $teller =0;
     foreach($_SESSION['catogorie'] as $level => $id){
         if ($teller ==0){
-        echo '<li class="breadcrumb-item"><a href="catalogus.php?id='.$id.'&naam='.$level.' " >'.$level.'</a></li>';
-      $teller++;
-      }
+            echo '<li class="breadcrumb-item"><a href="catalogus.php?id='.$id.'&naam='.$level.' " >'.$level.'</a></li>';
+            $teller++;
+        }
     }       
 }
 
@@ -654,5 +654,55 @@ function directorieVinden(){
     }
 }
 
+function gebruikersvinden($gebruikersnaam){
+  //  if (isset($_POST['zoeken'])){
+        $teller = 0;
+        try {
+            require('core/dbconnection.php');
+            $gebruikers = $dbh->prepare("
+            select gebruikersnaam, voornaam, achternaam, geslacht, postcode, plaatsnaam, land,  email, verkoper, geblokeerd 
+            from Gebruiker 
+            where gebruikersnaam like '% :gebruikersnaam %' ");
+            $gebruikers -> execute(
+                array(
+                    ':gebruikersnaam' =>  $gebruikersnaam,
+                )
+            );
+// hij komt niet in de while loop
+            while ( $resultaten = $gebruikers->fetchAll(PDO::FETCH_ASSOC)){
+                $teller ++;
+                $verkoper = "error";
+                $geblokeerd = "error";
+                if ($resultaten['verkoper'] == 1){
+                    $verkoper = "Ja";
+                }else{
+                    $verkoper = "nee";
+                }
+                if ($resultaten['geblokeerd'] == 1){
+                    $geblokeerd = "Ja";
+                }else{
+                    $geblokeerd = "nee";
+                }
+                echo '<tr>
+                    <th scope="row">'.$teller.'</th>
+                    <td>'.$resultaten['gebruikersnaam'].'</td>
+                    <td>'.$resultaten['voornaam'].'</td>
+                    <td>'.$resultaten['achternaam'].'</td>
+                    <td>'.$resultaten['geslacht'].'</td>
+                    <td>'.$resultaten['postcode'].'</td>
+                    <td>'.$resultaten['plaatsnaam'].'</td>
+                    <td>'.$resultaten['land'].'</td>
+                    <td>'.$resultaten['email'].'</td> 
+                    <td>'.$verkoper.'</td>       
+                    <td>'.$geblokeerd.'</td> 
+
+                    </tr>';
+            }
+        } catch (PDOexception $e) {
+            echo "er ging iets mis error: {$e->getMessage()}";
+        }
+   // }
+
+}
 
 ?>
