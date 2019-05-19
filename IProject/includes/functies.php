@@ -655,54 +655,104 @@ function directorieVinden(){
 }
 
 function gebruikersvinden($gebruikersnaam){
-  //  if (isset($_POST['zoeken'])){
-        $teller = 0;
-        try {
-            require('core/dbconnection.php');
-            $gebruikers = $dbh->prepare("
-            select gebruikersnaam, voornaam, achternaam, geslacht, postcode, plaatsnaam, land,  email, verkoper, geblokeerd 
-            from Gebruiker 
-            where gebruikersnaam like '% :gebruikersnaam %' ");
-            $gebruikers -> execute(
-                array(
-                    ':gebruikersnaam' =>  $gebruikersnaam,
-                )
-            );
-// hij komt niet in de while loop
-            while ( $resultaten = $gebruikers->fetchAll(PDO::FETCH_ASSOC)){
-                $teller ++;
-                $verkoper = "error";
-                $geblokeerd = "error";
-                if ($resultaten['verkoper'] == 1){
-                    $verkoper = "Ja";
-                }else{
-                    $verkoper = "nee";
-                }
-                if ($resultaten['geblokeerd'] == 1){
-                    $geblokeerd = "Ja";
-                }else{
-                    $geblokeerd = "nee";
-                }
-                echo '<tr>
+
+    $teller = 0;
+    try {
+        require('core/dbconnection.php');
+        $gebruikers = $dbh->prepare("
+                    select gebruikersnaam, voornaam, achternaam, geslacht, postcode, plaatsnaam, land,  email, verkoper, geblokeerd 
+                    from Gebruiker 
+                    where gebruikersnaam like :gebruikersnaam 
+                    ");
+        // kan geen like '% $gebruiker%' door prepared statement
+        $gebruikers -> execute(
+            array(
+                ':gebruikersnaam' => '%'.$gebruikersnaam.'%',
+            )
+        );
+        $resultaten =  $gebruikers ->fetchAll(PDO::FETCH_ASSOC);
+        foreach ( $resultaten as $resultaat ){
+            $teller ++;
+            $verkoper = "error";
+            $geblokeerd = "error";
+            if ($resultaat['verkoper'] == 1){
+                $verkoper = "Ja";
+            }else{
+                $verkoper = "nee";
+            }
+            if ($resultaat['geblokeerd'] == 1){
+                $geblokeerd = "Ja";
+            }else{
+                $geblokeerd = "Nee";
+            }
+            echo '<tr>
                     <th scope="row">'.$teller.'</th>
-                    <td>'.$resultaten['gebruikersnaam'].'</td>
-                    <td>'.$resultaten['voornaam'].'</td>
-                    <td>'.$resultaten['achternaam'].'</td>
-                    <td>'.$resultaten['geslacht'].'</td>
-                    <td>'.$resultaten['postcode'].'</td>
-                    <td>'.$resultaten['plaatsnaam'].'</td>
-                    <td>'.$resultaten['land'].'</td>
-                    <td>'.$resultaten['email'].'</td> 
+                    <td>'.$resultaat['gebruikersnaam'].'</td>
+                    <td>'.$resultaat['voornaam'].'</td>
+                    <td>'.$resultaat['achternaam'].'</td>
+                    <td>'.$resultaat['geslacht'].'</td>
+                    <td>'.$resultaat['postcode'].'</td>
+                    <td>'.$resultaat['plaatsnaam'].'</td>
+                    <td>'.$resultaat['land'].'</td>
+                    <td>'.$resultaat['email'].'</td> 
                     <td>'.$verkoper.'</td>       
                     <td>'.$geblokeerd.'</td> 
+                      ';
+            blokeren($geblokeerd, $teller, $resultaat['gebruikersnaam'] ); 
+            echo ' </tr>';
 
-                    </tr>';
-            }
-        } catch (PDOexception $e) {
-            echo "er ging iets mis error: {$e->getMessage()}";
         }
-   // }
-
+    } catch (PDOexception $e) {
+        // echo "er ging iets mis error: {$e->getMessage()}";
+    }
 }
+function blokeren($geblokeerd, $teller, $gebruiker){
+    if ($geblokeerd == "Ja"){
+        echo ' <td>   
+    <a class="btn btn-primary" href="overzichtGebruikers.php?id='.$teller.'&naam='.$gebruiker.'" role="button">Deblokeer</a> 
+   </td> ';
+    } else if ($geblokeerd == "Nee"){
+        echo ' <td>
+    <a class="btn btn-primary" href="overzichtGebruikers.php?id='.$teller.'&naam='.$gebruiker.'" role="button">Blokeer</a>
+      </td>  ';
+    }
+}
+function gebruikerblok(){
+    try {
+        require('core/dbconnection.php');
+        $blokeren = $dbh ->prepare (" UPDATE Gebruiker
+                                    SET geblokeerd = 1
+                                    WHERE gebruikersnaam like :gebruiker
+                                    ");
+        $deblokeren = $dbh ->prepare (" UPDATE Gebruiker
+                                    SET geblokeerd = 0
+                                    WHERE gebruikersnaam like :gebruiker
+                                    ");
+        $gebruiker = $dbh ->prepare (" SELECT * FROM Gebruiker where gebruikersnaam like :gebruiker
+                                    ");
+        $gebruiker -> execute(
+            array(
+                ':gebruiker' => $_GET['naam'],
+            )
+        );
+        $resultaat =  $gebruiker ->fetchAll(PDO::FETCH_ASSOC);
+        if ($resultaat[0]['geblokeerd'] == 1){
+            $deblokeren -> execute(
+            array(
+                ':gebruiker' => $resultaat[0]['gebruikersnaam'],
+            )
+        );
+        }else if ($resultaat[0]['geblokeerd'] == 0){
+            $blokeren -> execute(
+            array(
+                ':gebruiker' => $resultaat[0]['gebruikersnaam'],
+            )
+        );
+        }
 
+
+    } catch (PDOexception $e) {
+        echo "er ging iets mis error: {$e->getMessage()}";
+    }
+}
 ?>
