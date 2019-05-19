@@ -3,6 +3,7 @@ include 'includes/header.php';
 if (isset($_SESSION['gebruikersnaam']) && isset($_GET['id'])){
   
   $Verstuurd = false;
+  
   $_SESSION['id'] = HaalGebruikerOp($_GET['id']);
   
   $gebruiker = HaalGebruikerOp($_SESSION['gebruikersnaam']);
