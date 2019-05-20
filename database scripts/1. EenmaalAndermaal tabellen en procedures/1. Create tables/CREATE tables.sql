@@ -107,8 +107,8 @@ verkoper			VARCHAR(50)		NOT NULL,
 koper				VARCHAR(50)		NULL,
 looptijdeindedagtijdstip DATETIME	NOT NULL,
 veilinggesloten		BIT				NOT NULL,
-verkoopprijs		VARCHAR(9)		NULL
-gezien				int				NOT NULL DEFAULT 0
+verkoopprijs		VARCHAR(9)		NULL,
+gezien				int				NOT NULL DEFAULT 0,
 CONSTRAINT PK_voorwerpnr PRIMARY KEY (voorwerpnr)
 );
 
@@ -137,6 +137,13 @@ datumentijd			Datetime		NOT NULL,
 gebruikersnaam		VARCHAR(50)		NOT NULL,
 voorwerpnr			BIGINT			NOT NULL,
 CONSTRAINT PK_bod PRIMARY KEY (euro, voorwerpnr)
+);
+
+CREATE TABLE Voorwerpinrubriek
+(
+voorwerpnr			BIGINT			NOT NULL,
+rubrieknr			INT				NOT NULL,
+CONSTRAINT PK_voorwerpintabel PRIMARY KEY (voorwerpnr, rubrieknr)
 );
 
 ----------------------------------------------------------
@@ -196,3 +203,15 @@ CONSTRAINT FK_Bod_Voorwerp
 	FOREIGN KEY (voorwerpnr) REFERENCES Voorwerp(voorwerpnr)
 	ON UPDATE CASCADE
 	ON DELETE CASCADE
+go
+
+ALTER TABLE Voorwerpintabel ADD
+CONSTRAINT FK_voorwerpintabel_voorwerp
+	FOREIGN KEY (voorwerpnr) REFERENCES Voorwerp(voorwerpnr)
+	ON UPDATE NO ACTION
+	ON DELETE NO ACTION,
+CONSTRAINT FK_voorwerpintabel_rubriek 
+	FOREIGN KEY (rubrieknr) REFERENCES Rubriek(rubrieknummer)
+	ON UPDATE NO ACTION
+	ON DELETE NO ACTION
+go
