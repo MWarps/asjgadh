@@ -3,7 +3,7 @@ go
 
 --kolom met gebruikersnaam als foreign key altijd genoemd gebruikersnaam
 
-DROP TABLE IF EXISTS  Verkoper, Verificatie, Gebruikerstelefoon, Illustraties,  Voorwerp,  Rubrieken, Gebruiker, Vragen, Landen, Verificatietypen ;
+DROP TABLE IF EXISTS  Bod, Verkoper, Verificatie, Gebruikerstelefoon, Illustratie,  Voorwerp,  Rubrieken, Gebruiker, Vragen, Landen, Verificatietypen ;
 go
 ----------------------------------------------------------
 -------------------- CREATE TABLES -----------------------
@@ -48,6 +48,7 @@ antwoordtekst		VARCHAR(50)		NOT NULL,
 verkoper			bit				NOT NUll,
 beheerder			bit				NOT NULL DEFAULT 0,
 geblokeerd			bit				NOT NULL DEFAULT 0,
+gezien				bit				NOT NULL DEFAULT 0
 CONSTRAINT PK_Gebruiker PRIMARY KEY (gebruikersnaam),
 CONSTRAINT CK_gebruiker_geslacht CHECK (geslacht IN ( 'M','F','X') ),
 CONSTRAINT UQ_gebruiker_email UNIQUE(email),
@@ -98,7 +99,7 @@ startprijs			varchar(9)		NOT NULL,
 betalingswijze		varchar(20)		NOT NULL,
 betalingsinstructie	varchar(70)		NULL,
 plaatsnaam			varchar(28)		NOT NULL,
-land				CHAR(4)			NOT NULL,
+land				VARCHAR(40)		NOT NULL,
 looptijd			TINYINT			NOT NULL,
 looptijdbegindagtijdstip DATETIME	NOT NULL,
 verzendkosten		VARCHAR(9)		NULL,
@@ -107,7 +108,7 @@ verkoper			VARCHAR(50)		NOT NULL,
 koper				VARCHAR(50)		NULL,
 looptijdeindedagtijdstip DATETIME	NOT NULL,
 veilinggesloten		BIT				NOT NULL,
-verkoopprijs		VARCHAR(9)		NULL
+verkoopprijs		VARCHAR(9)		NULL,
 gezien				int				NOT NULL DEFAULT 0
 CONSTRAINT PK_voorwerpnr PRIMARY KEY (voorwerpnr)
 );
@@ -143,11 +144,16 @@ CONSTRAINT PK_bod PRIMARY KEY (euro, voorwerpnr)
 -------------------- ALTER TABLES ------------------------
 ----------------------------------------------------------
 
+
 ALTER TABLE Voorwerp ADD
 CONSTRAINT FK_Verkoper 
 	FOREIGN KEY (verkoper) REFERENCES Gebruiker(gebruikersnaam)
 	ON UPDATE CASCADE
-	ON DELETE CASCADE
+	ON DELETE CASCADE,
+CONSTRAINT FK_VoorwerpLand
+	FOREIGN KEY (land) REFERENCES Landen(NAAM_LAND)
+	ON UPDATE CASCADE
+	ON DELETE NO ACTION
 
 ALTER TABLE Illustratie ADD
 CONSTRAINT FK_voorwerpnrVanPlaatjes
@@ -160,9 +166,9 @@ CONSTRAINT FK_Vraag
 	FOREIGN KEY (vraag) REFERENCES Vragen(vraagnr)
 	ON UPDATE CASCADE
 	ON DELETE NO ACTION,
-CONSTRAINT FK_Gebruikerland 
+CONSTRAINT FK_Gebruikerland
 	FOREIGN KEY (land) REFERENCES Landen(NAAM_LAND)
-	ON UPDATE CASCADE
+	ON UPDATE NO ACTION
 	ON DELETE NO ACTION
 go
 

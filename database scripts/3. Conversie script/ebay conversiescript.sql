@@ -4,7 +4,7 @@ delete from dbo.Voorwerp
 delete from dbo.Illustratie
 
 INSERT INTO dbo.Gebruiker (gebruikersnaam, voornaam, achternaam, geslacht, adresregel1, adresregel2, postcode, plaatsnaam, 
-land, geboortedatum, email, wachtwoord, vraag, antwoordtekst, verkoper, beheerder, geblokeerd)
+land, geboortedatum, email, wachtwoord, vraag, antwoordtekst, verkoper, beheerder, geblokeerd, gezien)
 SELECT DISTINCT 
 LEFT(Username, 50)	AS gebruikersnaam,
 ' '					AS voornaam, -- is niet bekend bij ebay
@@ -13,7 +13,7 @@ LEFT(Username, 50)	AS gebruikersnaam,
 Location			AS adresregel1, 
 NULL				AS adresregel2,
 Postalcode			AS postcode, -- niet overal gestandaardiseerd
-Left(Location, 28)	AS plaatsnaam, -- is vaak het land plaatsnaam is maar bij sommige gebruikers bekend
+Location	AS plaatsnaam, -- is vaak het land plaatsnaam is maar bij sommige gebruikers bekend
 Location			AS land, --country code query !!!!!!
 '20000101'			AS geboortedatum, -- is niet bekend bij ebay
 CONCAT('asjgadh+', Username, '@gmail.com') AS email, -- email naam nog niet final
@@ -22,7 +22,8 @@ CONCAT('asjgadh+', Username, '@gmail.com') AS email, -- email naam nog niet fina
 Location			AS antwoordtekst, -- locatie als antwoord
 1					AS verkoper,
 0					AS beheerder,
-0					AS geblokeerd
+0					AS geblokeerd,
+0					AS gezien
 FROM dbo.Users
 
 -- Compleet --
