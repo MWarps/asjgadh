@@ -111,7 +111,7 @@ looptijdeindedagtijdstip DATETIME	NOT NULL,
 veilinggesloten		BIT				NOT NULL,
 verkoopprijs		VARCHAR(9)		NULL,
 gezien				int				NOT NULL DEFAULT 0,
-geblokkeerd			char(1)			DEFAULT 0,
+geblokkeerd			bit			DEFAULT 0,
 blokkeerdatum		Date			null,
 CONSTRAINT PK_voorwerpnr PRIMARY KEY (voorwerpnr)
 );

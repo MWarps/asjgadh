@@ -15,7 +15,7 @@ include 'includes/header.php';
             </ul>
         </div>
     </div>
-    <form class="needs-validation" novalidate action='overzichtGebruikers.php' method="post">
+    <form class="needs-validation" novalidate action='overzichtVeilingen.php' method="post">
         <div class="row">
             <div class="offset-1 col-md-10">
                 <h1 class="h3 mb-3 font-weight-normal text-center">Veilingsnaam zoeken</h1>
@@ -23,7 +23,7 @@ include 'includes/header.php';
                     <div class="input-group-prepend">
                         <span class="input-group-text" id="zoekopdracht" >Veilingsnaam:</span>
                     </div>
-                    <input type="text" class="form-control" placeholder="Gebruikersnaam" aria-label="titel" aria-describedby="basic-addon1"name="zoekopdracht"> 
+                    <input type="text" class="form-control" placeholder="Titel" aria-label="titel" aria-describedby="basic-addon1"name="zoekopdracht"> 
                     <button class="btn btn-primary" type="submit" value="veilingzoeken" id="veilingzoeken" name="veilingzoeken">Zoeken</button>
                 </div>
             </div>
@@ -31,7 +31,7 @@ include 'includes/header.php';
     </form>
     <div class="row">
         <div class="offset-0 col-md-12">
-            <h1 class="h3 offset-2 mb-3 font-weight-normal text-center">Resultaten:</h1>
+            <h1 class="h3 offset-0 mb-3 font-weight-normal text-center">Resultaten:</h1>
             <table class="table">
                 <thead class="thead-dark">
                     <tr>
@@ -57,7 +57,7 @@ include 'includes/header.php';
                 <tbody>
                     <?php
                     if (isset($_POST['veilingzoeken'])){
-                        gebruikersvinden($gebruikersnaam); 
+                       veilingenVinden($veilingnaam);
                     }
                     ?>
                 </tbody>
