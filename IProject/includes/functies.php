@@ -775,4 +775,8 @@ function gebruikerblok(){
         echo "er ging iets mis error: {$e->getMessage()}";
     }
 }
+
+function veilingenVinden ($veilingnaam){
+        
+}
 ?>
