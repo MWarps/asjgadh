@@ -124,6 +124,14 @@ volgnr				tinyint		NOT NULL
 CONSTRAINT PK_rubrieknummer PRIMARY KEY (rubrieknummer)
 );
 
+CREATE TABLE Bod (
+euro				VARCHAR(9)	NOT NULL,
+datumentijd			Datetime	NOT NULL,
+gebruikersnaam		VARCHAR(50)	NOT NULL,
+voorwerpnr			BIGINT		NOT NULL,
+CONSTRAINT PK_bod PRIMARY KEY (euro, voorwerpnr)
+);
+
 ----------------------------------------------------------
 -------------------- ALTER TABLES ------------------------
 ----------------------------------------------------------
@@ -175,3 +183,13 @@ CONSTRAINT FK_Verificatietype
 	ON UPDATE CASCADE
 	ON DELETE CASCADE
 go
+
+ALTER TABLE Bod ADD
+CONSTRAINT FK_Bod_Gebruiker
+	FOREIGN KEY (gebruikersnaam) REFERENCES Gebruiker(gebruikersnaam)
+	ON UPDATE CASCADE
+	ON DELETE CASCADE,
+CONSTRAINT FK_Bod_Voorwerp
+	FOREIGN KEY (voorwerpnr) REFERENCES Voorwerp(voorwerpnr)
+	ON UPDATE CASCADE
+	ON DELETE CASCADE
