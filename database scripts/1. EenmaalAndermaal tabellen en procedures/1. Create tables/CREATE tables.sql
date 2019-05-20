@@ -10,8 +10,8 @@ go
 ----------------------------------------------------------
 
 CREATE TABLE Vragen (  
-vraagnr		Tinyint		NOT NULL,  
-vraag		VARCHAR(80) NOT NULL,  
+vraagnr				TINYINT			NOT NULL,  
+vraag				VARCHAR(80)		NOT NULL,  
 CONSTRAINT pk_vraagnr PRIMARY KEY(vraagnr)  
 ) 
 
@@ -32,7 +32,7 @@ CREATE TABLE Gebruiker (
 gebruikersnaam		VARCHAR(50)		NOT NULL,
 voornaam			VARCHAR(50)		NOT NULL,
 achternaam			VARCHAR(51)		NOT NULL,
-geslacht			char(1)			NOT NULL,
+geslacht			CHAR(1)			NOT NULL,
 adresregel1			VARCHAR(71)		NOT NULL,
 adresregel2			VARCHAR(71)		NULL,
 postcode			CHAR(7)			NOT NUll,
@@ -41,7 +41,7 @@ land				VARCHAR(40)		NOT NULL,
 geboortedatum		Date			NOT NULL,
 email				VARCHAR(254)	NOT NULL,
 wachtwoord			VARCHAR(100)	NOT NULL,
-vraag				Tinyint			NOT NULL,
+vraag				TINYINT			NOT NULL,
 antwoordtekst		VARCHAR(50)		NOT NULL,
 verkoper			bit				NOT NUll,
 beheerder			bit				NOT NULL DEFAULT 0,
@@ -56,32 +56,32 @@ CONSTRAINT CK_plaatsnaam	CHECK ( plaatsnaam not like '%[0-9]%')
 );
 
 CREATE TABLE Verkoper (
-gebruikersnaam		VARCHAR(50) NOT NULL,
-bank				CHAR(4)		NOT NULL,
-bankrekeningnummer	CHAR(18)	NOT NULL,
+gebruikersnaam		VARCHAR(50)		NOT NULL,
+bank				CHAR(4)			NOT NULL,
+bankrekeningnummer	CHAR(18)		NOT NULL,
 --controle optie nog niet duidelijk
-creditcard			CHAR(19)	NULL,
+creditcard			CHAR(19)		NULL,
 CONSTRAINT PK_Verkoper PRIMARY KEY (gebruikersnaam)
 );
 
 CREATE TABLE Gebruikerstelefoon (
-volgnr			INT				NOT NULL,
-gebruikersnaam	VARCHAR(50)		NOT NULL,
-telefoon		VARCHAR(15)		NOT NULL,
+volgnr				INT				NOT NULL,
+gebruikersnaam		VARCHAR(50)		NOT NULL,
+telefoon			VARCHAR(15)		NOT NULL,
 CONSTRAINT PK_Gebruikerstelefoon PRIMARY KEY (volgnr, gebruikersnaam),
 CONSTRAINT CK_telefoon CHECK (telefoon NOT LIKE '%[a-z]%')
 );
 
 CREATE TABLE Verificatietypen (
-verificatietype		CHAR(5)		NOT NULL,
+verificatietype		CHAR(5)			NOT NULL,
 CONSTRAINT PK_Verificatietypen PRIMARY KEY (verificatietype)
 );
 
 CREATE TABLE Verificatie (
-email			VARCHAR(254)	NOT NULL,
-type			CHAR(5)			NOT NULL,
-verificatiecode int				NOT NULL,
-eindtijd		Smalldatetime	NOT NULL,
+email				VARCHAR(254)	NOT NULL,
+type				CHAR(5)			NOT NULL,
+verificatiecode		INT				NOT NULL,
+eindtijd			SMALLDATETIME	NOT NULL,
 CONSTRAINT PK_Verificatie PRIMARY KEY (email)
 );
 
@@ -93,7 +93,7 @@ startprijs			varchar(9)		NOT NULL,
 betalingswijze		varchar(20)		NOT NULL,
 betalingsinstructie	varchar(70)		NULL,
 plaatsnaam			varchar(28)		NOT NULL,
-land				VARCHAR(40)		NOT NULL,
+land				CHAR(4)			NOT NULL,
 looptijd			tinyint			NOT NULL,
 looptijdbegindagtijdstip datetime	NOT NULL,
 verzendkosten		varchar(9)		NULL,
@@ -102,24 +102,31 @@ verkoper			varchar(50)		NOT NULL,
 koper				varchar(50)		NULL,
 looptijdeindedagtijdstip datetime	NOT NULL,
 veilinggesloten		bit				NOT NULL,
-verkoopprijs		varchar(9)		NULL,
-gezien				int				NOT NULL DEFAULT 0
+verkoopprijs		varchar(9)		NULL
 CONSTRAINT PK_voorwerpnr PRIMARY KEY (voorwerpnr)
 );
 
 CREATE TABLE Illustratie
 (
-	voorwerpnr	bigint		 NOT NULL,
+	voorwerpnr bigint NOT NULL,
 	IllustratieFile varchar(100) NOT NULL,
     CONSTRAINT PK_ItemPlaatjes PRIMARY KEY (voorwerpnr, IllustratieFile)
 )
 
 CREATE TABLE Rubrieken (
-rubrieknummer		int			NOT NULL,
-rubrieknaam			varchar(100)NOT NULL,
-superrubriek		int			NULL,
-volgnr				tinyint		NOT NULL
+rubrieknummer		INT				NOT NULL,
+rubrieknaam			VARCHAR(100)	NOT NULL,
+superrubriek		INT				NULL,
+volgnr				TINYINT			NOT NULL
 CONSTRAINT PK_rubrieknummer PRIMARY KEY (rubrieknummer)
+);
+
+CREATE TABLE Bod (
+euro				VARCHAR(9)		NOT NULL,
+datumentijd			Datetime		NOT NULL,
+gebruikersnaam		VARCHAR(50)		NOT NULL,
+voorwerpnr			BIGINT			NOT NULL,
+CONSTRAINT PK_bod PRIMARY KEY (euro, voorwerpnr)
 );
 
 ----------------------------------------------------------
@@ -169,3 +176,13 @@ CONSTRAINT FK_Verificatietype
 	ON UPDATE CASCADE
 	ON DELETE CASCADE
 go
+
+ALTER TABLE Bod ADD
+CONSTRAINT FK_Bod_Gebruiker
+	FOREIGN KEY (gebruikersnaam) REFERENCES Gebruiker(gebruikersnaam)
+	ON UPDATE CASCADE
+	ON DELETE CASCADE,
+CONSTRAINT FK_Bod_Voorwerp
+	FOREIGN KEY (voorwerpnr) REFERENCES Voorwerp(voorwerpnr)
+	ON UPDATE CASCADE
+	ON DELETE CASCADE
