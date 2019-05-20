@@ -23,8 +23,8 @@ include 'includes/header.php';
                     <div class="input-group-prepend">
                         <span class="input-group-text" id="zoekopdracht" >Veilingsnaam:</span>
                     </div>
-                    <input type="text" class="form-control" placeholder="Gebruikersnaam" aria-label="gebruikersnaam" aria-describedby="basic-addon1"name="zoekopdracht"> 
-                    <button class="btn btn-primary" type="submit" value="zoeken" id="zoeken" name="zoeken">Zoeken</button>
+                    <input type="text" class="form-control" placeholder="Gebruikersnaam" aria-label="titel" aria-describedby="basic-addon1"name="zoekopdracht"> 
+                    <button class="btn btn-primary" type="submit" value="veilingzoeken" id="veilingzoeken" name="veilingzoeken">Zoeken</button>
                 </div>
             </div>
         </div><!--/row-->
@@ -54,7 +54,7 @@ include 'includes/header.php';
                 </thead>
                 <tbody>
                     <?php
-                    if (isset($_POST['zoeken'])){
+                    if (isset($_POST['veilingzoeken'])){
                         gebruikersvinden($gebruikersnaam); 
                     }
                     ?>

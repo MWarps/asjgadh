@@ -11,11 +11,11 @@ function haalAdvertentieOp(){
 
         $sqlSelect->execute(
             array(
-                            
+
             ));
         $records = $sqlSelect->fetch(PDO::FETCH_ASSOC);
         return $records;
-        
+
 
     } catch (PDOexception $e) {
         echo "er ging iets mis error: {$e->getMessage()}";
@@ -433,7 +433,7 @@ function emailResetWachtwoord($gebruikersnaam)
                   accountbeveiliging te garanderen.';
         $headers = "From:" .$from;
         mail($to,$subject,$message, $headers);
-        
+
 
     }
     catch (PDOexception $e) {
@@ -480,19 +480,19 @@ function controleVraag($vraag){
 }
 
 function stuurbericht($titel, $bericht, $Verzender, $Ontvanger){
-  
-  ini_set( 'display_errors', 1 );
-  error_reporting( E_ALL );
-  $from = "no-reply@iconcepts.nl";
-  $to = $Ontvanger['email'];
-  $subject = "$titel";
-  $message = emailBericht($bericht, $Verzender, $Ontvanger);
 
-  $headers = 'MIME-Version: 1.0' . "\r\n";
-  $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-  $headers .= "From:" .$from;
-  mail($to,$subject,$message, $headers);
-  
+    ini_set( 'display_errors', 1 );
+    error_reporting( E_ALL );
+    $from = "no-reply@iconcepts.nl";
+    $to = $Ontvanger['email'];
+    $subject = "$titel";
+    $message = emailBericht($bericht, $Verzender, $Ontvanger);
+
+    $headers = 'MIME-Version: 1.0' . "\r\n";
+    $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+    $headers .= "From:" .$from;
+    mail($to,$subject,$message, $headers);
+
 }
 
 /*
@@ -772,16 +772,16 @@ function gebruikerblok(){
         $resultaat =  $gebruiker ->fetchAll(PDO::FETCH_ASSOC);
         if ($resultaat[0]['geblokeerd'] == 1){
             $deblokeren -> execute(
-            array(
-                ':gebruiker' => $resultaat[0]['gebruikersnaam'],
-            )
-        );
+                array(
+                    ':gebruiker' => $resultaat[0]['gebruikersnaam'],
+                )
+            );
         }else if ($resultaat[0]['geblokeerd'] == 0){
             $blokeren -> execute(
-            array(
-                ':gebruiker' => $resultaat[0]['gebruikersnaam'],
-            )
-        );
+                array(
+                    ':gebruiker' => $resultaat[0]['gebruikersnaam'],
+                )
+            );
         }
 
 
@@ -791,6 +791,48 @@ function gebruikerblok(){
 }
 
 function veilingenVinden ($veilingnaam){
-        
+    try {
+        require('core/dbconnection.php');
+        $veilingen = $dbh ->prepare (" SELECT * FROM select * from Voorwerp Where titel like :titel");
+        $veilingen -> execute(
+            array(
+                ':titel' => '%'.$veilingnaam.'%',
+            )
+        );
+        $veiling = $veilingen ->fetchAll(PDO::FETCH_ASSOC);
+        foreach ( $veiling as $resultaat ){
+            $teller ++;
+            $verkoper = "error";
+            $geblokeerd = "error";
+            if ($resultaat['verkoper'] == 1){
+                $verkoper = "Ja";
+            }else{
+                $verkoper = "nee";
+            }
+            if ($resultaat['geblokeerd'] == 1){
+                $geblokeerd = "Ja";
+            }else{
+                $geblokeerd = "Nee";
+            }
+            echo '<tr>
+                    <th scope="row">'.$teller.'</th>
+                    <td>'.$resultaat['voorwerpnr'].'</td>
+                    <td>'.$resultaat['titel'].'</td>
+                    <td>'.$resultaat['startprijs'].'</td>
+                    <td>'.$resultaat['verzendkosten'].'</td>
+                    <td>'.$resultaat['betalingswijze'].'</td>
+                    <td>'.$resultaat['plaatsnaam'].'</td>
+                    <td>'.$resultaat['looptijd'].'</td>
+                    <td>'.$resultaat['looptijdbegindatum'].'</td> 
+                    <td>'.$resultaat['looptijdeinddatum'].'</td> 
+                    <td>'.$verkoper.'</td>       
+                    <td>'.$geblokeerd.'</td> 
+                      ';
+            blokeren($geblokeerd, $teller, $resultaat['gebruikersnaam'] ); 
+            echo '</tr>';
+        }   
+    } catch (PDOexception $e) {
+        echo "er ging iets mis error: {$e->getMessage()}";
+    }
 }
 ?>
