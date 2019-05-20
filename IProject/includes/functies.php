@@ -605,8 +605,6 @@ function statusOpValidatieZetten($gebruikersnaam){
                 ':gebruikersnaam' => $gebruikersnaam,
             ));
 
-        $verkoperVerificatie = $sqlSelect->fetchAll(PDO::FETCH_ASSOC);
-
     } catch (PDOexception $e) {
         echo "er ging iets mis error: {$e->getMessage()}";
     }

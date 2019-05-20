@@ -35,7 +35,7 @@ if(isset($_SESSION['gebruikersnaam'])){
     </head>
     <body>
         <header>
-            <nav class="navbar navbar-expand-lg navbar-light bg-flame">
+          <nav class="navbar navbar-expand-lg navbar-light bg-flame">
                 <div class="container">
                     <a class="navbar-brand" href="#"><img src="assets/img/EenmaalAndermaal.png" width="40" height="40" title="EenmaalAndermaal" alt="EenmaalAndermaal"></a>
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
@@ -47,22 +47,20 @@ if(isset($_SESSION['gebruikersnaam'])){
                                 <a class="nav-link" href="index.php">Home<span class="sr-only">(current)</span></a>
                             </li>
                         </ul>
-
+                        
                         <?php
                         if (isset($_SESSION['gebruikersnaam'])){ ?>
                               <ul class="navbar-nav">
                                       <li class="nav-item dropdown">
-                                      <a class="nav-link dropdown-toggle" href="#" id="accountbeheer" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                      <a class="nav-link dropdown-toggle" href="#" id="accountbeheer" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                       <?php echo $_SESSION['gebruikersnaam']; ?></a>
                                       <div class="dropdown-menu" aria-labelledby="accountbeheer">
                                           <a class="nav-link" href="#">Mijn account</a>
                                           <a class="dropdown-item" href="#">Beheer</a>
                                           <a class="dropdown-item" href="#">Meldingen</a>
                                           <a class="dropdown-item" href="../informeren.php">FAQ</a>
-                                      <?php if ($VerkoperValidatie){
-                                              
-                                                echo '<a class="dropdown-item" href="../verkoper.php">Verkoper worden</a>';
-                                              
+                                      <?php if ($VerkoperValidatie){                                              
+                                                echo '<a class="dropdown-item" href="../verkoper.php">Verkoper worden</a>';                                            
                                       } ?>    
                                       </li>
                                       <li class="nav-item">
@@ -70,7 +68,7 @@ if(isset($_SESSION['gebruikersnaam'])){
                                       </li>
                                     </ul>
                                     </div>
-                                    </div>
+                                    
                         <?php  } // einde if session actief is
                           else{
                               echo'<ul class="navbar-nav">
@@ -82,8 +80,9 @@ if(isset($_SESSION['gebruikersnaam'])){
                                                   </li>
                                               </ul>';
                           } ?>
+                          </div>
                       </div>
-                </div>
+                
             </nav>
             <nav class="navbar navbar-expand-lg navbar-light bg-orange2 spacing justify-content-md-center">
                 <form class="form-inline my-2 my-md-0" action="catalogus.php">
