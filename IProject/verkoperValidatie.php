@@ -4,10 +4,14 @@ include 'includes/header.php';
 $verkoper = gegevensIngevuld($_SESSION['gebruikersnaam']);
 
 if(!empty(gegevensIngevuld($_SESSION['gebruikersnaam']))) {
-  if($verkoper[0]['gevalideerd']) {
+  if($verkoper[0]['gevalideerd'] == 1) {
     echo '<script language="javascript">window.location.href ="index.php"</script>';
+  }  
   }
-}
+  
+  if(empty(gegevensIngevuld($_SESSION['gebruikersnaam']))) {
+    echo '<script language="javascript">window.location.href ="verkoper.php"</script>';
+  }
   
 $error = false;
 $overEindtijd = false;
