@@ -302,7 +302,7 @@ function landen()
 {
     try {
         require('core/dbconnection.php');
-        $sqlSelect = $dbh-> prepare ("GBA_CODE, NAAM_LAND from Landen");
+        $sqlSelect = $dbh-> prepare ("select NAAM_LAND from Landen");
         $sqlSelect  -> execute();
 
         echo '<label for="inputLanden">Land</label>';
@@ -310,9 +310,10 @@ function landen()
         // Open your drop down box
 
         // Loop through the query results, outputing the options one by one
+        echo '<option value="Nederland" selected>Nederland</option>';
         while ($row = $sqlSelect->fetch(PDO::FETCH_ASSOC)) {
-
-            echo '<option value="'.$row['GBA_CODE'].'">'.$row['NAAM_LAND'].'</option>';
+          
+            echo '<option value="'.$row['NAAM_LAND'].'">'.$row['NAAM_LAND'].'</option>';
         }
         echo '</select>';// Close your drop down box
     } catch (PDOexception $e) {
@@ -594,16 +595,14 @@ function haalVideosOp($rubriek)
     }
 }
 */
-
-function gegevensIngevuld (){
+function statusOpValidatieZetten($gebruikersnaam){
     try {
         require('core/dbconnection.php');
-        $sqlSelect = $dbh->prepare("SELECT verkoper FROM Gebruiker
-              WHERE verkoper = 1 AND gebruikersnaam = :gebruikersnaam ");
+        $sqlSelect = $dbh->prepare("UPDATE Verkoper Set gevalideerd = 1 WHERE gebruikersnaam = :gebruikersnaam");
 
         $sqlSelect->execute(
             array (
-                ':gebruikersnaam' => $_SESSION['gebruikersnaam'],
+                ':gebruikersnaam' => $gebruikersnaam,
             ));
 
         $verkoperVerificatie = $sqlSelect->fetchAll(PDO::FETCH_ASSOC);
@@ -611,11 +610,26 @@ function gegevensIngevuld (){
     } catch (PDOexception $e) {
         echo "er ging iets mis error: {$e->getMessage()}";
     }
+  
+}
 
+function gegevensIngevuld($gebruikersnaam){
+    try {
+        require('core/dbconnection.php');
+        $sqlSelect = $dbh->prepare("SELECT * FROM Verkoper where gebruikersnaam = :gebruikersnaam");
 
-    if (empty($verkoperVerificatie['gebruikersnaam'])){
-        return '<a class="dropdown-item" href="verkoper.php">Verkoper worden</a>';
-    }  
+        $sqlSelect->execute(
+            array (
+                ':gebruikersnaam' => $gebruikersnaam,
+            ));
+
+        $verkoperVerificatie = $sqlSelect->fetchAll(PDO::FETCH_ASSOC);
+        return $verkoperVerificatie;
+
+    } catch (PDOexception $e) {
+        echo "er ging iets mis error: {$e->getMessage()}";
+    }
+  
 }
 
 function setupCatogorien(){

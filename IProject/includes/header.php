@@ -2,6 +2,21 @@
 session_start();
 require 'includes/functies.php';
 require_once 'core/dbconnection.php';
+$VerkoperValidatie = false;
+
+if(isset($_SESSION['gebruikersnaam'])){
+  
+  if(empty(gegevensIngevuld($_SESSION['gebruikersnaam']))){
+    $VerkoperValidatie = true;    
+  }
+  if(!empty(gegevensIngevuld($_SESSION['gebruikersnaam']))){
+    $verkoper = gegevensIngevuld($_SESSION['gebruikersnaam']);
+    if($verkoper[0]['gevalideerd'] == 0){
+      $VerkoperValidatie = true;    
+    }
+  }
+}
+
 ?>
 <!DOCTYPE HTML>
 <html lang="nl">
@@ -34,25 +49,29 @@ require_once 'core/dbconnection.php';
                         </ul>
 
                         <?php
-                        if (isset($_SESSION['gebruikersnaam'])){
-                              echo '<ul class="navbar-nav">
+                        if (isset($_SESSION['gebruikersnaam'])){ ?>
+                              <ul class="navbar-nav">
                                       <li class="nav-item dropdown">
                                       <a class="nav-link dropdown-toggle" href="#" id="accountbeheer" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                      '.$_SESSION['gebruikersnaam'].'</a>
+                                      <?php echo $_SESSION['gebruikersnaam']; ?></a>
                                       <div class="dropdown-menu" aria-labelledby="accountbeheer">
                                           <a class="nav-link" href="#">Mijn account</a>
                                           <a class="dropdown-item" href="#">Beheer</a>
                                           <a class="dropdown-item" href="#">Meldingen</a>
                                           <a class="dropdown-item" href="../informeren.php">FAQ</a>
-                                          '.gegevensIngevuld().'
+                                      <?php if ($VerkoperValidatie){
+                                              
+                                                echo '<a class="dropdown-item" href="../verkoper.php">Verkoper worden</a>';
+                                              
+                                      } ?>    
                                       </li>
                                       <li class="nav-item">
                                           <a class="nav-link" href="index.php?uitlog=uitlog">Uitloggen</a>
                                       </li>
                                     </ul>
                                     </div>
-                                    </div>';
-                          } // einde if session actief is
+                                    </div>
+                        <?php  } // einde if session actief is
                           else{
                               echo'<ul class="navbar-nav">
                                                   <li class="nav-item">

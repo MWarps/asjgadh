@@ -3,7 +3,7 @@ go
 
 --kolom met gebruikersnaam als foreign key altijd genoemd gebruikersnaam
 
-DROP TABLE IF EXISTS  Bod, Verkoper, Verificatie, Gebruikerstelefoon, Illustratie,  Voorwerp,  Rubrieken, Gebruiker, Vragen, Landen, Verificatietypen ;
+DROP TABLE IF EXISTS  Voorwerpinrubriek, Bod, Verkoper, Verificatie, Gebruikerstelefoon, Illustratie,  Voorwerp,  Rubrieken, Gebruiker, Vragen, Landen, Verificatietypen ;
 go
 ----------------------------------------------------------
 -------------------- CREATE TABLES -----------------------
@@ -65,6 +65,7 @@ bank				CHAR(4)			NOT NULL,
 bankrekeningnummer	CHAR(18)		NOT NULL,
 --controle optie nog niet duidelijk
 creditcard			CHAR(19)		NULL,
+gevalideerd			bit				NOT NULL default 0
 CONSTRAINT PK_Verkoper PRIMARY KEY (gebruikersnaam)
 );
 
@@ -211,13 +212,13 @@ CONSTRAINT FK_Bod_Voorwerp
 	ON DELETE CASCADE
 go
 
-ALTER TABLE Voorwerpintabel ADD
+ALTER TABLE Voorwerpinrubriek ADD
 CONSTRAINT FK_voorwerpintabel_voorwerp
 	FOREIGN KEY (voorwerpnr) REFERENCES Voorwerp(voorwerpnr)
 	ON UPDATE NO ACTION
 	ON DELETE NO ACTION,
 CONSTRAINT FK_voorwerpintabel_rubriek 
-	FOREIGN KEY (rubrieknr) REFERENCES Rubriek(rubrieknummer)
+	FOREIGN KEY (rubrieknr) REFERENCES Rubrieken(rubrieknummer)
 	ON UPDATE NO ACTION
 	ON DELETE NO ACTION
 go

@@ -2,9 +2,18 @@
 include 'includes/header.php';
 require_once 'core/dbconnection.php';
 
-if(isset($_SESSION['gebruikersnaam'])){
+if(isset($_SESSION['gebruikersnaam'])) {
   
-    //gegevensIngevuld()
+$verkoper = gegevensIngevuld($_SESSION['gebruikersnaam']);
+  
+  if(!empty(gegevensIngevuld($_SESSION['gebruikersnaam']))) {
+    if($verkoper[0]['gevalideerd'] == 1) {
+      echo '<script language="javascript">window.location.href ="index.php"</script>';
+    }
+    else{
+      echo '<script language="javascript">window.location.href ="verkoperValidatie.php"</script>';
+    } 
+    }
       
   
     
@@ -25,7 +34,6 @@ if(isset($_SESSION['gebruikersnaam'])){
   
   MaakVerkoperBrief($_SESSION['gebruikersnaam']);
   
-  $_SESSION['beschrijving'] = true;
   echo '<script language="javascript">window.location.href ="verkoperValidatie.php"</script>';
   exit();
 }
@@ -44,7 +52,7 @@ if(isset($_SESSION['gebruikersnaam'])){
 
                             <label for="inputTussennaam">Bankrekeningnummer (Verplicht)</label>
                             <input type="text" name="bankrekeningnr" class="form-control" id="inputBankrekeningnr" placeholder="Bankrekeningnr"
-                            pattern="[A-Za-z]*" maxlength="10" value="<?php if($_POST) { echo $_POST['bankrekeningnr'];} ?>">
+                            pattern="[A-Za-z0-9]*" maxlength="10" value="<?php if($_POST) { echo $_POST['bankrekeningnr'];} ?>">
 
                             <label for="inputAchternaam">Creditcard (optioneel)</label>
                             <input type="text" name="creditcard" class="form-control" id="inputcreditcard" placeholder="Creditcard"
