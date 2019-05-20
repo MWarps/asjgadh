@@ -1,15 +1,16 @@
-USE iproject
+--USE iproject
 go
 
 --kolom met gebruikersnaam als foreign key altijd genoemd gebruikersnaam
 
-DROP TABLE IF EXISTS  Verkoper, Verificatie, Gebruikerstelefoon, Illustratie, Vragen, Voorwerp,  Rubrieken, Gebruiker, Landen, Verificatietypen, bod ;
+DROP TABLE IF EXISTS  Verkoper, Verificatie, Gebruikerstelefoon, Illustraties,  Voorwerp,  Rubrieken, Gebruiker, Vragen, Landen, Verificatietypen ;
 go
 ----------------------------------------------------------
 -------------------- CREATE TABLES -----------------------
 ----------------------------------------------------------
 
-CREATE TABLE Vragen (  
+CREATE TABLE Vragen 
+(  
 vraagnr				TINYINT			NOT NULL,  
 vraag				VARCHAR(80)		NOT NULL,  
 CONSTRAINT pk_vraagnr PRIMARY KEY(vraagnr)  
@@ -28,7 +29,8 @@ CREATE TABLE Landen
   CONSTRAINT CHK_DATUM CHECK ( BEGINDATUM < EINDDATUM )
 );
 
-CREATE TABLE Gebruiker (
+CREATE TABLE Gebruiker 
+(
 gebruikersnaam		VARCHAR(50)		NOT NULL,
 voornaam			VARCHAR(50)		NOT NULL,
 achternaam			VARCHAR(51)		NOT NULL,
@@ -55,7 +57,8 @@ CONSTRAINT CK_achternaam	CHECK ( achternaam not like '%[0-9]%'),
 CONSTRAINT CK_plaatsnaam	CHECK ( plaatsnaam not like '%[0-9]%')
 );
 
-CREATE TABLE Verkoper (
+CREATE TABLE Verkoper 
+(
 gebruikersnaam		VARCHAR(50)		NOT NULL,
 bank				CHAR(4)			NOT NULL,
 bankrekeningnummer	CHAR(18)		NOT NULL,
@@ -72,12 +75,14 @@ CONSTRAINT PK_Gebruikerstelefoon PRIMARY KEY (volgnr, gebruikersnaam),
 CONSTRAINT CK_telefoon CHECK (telefoon NOT LIKE '%[a-z]%')
 );
 
-CREATE TABLE Verificatietypen (
+CREATE TABLE Verificatietypen 
+(
 verificatietype		CHAR(5)			NOT NULL,
 CONSTRAINT PK_Verificatietypen PRIMARY KEY (verificatietype)
 );
 
-CREATE TABLE Verificatie (
+CREATE TABLE Verificatie 
+(
 email				VARCHAR(254)	NOT NULL,
 type				CHAR(5)			NOT NULL,
 verificatiecode		INT				NOT NULL,
@@ -94,15 +99,15 @@ betalingswijze		varchar(20)		NOT NULL,
 betalingsinstructie	varchar(70)		NULL,
 plaatsnaam			varchar(28)		NOT NULL,
 land				CHAR(4)			NOT NULL,
-looptijd			tinyint			NOT NULL,
-looptijdbegindagtijdstip datetime	NOT NULL,
-verzendkosten		varchar(9)		NULL,
-verzendinstructies	varchar(70)		NULL,
-verkoper			varchar(50)		NOT NULL,
-koper				varchar(50)		NULL,
-looptijdeindedagtijdstip datetime	NOT NULL,
-veilinggesloten		bit				NOT NULL,
-verkoopprijs		varchar(9)		NULL,
+looptijd			TINYINT			NOT NULL,
+looptijdbegindagtijdstip DATETIME	NOT NULL,
+verzendkosten		VARCHAR(9)		NULL,
+verzendinstructies	VARCHAR(70)		NULL,
+verkoper			VARCHAR(50)		NOT NULL,
+koper				VARCHAR(50)		NULL,
+looptijdeindedagtijdstip DATETIME	NOT NULL,
+veilinggesloten		BIT				NOT NULL,
+verkoopprijs		VARCHAR(9)		NULL
 gezien				int				NOT NULL DEFAULT 0
 CONSTRAINT PK_voorwerpnr PRIMARY KEY (voorwerpnr)
 );
@@ -114,6 +119,9 @@ CREATE TABLE Illustratie
     CONSTRAINT PK_ItemPlaatjes PRIMARY KEY (voorwerpnr, IllustratieFile)
 )
 
+--CREATE INDEX IX_Items_Categorie ON Items (Categorie)			Tabel Rubriek
+--CREATE INDEX IX_Categorieen_Parent ON Categorieen (Parent)	Tabel Rubriek
+
 CREATE TABLE Rubrieken (
 rubrieknummer		INT				NOT NULL,
 rubrieknaam			VARCHAR(100)	NOT NULL,
@@ -122,7 +130,8 @@ volgnr				INT				NOT NULL
 CONSTRAINT PK_rubrieknummer PRIMARY KEY (rubrieknummer)
 );
 
-CREATE TABLE Bod (
+CREATE TABLE Bod 
+(
 euro				VARCHAR(9)		NOT NULL,
 datumentijd			Datetime		NOT NULL,
 gebruikersnaam		VARCHAR(50)		NOT NULL,
