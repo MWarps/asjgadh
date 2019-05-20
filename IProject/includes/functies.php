@@ -312,7 +312,7 @@ function landen()
         // Loop through the query results, outputing the options one by one
         echo '<option value="Nederland" selected>Nederland</option>';
         while ($row = $sqlSelect->fetch(PDO::FETCH_ASSOC)) {
-          
+
             echo '<option value="'.$row['NAAM_LAND'].'">'.$row['NAAM_LAND'].'</option>';
         }
         echo '</select>';// Close your drop down box
@@ -610,7 +610,7 @@ function statusOpValidatieZetten($gebruikersnaam){
     } catch (PDOexception $e) {
         echo "er ging iets mis error: {$e->getMessage()}";
     }
-  
+
 }
 
 function gegevensIngevuld($gebruikersnaam){
@@ -629,7 +629,7 @@ function gegevensIngevuld($gebruikersnaam){
     } catch (PDOexception $e) {
         echo "er ging iets mis error: {$e->getMessage()}";
     }
-  
+
 }
 
 function setupCatogorien(){
@@ -802,13 +802,7 @@ function veilingenVinden ($veilingnaam){
         $veiling = $veilingen ->fetchAll(PDO::FETCH_ASSOC);
         foreach ( $veiling as $resultaat ){
             $teller ++;
-            $verkoper = "error";
             $geblokeerd = "error";
-            if ($resultaat['verkoper'] == 1){
-                $verkoper = "Ja";
-            }else{
-                $verkoper = "nee";
-            }
             if ($resultaat['geblokeerd'] == 1){
                 $geblokeerd = "Ja";
             }else{
@@ -825,8 +819,12 @@ function veilingenVinden ($veilingnaam){
                     <td>'.$resultaat['looptijd'].'</td>
                     <td>'.$resultaat['looptijdbegindatum'].'</td> 
                     <td>'.$resultaat['looptijdeinddatum'].'</td> 
-                    <td>'.$verkoper.'</td>       
+                    <td>'.$resultaat['verkoper'].'</td> 
+                    <td>'.$resultaat['koper'].'</td> 
+                    <td>'.$resultaat['veilinggesloten'].'</td> 
+                    <td>'.$resultaat['verkoopprijs'].'</td>
                     <td>'.$geblokeerd.'</td> 
+                    <td>'.$resultaat[blokeerdatum].'</td> 
                       ';
             blokeren($geblokeerd, $teller, $resultaat['gebruikersnaam'] ); 
             echo '</tr>';

@@ -50,6 +50,8 @@ include 'includes/header.php';
                         <th scope="col">koper</th>
                         <th scope="col">veilinggeloten</th>
                         <th scope="col">verkoopprijs</th>
+                        <th scope="col">geblokeerd</th>
+                        <th scope="col">datum van blokeren</th>
                     </tr>
                 </thead>
                 <tbody>
