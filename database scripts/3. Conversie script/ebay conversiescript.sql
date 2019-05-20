@@ -14,7 +14,7 @@ Location			AS adresregel1,
 NULL				AS adresregel2,
 Postalcode			AS postcode, -- niet overal gestandaardiseerd
 Left(Location, 28)	AS plaatsnaam, -- is vaak het land plaatsnaam is maar bij sommige gebruikers bekend
-Left(Location, 40)	AS land, --country code query !!!!!!
+Location			AS land, --country code query !!!!!!
 '20000101'			AS geboortedatum, -- is niet bekend bij ebay
 CONCAT('asjgadh+', Username, '@gmail.com') AS email, -- email naam nog niet final
 '$2y$10$Ggqn9ZFypjDNwTi.e0WSj.HRyB5SoycCDtef2AnuCY5y5Wzm1h4c6' AS wachtwoord, -- is gehashed in php
@@ -46,7 +46,7 @@ SELECT DISTINCT
 	'Paypal'AS betalingswijze,
 	NULL	AS betalingsinstructie,
 	Locatie AS plaatsnaam,
-LEFT(Locatie,40) AS land, 
+Locatie AS land, 
 	7		AS looptijd,
 	CURRENT_TIMESTAMP AS looptijdbegindagtijdstip,
 	NULL	AS verzendkosten,
@@ -57,7 +57,7 @@ LEFT(Locatie,40) AS land,
 	0		AS veilinggesloten,
 	NULL	as verkoopprijs,
 	0		AS gezien
-	FROM dbo.Items
+FROM dbo.Items
 
 INSERT INTO dbo.Illustratie (voorwerpnr, IllustratieFile)
 select DISTINCT

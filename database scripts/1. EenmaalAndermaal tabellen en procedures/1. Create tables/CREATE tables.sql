@@ -3,7 +3,7 @@ go
 
 --kolom met gebruikersnaam als foreign key altijd genoemd gebruikersnaam
 
-DROP TABLE IF EXISTS  Verkoper, Verificatie, Gebruikerstelefoon, Illustratie, Vragen, Voorwerp,  Rubrieken, Gebruiker, Landen, Verificatietypen ;
+DROP TABLE IF EXISTS  Verkoper, Verificatie, Gebruikerstelefoon, Illustratie, Vragen, Voorwerp,  Rubrieken, Gebruiker, Landen, Verificatietypen, bod ;
 go
 ----------------------------------------------------------
 -------------------- CREATE TABLES -----------------------
@@ -102,7 +102,8 @@ verkoper			varchar(50)		NOT NULL,
 koper				varchar(50)		NULL,
 looptijdeindedagtijdstip datetime	NOT NULL,
 veilinggesloten		bit				NOT NULL,
-verkoopprijs		varchar(9)		NULL
+verkoopprijs		varchar(9)		NULL,
+gezien				int				NOT NULL DEFAULT 0
 CONSTRAINT PK_voorwerpnr PRIMARY KEY (voorwerpnr)
 );
 
@@ -117,7 +118,7 @@ CREATE TABLE Rubrieken (
 rubrieknummer		INT				NOT NULL,
 rubrieknaam			VARCHAR(100)	NOT NULL,
 superrubriek		INT				NULL,
-volgnr				TINYINT			NOT NULL
+volgnr				INT				NOT NULL
 CONSTRAINT PK_rubrieknummer PRIMARY KEY (rubrieknummer)
 );
 
@@ -137,13 +138,13 @@ ALTER TABLE Voorwerp ADD
 CONSTRAINT FK_Verkoper 
 	FOREIGN KEY (verkoper) REFERENCES Gebruiker(gebruikersnaam)
 	ON UPDATE CASCADE
-	ON DELETE NO ACTION
+	ON DELETE CASCADE
 
 ALTER TABLE Illustratie ADD
-CONSTRAINT voorwerpnrVanPlaatjes
+CONSTRAINT FK_voorwerpnrVanPlaatjes
 	FOREIGN KEY(voorwerpnr) REFERENCES Voorwerp(voorwerpnr)
 	ON UPDATE CASCADE
-	ON DELETE NO ACTION
+	ON DELETE CASCADE
 
 ALTER TABLE Gebruiker ADD 
 CONSTRAINT FK_Vraag 
@@ -180,8 +181,8 @@ go
 ALTER TABLE Bod ADD
 CONSTRAINT FK_Bod_Gebruiker
 	FOREIGN KEY (gebruikersnaam) REFERENCES Gebruiker(gebruikersnaam)
-	ON UPDATE CASCADE
-	ON DELETE CASCADE,
+	ON UPDATE NO ACTION
+	ON DELETE NO ACTION,
 CONSTRAINT FK_Bod_Voorwerp
 	FOREIGN KEY (voorwerpnr) REFERENCES Voorwerp(voorwerpnr)
 	ON UPDATE CASCADE
