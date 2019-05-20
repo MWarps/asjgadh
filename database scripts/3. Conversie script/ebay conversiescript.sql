@@ -1,6 +1,7 @@
 delete from dbo.Gebruiker
 delete from dbo.Rubrieken
 delete from dbo.Voorwerp
+delete from dbo.Illustratie
 
 INSERT INTO dbo.Gebruiker (gebruikersnaam, voornaam, achternaam, geslacht, adresregel1, adresregel2, postcode, plaatsnaam, 
 land, geboortedatum, email, wachtwoord, vraag, antwoordtekst, verkoper, beheerder, geblokeerd)
@@ -13,7 +14,7 @@ Location			AS adresregel1,
 NULL				AS adresregel2,
 Postalcode			AS postcode, -- niet overal gestandaardiseerd
 Left(Location, 28)	AS plaatsnaam, -- is vaak het land plaatsnaam is maar bij sommige gebruikers bekend
-6030				AS land, --country code query !!!!!!
+Left(Location, 40)	AS land, --country code query !!!!!!
 '20000101'			AS geboortedatum, -- is niet bekend bij ebay
 CONCAT('asjgadh+', Username, '@gmail.com') AS email, -- email naam nog niet final
 '$2y$10$Ggqn9ZFypjDNwTi.e0WSj.HRyB5SoycCDtef2AnuCY5y5Wzm1h4c6' AS wachtwoord, -- is gehashed in php
@@ -36,23 +37,30 @@ go
 
 INSERT INTO dbo.Voorwerp (voorwerpnr, titel, beschrijving, startprijs, betalingswijze, betalingsinstructie, plaatsnaam, 
 land, looptijd, looptijdbegindagtijdstip, verzendkosten, verzendinstructies, verkoper, koper, looptijdeindedagtijdstip, 
-veilinggesloten, verkoopprijs)
+veilinggesloten, verkoopprijs, gezien)
 SELECT DISTINCT
-	ID AS voorwerpnr,
-	Titel AS titel,
+	ID		AS voorwerpnr,
+	Titel	AS titel,
 	Beschrijving AS beschrijving,
-	Prijs AS startprijs,
-	'Paypal' AS betalingswijze,
-	NULL as betalingsinstructie,
+	Prijs	AS startprijs,
+	'Paypal'AS betalingswijze,
+	NULL	AS betalingsinstructie,
 	Locatie AS plaatsnaam,
-	6030 AS land, -- lukt niet vanwege GBA_CODE !!!!
-	7 AS looptijd,
+LEFT(Locatie,40) AS land, 
+	7		AS looptijd,
 	CURRENT_TIMESTAMP AS looptijdbegindagtijdstip,
-	NULL as verzendkosten,
-	NULL as verzendinstructies,
+	NULL	AS verzendkosten,
+	NULL	AS verzendinstructies,
 	LEFT(Verkoper, 50) AS verkoper,
-	NULL as koper,
+	NULL	AS koper,
 	DATEADD(second, CAST(RAND() * 10 AS INT), DATEADD(day, 7, CURRENT_TIMESTAMP)) AS looptijdeindedagtijdstip, 
-	0 AS veilinggesloten,
-	NULL as verkoopprijs
+	0		AS veilinggesloten,
+	NULL	as verkoopprijs,
+	0		AS gezien
 	FROM dbo.Items
+
+INSERT INTO dbo.Illustratie (voorwerpnr, IllustratieFile)
+select DISTINCT
+	ItemID as voorwerpnr,
+	IllustratieFile as IllustratieFile
+FROM dbo.Illustraties
