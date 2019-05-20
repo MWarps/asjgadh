@@ -3,6 +3,26 @@ include 'email.php';
 include 'email2.php';
 include 'emailBericht.php';
 
+/* advertentie ophalen */
+function haalAdvertentieOp(){
+    try {
+        require('core/dbconnection.php');
+        $sqlSelect = $dbh->prepare("select beschrijving from voorwerp where voorwerpnr = 6576921535");
+
+        $sqlSelect->execute(
+            array(
+                            
+            ));
+        $records = $sqlSelect->fetch(PDO::FETCH_ASSOC);
+        return $records;
+        
+
+    } catch (PDOexception $e) {
+        echo "er ging iets mis error: {$e->getMessage()}";
+    }
+
+}
+
 /* deleting verificatie code*/
 function haalCodeOp($id){
     try {

@@ -23,9 +23,9 @@ include 'includes/header.php';
       
     <div class="card m-3" style="background-color: #f7f7f6;">
     	<div class="row">
-    		<aside class="col-md-5 border-right pr-0">
+    		<div class="col-md-5 border-right pr-0">
           
-    <article class="gallery-wrap border-bottom" >
+    <div class="gallery-wrap border-bottom" >
       <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
         <!-- Indicators -->
         <ol class="carousel-indicators">
@@ -73,7 +73,7 @@ include 'includes/header.php';
         </a>
       </div>
       
-    </article> <!-- gallery-wrap .end// -->
+    </div> <!-- gallery-wrap .end// -->
     <div class="status p-3 border-bottom">
         <div class="icon-product">
           <img src="assets/img/oog.jpg"></img>  100 x gezien
@@ -85,9 +85,9 @@ include 'includes/header.php';
         <a href="#">Reviews (6)</a>
     </div>  
     <button type="button" class="btn btn-primary btn-lg btn-block"><a style="color: white;" href="stuurbericht.php">Stuur bericht!</a></button>
-    		</aside>
-    		<aside class="col-md-7">
-    <article class="card-body px-5">
+  </div>
+    		<div class="col-md-7">
+    <div class="card-body px-5">
     	<h3 class="title mb-3">Productnaam</h3>
 
         <dl class="item-property">
@@ -141,8 +141,8 @@ include 'includes/header.php';
 	</div> <!-- col.// -->
     	</div> <!-- row.// -->
     	
-    </article> <!-- card-body.// -->
-    		</aside> <!-- col.// -->
+    </div> <!-- card-body.// -->
+  </div> <!-- col.// -->
     	</div> <!-- row.// -->
     </div> <!-- card.// -->
 
