@@ -18,11 +18,11 @@ CONSTRAINT pk_vraagnr PRIMARY KEY(vraagnr)
 
 CREATE TABLE Landen
 (
-  GBA_CODE CHAR(4) NOT NULL,
-  NAAM_LAND VARCHAR(40) NOT NULL,
-  BEGINDATUM DATE NULL,
-  EINDDATUM DATE NULL,
-  EER_Lid BIT NOT NULL DEFAULT 0,
+  GBA_CODE		CHAR(4) NOT NULL,
+  NAAM_LAND		VARCHAR(40) NOT NULL,
+  BEGINDATUM	DATE NULL,
+  EINDDATUM		DATE NULL,
+  EER_Lid		BIT NOT NULL DEFAULT 0,
   CONSTRAINT PK_Landen PRIMARY KEY (GBA_CODE),
   CONSTRAINT UQ_Landen UNIQUE (NAAM_LAND),
   CONSTRAINT CHK_CODE CHECK ( LEN(GBA_CODE) = 4 ),
@@ -39,15 +39,15 @@ adresregel1			VARCHAR(71)		NOT NULL,
 adresregel2			VARCHAR(71)		NULL,
 postcode			CHAR(7)			NOT NUll,
 plaatsnaam			VARCHAR(28)		NOT NUll,
-land				CHAR(4)			NOT NULL,
-geboortedatum		DATE			NOT NULL,
+land				VARCHAR(40)		NOT NULL,
+geboortedatum		Date			NOT NULL,
 email				VARCHAR(254)	NOT NULL,
 wachtwoord			VARCHAR(100)	NOT NULL,
 vraag				TINYINT			NOT NULL,
 antwoordtekst		VARCHAR(50)		NOT NULL,
-verkoper			BIT				NOT NUll,
-beheerder			BIT				DEFAULT 0,
-geblokeerd			BIT				DEFAULT 0,
+verkoper			bit				NOT NUll,
+beheerder			bit				NOT NULL DEFAULT 0,
+geblokeerd			bit				NOT NULL DEFAULT 0,
 CONSTRAINT PK_Gebruiker PRIMARY KEY (gebruikersnaam),
 CONSTRAINT CK_gebruiker_geslacht CHECK (geslacht IN ( 'M','F','X') ),
 CONSTRAINT UQ_gebruiker_email UNIQUE(email),
@@ -91,13 +91,13 @@ CONSTRAINT PK_Verificatie PRIMARY KEY (email)
 );
 
 CREATE TABLE Voorwerp (
-voorwerpnr			BIGINT			NOT NULL,
-titel				VARCHAR(100)	NOT NULL,
-beschrijving		VARCHAR(max)	NOT NULL,
-startprijs			VARCHAR(9)		NOT NULL,
-betalingswijze		VARCHAR(20)		NOT NULL,
-betalingsinstructie	VARCHAR(70)		NULL,
-plaatsnaam			VARCHAR(28)		NOT NULL,
+voorwerpnr			bigint			NOT NULL,
+titel				varchar(100)	NOT NULL,
+beschrijving		varchar(max)	NOT NULL,
+startprijs			varchar(9)		NOT NULL,
+betalingswijze		varchar(20)		NOT NULL,
+betalingsinstructie	varchar(70)		NULL,
+plaatsnaam			varchar(28)		NOT NULL,
 land				CHAR(4)			NOT NULL,
 looptijd			TINYINT			NOT NULL,
 looptijdbegindagtijdstip DATETIME	NOT NULL,
@@ -107,24 +107,21 @@ verkoper			VARCHAR(50)		NOT NULL,
 koper				VARCHAR(50)		NULL,
 looptijdeindedagtijdstip DATETIME	NOT NULL,
 veilinggesloten		BIT				NOT NULL,
-verkoopprijs		VARCHAR(9)		NULL,
-geblokkeerd			CHAR(1)			NOT NULL DEFAULT 0,
-blokkeerdatum		DATE			NULL,
+verkoopprijs		VARCHAR(9)		NULL
 CONSTRAINT PK_voorwerpnr PRIMARY KEY (voorwerpnr)
 );
 
-CREATE TABLE Illustraties
+CREATE TABLE Illustratie
 (
-	voorwerpnr		BIGINT			NOT NULL,
-	IllustratieFile VARCHAR(100)	NOT NULL,
+	voorwerpnr bigint NOT NULL,
+	IllustratieFile varchar(100) NOT NULL,
     CONSTRAINT PK_ItemPlaatjes PRIMARY KEY (voorwerpnr, IllustratieFile)
 )
 
 --CREATE INDEX IX_Items_Categorie ON Items (Categorie)			Tabel Rubriek
 --CREATE INDEX IX_Categorieen_Parent ON Categorieen (Parent)	Tabel Rubriek
 
-CREATE TABLE Rubrieken 
-(
+CREATE TABLE Rubrieken (
 rubrieknummer		INT				NOT NULL,
 rubrieknaam			VARCHAR(100)	NOT NULL,
 superrubriek		INT				NULL,
@@ -149,13 +146,9 @@ ALTER TABLE Voorwerp ADD
 CONSTRAINT FK_Verkoper 
 	FOREIGN KEY (verkoper) REFERENCES Gebruiker(gebruikersnaam)
 	ON UPDATE CASCADE
-	ON DELETE NO ACTION,
-	CONSTRAINT FK_VoorwerpLand 
-FOREIGN KEY (land) REFERENCES Landen(GBA_CODE)
-	ON UPDATE CASCADE
 	ON DELETE NO ACTION
 
-ALTER TABLE Illustraties ADD
+ALTER TABLE Illustratie ADD
 CONSTRAINT voorwerpnrVanPlaatjes
 	FOREIGN KEY(voorwerpnr) REFERENCES Voorwerp(voorwerpnr)
 	ON UPDATE CASCADE
@@ -167,7 +160,7 @@ CONSTRAINT FK_Vraag
 	ON UPDATE CASCADE
 	ON DELETE NO ACTION,
 CONSTRAINT FK_Gebruikerland 
-	FOREIGN KEY (land) REFERENCES Landen(GBA_CODE)
+	FOREIGN KEY (land) REFERENCES Landen(NAAM_LAND)
 	ON UPDATE CASCADE
 	ON DELETE NO ACTION
 go
