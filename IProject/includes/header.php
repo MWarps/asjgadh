@@ -35,14 +35,7 @@ if(isset($_SESSION['gebruikersnaam'])){
         
         
     </head>
-    <body>
-        <header>
-          <script> $(function () {
-    $('.dropdown-menu a').click(function (e) {
-        $('.active').removeClass('active');
-    });
-}); </script>
-
+    <body>          
           <nav class="navbar navbar-expand-lg navbar-light bg-flame">
                 <div class="container">
                     <a class="navbar-brand" href="#"><img src="assets/img/EenmaalAndermaal.png" width="40" height="40" title="EenmaalAndermaal" alt="EenmaalAndermaal"></a>
@@ -51,26 +44,27 @@ if(isset($_SESSION['gebruikersnaam'])){
                     </button>
                     <div class="navbar-collapse collapse " id="navbarNavDropdown">
                         <ul class="navbar-nav mr-auto">
-                            <li class="nav-items active">
-                                <a class="nav-link" href="index.php">Home<span class="sr-only">(current)</span></a>
+                            <li class="nav-items">
+                                <a class="nav-link" href="index.php">Home</a>
                             </li>
                         </ul>
                         
                         <?php
                         if (isset($_SESSION['gebruikersnaam'])){ ?>
-                              <ul class="navbar-nav">
-                                      <li class="nav-item dropdown">
-                                      <a class="nav-link dropdown-toggle" href="#" id="accountbeheer" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                      <?php echo $_SESSION['gebruikersnaam']; ?></a>
+                              <ul class="navbar-nav">                            
+                                      <div class="nav-item dropdown">
+                                        <button class="btn dropdown-toggle" type="button" id="accountbeheer" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                          <?php echo $_SESSION['gebruikersnaam']; ?>
+                                        </button>                                                           
                                       <div class="dropdown-menu" aria-labelledby="accountbeheer">
-                                          <a class="nav-link" href="#">Mijn account</a>
                                           <a class="dropdown-item" href="#">Beheer</a>
                                           <a class="dropdown-item" href="#">Meldingen</a>
                                           <a class="dropdown-item" href="../informeren.php">FAQ</a>
                                       <?php if ($VerkoperValidatie){                                              
-                                                echo '<a class="dropdown-item" href="../verkoper.php">Verkoper worden</a>';                                            
+                                    echo '<a class="dropdown-item" href="../verkoper.php">Verkoper worden</a>';                                            
                                       } ?>    
-                                      </li>
+                                    </div>
+                                  </div>
                                       <li class="nav-item">
                                           <a class="nav-link" href="index.php?uitlog=uitlog">Uitloggen</a>
                                       </li>
@@ -93,15 +87,15 @@ if(isset($_SESSION['gebruikersnaam'])){
                 
             </nav>
             <nav class="navbar navbar-expand-lg navbar-light bg-orange2 spacing justify-content-md-center">
-                <form class="form-inline my-2 my-md-0" action="catalogus.php">
+                <form class="form-inline my-2 my-md-0 needs-validation" novalidate action="catalogus.php" method="POST">
                     <ul class="navbar-nav">
                         <li class="navbar-item p-2">
-                            <input class="form-control" type="text" placeholder="Product Naam" aria-label="Search">
+                            <input class="form-control" name="zoektekst" type="text" placeholder="Product Naam" aria-label="Search">
                         </li>
                     </ul>
-                    
-                                      
-                
+                      <select name="Rubriek" class="form-control" id="inputRubriek">
+                        <?php HaalRubriekop(); ?>
+                        </select>
                     <ul class="navbar-nav">
                         <li class="navbar-item p-2">
                             <button type="submit" class="btn btn-light">Verstuur</button>
@@ -109,4 +103,4 @@ if(isset($_SESSION['gebruikersnaam'])){
                     </ul>
                 </form>
             </nav>
-        </header>
+      
