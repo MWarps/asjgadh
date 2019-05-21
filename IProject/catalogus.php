@@ -11,6 +11,7 @@ if(isset($_GET['zoek'])){
 }
 $rubriek = 157347;
 ?>
+                
 <div class="container-fluid">
     <div class="row">
         <div class="col">

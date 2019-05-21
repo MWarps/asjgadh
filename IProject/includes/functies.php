@@ -7,7 +7,7 @@ include 'emailBericht.php';
 function haalAdvertentieOp($rubriek, $zoektekst){
     try {
         require('core/dbconnection.php');
-        $sqlSelect = $dbh->prepare("select top 10 *, illustratieFile from Voorwerp, Voorwerpinrubriek, Illustratie
+        $sqlSelect = $dbh->prepare("select top 20 *, illustratieFile from Voorwerp, Voorwerpinrubriek, Illustratie
         where Voorwerp.voorwerpnr = Voorwerpinrubriek.voorwerpnr 
         AND Voorwerp.voorwerpnr = Illustratie.voorwerpnr
 		    AND Voorwerpinrubriek.rubrieknr = 157347
@@ -24,8 +24,12 @@ function haalAdvertentieOp($rubriek, $zoektekst){
               //  print_r($row);
               $teller = 0;
         foreach ($row as $rij => $id) {
+          if(strlen($row[$teller]['titel']) >= 40){
+            $row[$teller]['titel'] = substr($row[$teller]['titel'],0,40);
+            $row[$teller]['titel'] .= '...';
+          }
             echo '
-            <div class="col-md-4">
+            <div class="col-md-4 pb-3">
             <div class="card" style="width: 18rem;">
             <img class="card-img-top" src="'.$row[$teller]['illustratieFile'].'" alt="Foto bestaat niet">
             <h5 class="card-header"><a href="#">'.$row[$teller]['titel'].'</a></h5>
@@ -686,9 +690,27 @@ function catogorieSoort (){
         }
     }       
 }
-function HaalRubriekop()
+
+function HaalRubriekNaamOp($id)
 {
-  $id = -1;
+    try {
+        require('core/dbconnection.php');
+        $sqlSelect = $dbh-> prepare ("select rubrieknaam from Rubrieken where rubrieknummer = :id");
+        $sqlSelect  -> execute(
+            array(
+                ':id' =>  $id
+            ));
+            
+          $row = $sqlSelect->fetch(PDO::FETCH_ASSOC);
+          return $row;  
+              
+    } catch (PDOexception $e) {
+        echo "er ging iets mis error: {$e->getMessage()}";
+    }
+} 
+
+function HaalRubriekop($id)
+{
     try {
         require('core/dbconnection.php');
         $sqlSelect = $dbh-> prepare ("select * from Rubrieken where superrubriek = :id");
@@ -699,10 +721,8 @@ function HaalRubriekop()
   
         // Loop through the query results, outputing the options one by one    
         while ($row = $sqlSelect->fetch(PDO::FETCH_ASSOC)) {
-
-            echo '<option value="'.$row['rubrieknaam'].'">'.$row['rubrieknaam'].'</option>';
-        }
-      
+            echo '<a class="dropdown-item" href="catalogus.php?id='.$row['rubrieknummer'].'">'.$row['rubrieknaam'].'</a>';
+        }      
     } catch (PDOexception $e) {
         echo "er ging iets mis error: {$e->getMessage()}";
     }
