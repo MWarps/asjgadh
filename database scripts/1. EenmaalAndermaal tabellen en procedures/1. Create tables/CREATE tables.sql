@@ -3,7 +3,7 @@ go
 
 --kolom met gebruikersnaam als foreign key altijd genoemd gebruikersnaam
 
-DROP TABLE IF EXISTS  Voorwerpinrubriek, Bod, Verkoper, Verificatie, Gebruikerstelefoon, Illustratie,  Voorwerp,  Rubrieken, Gebruiker, Vragen, Landen, Verificatietypen ;
+DROP TABLE IF EXISTS  Voorwerpinrubriek, Bod,  Rubrieken, Illustratie,  Voorwerp, Verificatie, Verificatietypen, Gebruikerstelefoon, Verkoper, Gebruiker, Landen, Vragen ;
 go
 ----------------------------------------------------------
 -------------------- CREATE TABLES -----------------------
@@ -18,11 +18,11 @@ CONSTRAINT pk_vraagnr PRIMARY KEY(vraagnr)
 
 CREATE TABLE Landen
 (
-  GBA_CODE		CHAR(4) NOT NULL,
-  NAAM_LAND		VARCHAR(40) NOT NULL,
-  BEGINDATUM	DATE NULL,
-  EINDDATUM		DATE NULL,
-  EER_Lid		BIT NOT NULL DEFAULT 0,
+  GBA_CODE			CHAR(4)			NOT NULL,
+  NAAM_LAND			VARCHAR(40)		NOT NULL,
+  BEGINDATUM		DATE			NULL,
+  EINDDATUM			DATE			NULL,
+  EER_Lid			BIT				NOT NULL DEFAULT 0,
   CONSTRAINT PK_Landen PRIMARY KEY (GBA_CODE),
   CONSTRAINT UQ_Landen UNIQUE (NAAM_LAND),
   CONSTRAINT CHK_CODE CHECK ( LEN(GBA_CODE) = 4 ),
@@ -40,15 +40,15 @@ adresregel2			VARCHAR(71)		NULL,
 postcode			CHAR(7)			NOT NUll,
 plaatsnaam			VARCHAR(28)		NOT NUll,
 land				VARCHAR(40)		NOT NULL,
-geboortedatum		Date			NOT NULL,
+geboortedatum		DATE			NOT NULL,
 email				VARCHAR(254)	NOT NULL,
 wachtwoord			VARCHAR(100)	NOT NULL,
 vraag				TINYINT			NOT NULL,
 antwoordtekst		VARCHAR(50)		NOT NULL,
-verkoper			bit				NOT NUll,
-beheerder			bit				NOT NULL DEFAULT 0,
-geblokeerd			bit				NOT NULL DEFAULT 0,
-gezien				bit				NOT NULL DEFAULT 0
+verkoper			BIT				NOT NUll,
+beheerder			BIT				NOT NULL DEFAULT 0,
+geblokeerd			BIT				NOT NULL DEFAULT 0,
+gezien				BIT				NOT NULL DEFAULT 0
 CONSTRAINT PK_Gebruiker PRIMARY KEY (gebruikersnaam),
 CONSTRAINT CK_gebruiker_geslacht CHECK (geslacht IN ( 'M','F','X') ),
 CONSTRAINT UQ_gebruiker_email UNIQUE(email),
@@ -65,7 +65,7 @@ bank				CHAR(4)			NOT NULL,
 bankrekeningnummer	CHAR(18)		NOT NULL,
 --controle optie nog niet duidelijk
 creditcard			CHAR(19)		NULL,
-gevalideerd			bit				NOT NULL default 0
+gevalideerd			BIT				NOT NULL default 0
 CONSTRAINT PK_Verkoper PRIMARY KEY (gebruikersnaam)
 );
 
@@ -93,13 +93,13 @@ CONSTRAINT PK_Verificatie PRIMARY KEY (email)
 );
 
 CREATE TABLE Voorwerp (
-voorwerpnr			bigint			NOT NULL,
-titel				varchar(100)	NOT NULL,
-beschrijving		varchar(max)	NOT NULL,
-startprijs			varchar(9)		NOT NULL,
-betalingswijze		varchar(20)		NOT NULL,
-betalingsinstructie	varchar(70)		NULL,
-plaatsnaam			varchar(28)		NOT NULL,
+voorwerpnr			BIGINT			NOT NULL,
+titel				VARCHAR(100)	NOT NULL,
+beschrijving		VARCHAR(max)	NOT NULL,
+startprijs			VARCHAR(9)		NOT NULL,
+betalingswijze		VARCHAR(20)		NOT NULL,
+betalingsinstructie	VARCHAR(70)		NULL,
+plaatsnaam			VARCHAR(28)		NOT NULL,
 land				VARCHAR(40)		NOT NULL,
 looptijd			TINYINT			NOT NULL,
 looptijdbegindagtijdstip DATETIME	NOT NULL,
@@ -110,23 +110,24 @@ koper				VARCHAR(50)		NULL,
 looptijdeindedagtijdstip DATETIME	NOT NULL,
 veilinggesloten		BIT				NOT NULL,
 verkoopprijs		VARCHAR(9)		NULL,
-gezien				int				NOT NULL DEFAULT 0,
-geblokkeerd			bit			DEFAULT 0,
-blokkeerdatum		Date			null,
+gezien				INT				NOT NULL DEFAULT 0,
+geblokkeerd			BIT				NOT NULL DEFAULT 0,
+blokkeerdatum		DATE			NULL,
 CONSTRAINT PK_voorwerpnr PRIMARY KEY (voorwerpnr)
 );
 
 CREATE TABLE Illustratie
 (
-	voorwerpnr bigint NOT NULL,
-	IllustratieFile varchar(100) NOT NULL,
+	voorwerpnr		BIGINT			NOT NULL,
+	IllustratieFile VARCHAR(100)	NOT NULL,
     CONSTRAINT PK_ItemPlaatjes PRIMARY KEY (voorwerpnr, IllustratieFile)
 )
 
 --CREATE INDEX IX_Items_Categorie ON Items (Categorie)			Tabel Rubriek
 --CREATE INDEX IX_Categorieen_Parent ON Categorieen (Parent)	Tabel Rubriek
 
-CREATE TABLE Rubrieken (
+CREATE TABLE Rubrieken 
+(
 rubrieknummer		INT				NOT NULL,
 rubrieknaam			VARCHAR(100)	NOT NULL,
 superrubriek		INT				NULL,
