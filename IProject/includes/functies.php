@@ -841,7 +841,7 @@ function veilingenVinden($veilingnaam){
     $teller =0;
     try {
         require('core/dbconnection.php');
-        $veilingen = $dbh ->prepare (" SELECT * FROM select * from Voorwerp Where titel like :titel");
+        $veilingen = $dbh ->prepare (" select * from Voorwerp Where titel like :titel");
         $veilingen -> execute(
             array(
                 ':titel' => '%'.$veilingnaam.'%',

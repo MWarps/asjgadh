@@ -57,7 +57,7 @@ if (isset( $_GET['id'])){
                         <th scope="col">email</th>
                         <th scope="col">Verkoper</th>
                         <th scope="col">Geblokeerd</th>
-                        <th scope="col">Vink aan:</th>
+                        <th scope="cxol">Vink aan:</th>
                     </tr>
                 </thead>
                 <tbody>

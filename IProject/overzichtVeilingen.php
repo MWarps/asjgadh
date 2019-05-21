@@ -57,7 +57,7 @@ include 'includes/header.php';
                 <tbody>
                     <?php
                     if (isset($_POST['veilingzoeken'])){
-                       veilingenVinden($veilingnaam);
+                       veilingenVinden($_POST['veilingzoeken']);
                     }
                     ?>
                 </tbody>
