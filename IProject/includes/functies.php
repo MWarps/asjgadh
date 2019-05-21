@@ -23,6 +23,8 @@ function haalAdvertentieOp(){
 
 }
 
+
+
 /* deleting verificatie code*/
 function haalCodeOp($id){
     try {
@@ -661,13 +663,37 @@ function catogorieSoort (){
         }
     }       
 }
+function HaalRubriekop()
+{
+  $id = -1;
+    try {
+        require('core/dbconnection.php');
+        $sqlSelect = $dbh-> prepare ("select * from Rubrieken where superrubriek = :id");
+        $sqlSelect  -> execute(
+            array(
+                ':id' =>  $id
+            ));
+  
+        // Loop through the query results, outputing the options one by one    
+        while ($row = $sqlSelect->fetch(PDO::FETCH_ASSOC)) {
+
+            echo '<option value="'.$row['rubrieknaam'].'">'.$row['rubrieknaam'].'</option>';
+        }
+      
+    } catch (PDOexception $e) {
+        echo "er ging iets mis error: {$e->getMessage()}";
+    }
+} 
+  
+
+
 
 function directorieVinden(){
     $id = (end($_SESSION['catogorie']) );
     $teller = 0;
     try {
         require('core/dbconnection.php');
-        $catogorien = $dbh->prepare("select * from Categorieen where parent = :id ");
+        $catogorien = $dbh->prepare("select * from Rubrieken where superrubriek = :id ");
         $catogorien -> execute(
             array(
                 ':id' =>  $id,
@@ -677,8 +703,8 @@ function directorieVinden(){
         $print = $catogorien->fetchAll(PDO::FETCH_ASSOC);
         foreach ( $print  as $Name => $id){
             echo '<a class="btn btn-outline-dark"  
-            href="catalogus.php?id='.$print[$teller]['ID'].'&naam='.$print[$teller]['Name'].'" 
-            role="button">'.$print[$teller]['Name'].'</a>';
+            href="catalogus.php?id='.$print[$teller]['rubrieknummer'].'&naam='.$print[$teller]['rubrieknaam'].'" 
+            role="button">'.$print[$teller]['rubrieknaam'].'</a>';
             $teller++ ;
         }
     } catch (PDOexception $e) {
