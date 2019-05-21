@@ -11,7 +11,7 @@ SELECT a.superrubriek, a.rubrieknummer
 	FROM dbo.Rubrieken a JOIN cte c ON a.superrubriek = c.rubrieknummer
 												)
 
-SELECT TOP 20 *
+SELECT TOP 20 * --hier aangeven welke waardes gereturned worden
 	FROM dbo.Voorwerp
 	join dbo.Voorwerpinrubriek
 	on dbo.Voorwerp.voorwerpnr = dbo.Voorwerpinrubriek.voorwerpnr

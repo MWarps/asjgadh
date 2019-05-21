@@ -126,7 +126,8 @@ CREATE TABLE Illustratie
 --CREATE INDEX IX_Items_Categorie ON Items (Categorie)			Tabel Rubriek
 --CREATE INDEX IX_Categorieen_Parent ON Categorieen (Parent)	Tabel Rubriek
 
-CREATE TABLE Rubrieken (
+CREATE TABLE Rubrieken 
+(
 rubrieknummer		INT				NOT NULL,
 rubrieknaam			VARCHAR(100)	NOT NULL,
 superrubriek		INT				NULL,
