@@ -857,10 +857,11 @@ function gebruikerblok(){
     }
 }
 
-function veilingenVinden ($veilingnaam){
+function veilingenVinden($veilingnaam){
+    $teller =0;
     try {
         require('core/dbconnection.php');
-        $veilingen = $dbh ->prepare (" SELECT * FROM select * from Voorwerp Where titel like :titel");
+        $veilingen = $dbh ->prepare (" select * from Voorwerp Where titel like :titel");
         $veilingen -> execute(
             array(
                 ':titel' => '%'.$veilingnaam.'%',
@@ -891,13 +892,26 @@ function veilingenVinden ($veilingnaam){
                     <td>'.$resultaat['veilinggesloten'].'</td> 
                     <td>'.$resultaat['verkoopprijs'].'</td>
                     <td>'.$geblokeerd.'</td> 
-                    <td>'.$resultaat[blokeerdatum].'</td> 
+                    <td>'.$resultaat[blokeerdatum].'</td>
                       ';
-            blokeren($geblokeerd, $teller, $resultaat['gebruikersnaam'] ); 
+            veilingblokeren($geblokeerd, $teller, $resultaat['titel'] ); 
+           
             echo '</tr>';
         }   
     } catch (PDOexception $e) {
         echo "er ging iets mis error: {$e->getMessage()}";
+    }
+}
+
+function veilingblokeren($geblokeerd, $teller, $titel){
+    if ($geblokeerd == "Ja"){
+        echo ' <td>   
+    <a class="btn btn-primary" href="overzichtVeilingen.php?id='.$teller.'&naam='.$titel.'" role="button">Deblokeer</a> 
+   </td> ';
+    } else if ($geblokeerd == "Nee"){
+        echo ' <td>
+    <a class="btn btn-primary" href="overzichtVeilingen.php?id='.$teller.'&naam='.$titel.'" role="button">Blokeer</a>
+      </td>  ';
     }
 }
 ?>
