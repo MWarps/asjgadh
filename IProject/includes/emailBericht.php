@@ -338,7 +338,7 @@ function emailBericht($bericht, $Verzender, $Ontvanger)
                       <p>Klik hier om naar de website te gaan: <a href="http://iproject34.icasites.nl">EenmaalAndermaal.nl</a>
                               
                       </td>
-                    </tr>
+                    </tr>https://github.com/leemunroe/responsive-html-email-template
                   </table>
                 </td>
               </tr>
@@ -370,4 +370,6 @@ function emailBericht($bericht, $Verzender, $Ontvanger)
 </html>';
 
     return $tekst;
+    
+    // Bron: https://github.com/leemunroe/responsive-html-email-template
 }
