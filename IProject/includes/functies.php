@@ -4,19 +4,42 @@ include 'email2.php';
 include 'emailBericht.php';
 
 /* advertentie ophalen */
-function haalAdvertentieOp(){
+function haalAdvertentieOp($rubriek, $zoektekst){
     try {
         require('core/dbconnection.php');
-        $sqlSelect = $dbh->prepare("select beschrijving from voorwerp where voorwerpnr = 6576921535");
+        $sqlSelect = $dbh->prepare("select top 10 *, illustratieFile from Voorwerp, Voorwerpinrubriek, Illustratie
+        where Voorwerp.voorwerpnr = Voorwerpinrubriek.voorwerpnr 
+        AND Voorwerp.voorwerpnr = Illustratie.voorwerpnr
+		    AND Voorwerpinrubriek.rubrieknr = 157347
+		    AND titel like '%a%'
+        AND illustratiefile like 'dt_1%' ");
 
         $sqlSelect->execute(
-            array(
-
-            ));
-        $records = $sqlSelect->fetch(PDO::FETCH_ASSOC);
-        return $records;
-
-
+          /*  array(
+              ':rubriek' => $rubriek,
+              'zoektekst' => $zoektekst        
+            )*/
+          );
+              $row = $sqlSelect->fetchAll(PDO::FETCH_ASSOC);
+              //  print_r($row);
+              $teller = 0;
+        foreach ($row as $rij => $id) {
+            echo '
+            <div class="col-md-4">
+            <div class="card" style="width: 18rem;">
+            <img class="card-img-top" src="'.$row[$teller]['illustratieFile'].'" alt="Foto bestaat niet">
+            <h5 class="card-header"><a href="#">'.$row[$teller]['titel'].'</a></h5>
+            <div class="card-body">
+            <h4 class="card-text">'.$row[$teller]['startprijs'].'</h4>
+            <p class="card-text"><a href="#">'.$row[$teller]['verkoper'].'</a><br>
+            '.$row[$teller]['land'].', '.$row[$teller]['plaatsnaam'].'</p>
+            <a href="#" class="btn btn-block btn-primary">Ga naar artikel</a>
+            </div>
+            </div>
+            </div>';
+            $teller++;
+        }
+    
     } catch (PDOexception $e) {
         echo "er ging iets mis error: {$e->getMessage()}";
     }

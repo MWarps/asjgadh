@@ -1,8 +1,15 @@
 <?php
 include 'includes/header.php';
 setupCatogorien();
-
-
+$zoektekst = '';
+$rubriek;
+if(isset($_GET['zoek'])){
+  $rubriek = $_GET['rubriek'];
+  if(isset($_GET['zoektekst'])){
+    $zoektekst = $_GET['zoektekst'];
+  }
+}
+$rubriek = 157347;
 ?>
 <div class="container-fluid">
     <div class="row">
@@ -25,52 +32,12 @@ setupCatogorien();
           </div>
           <div class="col-md-9">
           <div class="row">
-            
-            <div class="col-md-4">
-            <div class="card" style="width: 18rem;">
-            <img class="card-img-top" src="https://dummyimage.com/600x400/55595c/fff" alt="Card image cap">
-            <h5 class="card-header"><a href="#">Product Naam</a></h5>
-            <div class="card-body">
-            <h4 class="card-text">€1,50</h4>
-            <p class="card-text"><a href="#">Naam Verkoper</a><br>
-            Land, stad</p>
-            <a href="#" class="btn btn-block btn-primary">Ga naar artikel</a>
-            </div>
-            </div>
-            </div>
-
-<div class="col-md-4">
-<div class="card" style="width: 18rem;">
-<img class="card-img-top" src="https://dummyimage.com/600x400/55595c/fff" alt="Card image cap">
-<h5 class="card-header"><a href="#">Product Naam</a></h5>
-<div class="card-body">
-<h4 class="card-text">BIEDEN</h4>
-<p class="card-text"><a href="#">Naam Verkoper</a><br>
-Land, stad</p>
-<a href="#" class="btn btn-primary">Ga naar artikel</a>
-</div>
-</div>
-</div>
-
-<div class="col-md-4">
-<div class="card" style="width: 18rem;">
-<img class="card-img-top" src="https://dummyimage.com/600x400/55595c/fff" alt="Card image cap">
-<h5 class="card-header"><a href="#">Product Naam</a></h5>
-<div class="card-body">
-<h4 class="card-text">€125,00</h4>
-<p class="card-text"><a href="#">Naam Verkoper</a><br>
-Land, stad</p>
-<a href="#" class="btn btn-primary">Ga naar artikel</a>
-</div>
-</div>
-</div>
+          <?php haalAdvertentieOp($rubriek, $zoektekst) ?>
         </div> 
       </div>  
       </div>
     </div>
 </div>
-
-
         <?php 
     include 'includes/footer.php' 
         ?>

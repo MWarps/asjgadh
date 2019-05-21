@@ -87,18 +87,18 @@ if(isset($_SESSION['gebruikersnaam'])){
                 
             </nav>
             <nav class="navbar navbar-expand-lg navbar-light bg-orange2 spacing justify-content-md-center">
-                <form class="form-inline my-2 my-md-0 needs-validation" novalidate action="catalogus.php" method="POST">
+                <form class="form-inline my-2 my-md-0 needs-validation" novalidate action="catalogus.php" method="get">
                     <ul class="navbar-nav">
                         <li class="navbar-item p-2">
                             <input class="form-control" name="zoektekst" type="text" placeholder="Product Naam" aria-label="Search">
                         </li>
                     </ul>
-                      <select name="Rubriek" class="form-control" id="inputRubriek">
+                      <select name="rubriek" class="form-control" id="inputRubriek">
                         <?php HaalRubriekop(); ?>
                         </select>
                     <ul class="navbar-nav">
                         <li class="navbar-item p-2">
-                            <button type="submit" class="btn btn-light">Verstuur</button>
+                            <button type="submit" name="zoek" id="zoek" class="btn btn-light">Verstuur</button>
                         </li>
                     </ul>
                 </form>
