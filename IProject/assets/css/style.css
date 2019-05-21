@@ -51,6 +51,10 @@
   -ms-flex: 1;
   flex: 1;
 }
+
+.dropdown-toggle.active-dropdown::after {
+    transform: rotate(-90deg);
+}
 /* =============================================
                       Aside
    =============================================*/
@@ -105,11 +109,22 @@ body {
   margin-right: auto;
   
 }
-
+/* =============================================
+                      Catalogus
+   =============================================*/
+   .thumbnail img{
+     max-height: 170px;
+     max-width: 170px; 
+     object-fit: scale-down;
+     display: block;
+     margin-left: auto;
+     margin-right: auto;
+   }
+   
 /* =============================================
                       Product
    =============================================*/
-  /* Style the Image Used to Trigger the Modal */
+
   
   .card-size{
   width: 18rem;

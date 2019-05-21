@@ -32,9 +32,17 @@ if(isset($_SESSION['gebruikersnaam'])){
         <!-- Custom css -->
         <link rel="stylesheet" type="text/css"  href="../assets/css/style.css"/>
         <link rel="stylesheet" type="text/css"  href="assets/css/style.css"/>
+        
+        
     </head>
     <body>
         <header>
+          <script> $(function () {
+    $('.dropdown-menu a').click(function (e) {
+        $('.active').removeClass('active');
+    });
+}); </script>
+
           <nav class="navbar navbar-expand-lg navbar-light bg-flame">
                 <div class="container">
                     <a class="navbar-brand" href="#"><img src="assets/img/EenmaalAndermaal.png" width="40" height="40" title="EenmaalAndermaal" alt="EenmaalAndermaal"></a>
@@ -43,7 +51,7 @@ if(isset($_SESSION['gebruikersnaam'])){
                     </button>
                     <div class="navbar-collapse collapse " id="navbarNavDropdown">
                         <ul class="navbar-nav mr-auto">
-                            <li class="nav-items">
+                            <li class="nav-items active">
                                 <a class="nav-link" href="index.php">Home<span class="sr-only">(current)</span></a>
                             </li>
                         </ul>
@@ -91,21 +99,9 @@ if(isset($_SESSION['gebruikersnaam'])){
                             <input class="form-control" type="text" placeholder="Product Naam" aria-label="Search">
                         </li>
                     </ul>
-                    <ul class="navbar-nav">
-                        <li class="navbar-item p-2">
-                            <input class="form-control" type="text" placeholder="Selecteer Rubriek" aria-label="Search">
-                        </li>
-                    </ul>
-                    <ul class="navbar-nav">
-                        <li class="navbar-item p-2">
-                            <input class="form-control" type="text" placeholder="Postcode" aria-label="Search">
-                        </li>
-                    </ul>
-                    <ul class="navbar-nav">
-                        <li class="navbar-item p-2">
-                            <input class="form-control" type="text" placeholder="Selecteer afstand" aria-label="Search">
-                        </li>
-                    </ul>
+                    
+                                      
+                
                     <ul class="navbar-nav">
                         <li class="navbar-item p-2">
                             <button type="submit" class="btn btn-light">Verstuur</button>
