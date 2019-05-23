@@ -120,20 +120,20 @@ function zijnErBiedingen($voorwerpnr){
 }
 
 function VoorwerpGezien($voorwerpnr) {
-  try {
-      require('core/dbconnection.php');
-      $sqlSelect = $dbh->prepare(" UPDATE Voorwerp
+    try {
+        require('core/dbconnection.php');
+        $sqlSelect = $dbh->prepare(" UPDATE Voorwerp
       Set gezien = gezien + 1
       Where voorwerpnr = :voorwerpnr");
 
-      $sqlSelect->execute(
-          array(
-            ':voorwerpnr' => $voorwerpnr
-          ));
+        $sqlSelect->execute(
+            array(
+                ':voorwerpnr' => $voorwerpnr
+            ));
 
-  } catch (PDOexception $e) {
-      echo "er ging iets mis error: {$e->getMessage()}";
-  }
+    } catch (PDOexception $e) {
+        echo "er ging iets mis error: {$e->getMessage()}";
+    }
 }
 
 function updateBieden($bod, $gebruikersnaam, $voorwerpnr){
@@ -149,10 +149,10 @@ function updateBieden($bod, $gebruikersnaam, $voorwerpnr){
               ':voorwerpnr' => $voorwerpnr
           ));
 
-  } catch (PDOexception $e) {
-      echo "er ging iets mis error: {$e->getMessage()}";
-  }
-  
+    } catch (PDOexception $e) {
+        echo "er ging iets mis error: {$e->getMessage()}";
+    }
+
 }
 
 function Biedingen($voorwerpnr){
@@ -169,10 +169,14 @@ function Biedingen($voorwerpnr){
               echo '<li class="list-group-item">€'.$row['euro'].' '.$row['gebruikersnaam'].' '.date("d.m.Y H:i", strtotime($row['datumentijd'])).'</li>';    
           }
 
-  } catch (PDOexception $e) {
-      echo "er ging iets mis error: {$e->getMessage()}";
-  }
-  
+        while ($row = $sqlSelect->fetch(PDO::FETCH_ASSOC)) {
+            echo '<li class="list-group-item"><a href="#">€'.$row['euro'].' '.$row['gebruikersnaam'].' '.$row['datumentijd'].'</a></li>';    
+        }
+
+    } catch (PDOexception $e) {
+        echo "er ging iets mis error: {$e->getMessage()}";
+    }
+
 }
 function DetailAdvertentie($id)
 {
@@ -220,7 +224,7 @@ function haalAdvertentieOp($rubriek){
             </div>
             </div>';
         }
-    
+
     } catch (PDOexception $e) {
         echo "er ging iets mis error: {$e->getMessage()}";
     }
@@ -860,9 +864,15 @@ function catogorieToevoeging (){
 
 function catogorieSoort (){
     $teller =0;
+    $titel;
     foreach($_SESSION['catogorie'] as $level => $id){
         if ($teller ==0){
-            echo '<li class="breadcrumb-item"><a href="catalogus.php?id='.$id.'&naam='.$level.' " >'.$level.'</a></li>';
+            if ($id == -1){
+                $titel = "Hoofdmenu" ;        
+            }else {
+                $titel = $level;
+            }
+            echo '<li class="breadcrumb-item"><a href="catalogus.php?id='.$id.'&naam='.$level.' " >'.$titel.'</a></li>';
             $teller++;
         }
     }       
@@ -877,10 +887,10 @@ function HaalRubriekNaamOp($id)
             array(
                 ':id' =>  $id
             ));
-            
-          $row = $sqlSelect->fetch(PDO::FETCH_ASSOC);
-          return $row;  
-              
+
+        $row = $sqlSelect->fetch(PDO::FETCH_ASSOC);
+        return $row;  
+
     } catch (PDOexception $e) {
         echo "er ging iets mis error: {$e->getMessage()}";
     }
@@ -895,7 +905,7 @@ function HaalRubriekop($id)
             array(
                 ':id' =>  $id
             ));
-  
+
         // Loop through the query results, outputing the options one by one    
         while ($row = $sqlSelect->fetch(PDO::FETCH_ASSOC)) {
             echo '<a class="dropdown-item" href="catalogus.php?id='.$row['rubrieknummer'].'">'.$row['rubrieknaam'].'</a>';
@@ -904,7 +914,7 @@ function HaalRubriekop($id)
         echo "er ging iets mis error: {$e->getMessage()}";
     }
 } 
-  
+
 
 
 
@@ -921,19 +931,32 @@ function directorieVinden(){
         );
 
         $print = $catogorien->fetchAll(PDO::FETCH_ASSOC);
-        foreach ( $print  as $Name => $id){
+        foreach ( $print as $Name => $id){ 
             echo '<a class="btn btn-outline-dark"  
-            href="catalogus.php?id='.$print[$teller]['superrubiek'].'&naam='.$print[$teller]['rubrieknaam'].'" 
-            role="button">'.$print[$teller]['rubrieknaam'].'</a>';
+                    href="catalogus.php?id='.$print[$teller]['rubrieknummer'].'&naam='.$print[$teller]['rubrieknaam'].'" 
+                    role="button">'.$print[$teller]['rubrieknaam'].'</a>';
             $teller++ ;
         }
+       
+        if(empty($print)){
+            $terug = $dbh -> prepare("select * from Rubrieken where rubrieknummer = ( select  superrubriek from Rubrieken where rubrieknummer = :id)");
+            $terug -> execute (
+            array(
+            ':id' => $id,
+            )
+            );
+            $resultaat = $terug->fetchAll(PDO::FETCH_ASSOC);
+           echo '<a class="btn btn-outline-dark"  
+                    href="catalogus.php?id='.$resultaat[0]['rubrieknummer'].'&naam='.$resultaat[0]['rubrieknaam'].'" 
+                    role="button">er zijn geen sub-catogorien beschikbaar. Klik hier om terug te gaan</a>';
+        }
+        
     } catch (PDOexception $e) {
-        echo "er ging iets mis error: {$e->getMessage()}";
+        // echo "er ging iets mis error: {$e->getMessage()}";
     }
 }
 
 function gebruikersvinden($gebruikersnaam){
-
     $teller = 0;
     try {
         require('core/dbconnection.php');
@@ -1072,7 +1095,7 @@ function veilingenVinden($veilingnaam){
                     <td>'.$resultaat[blokeerdatum].'</td>
                       ';
             veilingblokeren($geblokeerd, $teller, $resultaat['titel'] ); 
-           
+
             echo '</tr>';
         }   
     } catch (PDOexception $e) {

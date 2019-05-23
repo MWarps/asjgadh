@@ -40,8 +40,8 @@ $verkoper = gegevensIngevuld($_SESSION['gebruikersnaam']);
 
 ?>
     <div class="container">
-        <div class="row ">
-          <div class="offset-3 col-md-6 mt-4">
+        <div class="row justify-content-center">
+          <div class="col-md-6 mt-4">
             <div class="jumbotron bg-dark text-white" style="padding: 2rem">
                 <form class="needs-validation" novalidate action='verkoper.php' method="post">
                     <h1 class="h3 mb-3 text-center">Registreer je hier als verkoper!</h1>

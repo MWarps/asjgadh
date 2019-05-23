@@ -70,11 +70,13 @@ if(isset($_POST['bieden'])){
          <ol class="carousel-indicators">
            <li data-target="#carousel-example-generic" data-slide-to="0" class="active"><img src="../pics/<?php echo $advertentie['illustratieFile']; ?>" alt="..."></li>
            <?php $Illustratie1 = HaalIllustratiesOp($advertentie['voorwerpnr']);
+           
            $teller = 1;       
-          foreach ($Illustratie1 as $rij) {
+          foreach ($Illustratie1 as $rij => $id) {
+            if(!empty($Illustratie1[$teller]['illustratieFile'])){
              echo '<li data-target="#carousel-example-generic" data-slide-to="'.$teller.'"><img src="../pics/'.$Illustratie1[$teller]['illustratieFile'].'" alt="..."></li>';
              $teller++;    
-           }  
+           }  }
            ?>           
          </ol>
         
@@ -91,13 +93,14 @@ if(isset($_POST['bieden'])){
           $Illustratie2 = HaalIllustratiesOp($advertentie['voorwerpnr']);
           $teller = 1;
           foreach ($Illustratie2 as $rij) {
+            if(!empty($Illustratie1[$teller]['illustratieFile'])){
             echo '<div class="carousel-item">
                     <div class="img-big-wrap">
                       <img src="../pics/'.$Illustratie2[$teller]['illustratieFile'].'" alt="...">
                     </div>           
                  </div>';
             $teller++;    
-          } 
+          } }
           ?>
          </div>
          <!-- Controls -->

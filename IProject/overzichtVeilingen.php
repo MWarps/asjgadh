@@ -5,8 +5,8 @@ include 'includes/header.php';
 ?>
 
 <div class="container">
-    <div class="row">
-        <div class="offset-3 col-md-6 mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6 mt-4">
             <h1 class="h3 mb-3 font-weight-normal text-center">Beheerders omgeving</h1>
             <h2 class="h3 mb-3 font-weight-normal text-center">Toegestane acties:</h2>
             <ul class="list-group">
@@ -16,8 +16,8 @@ include 'includes/header.php';
         </div>
     </div>
     <form class="needs-validation" novalidate action='overzichtVeilingen.php' method="post">
-        <div class="row">
-            <div class="offset-1 col-md-10">
+        <div class="row justify-content-center">
+            <div class="col-md-10">
                 <h1 class="h3 mb-3 font-weight-normal text-center">Veilingsnaam zoeken</h1>
                 <div class="input-group mb-6">
                     <div class="input-group-prepend">
@@ -29,8 +29,8 @@ include 'includes/header.php';
             </div>
         </div><!--/row-->
     </form>
-    <div class="row">
-        <div class="offset-0 col-md-12">
+    <div class="row justify-content-center">
+        <div class="col-md-12">
             <h1 class="h3 offset-0 mb-3 font-weight-normal text-center">Resultaten:</h1>
             <table class="table">
                 <thead class="thead-dark">

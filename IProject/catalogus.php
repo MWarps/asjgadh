@@ -1,6 +1,12 @@
 <?php
 include 'includes/header.php';
-setupCatogorien();
+if (!isset($_SESSION['catogorie'])){
+    setupCatogorien();
+}
+
+if(isset($_GET['id'])){
+    $_SESSION['catogorie']['id'] = $_GET['id'];
+}
 
 ?>
 
@@ -32,5 +38,5 @@ setupCatogorien();
 </div>
 
 <?php 
-    include 'includes/footer.php' 
+include 'includes/footer.php' 
 ?>

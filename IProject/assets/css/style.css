@@ -112,9 +112,9 @@ body {
 /* =============================================
                       Catalogus
    =============================================*/
-   .thumbnail img{
-     max-height: 170px;
-     max-width: 170px; 
+   .thumbnail img {
+     max-height: 180px;
+     max-width: 180px; 
      object-fit: scale-down;
      display: block;
      margin-left: auto;
@@ -438,12 +438,19 @@ body {
                       Mobile
    =============================================*/
 @media only screen and (max-width : 520px) {
+  /* =============================================
+                      Homepage
+   =============================================*/
  .carousel {
    display:none;
  }
-  .hovereffect img{
+ .hovereffect img{
     width:100%;
-  }
+ }
+  /* =============================================
+                     Inloggen
+  =============================================*/
+  .
 }
 
 @media (min-width: 979px) {
