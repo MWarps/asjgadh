@@ -74,8 +74,8 @@ if(isset($_SESSION['gebruikersnaam'])){
                                       <li class="nav-item">
                                           <a class="nav-link" href="index.php?uitlog=uitlog">Uitloggen</a>
                                       </li>
-                                    </ul>
-                                    </div>                                    
+                              </ul>
+                      </div>                                    
                         <?php  } // einde if session actief is
                           else{
                               echo'<ul class="navbar-nav">
@@ -88,8 +88,7 @@ if(isset($_SESSION['gebruikersnaam'])){
                                    </ul>';
                           } ?>
                           </div>
-                      </div>
-                
-            </nav>
+                      </div>          
+                    </nav>
             
       
