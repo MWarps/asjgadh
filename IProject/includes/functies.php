@@ -3,6 +3,84 @@ include 'email.php';
 include 'email2.php';
 include 'emailBericht.php';
 
+function VoorwerpGezien($voorwerpnr) {
+  try {
+      require('core/dbconnection.php');
+      $sqlSelect = $dbh->prepare(" UPDATE Voorwerp
+      Set gezien = gezien + 1
+      Where voorwerpnr = :voorwerpnr");
+
+      $sqlSelect->execute(
+          array(
+            ':voorwerpnr' => $voorwerpnr
+          ));
+
+  } catch (PDOexception $e) {
+      echo "er ging iets mis error: {$e->getMessage()}";
+  }
+}
+
+function updateBieden($bod, $gebruikersnaam, $datumentijd, $voorwerpnr){
+  try {
+      require('core/dbconnection.php');
+      $sqlSelect = $dbh->prepare("INSERT INTO bod (euro, datumentijd, gebruikersnaam, voorweprnr)
+      values (:bod, :gebruikersnaam, :datumentijd, :voorwerpnr)");
+
+      $sqlSelect->execute(
+          array(
+              ':bod' => $bod,
+              ':gebruikersnaam' => $gebruikersnaam,
+              ':datumentijd' => $datumentijd,
+              ':voorwerpnr' => $voorwerpnr
+          ));
+
+  } catch (PDOexception $e) {
+      echo "er ging iets mis error: {$e->getMessage()}";
+  }
+  
+}
+
+function Biedingen($voorwerpnr){
+  try {
+      require('core/dbconnection.php');
+      $sqlSelect = $dbh->prepare("select * from Bod where voorwerpnr = :voorwerpnr");
+
+      $sqlSelect->execute(
+          array(
+              ':voorwerpnr' => $voorwerpnr
+          ));
+        
+          while ($row = $sqlSelect->fetch(PDO::FETCH_ASSOC)) {
+              echo '<li class="list-group-item"><a href="#">€'.$row['euro'].' '.$row['gebruikersnaam'].' '.$row['datumentijd'].'</a></li>';    
+          }
+
+  } catch (PDOexception $e) {
+      echo "er ging iets mis error: {$e->getMessage()}";
+  }
+  
+}
+function DetailAdvertentie($id)
+{
+    try {
+        require('core/dbconnection.php');
+        $sqlSelect = $dbh->prepare("select top 4*, illustratieFile from Voorwerp, Illustratie
+        where Voorwerp.voorwerpnr = Illustratie.voorwerpnr
+        AND Voorwerp.voorwerpnr = :id");
+
+        $sqlSelect->execute(
+            array(
+                ':id' => $id              
+            ));
+        $records = $sqlSelect->fetch(PDO::FETCH_ASSOC);
+
+        return $records;
+
+    } catch (PDOexception $e) {
+        echo "er ging iets mis error: {$e->getMessage()}";
+    }
+
+}
+
 /* advertentie ophalen */
 function haalAdvertentieOp($rubriek, $zoektekst){
     try {
