@@ -878,7 +878,7 @@ function catogorieToevoeging (){
     $_SESSION['catogorie'] = $_SESSION['catogorie']  + $array2; 
 }// einde functie
 
-function catogorieSoort (){
+function catogorieSoort($pagina) {
     $teller =0;
     $titel;
     foreach($_SESSION['catogorie'] as $level => $id){
@@ -888,7 +888,7 @@ function catogorieSoort (){
             }else {
                 $titel = $level;
             }
-            echo '<li class="breadcrumb-item"><a href="catalogus.php?id='.$id.'&naam='.$level.' " >'.$titel.'</a></li>';
+            echo '<li class="breadcrumb-item"><a href="'.$pagina.'?id='.$id.'&naam='.$level.' " >'.$titel.'</a></li>';
             $teller++;
         }
     }       
@@ -934,7 +934,7 @@ function HaalRubriekop($id)
 
 
 
-function directorieVinden(){
+function directorieVinden($pagina){
     $id = (end($_SESSION['catogorie']) );
     $teller = 0;
     try {
@@ -949,7 +949,7 @@ function directorieVinden(){
         $print = $catogorien->fetchAll(PDO::FETCH_ASSOC);
         foreach ( $print as $Name => $id){ 
             echo '<a class="btn btn-outline-dark"  
-                    href="catalogus.php?id='.$print[$teller]['rubrieknummer'].'&naam='.$print[$teller]['rubrieknaam'].'" 
+                    href="'.$pagina.'?id='.$print[$teller]['rubrieknummer'].'&naam='.$print[$teller]['rubrieknaam'].'" 
                     role="button">'.$print[$teller]['rubrieknaam'].'</a>';
             $teller++ ;
         }
@@ -962,10 +962,24 @@ function directorieVinden(){
             )
             );
             $resultaat = $terug->fetchAll(PDO::FETCH_ASSOC);
+            if($pagina == 'catalogus.php'){
            echo '<a class="btn btn-outline-dark"  
-                    href="catalogus.php?id='.$resultaat[0]['rubrieknummer'].'&naam='.$resultaat[0]['rubrieknaam'].'" 
-                    role="button">er zijn geen sub-catogorien beschikbaar. Klik hier om terug te gaan</a>';
+                    href="'.$pagina.'?id='.$resultaat[0]['rubrieknummer'].'&naam='.$resultaat[0]['rubrieknaam'].'" 
+                    role="button">Er zijn geen sub-catogorien beschikbaar. Klik hier om terug te gaan</a>';
         }
+        if($pagina == 'veilen.php'){
+          $terug1 = $dbh -> prepare("select * from Rubrieken where rubrieknummer = :id");
+          $terug1 -> execute (
+          array(
+          ':id' => $id));
+          $resultaat1 = $terug1->fetchAll(PDO::FETCH_ASSOC);
+          $_SESSION['rubriek'] = $resultaat1[0]['rubrieknummer'];
+        echo  '<a class="btn"  
+                   href="'.$pagina.'?id='.$resultaat[0]['rubrieknummer'].'&naam='.$resultaat[0]['rubrieknaam'].'" 
+                   role="button">Uw gekozen rubriek is: <strong>'.$resultaat1[0]['rubrieknaam'].'<br></strong> Klik <strong> hier</strong>
+                   om naar de vorige rubriek te gaan.</a>';
+          }
+      }
         
     } catch (PDOexception $e) {
         // echo "er ging iets mis error: {$e->getMessage()}";

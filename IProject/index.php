@@ -1,5 +1,6 @@
 <?php
 include 'includes/header.php';
+$pagina = 'catalogus.php';
 setupCatogorien();
 // Kijkt er geklikt is op de knop uitloggen
 if (isset($_GET['uitlog'])){
@@ -122,7 +123,7 @@ if(isset($_SESSION['status'])){
             <div class="card bg-light mb-3">
                 <div class="card-header bg-orange2 text-white text-uppercase"><i class="fa fa-list"></i> categorie&euml;n </div>
                 <button class="dropdown-menu card-header bg-orange2 text-white text-uppercase">categorie</button>
-                <?php    directorieVinden() ?>
+                <?php    directorieVinden($pagina) ?>
             </div>
         </div>
     <!--/span-->

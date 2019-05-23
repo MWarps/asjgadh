@@ -1,5 +1,8 @@
 <?php
 include 'includes/header.php';
+$pagina = 'catalogus.php';
+$_SESSION['catalogus'] = true;
+
 if (!isset($_SESSION['catogorie'])){
     setupCatogorien();
 }
@@ -15,7 +18,7 @@ if(isset($_GET['id'])){
         <div class="col">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
-                    <?php catogorieSoort(); ?>
+                    <?php catogorieSoort($pagina); ?>
                 </ol>
             </nav>
         </div>
@@ -26,7 +29,7 @@ if(isset($_GET['id'])){
         <div class="col-md-3">
             <div class="card bg-light mb-3">
                 <div class="card-header bg-flame text-white text-uppercase"><i class="fa fa-list"></i> categorie&euml;n </div>
-                <?php directorieVinden() ?>
+                <?php directorieVinden($pagina) ?>
             </div>        
         </div>
         <div class="col-md-9">

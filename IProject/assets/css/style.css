@@ -129,6 +129,11 @@ body {
   .card-size{
   width: 18rem;
   }
+  
+  .card-breedte{
+    width: 100%;
+  }
+  
   .gallery-wrap .img-big-wrap img {
       max-height: 450px;
       max-width: 100%;
