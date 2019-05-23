@@ -3,6 +3,46 @@ include 'email.php';
 include 'email2.php';
 include 'emailBericht.php';
 
+function HaalIllustratiesOp($voorwerpnr){
+  
+  try {
+      require('core/dbconnection.php');
+      $sqlSelect = $dbh->prepare("select illustratieFile from Voorwerp, Illustratie
+      where Voorwerp.voorwerpnr = Illustratie.voorwerpnr
+      AND Voorwerp.voorwerpnr = :voorwerpnr");
+
+      $sqlSelect->execute(
+          array(
+          ':voorwerpnr' => $voorwerpnr
+          ));
+          
+          $records = $sqlSelect->fetchAll(PDO::FETCH_ASSOC);  
+          return $records;    
+        
+           
+  } catch (PDOexception $e) {
+      echo "er ging iets mis error: {$e->getMessage()}";
+  } 
+}
+
+function zijnErBiedingen($voorwerpnr){
+  try {
+      require('core/dbconnection.php');
+      $sqlSelect = $dbh->prepare("select * from bod where voorwerpnr = :voorwerpnr order by euro desc");
+
+      $sqlSelect->execute(
+          array(
+          ':voorwerpnr' => $voorwerpnr
+          ));
+          
+          $records = $sqlSelect->fetch(PDO::FETCH_ASSOC);  
+          return $records;     
+           
+  } catch (PDOexception $e) {
+      echo "er ging iets mis error: {$e->getMessage()}";
+  }  
+}
+
 function VoorwerpGezien($voorwerpnr) {
   try {
       require('core/dbconnection.php');
@@ -20,17 +60,16 @@ function VoorwerpGezien($voorwerpnr) {
   }
 }
 
-function updateBieden($bod, $gebruikersnaam, $datumentijd, $voorwerpnr){
+function updateBieden($bod, $gebruikersnaam, $voorwerpnr){
   try {
       require('core/dbconnection.php');
-      $sqlSelect = $dbh->prepare("INSERT INTO bod (euro, datumentijd, gebruikersnaam, voorweprnr)
-      values (:bod, :gebruikersnaam, :datumentijd, :voorwerpnr)");
+      $sqlSelect = $dbh->prepare("INSERT INTO bod (euro, gebruikersnaam, voorwerpnr)
+      values (:bod, :gebruikersnaam, :voorwerpnr)");
 
       $sqlSelect->execute(
           array(
               ':bod' => $bod,
               ':gebruikersnaam' => $gebruikersnaam,
-              ':datumentijd' => $datumentijd,
               ':voorwerpnr' => $voorwerpnr
           ));
 
@@ -43,7 +82,7 @@ function updateBieden($bod, $gebruikersnaam, $datumentijd, $voorwerpnr){
 function Biedingen($voorwerpnr){
   try {
       require('core/dbconnection.php');
-      $sqlSelect = $dbh->prepare("select * from Bod where voorwerpnr = :voorwerpnr");
+      $sqlSelect = $dbh->prepare("select top 5 * from Bod where voorwerpnr = :voorwerpnr order by euro desc");
 
       $sqlSelect->execute(
           array(
@@ -51,7 +90,7 @@ function Biedingen($voorwerpnr){
           ));
         
           while ($row = $sqlSelect->fetch(PDO::FETCH_ASSOC)) {
-              echo '<li class="list-group-item"><a href="#">€'.$row['euro'].' '.$row['gebruikersnaam'].' '.$row['datumentijd'].'</a></li>';    
+              echo '<li class="list-group-item">€'.$row['euro'].' '.$row['gebruikersnaam'].' '.date("d.m.Y H:i", strtotime($row['datumentijd'])).'</li>';    
           }
 
   } catch (PDOexception $e) {
