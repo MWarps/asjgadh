@@ -29,10 +29,10 @@ include 'includes/header.php';
             </div>
         </div><!--/row-->
     </form>
-    <div class="row justify-content-center">
+    <div class="row">
         <div class="col-md-12">
-            <h1 class="h3 offset-0 mb-3 font-weight-normal text-center">Resultaten:</h1>
-            <table class="table">
+            <h1 class="h3 mb-3 font-weight-normal text-center">Resultaten:</h1>
+            <table class="table table-responsive">
                 <thead class="thead-dark">
                     <tr>
                         <th scope="col">#</th>
