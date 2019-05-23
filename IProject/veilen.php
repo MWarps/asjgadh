@@ -6,7 +6,7 @@ include 'includes/header.php';
 <div class="container">
     <div class="row">
         <div class="offset-3 col-md-10 mt-2">
-            <div class="needs-validation" novalidate action='register.php' method="post">
+            <div class="needs-validation" novalidate action='veilen.php' method="post">
                 <h1 class="h3 mb-2 text-center "> Veiling starten </h1>
                 <p class=" mb-2 text-center " > Hier kunt u een voorwerp te koop aan bieden, vul alle onderstaande velden in.</p>
 
@@ -90,12 +90,18 @@ include 'includes/header.php';
 
                 <div class="form-row">
                     <div class="form-group col-md-4">
-                        <label for="inputImages">Voeg afbeeldingen toe</label>
-                        <input type="image" name="rImage class="form-control" id="inputImage" placeholder="..."
-                               value="<?php if($_POST) { echo $_POST['rImage'];} ?>" required>
-                        <div class="invalid-feedback">
-                            Voeg minimaal 1 en maximaal 4 afbeeldingen toe.
-                        </div>
+                        <form>
+                            <div class="form-group">
+                                <label for="exampleFormControlFile1">Voeg minimaal 1 afbeelding toe</label>
+                                <input type="file" class="form-control-file pb-4" id="exampleFormControlFile1" required>
+                                <label for="exampleFormControlFile2"></label>
+                                <input type="file" class="form-control-file pb-4" id="exampleFormControlFile1">
+                                <label for="exampleFormControlFile2"></label>
+                                <input type="file" class="form-control-file pb-4" id="exampleFormControlFile1">
+                                <label for="exampleFormControlFile2"></label>
+                                <input type="file" class="form-control-file pb-4" id="exampleFormControlFile1">
+                            </div>
+                        </form>
                     </div>
                 </div>
 
@@ -126,13 +132,13 @@ include 'includes/header.php';
 
 
                 <div class="form-row">
-
                     <div class="form-group col-md-4">
-
                         <label for="inputLooptijd">Looptijd</label>
-                        <button class="btn btn-primary" type="submit">5 dagen</button>
-                        <button class="btn btn-primary" type="submit">7 dagen</button>
-                        <button class="btn btn-primary" type="submit">10 dagen</button>
+                        <form action="idk" method="get">
+                        <button class="btn btn-primary" type="submit" value="5">5 dagen</button>
+                        <button class="btn btn-primary" type="submit" value="7">7 dagen</button>
+                        <button class="btn btn-primary" type="submit" value="10">10 dagen</button>
+                        </form>
                     </div>
                 </div>
 
