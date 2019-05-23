@@ -36,6 +36,7 @@ FROM dbo.Categorieen
 
 go 
 
+-- alle koersen komen van www.wisselkoers.nl op 23/05/2019 om 11:11
 INSERT INTO dbo.Voorwerp (voorwerpnr, titel, beschrijving, startprijs, betalingswijze, betalingsinstructie, plaatsnaam, 
 land, looptijd, looptijdbegindagtijdstip, verzendkosten, verzendinstructies, verkoper, koper, looptijdeindedagtijdstip, 
 veilinggesloten, verkoopprijs, gezien)
@@ -59,6 +60,82 @@ Locatie AS land,
 	NULL	as verkoopprijs,
 	0		AS gezien
 FROM dbo.Items
+WHERE Valuta = 'EUR'
+
+INSERT INTO dbo.Voorwerp (voorwerpnr, titel, beschrijving, startprijs, betalingswijze, betalingsinstructie, plaatsnaam, 
+land, looptijd, looptijdbegindagtijdstip, verzendkosten, verzendinstructies, verkoper, koper, looptijdeindedagtijdstip, 
+veilinggesloten, verkoopprijs, gezien)
+SELECT DISTINCT
+	ID		AS voorwerpnr,
+	Titel	AS titel,
+	Beschrijving AS beschrijving,
+	Prijs * 0.667	AS startprijs,
+	'Paypal'AS betalingswijze,
+	NULL	AS betalingsinstructie,
+	Locatie AS plaatsnaam,
+Locatie AS land, 
+	7		AS looptijd,
+	CURRENT_TIMESTAMP AS looptijdbegindagtijdstip,
+	NULL	AS verzendkosten,
+	NULL	AS verzendinstructies,
+	LEFT(Verkoper, 50) AS verkoper,
+	NULL	AS koper,
+	DATEADD(second, CAST(RAND() * 10 AS INT), DATEADD(day, 7, CURRENT_TIMESTAMP)) AS looptijdeindedagtijdstip, 
+	0		AS veilinggesloten,
+	NULL	as verkoopprijs,
+	0		AS gezien
+FROM dbo.Items
+WHERE Valuta = 'CAD'
+
+INSERT INTO dbo.Voorwerp (voorwerpnr, titel, beschrijving, startprijs, betalingswijze, betalingsinstructie, plaatsnaam, 
+land, looptijd, looptijdbegindagtijdstip, verzendkosten, verzendinstructies, verkoper, koper, looptijdeindedagtijdstip, 
+veilinggesloten, verkoopprijs, gezien)
+SELECT DISTINCT
+	ID		AS voorwerpnr,
+	Titel	AS titel,
+	Beschrijving AS beschrijving,
+	Prijs * 0.898	AS startprijs,
+	'Paypal'AS betalingswijze,
+	NULL	AS betalingsinstructie,
+	Locatie AS plaatsnaam,
+Locatie AS land, 
+	7		AS looptijd,
+	CURRENT_TIMESTAMP AS looptijdbegindagtijdstip,
+	NULL	AS verzendkosten,
+	NULL	AS verzendinstructies,
+	LEFT(Verkoper, 50) AS verkoper,
+	NULL	AS koper,
+	DATEADD(second, CAST(RAND() * 10 AS INT), DATEADD(day, 7, CURRENT_TIMESTAMP)) AS looptijdeindedagtijdstip, 
+	0		AS veilinggesloten,
+	NULL	as verkoopprijs,
+	0		AS gezien
+FROM dbo.Items
+WHERE Valuta = 'USD'
+
+INSERT INTO dbo.Voorwerp (voorwerpnr, titel, beschrijving, startprijs, betalingswijze, betalingsinstructie, plaatsnaam, 
+land, looptijd, looptijdbegindagtijdstip, verzendkosten, verzendinstructies, verkoper, koper, looptijdeindedagtijdstip, 
+veilinggesloten, verkoopprijs, gezien)
+SELECT DISTINCT
+	ID		AS voorwerpnr,
+	Titel	AS titel,
+	Beschrijving AS beschrijving,
+	Prijs * 1.134	AS startprijs,
+	'Paypal'AS betalingswijze,
+	NULL	AS betalingsinstructie,
+	Locatie AS plaatsnaam,
+Locatie AS land, 
+	7		AS looptijd,
+	CURRENT_TIMESTAMP AS looptijdbegindagtijdstip,
+	NULL	AS verzendkosten,
+	NULL	AS verzendinstructies,
+	LEFT(Verkoper, 50) AS verkoper,
+	NULL	AS koper,
+	DATEADD(second, CAST(RAND() * 10 AS INT), DATEADD(day, 7, CURRENT_TIMESTAMP)) AS looptijdeindedagtijdstip, 
+	0		AS veilinggesloten,
+	NULL	as verkoopprijs,
+	0		AS gezien
+FROM dbo.Items
+WHERE Valuta = 'GBP'
 
 INSERT INTO dbo.Illustratie (voorwerpnr, IllustratieFile)
 select DISTINCT

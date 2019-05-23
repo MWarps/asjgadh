@@ -1,15 +1,13 @@
 <?php
 include 'includes/header.php';
-setupCatogorien();
-$zoektekst = '';
-$rubriek;
-if(isset($_GET['zoek'])){
-    $rubriek = $_GET['rubriek'];
-    if(isset($_GET['zoektekst'])){
-        $zoektekst = $_GET['zoektekst'];
-    }
+if (!isset($_SESSION['catogorie'])){
+    setupCatogorien();
 }
-$rubriek = 157347;
+
+if(isset($_GET['id'])){
+    $_SESSION['catogorie']['id'] = $_GET['id'];
+}
+
 ?>
 
 <div class="container-fluid">
@@ -33,12 +31,12 @@ $rubriek = 157347;
         </div>
         <div class="col-md-9">
             <div class="row">
-                <?php haalAdvertentieOp($rubriek, $zoektekst) ?>
+                <?php haalAdvertentieOp($rubriek) ?>
             </div> 
         </div>  
     </div>
 </div>
 
 <?php 
-    include 'includes/footer.php' 
+include 'includes/footer.php' 
 ?>

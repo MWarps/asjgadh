@@ -8,11 +8,11 @@ if (isset($_SESSION['gebruikersnaam']) && isset($_GET['id'])){
   
   $gebruiker = HaalGebruikerOp($_SESSION['gebruikersnaam']);
   
-  
   if(isset($_POST['Volgende'])){
     $Verstuurd = true;
     $titel = $_POST['titel'];
     $bericht = $_POST['bericht'];
+    
     stuurbericht($titel, $bericht, $gebruiker, $_SESSION['id']);
     
   }
@@ -63,7 +63,8 @@ if (isset($_SESSION['gebruikersnaam']) && isset($_GET['id'])){
 }
 
 else{
-      include 'includes/404error.php';
+  echo '<script language="javascript">window.location.href ="login.php"</script>';
+  exit();
 }
 include 'includes/footer.php';
 ?>

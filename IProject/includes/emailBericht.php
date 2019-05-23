@@ -1,6 +1,7 @@
 <?php
 function emailBericht($bericht, $Verzender, $Ontvanger)
 {
+  // https://github.com/leemunroe/responsive-html-email-template
     $tekst = '
  <html>
   <head>
@@ -325,8 +326,7 @@ function emailBericht($bericht, $Verzender, $Ontvanger)
                   <table role="presentation" border="0" cellpadding="0" cellspacing="0">
                     <tr>
                       <td>
-                      <h2> Hallo '.$Ontvanger['voornaam'].'</h2>,
-                      <br>
+                      <h2> Hallo '.$Ontvanger['voornaam'].',</h2>
                       <br>
                       <p>Een gebruiker op de website EenmaalAndermaal is geinteresseerd of heeft vragen over uw product:</p>
                       <br>
@@ -338,7 +338,8 @@ function emailBericht($bericht, $Verzender, $Ontvanger)
                       <p>Klik hier om naar de website te gaan: <a href="http://iproject34.icasites.nl">EenmaalAndermaal.nl</a>
                               
                       </td>
-                    </tr>https://github.com/leemunroe/responsive-html-email-template
+                    </tr>
+                    
                   </table>
                 </td>
               </tr>
