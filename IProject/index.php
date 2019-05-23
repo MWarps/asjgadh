@@ -120,8 +120,8 @@ if(isset($_SESSION['status'])){
     <div class="row mt-2">
      <div class="col-md-3">
             <div class="card bg-light mb-3">
-                <div class="card-header bg-flame text-white text-uppercase"><i class="fa fa-list"></i> categorie&euml;n </div>
-                <button class="dropdown-menu card-header bg-flame text-white text-uppercase">categorie</button>
+                <div class="card-header bg-orange2 text-white text-uppercase"><i class="fa fa-list"></i> categorie&euml;n </div>
+                <button class="dropdown-menu card-header bg-orange2 text-white text-uppercase">categorie</button>
                 <?php    directorieVinden() ?>
             </div>
         </div>

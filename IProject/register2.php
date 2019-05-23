@@ -54,8 +54,8 @@ if (isset($_POST['rVolgende'])) {
 
 ?>
     <div class="container-fluid h-100">
-        <div class="row h-100">
-            <div class="offset-2 col-md-8">
+        <div class="row h-100 justify-content-center">
+            <div class="col-md-8">
                 <form class="needs-validation" novalidate action="register2.php" method="POST"
                 oninput='rHerhaalWachtwoord.setCustomValidity(rHerhaalWachtwoord.value != rWachtwoord.value ? "Passwords do not match." : "")'>
                     <h1 class="h3 mb-3 text-center">Registreer je hier!</h1>
@@ -228,9 +228,9 @@ if (isset($_POST['rVolgende'])) {
                         </div>
                         </div>
                     </div>
-                    <button type="submit" name="rVolgende" id="rVolgende" class="btn bg-flame">
-                      Volgende
-                    </button>
+                    <div class="form-row text-center">
+                        <button type="submit" name="rVolgende" id="rVolgende" class="btn bg-flame text-center">Volgende</button>
+                    </div>
                 </form>
             </div>
         </div>

@@ -25,8 +25,8 @@ if (!isset($_SESSION['gebruikersnaam'])){
 
 ?>
 <div class="container">
-    <div class="row">
-        <div class="offset-3 col-md-6 mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6 mt-4">
             <form class="needs-validation form-signin" novalidate method="post" action="login.php">
                 <h1 class="h3 mb-3 font-weight-normal text-center">Login</h1>
                 <?php

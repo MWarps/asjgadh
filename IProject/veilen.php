@@ -4,8 +4,8 @@ include 'includes/header.php';
 
 
 <div class="container">
-    <div class="row">
-        <div class="offset-3 col-md-10 mt-2">
+    <div class="row justify-content-center">
+        <div class="col-md-10 mt-2">
             <div class="needs-validation" novalidate action='veilen.php' method="post">
                 <h1 class="h3 mb-2 text-center "> Veiling starten </h1>
                 <p class=" mb-2 text-center " > Hier kunt u een voorwerp te koop aan bieden, vul alle onderstaande velden in.</p>

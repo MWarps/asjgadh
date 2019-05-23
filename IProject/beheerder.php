@@ -4,8 +4,8 @@ include 'includes/header.php';
 ?>
 
 <div class="container">
-    <div class="row">
-        <div class="offset-3 col-md-6 mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6 mt-4">
             <h1 class="h3 mb-3 font-weight-normal text-center">Beheerders omgeving</h1>
              <h2 class="h3 mb-3 font-weight-normal text-center">Toegestane acties:</h2>
             <ul class="list-group">
