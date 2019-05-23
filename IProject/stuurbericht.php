@@ -8,11 +8,11 @@ if (isset($_SESSION['gebruikersnaam']) && isset($_GET['id'])){
   
   $gebruiker = HaalGebruikerOp($_SESSION['gebruikersnaam']);
   
-  
   if(isset($_POST['Volgende'])){
     $Verstuurd = true;
     $titel = $_POST['titel'];
     $bericht = $_POST['bericht'];
+    
     stuurbericht($titel, $bericht, $gebruiker, $_SESSION['id']);
     
   }
@@ -21,7 +21,7 @@ if (isset($_SESSION['gebruikersnaam']) && isset($_GET['id'])){
 <div class="container">
     <div class="row">
         <div class="offset-3 col-md-6 mt-4">
-            <form class="needs-validation" novalidate action="stuurbericht.php" method="POST">
+            <form class="needs-validation" novalidate action="stuurbericht.php?id=<?php echo $_SESSION['id']['gebruikersnaam']?>" method="POST">
                 <h1 class="h3 mb-3 text-center">Stuur een bericht!</h1>
                 <?php
                 if($Verstuurd){
@@ -63,7 +63,8 @@ if (isset($_SESSION['gebruikersnaam']) && isset($_GET['id'])){
 }
 
 else{
-      include 'includes/404error.php';
+  echo '<script language="javascript">window.location.href ="login.php"</script>';
+  exit();
 }
 include 'includes/footer.php';
 ?>

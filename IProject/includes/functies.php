@@ -3,6 +3,122 @@ include 'email.php';
 include 'email2.php';
 include 'emailBericht.php';
 
+function getProductenUitRubriek($rubriek, $aantal) {
+    try {
+        require('core/dbconnection.php');
+        $sqlSelect = $dbh->prepare("WITH cte AS
+        (
+        SELECT superrubriek, rubrieknummer
+        FROM dbo.Rubrieken
+        WHERE superrubriek = :rubriek --nummer van rubriek waar in gezocht wordt
+        UNION ALL
+        
+        SELECT  a.superrubriek, a.rubrieknummer
+        	FROM dbo.Rubrieken a
+        	INNER JOIN cte s ON a.superrubriek = s.rubrieknummer
+        )
+        SELECT distinct top :aantal dbo.Voorwerp.voorwerpnr, dbo.Voorwerp.titel, dbo.Voorwerp.geblokkeerd  --hier aangeven hoeveel waardes gereturned
+        	FROM dbo.Voorwerpinrubriek
+        	left JOIN dbo.Voorwerp on dbo.Voorwerpinrubriek.voorwerpnr = dbo.Voorwerp.voorwerpnr
+        	right JOIN cte on dbo.Voorwerpinrubriek.rubrieknr = cte.rubrieknummer;");
+
+        $sqlSelect->execute(
+            array(
+                ':rubriek' => $rubriek,
+                ':aantal' => $aantal
+            ));
+
+        $records = $sqlSelect->fetchAll(PDO::FETCH_ASSOC);
+
+        return $records;
+    }
+    catch (PDOexception $e) {
+        echo "er ging iets mis error: {$e->getMessage()}";
+    }
+}
+
+function getAanbevolen($gebruiker) {
+    try {
+        require('core/dbconnection.php');
+        $sqlSelect = $dbh->prepare("SELECT TOP 1 * FROM Aanbevoler
+      WHERE gebruikersnaam = :gebruikersnaam
+	  ORDER BY datumtijd DESC");
+
+        $sqlSelect->execute(
+            array(
+                ':gebruikersnaam' => $gebruiker
+            ));
+
+        $record = $sqlSelect->fetch(PDO::FETCH_ASSOC);
+
+        return $record;
+    }
+    catch (PDOexception $e) {
+        echo "er ging iets mis error: {$e->getMessage()}";
+    }
+}
+
+function getLaatstBekeken($gebruiker) {
+    try {
+        require('core/dbconnection.php');
+        $sqlSelect = $dbh->prepare("SELECT TOP 3 * FROM LaatstBekeken
+      WHERE gebruikersnaam = :gebruikersnaam
+	  ORDER BY datumtijd DESC");
+
+        $sqlSelect->execute(
+            array(
+                ':gebruikersnaam' => $gebruiker
+            ));
+
+        $records = $sqlSelect->fetchAll(PDO::FETCH_ASSOC);
+
+        return $records;
+    }
+    catch (PDOexception $e) {
+        echo "er ging iets mis error: {$e->getMessage()}";
+    }
+}
+
+function HaalIllustratiesOp($voorwerpnr){
+  
+  try {
+      require('core/dbconnection.php');
+      $sqlSelect = $dbh->prepare("select illustratieFile from Voorwerp, Illustratie
+      where Voorwerp.voorwerpnr = Illustratie.voorwerpnr
+      AND Voorwerp.voorwerpnr = :voorwerpnr");
+
+      $sqlSelect->execute(
+          array(
+          ':voorwerpnr' => $voorwerpnr
+          ));
+          
+          $records = $sqlSelect->fetchAll(PDO::FETCH_ASSOC);  
+          return $records;    
+        
+           
+  } catch (PDOexception $e) {
+      echo "er ging iets mis error: {$e->getMessage()}";
+  } 
+}
+
+function zijnErBiedingen($voorwerpnr){
+  try {
+      require('core/dbconnection.php');
+      $sqlSelect = $dbh->prepare("select * from bod where voorwerpnr = :voorwerpnr order by euro desc");
+
+      $sqlSelect->execute(
+          array(
+          ':voorwerpnr' => $voorwerpnr
+          ));
+          
+          $records = $sqlSelect->fetch(PDO::FETCH_ASSOC);  
+          return $records;     
+           
+  } catch (PDOexception $e) {
+      echo "er ging iets mis error: {$e->getMessage()}";
+  }  
+}
+
 function VoorwerpGezien($voorwerpnr) {
     try {
         require('core/dbconnection.php');
@@ -20,19 +136,18 @@ function VoorwerpGezien($voorwerpnr) {
     }
 }
 
-function updateBieden($bod, $gebruikersnaam, $datumentijd, $voorwerpnr){
-    try {
-        require('core/dbconnection.php');
-        $sqlSelect = $dbh->prepare("INSERT INTO bod (euro, datumentijd, gebruikersnaam, voorweprnr)
-      values (:bod, :gebruikersnaam, :datumentijd, :voorwerpnr)");
+function updateBieden($bod, $gebruikersnaam, $voorwerpnr){
+  try {
+      require('core/dbconnection.php');
+      $sqlSelect = $dbh->prepare("INSERT INTO bod (euro, gebruikersnaam, voorwerpnr)
+      values (:bod, :gebruikersnaam, :voorwerpnr)");
 
-        $sqlSelect->execute(
-            array(
-                ':bod' => $bod,
-                ':gebruikersnaam' => $gebruikersnaam,
-                ':datumentijd' => $datumentijd,
-                ':voorwerpnr' => $voorwerpnr
-            ));
+      $sqlSelect->execute(
+          array(
+              ':bod' => $bod,
+              ':gebruikersnaam' => $gebruikersnaam,
+              ':voorwerpnr' => $voorwerpnr
+          ));
 
     } catch (PDOexception $e) {
         echo "er ging iets mis error: {$e->getMessage()}";
@@ -41,14 +156,18 @@ function updateBieden($bod, $gebruikersnaam, $datumentijd, $voorwerpnr){
 }
 
 function Biedingen($voorwerpnr){
-    try {
-        require('core/dbconnection.php');
-        $sqlSelect = $dbh->prepare("select * from Bod where voorwerpnr = :voorwerpnr");
+  try {
+      require('core/dbconnection.php');
+      $sqlSelect = $dbh->prepare("select top 5 * from Bod where voorwerpnr = :voorwerpnr order by euro desc");
 
-        $sqlSelect->execute(
-            array(
-                ':voorwerpnr' => $voorwerpnr
-            ));
+      $sqlSelect->execute(
+          array(
+              ':voorwerpnr' => $voorwerpnr
+          ));
+        
+          while ($row = $sqlSelect->fetch(PDO::FETCH_ASSOC)) {
+              echo '<li class="list-group-item">€'.$row['euro'].' '.$row['gebruikersnaam'].' '.date("d.m.Y H:i", strtotime($row['datumentijd'])).'</li>';    
+          }
 
         while ($row = $sqlSelect->fetch(PDO::FETCH_ASSOC)) {
             echo '<li class="list-group-item"><a href="#">€'.$row['euro'].' '.$row['gebruikersnaam'].' '.$row['datumentijd'].'</a></li>';    
@@ -63,7 +182,7 @@ function DetailAdvertentie($id)
 {
     try {
         require('core/dbconnection.php');
-        $sqlSelect = $dbh->prepare("select top 4*, illustratieFile from Voorwerp, Illustratie
+        $sqlSelect = $dbh->prepare("select *, illustratieFile from Voorwerp, Illustratie
         where Voorwerp.voorwerpnr = Illustratie.voorwerpnr
         AND Voorwerp.voorwerpnr = :id");
 
@@ -82,25 +201,23 @@ function DetailAdvertentie($id)
 }
 
 /* advertentie ophalen */
-function haalAdvertentieOp($rubriek, $zoektekst){
+function haalAdvertentieOp($rubriek){
     try {
         require('core/dbconnection.php');
         $sqlSelect = $dbh->prepare("select top 20 *, illustratieFile from Voorwerp, Voorwerpinrubriek, Illustratie
         where Voorwerp.voorwerpnr = Voorwerpinrubriek.voorwerpnr 
         AND Voorwerp.voorwerpnr = Illustratie.voorwerpnr
 		    AND Voorwerpinrubriek.rubrieknr = 157347
-		    AND titel like '%a%'
         AND illustratiefile like 'dt_1%' ");
 
         $sqlSelect->execute(
-            /*  array(
-              ':rubriek' => $rubriek,
-              'zoektekst' => $zoektekst        
-            )*/
+        /* array(
+              ':rubriek' => $rubriek                 
+          )*/
         );
-        $row = $sqlSelect->fetchAll(PDO::FETCH_ASSOC);
-        //  print_r($row);
-        $teller = 0;
+              $row = $sqlSelect->fetchAll(PDO::FETCH_ASSOC);
+              //  print_r($row);
+              $teller = 0;
         foreach ($row as $rij => $id) {
             if(strlen($row[$teller]['titel']) >= 40){
                 $row[$teller]['titel'] = substr($row[$teller]['titel'],0,40);
@@ -109,13 +226,13 @@ function haalAdvertentieOp($rubriek, $zoektekst){
             echo '
             <div class="col-md-4 pb-3">
             <div class="card" style="width: 18rem;">
-            <img class="card-img-top" src="'.$row[$teller]['illustratieFile'].'" alt="Foto bestaat niet">
-            <h5 class="card-header"><a href="#">'.$row[$teller]['titel'].'</a></h5>
+            <img class="card-img-top" src="../pics/'.$row[$teller]['illustratieFile'].'" alt="Foto bestaat niet">
+            <h5 class="card-header"><a href="advertentie.php?id='.$row[$teller]['voorwerpnr'].'">'.$row[$teller]['titel'].'</a></h5>
             <div class="card-body">
             <h4 class="card-text">'.$row[$teller]['startprijs'].'</h4>
             <p class="card-text"><a href="#">'.$row[$teller]['verkoper'].'</a><br>
             '.$row[$teller]['land'].', '.$row[$teller]['plaatsnaam'].'</p>
-            <a href="#" class="btn btn-block btn-primary">Ga naar artikel</a>
+            <a href="advertentie.php?id='.$row[$teller]['voorwerpnr'].'" class="btn btn-block btn-primary">Ga naar artikel</a>
             </div>
             </div>
             </div>';

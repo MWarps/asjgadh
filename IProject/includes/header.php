@@ -33,6 +33,8 @@ if(isset($_SESSION['gebruikersnaam'])){
         <meta name="Homepage" content="Online koop en verkoop van 2e handsgoederen">
         <title>EenmaalAndermaal</title>
 
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- Zorgt voor dat css die voor mobiel worden gebruikt ook alleen worden gezien bij mobiel window. -->
         <!-- Bootstrap core CSS -->
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
         <link href="/assets/css/bootstrap/bootstrap.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -74,8 +76,8 @@ if(isset($_SESSION['gebruikersnaam'])){
                                       <li class="nav-item">
                                           <a class="nav-link" href="index.php?uitlog=uitlog">Uitloggen</a>
                                       </li>
-                                    </ul>
-                                    </div>                                    
+                              </ul>
+                      </div>                                    
                         <?php  } // einde if session actief is
                           else{
                               echo'<ul class="navbar-nav">
@@ -88,8 +90,7 @@ if(isset($_SESSION['gebruikersnaam'])){
                                    </ul>';
                           } ?>
                           </div>
-                      </div>
-                
-            </nav>
+                      </div>          
+                    </nav>
             
       

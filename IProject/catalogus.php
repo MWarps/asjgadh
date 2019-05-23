@@ -31,9 +31,7 @@ if(isset($_GET['id'])){
         </div>
         <div class="col-md-9">
             <div class="row">
-                <?php //haalAdvertentieOp($rubriek, $zoektekst);  
-                ?>
-
+                <?php haalAdvertentieOp($rubriek) ?>
             </div> 
         </div>  
     </div>
