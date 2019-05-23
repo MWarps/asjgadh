@@ -1,15 +1,7 @@
 <?php
 include 'includes/header.php';
 setupCatogorien();
-$zoektekst = '';
-$rubriek;
-if(isset($_GET['zoek'])){
-    $rubriek = $_GET['rubriek'];
-    if(isset($_GET['zoektekst'])){
-        $zoektekst = $_GET['zoektekst'];
-    }
-}
-$rubriek = 157347;
+
 ?>
 
 <div class="container-fluid">
