@@ -32,7 +32,6 @@ if(isset($_POST['bieden'])){
   }
 }
 ?>
-
 <div class="container-fluid">
     <div class="row">
         <div class="col">            
@@ -69,38 +68,32 @@ if(isset($_POST['bieden'])){
        <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
          <!-- Indicators -->
          <ol class="carousel-indicators">
-           <li data-target="#carousel-example-generic" data-slide-to="0" class="active"><img src="<?php echo $advertentie['illustratieFile']; ?>" alt="..."></li>
+           <li data-target="#carousel-example-generic" data-slide-to="0" class="active"><img src="../pics/<?php echo $advertentie['illustratieFile']; ?>" alt="..."></li>
            <?php $Illustratie1 = HaalIllustratiesOp($advertentie['voorwerpnr']);
-           $teller = 0;
-           
+           $teller = 1;       
           foreach ($Illustratie1 as $rij) {
-             echo '<li data-target="#carousel-example-generic" data-slide-to="'.$teller.'"><img src="'.$Illustratie1[$teller]['illustratieFile'].'" alt="..."></li>';
+             echo '<li data-target="#carousel-example-generic" data-slide-to="'.$teller.'"><img src="../pics/'.$Illustratie1[$teller]['illustratieFile'].'" alt="..."></li>';
              $teller++;    
            }  
            ?>           
          </ol>
-         <!-- The Modal -->
-         <div id="myModal" class="modal">
-         <!-- The Close Button -->
-         <span class="close">&times;</span>
-         <!-- Modal Content (The Image) -->
-         <img class="modal-content" id="img01">
-         </div>
-         <!-- slider-product.// -->
+        
          <!-- Wrapper for slides -->
          <div class="carousel-inner" role="listbox">
            
            <div class="carousel-item active">
              <div class="img-big-wrap">
-               <img id="myImg" src="<?php echo $advertentie['illustratieFile']; ?>" alt="...">
+               <img src="../pics/<?php echo $advertentie['illustratieFile']; ?>" alt="...">
              </div>           
-          </div>        
-          <?php $Illustratie2 = HaalIllustratiesOp($advertentie['voorwerpnr']);
-          $teller = 0;
+          </div> 
+                 
+          <?php 
+          $Illustratie2 = HaalIllustratiesOp($advertentie['voorwerpnr']);
+          $teller = 1;
           foreach ($Illustratie2 as $rij) {
-            echo '<div class="carousel-item active">
+            echo '<div class="carousel-item">
                     <div class="img-big-wrap">
-                      <img id="myImg" src="'.$Illustratie2[$teller]['illustratieFile'].'" alt="...">
+                      <img src="../pics/'.$Illustratie2[$teller]['illustratieFile'].'" alt="...">
                     </div>           
                  </div>';
             $teller++;    
@@ -187,30 +180,6 @@ if(isset($_POST['bieden'])){
   </div>
    
 </div>
-
-<!--container.//-->
-<script>
-// Get the modal
-var modal = document.getElementById("myModal");
-
-// Get the image and insert it inside the modal - use its "alt" text as a caption
-var img = document.getElementById("myImg");
-var modalImg = document.getElementById("img01");
-var captionText = document.getElementById("caption");
-img.onclick = function(){
-modal.style.display = "block";
-modalImg.src = this.src;
-captionText.innerHTML = this.alt;
-}
-
-// Get the <span> element that closes the modal
-var span = document.getElementsByClassName("close")[0];
-
-// When the user clicks on <span> (x), close the modal
-span.onclick = function() { 
-modal.style.display = "none";
-}
-</script>
 
 <?php }
 else {

@@ -3,6 +3,8 @@ include 'email.php';
 include 'email2.php';
 include 'emailBericht.php';
 
+
+
 function HaalIllustratiesOp($voorwerpnr){
   
   try {
@@ -121,22 +123,20 @@ function DetailAdvertentie($id)
 }
 
 /* advertentie ophalen */
-function haalAdvertentieOp($rubriek, $zoektekst){
+function haalAdvertentieOp($rubriek){
     try {
         require('core/dbconnection.php');
         $sqlSelect = $dbh->prepare("select top 20 *, illustratieFile from Voorwerp, Voorwerpinrubriek, Illustratie
         where Voorwerp.voorwerpnr = Voorwerpinrubriek.voorwerpnr 
         AND Voorwerp.voorwerpnr = Illustratie.voorwerpnr
 		    AND Voorwerpinrubriek.rubrieknr = 157347
-		    AND titel like '%a%'
         AND illustratiefile like 'dt_1%' ");
 
         $sqlSelect->execute(
-          /*  array(
-              ':rubriek' => $rubriek,
-              'zoektekst' => $zoektekst        
-            )*/
-          );
+        /* array(
+              ':rubriek' => $rubriek                 
+          )*/
+        );
               $row = $sqlSelect->fetchAll(PDO::FETCH_ASSOC);
               //  print_r($row);
               $teller = 0;
@@ -148,13 +148,13 @@ function haalAdvertentieOp($rubriek, $zoektekst){
             echo '
             <div class="col-md-4 pb-3">
             <div class="card" style="width: 18rem;">
-            <img class="card-img-top" src="'.$row[$teller]['illustratieFile'].'" alt="Foto bestaat niet">
-            <h5 class="card-header"><a href="#">'.$row[$teller]['titel'].'</a></h5>
+            <img class="card-img-top" src="../pics/'.$row[$teller]['illustratieFile'].'" alt="Foto bestaat niet">
+            <h5 class="card-header"><a href="advertentie.php?id='.$row[$teller]['voorwerpnr'].'">'.$row[$teller]['titel'].'</a></h5>
             <div class="card-body">
             <h4 class="card-text">'.$row[$teller]['startprijs'].'</h4>
             <p class="card-text"><a href="#">'.$row[$teller]['verkoper'].'</a><br>
             '.$row[$teller]['land'].', '.$row[$teller]['plaatsnaam'].'</p>
-            <a href="#" class="btn btn-block btn-primary">Ga naar artikel</a>
+            <a href="advertentie.php?id='.$row[$teller]['voorwerpnr'].'" class="btn btn-block btn-primary">Ga naar artikel</a>
             </div>
             </div>
             </div>';
