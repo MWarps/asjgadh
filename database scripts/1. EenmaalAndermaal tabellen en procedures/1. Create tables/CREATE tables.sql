@@ -138,7 +138,7 @@ CONSTRAINT PK_rubrieknummer PRIMARY KEY (rubrieknummer)
 CREATE TABLE Bod 
 (
 euro				VARCHAR(9)		NOT NULL,
-datumentijd			Datetime		NOT NULL,
+datumentijd			DATETIME		NOT NULL DEFAULT CURRENT_TIMESTAMP,
 gebruikersnaam		VARCHAR(50)		NOT NULL,
 voorwerpnr			BIGINT			NOT NULL,
 CONSTRAINT PK_bod PRIMARY KEY (euro, voorwerpnr)
@@ -149,6 +149,22 @@ CREATE TABLE Voorwerpinrubriek
 voorwerpnr			BIGINT			NOT NULL,
 rubrieknr			INT				NOT NULL,
 CONSTRAINT PK_voorwerpintabel PRIMARY KEY (voorwerpnr, rubrieknr)
+);
+
+CREATE TABLE Laatstbekeken
+(
+gebruikersnaam		VARCHAR(50)		NOT NULL,
+voorwerpnr			BIGINT			NOT NULL,
+datumtijd			DATETIME		NOT NULL DEFAULT CURRENT_TIMESTAMP,
+CONSTRAINT PK_laatstbekeken PRIMARY KEY (gebruikersnaam, voorwerpnr)
+);
+
+CREATE TABLE Aanbevolen
+(
+gebruikersnaam		VARCHAR(50)		NOT NULL,
+rubrieknr			INT				NOT NULL,
+datumtijd			DATETIME		NOT NULL DEFAULT CURRENT_TIMESTAMP,
+CONSTRAINT PK_laatstbekeken PRIMARY KEY (gebruikersnaam)
 );
 
 ----------------------------------------------------------
@@ -221,6 +237,28 @@ CONSTRAINT FK_voorwerpintabel_voorwerp
 	ON UPDATE NO ACTION
 	ON DELETE NO ACTION,
 CONSTRAINT FK_voorwerpintabel_rubriek 
+	FOREIGN KEY (rubrieknr) REFERENCES Rubrieken(rubrieknummer)
+	ON UPDATE NO ACTION
+	ON DELETE NO ACTION
+go
+
+ALTER TABLE Laatstbekeken ADD
+CONSTRAINT FK_laatstbekeken_gebruiker
+	FOREIGN KEY (gebruikersnaam) REFERENCES Gebruiker(gebruikersnaam)
+	ON UPDATE CASCADE
+	ON DELETE CASCADE,
+CONSTRAINT FK_laatstbekeken_voorwerp
+	FOREIGN KEY (voorwerpnr) REFERENCES Voorwerp(voorwerpnr)
+	ON UPDATE NO ACTION
+	ON DELETE NO ACTION
+go
+
+ALTER TABLE Aanbevolen ADD
+CONSTRAINT FK_aanbevolen_gebruiker
+	FOREIGN KEY (gebruikersnaam) REFERENCES Gebruiker(gebruikersnaam)
+	ON UPDATE CASCADE
+	ON DELETE CASCADE,
+CONSTRAINT FK_aanbevolen_rubriek
 	FOREIGN KEY (rubrieknr) REFERENCES Rubrieken(rubrieknummer)
 	ON UPDATE NO ACTION
 	ON DELETE NO ACTION
