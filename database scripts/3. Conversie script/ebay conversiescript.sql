@@ -65,3 +65,9 @@ select DISTINCT
 	ItemID as voorwerpnr,
 	IllustratieFile as IllustratieFile
 FROM dbo.Illustraties
+
+insert into Voorwerpinrubriek (voorwerpnr, rubrieknr)
+select distinct
+ID as voorwerpnr,
+Categorie as rubrieknr
+from Items

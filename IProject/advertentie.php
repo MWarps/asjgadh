@@ -1,20 +1,48 @@
 <?php
 include 'includes/header.php';
-$beschrijving = haalAdvertentieOp();
+if(isset($_GET['id'])){
+  
+$advertentie = DetailAdvertentie($_GET['id']);
+
+if(!isset($_POST['bieden'])){
+  $voorwerpnr = $_GET['id']; 
+  VoorwerpGezien($voorwerpnr);
+}  
+
+if(isset($_POST['bieden'])){
+  if(isset($_SESSION['gebruikersnaam'])){
+    $bod = $_POST['bod'];
+    $gebruikersnaam = $_SESSION['gebruikersnaam'];
+    $datumentijd = date("d.m.Y H:i");
+    $voorwerpnr = $_GET['id'];  
+    updateBieden($bod, $gebruikersnaam, $datumentijd, $voorwerpnr);
+    
+  }  
+  else {
+    echo '<div class="container">
+            <div class="h-100 row align-items-center">
+              <div class="col">
+                 <div class="alert alert-warning alert-dismissible fade show mt-3" role="alert">
+                    <strong>U bent niet ingelogd</strong> U Moet eerst inloggen voordat u een bod kan uitbrengen.
+                      <button type="button" class="close pt-0" data-dismiss="alert" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                 </div>
+              </div>
+            </div>
+          </div>';
+  }
+}
 ?>
 
 <div class="container-fluid">
     <div class="row">
         <div class="col">            
-            <nav aria-label="breadcrumb">
-              
+            <nav aria-label="breadcrumb">        
                 <ol class="breadcrumb">
-                  <button class="btn btn-sm btn-primary mr-3" id="terug" name="terug" value="terug"><a href="#"></a>Vorige</button>
-                  
-                    <?php catogorieSoort(); ?>
-                    
-                </ol>
-              
+                  <button class="btn btn-sm btn-primary mr-3" id="terug" name="terug" value="terug"><a href="#"></a>Vorige</button>              
+                    <?php catogorieSoort(); ?>                    
+                </ol>            
             </nav>
         </div>
     </div>
@@ -25,15 +53,14 @@ $beschrijving = haalAdvertentieOp();
 <div class="card" style="background-color: #f7f7f6;">
   <div class="row">
     <div class="col">
-      <h3 class="card-header">Productnaam</h3>
+      <h3 class="card-header"><?PHP echo $advertentie['titel']; ?></h3>
     </div>
   </div>  
   
   <div class="row">
     <div class="col-md-7" >
-      <div class="card-body">
-        
-        <iframe width="100%" height="450px" srcdoc='<html><body><?php echo $beschrijving['beschrijving']; ?></body></html>'></iframe>
+      <div class="card-body">  
+        <iframe width="100%" height="450px" srcdoc='<html><body><?php echo $advertentie['beschrijving']; ?></body></html>'></iframe>
     </div>  <!-- item-property-hor .// -->
   </div>
       
@@ -92,17 +119,21 @@ $beschrijving = haalAdvertentieOp();
    </div>  
  <div class="row">
    
-   <div class="form-group col-md-3">
+   <div class="col-md-3">
      <div class="card-body">
-     
-       <p>Bieden: (vanaf: 1000,00)</p>
-       
-         <form class="needs-validation" novalidate action='register.php' method="post">
-         <input type="number" name="bod" class="form-control" id="bod" placeholder="" required>
-         <button class="btn btn-lg btn-primary mt-3" id="bieden" type="submit" name="bieden" value="bieden"> Plaats bod </button>
+         <form class="needs-validation" novalidate action='advertentie.php?id=110685158191' method="post">
+           <div class="form-row">
+        <label for="bod">Bieden: (vanaf: €<?php echo $advertentie['startprijs']; ?>)</label>
+         <input type="number" name="bod" class="form-control" id="bod" min="<?php //echo $advertentie['startprijs']; ?>" required>
+         <div class="invalid-feedback">
+             Voer een bod vanaf €<?php echo $advertentie['startprijs']; ?>.
+         </div>
+         <button class="btn btn-lg btn-primary mt-3" type="submit" name="bieden" value="bieden"> Plaats bod </button>
          </form>
        </div>
+       </div>
     </div>
+    
   <div class="col-md-4">
     <div class="card-body">
    <div class="card">
@@ -110,26 +141,32 @@ $beschrijving = haalAdvertentieOp();
        Biedingen
      </div>
      <ul class="list-group list-group-flush">
-       <li class="list-group-item"><a href="#">€6500,00 Lucas</a></li>
-       <li class="list-group-item"><a href="#">€6000,00 Roy</a></li>
-       <li class="list-group-item"><a href="#">€5800,00 Merlijn</a></li>
-       <li class="list-group-item"><a href="#">€5500,00 Sandra</a></li>
+       <?php if(!empty(Biedingen($advertentie['voorwerpnr']))){
+                Biedingen($advertentie['voorwerpnr']);}
+             else{
+               echo '<li class="list-group-item"> Er zijn nog geen biedingen gedaan</li>';
+             }
+        ?>
      </ul>
    </div>
  </div>
  </div>
  <div class="col-md-5">
    <div class="card-body">
-   <div class="status">
-     
-       <div class="icon-product">
-         <img src="assets/img/oog.jpg"></img>  100 x gezien
-         <img src="assets/img/clock.jpg"></img>  sinds 14 mei '19, 14:00  
-       </div>
-   </div>
-       <a href="#">Lucas Schaars</a> <br>
-       <a href="#">Reviews (6)</a>
+       <a href="#"><?php echo $advertentie['verkoper']; ?></a><br>
+       <a href="#">Reviews</a><br><br>
    <button type="button" class="btn btn-primary btn-lg"><a style="color: white;" href="stuurbericht.php">Stuur bericht!</a></button>
+   <hr>
+   
+       <div class="icon-product">
+         <img src="assets/img/oog.jpg"></img> <?php echo $advertentie['gezien'] ?> x gezien <br>
+         <img src="assets/img/clock.jpg"></img>  sinds <?php echo date("d.m.Y H:i", strtotime($advertentie['looptijdbegindagtijdstip'])) ; ?>  <br><br>
+         <img src="assets/img/betalingswijze.png"></img>  betalingswijze: <strong><?php echo $advertentie['betalingswijze'] ?></strong> <br>
+         <img src="assets/img/instructions.png"></img>  betalingsinstructies: <?php echo $advertentie['betalingsinstructie'] ?> <br><br>
+         <img src="assets/img/verzending.png"></img>  Verzendkosten: <?php echo $advertentie['verzendkosten'] ?> <br>
+         <img src="assets/img/instructions.png"></img>  Verzendinstructies: <?php echo $advertentie['verzendinstructies'] ?> <br><br>
+         <img src="assets/img/voorwerp.png"></img>  Voorwerpnummer: <strong><?php echo $advertentie['voorwerpnr'] ?></strong> 
+      </div>
 </div>
 </div>
  
@@ -162,4 +199,9 @@ modal.style.display = "none";
 }
 </script>
 
-<?php include 'includes/footer.php' ?>
+<?php }
+else {
+  include 'includes/404error.php';
+}
+
+include 'includes/footer.php' ?>
