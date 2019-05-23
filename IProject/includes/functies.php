@@ -3,6 +3,40 @@ include 'email.php';
 include 'email2.php';
 include 'emailBericht.php';
 
+function getProductenUitRubriek($rubriek, $aantal) {
+    try {
+        require('core/dbconnection.php');
+        $sqlSelect = $dbh->prepare("WITH cte AS
+        (
+        SELECT superrubriek, rubrieknummer
+        FROM dbo.Rubrieken
+        WHERE superrubriek = :rubriek --nummer van rubriek waar in gezocht wordt
+        UNION ALL
+        
+        SELECT  a.superrubriek, a.rubrieknummer
+        	FROM dbo.Rubrieken a
+        	INNER JOIN cte s ON a.superrubriek = s.rubrieknummer
+        )
+        SELECT distinct top :aantal dbo.Voorwerp.voorwerpnr, dbo.Voorwerp.titel, dbo.Voorwerp.geblokkeerd  --hier aangeven hoeveel waardes gereturned
+        	FROM dbo.Voorwerpinrubriek
+        	left JOIN dbo.Voorwerp on dbo.Voorwerpinrubriek.voorwerpnr = dbo.Voorwerp.voorwerpnr
+        	right JOIN cte on dbo.Voorwerpinrubriek.rubrieknr = cte.rubrieknummer;");
+
+        $sqlSelect->execute(
+            array(
+                ':rubriek' => $rubriek,
+                ':aantal' => $aantal
+            ));
+
+        $records = $sqlSelect->fetchAll(PDO::FETCH_ASSOC);
+
+        return $records;
+    }
+    catch (PDOexception $e) {
+        echo "er ging iets mis error: {$e->getMessage()}";
+    }
+}
+
 function getAanbevolen($gebruiker) {
     try {
         require('core/dbconnection.php');
