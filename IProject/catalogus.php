@@ -92,9 +92,6 @@ $beschrijving = haalAdvertentieOp();
                 </div>
       </div>
     </div>
-
-
-
-        <?php 
-    include 'includes/footer.php' 
-        ?>
+    <?php
+        include 'includes/footer.php'
+    ?>
