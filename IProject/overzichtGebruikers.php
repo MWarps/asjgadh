@@ -16,8 +16,8 @@ if (isset( $_GET['id'])){
 ?>
 
 <div class="container">
-    <div class="row">
-        <div class="offset-3 col-md-6 mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6 mt-4">
             <h1 class="h3 mb-3 font-weight-normal text-center">Beheerders omgeving</h1>
             <h2 class="h3 mb-3 font-weight-normal text-center">Toegestane acties:</h2>
             <ul class="list-group">
@@ -27,9 +27,9 @@ if (isset( $_GET['id'])){
         </div>
     </div><!--/row-->
     <form class="needs-validation" novalidate action='overzichtGebruikers.php' method="post">
-        <div class="row">
-            <div class="offset-1 col-md-10">
-                <h1 class="h3 mb-3 font-weight-normal text-center">Gebruikerszoeken</h1>
+        <div class="row justify-content-center">
+            <div class="col-md-10">
+                <h1 class="h3 mb-3 font-weight-normal text-center">Gebruikers zoeken</h1>
                 <div class="input-group mb-6">
                     <div class="input-group-prepend">
                         <span class="input-group-text" id="zoekopdracht" >Gebruikersnaam:</span>
@@ -40,8 +40,8 @@ if (isset( $_GET['id'])){
             </div>
         </div><!--/row-->
     </form>
-    <div class="row">
-        <div class="offset-0 col-md-12">
+    <div class="row justify-content-center">
+        <div class="col-md-12">
             <h1 class="h3 offset-2 mb-3 font-weight-normal text-center">Resultaten:</h1>
             <table class="table">
                 <thead class="thead-dark">
