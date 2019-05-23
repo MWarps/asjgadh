@@ -3,6 +3,27 @@ include 'email.php';
 include 'email2.php';
 include 'emailBericht.php';
 
+function getLaatstBekeken($gebruiker) {
+    try {
+        require('core/dbconnection.php');
+        $sqlSelect = $dbh->prepare("SELECT TOP 3 * FROM LaatstBekeken
+      WHERE gebruikersnaam = :gebruikersnaam
+	  OEDER BY datumtijd DESC");
+
+        $sqlSelect->execute(
+            array(
+                ':gebruikersnaam' => $gebruiker
+            ));
+
+        $records = $sqlSelect->fetchAll(PDO::FETCH_ASSOC);
+
+        return $records;
+    }
+    catch (PDOexception $e) {
+        echo "er ging iets mis error: {$e->getMessage()}";
+    }
+}
+
 function HaalIllustratiesOp($voorwerpnr){
   
   try {
