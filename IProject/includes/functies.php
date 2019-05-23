@@ -3,6 +3,22 @@ include 'email.php';
 include 'email2.php';
 include 'emailBericht.php';
 
+function getPopulairsteArtikelen() {
+    try {
+        require('core/dbconnection.php');
+        $sqlSelect = $dbh->prepare("SELECT TOP 3 * FROM Voorwerp ORDER BY gezien DESC");
+
+        $sqlSelect->execute();
+
+        $records = $sqlSelect->fetchAll(PDO::FETCH_ASSOC);
+
+        return $records;
+    }
+    catch (PDOexception $e) {
+        echo "er ging iets mis error: {$e->getMessage()}";
+    }
+}
+
 function getProductenUitRubriek($rubriek, $aantal) {
     try {
         require('core/dbconnection.php');

@@ -187,9 +187,7 @@ if(isset($_SESSION['status'])){
             </div>
         </div>
         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-            <?php $advertentie = DetailAdvertentie($aanbevolen[2])
-
-            ?>
+            <?php $advertentie = DetailAdvertentie($aanbevolen[2]);?>
             <div class="hovereffect">
                 <img class="img-responsive" src="<?php echo $advertentie['illustratieFile'];?>" alt="">
                 <div class="overlay">
@@ -199,30 +197,34 @@ if(isset($_SESSION['status'])){
             </div>
         </div>
         <button type="button" class="btn btn-secondary btn-sm btn-block">Populairste Artikelen</button>
+        <?php $populairst = getPopulairsteArtikelen(); ?>
         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+            <?php $advertentie = DetailAdvertentie($populairst[0]);?>
             <div class="hovereffect">
-                <img class="img-responsive" src="http://placehold.it/350x200" alt="">
+                <img class="img-responsive" src="<?php echo $advertentie['illustratieFile'];?>" alt="">
                 <div class="overlay">
                     <h2>Hover effect 1</h2>
-                    <a class="info" href="#">link here</a>
+                    <a class="info" href="advertentie.php?id=<?php echo $advertentie['voorwerpnr']; ?>"><?php echo $advertentie['titel'];?></a>
                 </div>
             </div>
         </div>
         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+            <?php $advertentie = DetailAdvertentie($populairst[1]);?>
             <div class="hovereffect">
-                <img class="img-responsive" src="http://placehold.it/350x200" alt="">
+                <img class="img-responsive" src="<?php echo $advertentie['illustratieFile'];?>" alt="">
                 <div class="overlay">
                     <h2>Hover effect 1</h2>
-                    <a class="info" href="#">link here</a>
+                    <a class="info" href="advertentie.php?id=<?php echo $advertentie['voorwerpnr']; ?>"><?php echo $advertentie['titel'];?></a>
                 </div>
             </div>
         </div>
         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+            <?php $advertentie = DetailAdvertentie($populairst[2]);?>
             <div class="hovereffect">
-                <img class="img-responsive" src="http://placehold.it/350x200" alt="">
+                <img class="img-responsive" src="<?php echo $advertentie['illustratieFile'];?>" alt="">
                 <div class="overlay">
                     <h2>Hover effect 1</h2>
-                    <a class="info" href="#">link here</a>
+                    <a class="info" href="advertentie.php?id=<?php echo $advertentie['voorwerpnr']; ?>"><?php echo $advertentie['titel'];?></a>
                 </div>
             </div>
         </div>
