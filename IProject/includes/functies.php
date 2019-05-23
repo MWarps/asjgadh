@@ -863,7 +863,7 @@ function directorieVinden(){
         $print = $catogorien->fetchAll(PDO::FETCH_ASSOC);
         foreach ( $print  as $Name => $id){
             echo '<a class="btn btn-outline-dark"  
-            href="catalogus.php?id='.$print[$teller]['rubrieknummer'].'&naam='.$print[$teller]['rubrieknaam'].'" 
+            href="catalogus.php?id='.$print[$teller]['superrubiek'].'&naam='.$print[$teller]['rubrieknaam'].'" 
             role="button">'.$print[$teller]['rubrieknaam'].'</a>';
             $teller++ ;
         }
