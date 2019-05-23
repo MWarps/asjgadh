@@ -4,6 +4,12 @@ $dbname = 'iproject';
 $username = 'testgebruiker';
 $password = 'test123';
 // dit zijn nep gegevens!
+
+/*$hostname = 'mssql2.iproject.icasites.nl';
+$dbname = 'iproject34';
+$username = 'iproject34';
+$password = '263MsBEvp8vS';*/
+
 try {
     global $dbh;
 

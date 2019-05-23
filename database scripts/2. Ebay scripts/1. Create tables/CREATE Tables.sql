@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS  Users,  Items, Illustraties,   Categorieen, Items;
+DROP TABLE IF EXISTS  Users, Illustraties, Items, Categorieen, Items;
 
 go 
 
@@ -17,8 +17,7 @@ CREATE TABLE Categorieen
 	Name varchar(100) NULL,
 	Parent int NULL,
 	CONSTRAINT PK_Categorieen PRIMARY KEY (ID)
-)
-
+) 
 
 CREATE TABLE Items
 (
@@ -39,13 +38,11 @@ CREATE TABLE Items
 )
 
 CREATE TABLE Illustraties
-(
-	ItemID bigint NOT NULL,
-	IllustratieFile varchar(100) NOT NULL,
-    CONSTRAINT PK_ItemPlaatjes2 PRIMARY KEY (ItemID, IllustratieFile),
-	CONSTRAINT [ItemsVoorPlaatje] FOREIGN KEY(ItemID) REFERENCES Items (ID)
+( ItemID bigint NOT NULL,
+  IllustratieFile varchar(100) NOT NULL
+  CONSTRAINT PK_itemIllustratie PRIMARY KEY (ItemID, IllustratieFile),
+  CONSTRAINT FK_item FOREIGN KEY (ItemID) REFERENCES Items(ID)
 )
-
 
 CREATE INDEX IX_Items_Categorie ON Items (Categorie)
 CREATE INDEX IX_Categorieen_Parent ON Categorieen (Parent)

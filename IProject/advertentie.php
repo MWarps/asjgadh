@@ -1,155 +1,182 @@
-    <?php
+<?php
 include 'includes/header.php';
-    ?>
-    
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col mx-3">            
-                <nav aria-label="breadcrumb">
-                  
-                    <ol class="breadcrumb">
-                      <button class="btn btn-sm btn-primary mr-3" id="terug" name="terug" value="terug"><a href="#"></a>Vorige</button>
-                      
-                        <?php catogorieSoort(); ?>
-                        
-                    </ol>
-                  
-                </nav>
-            </div>
-        </div>
-    </div>
-    <!-- Page Content -->
-    <div class="container-fluid">
-      
-    <div class="card m-3" style="background-color: #f7f7f6;">
-    	<div class="row">
-    		<div class="col-md-5 border-right pr-0">
-          
-    <div class="gallery-wrap border-bottom" >
-      <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
-        <!-- Indicators -->
-        <ol class="carousel-indicators">
-          <li data-target="#carousel-example-generic" data-slide-to="0" class="active"><img  src="assets/img/motor.jpg" alt="..."></li>
-          <li data-target="#carousel-example-generic" data-slide-to="1"><img src="assets/img/motor2.jpg" alt="..."></li>
-          <li data-target="#carousel-example-generic" data-slide-to="2"><img src="assets/img/motor.jpg" alt="..."></li>
-        </ol>
-        <!-- The Modal -->
-        <div id="myModal" class="modal">
-        <!-- The Close Button -->
-        <span class="close">&times;</span>
-        <!-- Modal Content (The Image) -->
-        <img class="modal-content" id="img01">
-        </div>
-        <!-- slider-product.// -->
-        <!-- Wrapper for slides -->
-        <div class="carousel-inner" role="listbox">
-          <div class="carousel-item active">
-            <div class="img-big-wrap">
-              <img id="myImg" src="assets/img/motor.jpg" alt="...">
-            </div>
-                    
-         </div>
-          <div class="carousel-item">
-              <div class="img-big-wrap">
-            <img src="assets/img/motor2.jpg" alt="...">
-              </div>
-            
-          </div>
-          <div class="carousel-item">
-            <div class="img-big-wrap">
-            <img src="assets/img/motor.jpg" alt="...">
-          </div>
-          </div>
-        </div>
+if(isset($_GET['id'])){
   
-        <!-- Controls -->
-        <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
-          <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-          <span class="sr-only">Previous</span>
-        </a>
-        <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
-          <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-          <span class="sr-only">Next</span>
-        </a>
-      </div>
-      
-    </div> <!-- gallery-wrap .end// -->
-    <div class="status p-3 border-bottom">
-        <div class="icon-product">
-          <img src="assets/img/oog.jpg"></img>  100 x gezien
-          <img src="assets/img/clock.jpg"></img>  sinds 14 mei '19, 14:00  
+$advertentie = DetailAdvertentie($_GET['id']);
+
+if(!isset($_POST['bieden'])){
+  $voorwerpnr = $_GET['id']; 
+  VoorwerpGezien($voorwerpnr);
+}  
+
+if(isset($_POST['bieden'])){
+  if(isset($_SESSION['gebruikersnaam'])){
+    $bod = $_POST['bod'];
+    $gebruikersnaam = $_SESSION['gebruikersnaam'];
+    $datumentijd = date("d.m.Y H:i");
+    $voorwerpnr = $_GET['id'];  
+    updateBieden($bod, $gebruikersnaam, $datumentijd, $voorwerpnr);
+    
+  }  
+  else {
+    echo '<div class="container">
+            <div class="h-100 row align-items-center">
+              <div class="col">
+                 <div class="alert alert-warning alert-dismissible fade show mt-3" role="alert">
+                    <strong>U bent niet ingelogd</strong> U Moet eerst inloggen voordat u een bod kan uitbrengen.
+                      <button type="button" class="close pt-0" data-dismiss="alert" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                 </div>
+              </div>
+            </div>
+          </div>';
+  }
+}
+?>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col">            
+            <nav aria-label="breadcrumb">        
+                <ol class="breadcrumb">
+                  <button class="btn btn-sm btn-primary mr-3" id="terug" name="terug" value="terug"><a href="#"></a>Vorige</button>              
+                    <?php catogorieSoort(); ?>                    
+                </ol>            
+            </nav>
         </div>
     </div>
-    <div class="item-property p-3">
-        <a href="#">Lucas Schaars</a> <br>
-        <a href="#">Reviews (6)</a>
-    </div>  
-    <button type="button" class="btn btn-primary btn-lg btn-block"><a style="color: white;" href="stuurbericht.php">Stuur bericht!</a></button>
+</div>
+<!-- Page Content -->
+<div class="container-fluid">
+  
+<div class="card" style="background-color: #f7f7f6;">
+  <div class="row">
+    <div class="col">
+      <h3 class="card-header"><?PHP echo $advertentie['titel']; ?></h3>
+    </div>
+  </div>  
+  
+  <div class="row">
+    <div class="col-md-7" >
+      <div class="card-body">  
+        <iframe width="100%" height="450px" srcdoc='<html><body><?php echo $advertentie['beschrijving']; ?></body></html>'></iframe>
+    </div>  <!-- item-property-hor .// -->
   </div>
-    		<div class="col-md-7">
-    <div class="card-body px-5">
-    	<h3 class="title mb-3">Productnaam</h3>
+      
+ <!-- gallery-wrap .end// -->
 
-        <dl class="item-property">
-      <dt>Description</dt>
-      <dd><p>Here goes description consectetur adipisicing elit, sed do eiusmod
-    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-    quis nostrud exercitation ullamco </p></dd>
-    </dl>
-    <dl class="param param-feature">
-      <dt>Model#</dt>
-      <dd>12345611</dd>
-    </dl>  <!-- item-property-hor .// -->
-    <dl class="param param-feature">
-      <dt>Kleur</dt>
-      <dd>Zwart and oranje</dd>
-    </dl>  <!-- item-property-hor .// -->
-    <dl class="param param-feature">
-      <dt>Verzending</dt>
-      <dd>Europa</dd>
-    </dl>  <!-- item-property-hor .// -->
-
-    <hr>
-    	<div class="row">
-    		<div class="col-sm-6">
-          <div class="form-group col-md-8">
-    			<dl class="param param-inline">
-    			  <dt>Bieden:</dt> (vanaf: 1000,00)
-    			  <dd>
-              <form class="needs-validation" novalidate action='register.php' method="post">
-              <input type="number" name="bod" class="form-control" id="bod" placeholder="" required>
-              <button class="btn btn-lg btn-primary mb-5 mt-3" id="bieden" type="submit" name="bieden" value="bieden"> Plaats bod </button>
-              </form>
-    			  </dd>
-    			</dl> 
-        </div> <!-- item-property .// -->
-    		</div> <!-- col.// -->
-    		<div class="col-sm-6">
-          <div class="card">
-        
-  <div class="card-header">
-    Biedingen
+   <div class="col-md-5">
+     <div class="gallery-wrap card-body" >
+       <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+         <!-- Indicators -->
+         <ol class="carousel-indicators">
+           <li data-target="#carousel-example-generic" data-slide-to="0" class="active"><img  src="assets/img/motor.jpg" alt="..."></li>
+           <li data-target="#carousel-example-generic" data-slide-to="1"><img src="assets/img/motor2.jpg" alt="..."></li>
+           <li data-target="#carousel-example-generic" data-slide-to="2"><img src="assets/img/motor.jpg" alt="..."></li>
+         </ol>
+         <!-- The Modal -->
+         <div id="myModal" class="modal">
+         <!-- The Close Button -->
+         <span class="close">&times;</span>
+         <!-- Modal Content (The Image) -->
+         <img class="modal-content" id="img01">
+         </div>
+         <!-- slider-product.// -->
+         <!-- Wrapper for slides -->
+         <div class="carousel-inner" role="listbox">
+           <div class="carousel-item active">
+             <div class="img-big-wrap">
+               <img id="myImg" src="assets/img/motor.jpg" alt="...">
+             </div>
+                     
+          </div>
+           <div class="carousel-item">
+               <div class="img-big-wrap">
+             <img src="assets/img/motor2.jpg" alt="...">
+               </div>
+             
+           </div>
+           <div class="carousel-item">
+             <div class="img-big-wrap">
+             <img src="assets/img/motor.jpg" alt="...">
+           </div>
+           </div>
+         </div>
+   
+         <!-- Controls -->
+         <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+           <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+           <span class="sr-only">Previous</span>
+         </a>
+         <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+           <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+           <span class="sr-only">Next</span>
+         </a>
+       </div>
+     </div>
+   </div>
+   </div>  
+ <div class="row">
+   
+   <div class="col-md-3">
+     <div class="card-body">
+         <form class="needs-validation" novalidate action='advertentie.php?id=110685158191' method="post">
+           <div class="form-row">
+        <label for="bod">Bieden: (vanaf: €<?php echo $advertentie['startprijs']; ?>)</label>
+         <input type="number" name="bod" class="form-control" id="bod" min="<?php //echo $advertentie['startprijs']; ?>" required>
+         <div class="invalid-feedback">
+             Voer een bod vanaf €<?php echo $advertentie['startprijs']; ?>.
+         </div>
+         <button class="btn btn-lg btn-primary mt-3" type="submit" name="bieden" value="bieden"> Plaats bod </button>
+         </form>
+       </div>
+       </div>
+    </div>
+    
+  <div class="col-md-4">
+    <div class="card-body">
+   <div class="card">
+     <div class="card-header">
+       Biedingen
+     </div>
+     <ul class="list-group list-group-flush">
+       <?php if(!empty(Biedingen($advertentie['voorwerpnr']))){
+                Biedingen($advertentie['voorwerpnr']);}
+             else{
+               echo '<li class="list-group-item"> Er zijn nog geen biedingen gedaan</li>';
+             }
+        ?>
+     </ul>
+   </div>
+ </div>
+ </div>
+ <div class="col-md-5">
+   <div class="card-body">
+       <a href="#"><?php echo $advertentie['verkoper']; ?></a><br>
+       <a href="#">Reviews</a><br><br>
+   <button type="button" class="btn btn-primary btn-lg"><a style="color: white;" href="stuurbericht.php">Stuur bericht!</a></button>
+   <hr>
+   
+       <div class="icon-product">
+         <img src="assets/img/oog.jpg"></img> <?php echo $advertentie['gezien'] ?> x gezien <br>
+         <img src="assets/img/clock.jpg"></img>  sinds <?php echo date("d.m.Y H:i", strtotime($advertentie['looptijdbegindagtijdstip'])) ; ?>  <br><br>
+         <img src="assets/img/betalingswijze.png"></img>  betalingswijze: <strong><?php echo $advertentie['betalingswijze'] ?></strong> <br>
+         <img src="assets/img/instructions.png"></img>  betalingsinstructies: <?php echo $advertentie['betalingsinstructie'] ?> <br><br>
+         <img src="assets/img/verzending.png"></img>  Verzendkosten: <?php echo $advertentie['verzendkosten'] ?> <br>
+         <img src="assets/img/instructions.png"></img>  Verzendinstructies: <?php echo $advertentie['verzendinstructies'] ?> <br><br>
+         <img src="assets/img/voorwerp.png"></img>  Voorwerpnummer: <strong><?php echo $advertentie['voorwerpnr'] ?></strong> 
+      </div>
+</div>
+</div>
+ 
   </div>
-  <ul class="list-group list-group-flush">
-    <li class="list-group-item"><a href="#">€6500,00 Lucas</a></li>
-    <li class="list-group-item"><a href="#">€6000,00 Roy</a></li>
-    <li class="list-group-item"><a href="#">€5800,00 Merlijn</a></li>
-    <li class="list-group-item"><a href="#">€5500,00 Sandra</a></li>
-  </ul>
+  </div>
+   
 </div>
 
-	</div> <!-- col.// -->
-    	</div> <!-- row.// -->
-    	
-    </div> <!-- card-body.// -->
-  </div> <!-- col.// -->
-    	</div> <!-- row.// -->
-    </div> <!-- card.// -->
-
-
-    </div>
-    <!--container.//-->
-    <script>
+<!--container.//-->
+<script>
 // Get the modal
 var modal = document.getElementById("myModal");
 
@@ -158,9 +185,9 @@ var img = document.getElementById("myImg");
 var modalImg = document.getElementById("img01");
 var captionText = document.getElementById("caption");
 img.onclick = function(){
-  modal.style.display = "block";
-  modalImg.src = this.src;
-  captionText.innerHTML = this.alt;
+modal.style.display = "block";
+modalImg.src = this.src;
+captionText.innerHTML = this.alt;
 }
 
 // Get the <span> element that closes the modal
@@ -168,7 +195,13 @@ var span = document.getElementsByClassName("close")[0];
 
 // When the user clicks on <span> (x), close the modal
 span.onclick = function() { 
-  modal.style.display = "none";
+modal.style.display = "none";
 }
 </script>
-<?php include 'includes/footer.php' ?>
+
+<?php }
+else {
+  include 'includes/404error.php';
+}
+
+include 'includes/footer.php' ?>

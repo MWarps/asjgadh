@@ -73,5 +73,20 @@
                 <a href="#"><img class="img-responsive" src="http://placehold.it/350x200" alt="Verkoper worden"></a>
             </div>
         </div>
+        <div class="row mt-3 mb-3">
+            <div class="col-md-5">
+                <a href="#"><img class="img-responsive" src="http://placehold.it/350x200" alt="Verkoper worden"></a>
+            </div>
+            <div class="col-md-7">
+                <h2>Ik wil graag op een product bieden, hoe doe ik dat?</h2>
+                <p>
+                    Om een product te verkopen moet u eerst rechten krijgen om het te verkopen. Deze rechten krijgt u door naar "mijn profiel te gaan". Als u bent ingelogd staat dit boven aan de website.
+                    Daar staat een knop met "Ik wil verkoper worden". Klik op de knop. Vervolgens wordt er een brief naar u toegestuurd met een verficatie code. Deze code is 10 dagen geldig.
+                    Op het moment dat u de code hebt ontvangen moet u de code invullen bij het veld dat tevoorschijn komt als u de code aanvraagt. Als u de code hebt ingevuld zult u een nieuwe knop
+                    boven aan de pagina krijgen met "Product aanbieden". Klik hierop en vul vervolgens het formulier in. Daarna wordt uw product op de pagina getoond en kunt u het eventueel
+                    aanpassen.
+                </p>
+            </div>
+        </div>
     </div>
 <?php include 'includes/footer.php' ?>

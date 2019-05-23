@@ -1,7 +1,17 @@
 <?php
 include 'includes/header.php';
 
-if (isset($_SESSION['beschrijving'])){
+$verkoper = gegevensIngevuld($_SESSION['gebruikersnaam']);
+
+if(!empty(gegevensIngevuld($_SESSION['gebruikersnaam']))) {
+  if($verkoper[0]['gevalideerd'] == 1) {
+    echo '<script language="javascript">window.location.href ="index.php"</script>';
+  }  
+  }
+  
+  if(empty(gegevensIngevuld($_SESSION['gebruikersnaam']))) {
+    echo '<script language="javascript">window.location.href ="verkoper.php"</script>';
+  }
   
 $error = false;
 $overEindtijd = false;
@@ -16,6 +26,7 @@ if (isset($_POST['valideren'])){
             unset($_SESSION['beschrijving']);
             $_SESSION['status'] = 'verkoper';
             deleteVerificatieRij($gebruiker['email'], $type);
+            statusOpValidatieZetten($_SESSION['gebruikersnaam']);
             
             echo '<script language="javascript">window.location.href ="index.php"</script>';
             exit();
@@ -56,9 +67,7 @@ if (isset($_POST['valideren'])){
 </div>
 
 <?php
-} else {
-    include 'includes/404error.php';
-}
+
 
 include 'includes/footer.php';
 ?>

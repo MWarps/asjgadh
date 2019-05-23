@@ -3,25 +3,132 @@ include 'email.php';
 include 'email2.php';
 include 'emailBericht.php';
 
-/* advertentie ophalen */
-function haalAdvertentieOp(){
+function VoorwerpGezien($voorwerpnr) {
+  try {
+      require('core/dbconnection.php');
+      $sqlSelect = $dbh->prepare(" UPDATE Voorwerp
+      Set gezien = gezien + 1
+      Where voorwerpnr = :voorwerpnr");
+
+      $sqlSelect->execute(
+          array(
+            ':voorwerpnr' => $voorwerpnr
+          ));
+
+  } catch (PDOexception $e) {
+      echo "er ging iets mis error: {$e->getMessage()}";
+  }
+}
+
+function updateBieden($bod, $gebruikersnaam, $datumentijd, $voorwerpnr){
+  try {
+      require('core/dbconnection.php');
+      $sqlSelect = $dbh->prepare("INSERT INTO bod (euro, datumentijd, gebruikersnaam, voorweprnr)
+      values (:bod, :gebruikersnaam, :datumentijd, :voorwerpnr)");
+
+      $sqlSelect->execute(
+          array(
+              ':bod' => $bod,
+              ':gebruikersnaam' => $gebruikersnaam,
+              ':datumentijd' => $datumentijd,
+              ':voorwerpnr' => $voorwerpnr
+          ));
+
+  } catch (PDOexception $e) {
+      echo "er ging iets mis error: {$e->getMessage()}";
+  }
+  
+}
+
+function Biedingen($voorwerpnr){
+  try {
+      require('core/dbconnection.php');
+      $sqlSelect = $dbh->prepare("select * from Bod where voorwerpnr = :voorwerpnr");
+
+      $sqlSelect->execute(
+          array(
+              ':voorwerpnr' => $voorwerpnr
+          ));
+        
+          while ($row = $sqlSelect->fetch(PDO::FETCH_ASSOC)) {
+              echo '<li class="list-group-item"><a href="#">€'.$row['euro'].' '.$row['gebruikersnaam'].' '.$row['datumentijd'].'</a></li>';    
+          }
+
+  } catch (PDOexception $e) {
+      echo "er ging iets mis error: {$e->getMessage()}";
+  }
+  
+}
+function DetailAdvertentie($id)
+{
     try {
         require('core/dbconnection.php');
-        $sqlSelect = $dbh->prepare("select beschrijving from voorwerp where voorwerpnr = 6576921535");
+        $sqlSelect = $dbh->prepare("select top 4*, illustratieFile from Voorwerp, Illustratie
+        where Voorwerp.voorwerpnr = Illustratie.voorwerpnr
+        AND Voorwerp.voorwerpnr = :id");
 
         $sqlSelect->execute(
             array(
-                            
+                ':id' => $id              
             ));
         $records = $sqlSelect->fetch(PDO::FETCH_ASSOC);
+
         return $records;
-        
 
     } catch (PDOexception $e) {
         echo "er ging iets mis error: {$e->getMessage()}";
     }
 
 }
+
+/* advertentie ophalen */
+function haalAdvertentieOp($rubriek, $zoektekst){
+    try {
+        require('core/dbconnection.php');
+        $sqlSelect = $dbh->prepare("select top 20 *, illustratieFile from Voorwerp, Voorwerpinrubriek, Illustratie
+        where Voorwerp.voorwerpnr = Voorwerpinrubriek.voorwerpnr 
+        AND Voorwerp.voorwerpnr = Illustratie.voorwerpnr
+		    AND Voorwerpinrubriek.rubrieknr = 157347
+		    AND titel like '%a%'
+        AND illustratiefile like 'dt_1%' ");
+
+        $sqlSelect->execute(
+          /*  array(
+              ':rubriek' => $rubriek,
+              'zoektekst' => $zoektekst        
+            )*/
+          );
+              $row = $sqlSelect->fetchAll(PDO::FETCH_ASSOC);
+              //  print_r($row);
+              $teller = 0;
+        foreach ($row as $rij => $id) {
+          if(strlen($row[$teller]['titel']) >= 40){
+            $row[$teller]['titel'] = substr($row[$teller]['titel'],0,40);
+            $row[$teller]['titel'] .= '...';
+          }
+            echo '
+            <div class="col-md-4 pb-3">
+            <div class="card" style="width: 18rem;">
+            <img class="card-img-top" src="'.$row[$teller]['illustratieFile'].'" alt="Foto bestaat niet">
+            <h5 class="card-header"><a href="#">'.$row[$teller]['titel'].'</a></h5>
+            <div class="card-body">
+            <h4 class="card-text">'.$row[$teller]['startprijs'].'</h4>
+            <p class="card-text"><a href="#">'.$row[$teller]['verkoper'].'</a><br>
+            '.$row[$teller]['land'].', '.$row[$teller]['plaatsnaam'].'</p>
+            <a href="#" class="btn btn-block btn-primary">Ga naar artikel</a>
+            </div>
+            </div>
+            </div>';
+            $teller++;
+        }
+    
+    } catch (PDOexception $e) {
+        echo "er ging iets mis error: {$e->getMessage()}";
+    }
+
+}
+
+
 
 /* deleting verificatie code*/
 function haalCodeOp($id){
@@ -302,7 +409,7 @@ function landen()
 {
     try {
         require('core/dbconnection.php');
-        $sqlSelect = $dbh-> prepare ("GBA_CODE, NAAM_LAND from Landen");
+        $sqlSelect = $dbh-> prepare ("select NAAM_LAND from Landen");
         $sqlSelect  -> execute();
 
         echo '<label for="inputLanden">Land</label>';
@@ -310,9 +417,10 @@ function landen()
         // Open your drop down box
 
         // Loop through the query results, outputing the options one by one
+        echo '<option value="Nederland" selected>Nederland</option>';
         while ($row = $sqlSelect->fetch(PDO::FETCH_ASSOC)) {
 
-            echo '<option value="'.$row['GBA_CODE'].'">'.$row['NAAM_LAND'].'</option>';
+            echo '<option value="'.$row['NAAM_LAND'].'">'.$row['NAAM_LAND'].'</option>';
         }
         echo '</select>';// Close your drop down box
     } catch (PDOexception $e) {
@@ -432,7 +540,7 @@ function emailResetWachtwoord($gebruikersnaam)
                   accountbeveiliging te garanderen.';
         $headers = "From:" .$from;
         mail($to,$subject,$message, $headers);
-        
+
 
     }
     catch (PDOexception $e) {
@@ -479,19 +587,19 @@ function controleVraag($vraag){
 }
 
 function stuurbericht($titel, $bericht, $Verzender, $Ontvanger){
-  
-  ini_set( 'display_errors', 1 );
-  error_reporting( E_ALL );
-  $from = "no-reply@iconcepts.nl";
-  $to = $Ontvanger['email'];
-  $subject = "$titel";
-  $message = emailBericht($bericht, $Verzender, $Ontvanger);
 
-  $headers = 'MIME-Version: 1.0' . "\r\n";
-  $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-  $headers .= "From:" .$from;
-  mail($to,$subject,$message, $headers);
-  
+    ini_set( 'display_errors', 1 );
+    error_reporting( E_ALL );
+    $from = "no-reply@iconcepts.nl";
+    $to = $Ontvanger['email'];
+    $subject = "$titel";
+    $message = emailBericht($bericht, $Verzender, $Ontvanger);
+
+    $headers = 'MIME-Version: 1.0' . "\r\n";
+    $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+    $headers .= "From:" .$from;
+    mail($to,$subject,$message, $headers);
+
 }
 
 /*
@@ -594,28 +702,39 @@ function haalVideosOp($rubriek)
     }
 }
 */
-
-function gegevensIngevuld (){
+function statusOpValidatieZetten($gebruikersnaam){
     try {
         require('core/dbconnection.php');
-        $sqlSelect = $dbh->prepare("SELECT verkoper FROM Gebruiker
-              WHERE verkoper = 1 AND gebruikersnaam = :gebruikersnaam ");
+        $sqlSelect = $dbh->prepare("UPDATE Verkoper Set gevalideerd = 1 WHERE gebruikersnaam = :gebruikersnaam");
 
         $sqlSelect->execute(
             array (
-                ':gebruikersnaam' => $_SESSION['gebruikersnaam'],
+                ':gebruikersnaam' => $gebruikersnaam,
             ));
-
-        $verkoperVerificatie = $sqlSelect->fetchAll(PDO::FETCH_ASSOC);
 
     } catch (PDOexception $e) {
         echo "er ging iets mis error: {$e->getMessage()}";
     }
 
+}
 
-    if (empty($verkoperVerificatie['gebruikersnaam'])){
-        return '<a class="dropdown-item" href="verkoper.php">Verkoper worden</a>';
-    }  
+function gegevensIngevuld($gebruikersnaam){
+    try {
+        require('core/dbconnection.php');
+        $sqlSelect = $dbh->prepare("SELECT * FROM Verkoper where gebruikersnaam = :gebruikersnaam");
+
+        $sqlSelect->execute(
+            array (
+                ':gebruikersnaam' => $gebruikersnaam,
+            ));
+
+        $verkoperVerificatie = $sqlSelect->fetchAll(PDO::FETCH_ASSOC);
+        return $verkoperVerificatie;
+
+    } catch (PDOexception $e) {
+        echo "er ging iets mis error: {$e->getMessage()}";
+    }
+
 }
 
 function setupCatogorien(){
@@ -650,12 +769,52 @@ function catogorieSoort (){
     }       
 }
 
+function HaalRubriekNaamOp($id)
+{
+    try {
+        require('core/dbconnection.php');
+        $sqlSelect = $dbh-> prepare ("select rubrieknaam from Rubrieken where rubrieknummer = :id");
+        $sqlSelect  -> execute(
+            array(
+                ':id' =>  $id
+            ));
+            
+          $row = $sqlSelect->fetch(PDO::FETCH_ASSOC);
+          return $row;  
+              
+    } catch (PDOexception $e) {
+        echo "er ging iets mis error: {$e->getMessage()}";
+    }
+} 
+
+function HaalRubriekop($id)
+{
+    try {
+        require('core/dbconnection.php');
+        $sqlSelect = $dbh-> prepare ("select * from Rubrieken where superrubriek = :id");
+        $sqlSelect  -> execute(
+            array(
+                ':id' =>  $id
+            ));
+  
+        // Loop through the query results, outputing the options one by one    
+        while ($row = $sqlSelect->fetch(PDO::FETCH_ASSOC)) {
+            echo '<a class="dropdown-item" href="catalogus.php?id='.$row['rubrieknummer'].'">'.$row['rubrieknaam'].'</a>';
+        }      
+    } catch (PDOexception $e) {
+        echo "er ging iets mis error: {$e->getMessage()}";
+    }
+} 
+  
+
+
+
 function directorieVinden(){
     $id = (end($_SESSION['catogorie']) );
     $teller = 0;
     try {
         require('core/dbconnection.php');
-        $catogorien = $dbh->prepare("select * from Categorieen where parent = :id ");
+        $catogorien = $dbh->prepare("select * from Rubrieken where superrubriek = :id ");
         $catogorien -> execute(
             array(
                 ':id' =>  $id,
@@ -665,8 +824,8 @@ function directorieVinden(){
         $print = $catogorien->fetchAll(PDO::FETCH_ASSOC);
         foreach ( $print  as $Name => $id){
             echo '<a class="btn btn-outline-dark"  
-            href="catalogus.php?id='.$print[$teller]['ID'].'&naam='.$print[$teller]['Name'].'" 
-            role="button">'.$print[$teller]['Name'].'</a>';
+            href="catalogus.php?id='.$print[$teller]['rubrieknummer'].'&naam='.$print[$teller]['rubrieknaam'].'" 
+            role="button">'.$print[$teller]['rubrieknaam'].'</a>';
             $teller++ ;
         }
     } catch (PDOexception $e) {
@@ -758,21 +917,79 @@ function gebruikerblok(){
         $resultaat =  $gebruiker ->fetchAll(PDO::FETCH_ASSOC);
         if ($resultaat[0]['geblokeerd'] == 1){
             $deblokeren -> execute(
-            array(
-                ':gebruiker' => $resultaat[0]['gebruikersnaam'],
-            )
-        );
+                array(
+                    ':gebruiker' => $resultaat[0]['gebruikersnaam'],
+                )
+            );
         }else if ($resultaat[0]['geblokeerd'] == 0){
             $blokeren -> execute(
-            array(
-                ':gebruiker' => $resultaat[0]['gebruikersnaam'],
-            )
-        );
+                array(
+                    ':gebruiker' => $resultaat[0]['gebruikersnaam'],
+                )
+            );
         }
 
 
     } catch (PDOexception $e) {
         echo "er ging iets mis error: {$e->getMessage()}";
+    }
+}
+
+function veilingenVinden($veilingnaam){
+    $teller =0;
+    try {
+        require('core/dbconnection.php');
+        $veilingen = $dbh ->prepare (" select * from Voorwerp Where titel like :titel");
+        $veilingen -> execute(
+            array(
+                ':titel' => '%'.$veilingnaam.'%',
+            )
+        );
+        $veiling = $veilingen ->fetchAll(PDO::FETCH_ASSOC);
+        foreach ( $veiling as $resultaat ){
+            $teller ++;
+            $geblokeerd = "error";
+            if ($resultaat['geblokeerd'] == 1){
+                $geblokeerd = "Ja";
+            }else{
+                $geblokeerd = "Nee";
+            }
+            echo '<tr>
+                    <th scope="row">'.$teller.'</th>
+                    <td>'.$resultaat['voorwerpnr'].'</td>
+                    <td>'.$resultaat['titel'].'</td>
+                    <td>'.$resultaat['startprijs'].'</td>
+                    <td>'.$resultaat['verzendkosten'].'</td>
+                    <td>'.$resultaat['betalingswijze'].'</td>
+                    <td>'.$resultaat['plaatsnaam'].'</td>
+                    <td>'.$resultaat['looptijd'].'</td>
+                    <td>'.$resultaat['looptijdbegindatum'].'</td> 
+                    <td>'.$resultaat['looptijdeinddatum'].'</td> 
+                    <td>'.$resultaat['verkoper'].'</td> 
+                    <td>'.$resultaat['koper'].'</td> 
+                    <td>'.$resultaat['veilinggesloten'].'</td> 
+                    <td>'.$resultaat['verkoopprijs'].'</td>
+                    <td>'.$geblokeerd.'</td> 
+                    <td>'.$resultaat[blokeerdatum].'</td>
+                      ';
+            veilingblokeren($geblokeerd, $teller, $resultaat['titel'] ); 
+           
+            echo '</tr>';
+        }   
+    } catch (PDOexception $e) {
+        echo "er ging iets mis error: {$e->getMessage()}";
+    }
+}
+
+function veilingblokeren($geblokeerd, $teller, $titel){
+    if ($geblokeerd == "Ja"){
+        echo ' <td>   
+    <a class="btn btn-primary" href="overzichtVeilingen.php?id='.$teller.'&naam='.$titel.'" role="button">Deblokeer</a> 
+   </td> ';
+    } else if ($geblokeerd == "Nee"){
+        echo ' <td>
+    <a class="btn btn-primary" href="overzichtVeilingen.php?id='.$teller.'&naam='.$titel.'" role="button">Blokeer</a>
+      </td>  ';
     }
 }
 ?>

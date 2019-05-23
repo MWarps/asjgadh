@@ -1,4 +1,4 @@
-/*!
+﻿/*!
   * Bootstrap v4.3.1 (https://getbootstrap.com/)
   * Copyright 2011-2019 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
@@ -8,8 +8,6 @@
   typeof define === 'function' && define.amd ? define(['exports', 'jquery'], factory) :
   (global = global || self, factory(global.bootstrap = {}, global.jQuery));
 }(this, function (exports, $) { 'use strict';
-
-  $ = $ && $.hasOwnProperty('default') ? $['default'] : $;
                                
 (function() {
     'use strict';
