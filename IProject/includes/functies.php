@@ -222,10 +222,12 @@ function haalAdvertentieOp($rubriek){
             echo '
             <div class="col-md-4 pb-3">
             <div class="card" style="width: 18rem;">
+            <div class="thumbnail">
             <img class="card-img-top" src="../pics/'.$row[$teller]['illustratieFile'].'" alt="Foto bestaat niet">
+            </div>
             <h5 class="card-header"><a href="advertentie.php?id='.$row[$teller]['voorwerpnr'].'">'.$row[$teller]['titel'].'</a></h5>
             <div class="card-body">
-            <h4 class="card-text">'.$row[$teller]['startprijs'].'</h4>
+            <h4 class="card-text">€'.$row[$teller]['startprijs'].'</h4>
             <p class="card-text"><a href="#">'.$row[$teller]['verkoper'].'</a><br>
             '.$row[$teller]['land'].', '.$row[$teller]['plaatsnaam'].'</p>
             <a href="advertentie.php?id='.$row[$teller]['voorwerpnr'].'" class="btn btn-block btn-primary">Ga naar artikel</a>
