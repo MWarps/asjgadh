@@ -168,7 +168,7 @@ if(isset($_POST['bieden'])){
    <div class="card-body">
        <a href="#"><?php echo $advertentie['verkoper']; ?></a><br>
        <a href="#">Reviews</a><br><br>
-   <button type="button" class="btn btn-primary btn-lg"><a style="color: white;" href="stuurbericht.php">Stuur bericht!</a></button>
+   <button type="button" class="btn btn-primary btn-lg"><a style="color: white;" href="stuurbericht.php?id=<?php echo $advertentie['verkoper']?>">Stuur bericht!</a></button>
    <hr>
    
        <div class="icon-product">

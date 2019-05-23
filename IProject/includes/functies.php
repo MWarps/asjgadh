@@ -102,7 +102,7 @@ function DetailAdvertentie($id)
 {
     try {
         require('core/dbconnection.php');
-        $sqlSelect = $dbh->prepare("select top 4*, illustratieFile from Voorwerp, Illustratie
+        $sqlSelect = $dbh->prepare("select *, illustratieFile from Voorwerp, Illustratie
         where Voorwerp.voorwerpnr = Illustratie.voorwerpnr
         AND Voorwerp.voorwerpnr = :id");
 
