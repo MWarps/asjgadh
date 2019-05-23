@@ -164,7 +164,7 @@ CREATE TABLE Aanbevolen
 gebruikersnaam		VARCHAR(50)		NOT NULL,
 rubrieknr			INT				NOT NULL,
 datumtijd			DATETIME		NOT NULL DEFAULT CURRENT_TIMESTAMP,
-CONSTRAINT PK_laatstbekeken PRIMARY KEY (gebruikersnaam)
+CONSTRAINT PK_laatstbekeken PRIMARY KEY (gebruikersnaam, rubrieknr, datumtijd)
 );
 
 ----------------------------------------------------------
