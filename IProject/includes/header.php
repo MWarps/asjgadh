@@ -91,51 +91,5 @@ if(isset($_SESSION['gebruikersnaam'])){
                       </div>
                 
             </nav>
-            <nav class="navbar navbar-expand-lg navbar-light bg-orange2 spacing justify-content-md-center">
-                <form class="form-inline my-2 my-md-0 needs-validation" novalidate action="catalogus.php" method="get">
-                    <ul class="navbar-nav">
-                        <li class="navbar-item px-1">
-                            <input class="form-control" name="zoektekst" type="text" placeholder="Product Naam" aria-label="Search">
-                        </li>
-                    </ul>
-                    <div class="dropdown px-1">
-                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuRubriek" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                          <?php 
-                            if(isset($_SESSION['rubriek']['subrubriek2'])){
-                            $naam = HaalRubriekNaamOp($_SESSION['rubriek']['subrubriek2']);
-                            echo $naam['rubrieknaam'];
-                            } 
-                            else {
-                              echo 'Selecteer rubriek';
-                            }
-                            ?>
-                        </button>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuRubriek">
-                          <?php HaalRubriekop($_SESSION['rubriek']['subrubriek1'])
-                          
-                          ?>                      
-                        </div>
-                    </div>
-                      <?php 
-                          if(isset($_GET['id']) && isset($_SESSION['rubriek']['subrubriek2'])) { 
-                                            
-                      ?>          
-                        <div class="dropdown px-1">
-                          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuRubriek" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Sub rubriek
-                          </button>
-                          <div class="dropdown-menu" aria-labelledby="dropdownMenuRubriek">
-                            <?php HaalRubriekop($_SESSION['rubriek2'])?>                      
-                          </div>
-                      </div>
-                    <?php } ?>
-                    
-                    
-                    <ul class="navbar-nav">
-                        <li class="navbar-item p-2">
-                            <button type="submit" name="zoek" id="zoek" class="btn btn-light">Verstuur</button>
-                        </li>
-                    </ul>
-                </form>
-            </nav>
+            
       
