@@ -43,7 +43,7 @@ if (isset( $_GET['id'])){
     <div class="row justify-content-center">
         <div class="col-md-12">
             <h1 class="h3 offset-2 mb-3 font-weight-normal text-center">Resultaten:</h1>
-            <table class="table">
+            <table class="table table-responsive">
                 <thead class="thead-dark">
                     <tr>
                         <th scope="col">#</th>

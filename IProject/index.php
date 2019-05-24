@@ -136,7 +136,7 @@ if(isset($_SESSION['status'])){
         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
             <?php $advertentie = DetailAdvertentie($laatstBekeken[0]); ?>
             <div class="hovereffect">
-                <img class="img-responsive" src="<?php echo $advertentie['illustratieFile']?>" alt="">
+                <img class="img-responsive" src="<?php echo $advertentie['illustratieFile']?>" alt="Geen afbeelding beschikbaar">
                 <div class="overlay">
                     <h2>Hover effect 1</h2>
                     <a class="info" href=\"advertentie.php?id=<?php echo $advertentie['voorwerpnr']; ?>"><?php echo $advertentie['titel'];?></a>
@@ -146,7 +146,7 @@ if(isset($_SESSION['status'])){
         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
             <?php $advertentie = DetailAdvertentie($laatstBekeken[1]); ?>
             <div class="hovereffect">
-                <img class="img-responsive" src="<?php echo $advertentie['illustratieFile'];?>" alt="">
+                <img class="img-responsive" src="<?php echo $advertentie['illustratieFile'];?>" alt="Geen afbeelding beschikbaar">
                 <div class="overlay">
                     <h2>Hover effect 1</h2>
                     <a class="info" href="advertentie.php?id=<?php echo $advertentie['voorwerpnr']; ?>"><?php echo $advertentie['titel'];?></a>
@@ -156,7 +156,7 @@ if(isset($_SESSION['status'])){
         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
             <?php $advertentie = DetailAdvertentie($laatstBekeken[2]);?>
             <div class="hovereffect">
-                <img class="img-responsive" src="<?php echo $advertentie['illustratieFile'];?>" alt="">
+                <img class="img-responsive" src="<?php echo $advertentie['illustratieFile'];?>" alt="Geen afbeelding beschikbaar">
                 <div class="overlay">
                     <h2>Hover effect 1</h2>
                     <a class="info" href="advertentie.php?id=<?php echo $advertentie['voorwerpnr']; ?>"><?php echo $advertentie['titel'];?></a>
@@ -171,7 +171,7 @@ if(isset($_SESSION['status'])){
         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
             <?php $advertentie = DetailAdvertentie($aanbevolen[0]);?>
             <div class="hovereffect">
-                <img class="img-responsive" src="<?php echo $advertentie['illustratieFile'];?>" alt="">
+                <img class="img-responsive" src="<?php echo $advertentie['illustratieFile'];?>" alt="Geen afbeelding beschikbaar">
                 <div class="overlay">
                     <h2>Hover effect 1</h2>
                     <a class="info" href="advertentie.php?id=<?php echo $advertentie['voorwerpnr']; ?>"><?php echo $advertentie['titel'];?></a>
@@ -181,7 +181,7 @@ if(isset($_SESSION['status'])){
         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
             <?php $advertentie = DetailAdvertentie($aanbevolen[1]);?>
             <div class="hovereffect">
-                <img class="img-responsive" src="<?php echo $advertentie['illustratieFile'];?>" alt="">
+                <img class="img-responsive" src="<?php echo $advertentie['illustratieFile'];?>" alt="Geen afbeelding beschikbaar">
                 <div class="overlay">
                     <h2>Hover effect 1</h2>
                     <a class="info" href="advertentie.php?id=<?php echo $advertentie['voorwerpnr']; ?>"><?php echo $advertentie['titel'];?></a>
@@ -191,7 +191,7 @@ if(isset($_SESSION['status'])){
         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
             <?php $advertentie = DetailAdvertentie($aanbevolen[2]);?>
             <div class="hovereffect">
-                <img class="img-responsive" src=\"<?php echo $advertentie['illustratieFile'];?>" alt="">
+                <img class="img-responsive" src=\"<?php echo $advertentie['illustratieFile'];?>" alt="Geen afbeelding beschikbaar">
                 <div class="overlay">
                     <h2>Hover effect 1</h2>
                     <a class="info" href="advertentie.php?id=<?php echo $advertentie['voorwerpnr']; ?>"><?php echo $advertentie['titel'];?></a>
@@ -204,7 +204,7 @@ if(isset($_SESSION['status'])){
         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
             <?php $advertentie = DetailAdvertentie($populairst[0]);?>
             <div class="hovereffect">
-                <img class="img-responsive" src="<?php echo $advertentie['illustratieFile'];?>" alt="">
+                <img class="img-responsive" src="<?php echo $advertentie['illustratieFile'];?>" alt="Geen afbeelding beschikbaar">
                 <div class="overlay">
                     <h2>Hover effect 1</h2>
                     <a class="info" href="advertentie.php?id=<?php echo $advertentie['voorwerpnr']; ?>"><?php echo $advertentie['titel'];?></a>
@@ -214,7 +214,7 @@ if(isset($_SESSION['status'])){
         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
             <?php $advertentie = DetailAdvertentie($populairst[1]);?>
             <div class="hovereffect">
-                <img class="img-responsive" src="<?php echo $advertentie['illustratieFile'];?>" alt="">
+                <img class="img-responsive" src="<?php echo $advertentie['illustratieFile'];?>" alt="Geen afbeelding beschikbaar">
                 <div class="overlay">
                     <h2>Hover effect 1</h2>
                     <a class="info" href="advertentie.php?id=<?php echo $advertentie['voorwerpnr']; ?>"><?php echo $advertentie['titel'];?></a>
@@ -224,7 +224,7 @@ if(isset($_SESSION['status'])){
         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
             <?php $advertentie = DetailAdvertentie($populairst[2]);?>
             <div class="hovereffect">
-                <img class="img-responsive" src="<?php echo $advertentie['illustratieFile'];?>" alt="">
+                <img class="img-responsive" src="<?php echo $advertentie['illustratieFile'];?>" alt="Geen afbeelding beschikbaar">
                 <div class="overlay">
                     <h2>Hover effect 1</h2>
                     <a class="info" href="advertentie.php?id=<?php echo $advertentie['voorwerpnr']; ?>"><?php echo $advertentie['titel'];?></a>
