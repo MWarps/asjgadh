@@ -1,6 +1,6 @@
 <?php
 include 'includes/header.php';
-
+if(isset($_SESSION['gebruikersnaam'])){
 if(isset($_POST['Volgende'])){
   $rubriek = $_POST['Rubriek'];
   $titel = $_POST['titel'];
@@ -18,13 +18,14 @@ if(isset($_POST['Volgende'])){
   $land =  $_POST['rLand'];
   $looptijd = $_POST['looptijd'];
    
+  $gebruiker = HaalGebruikerOp($_SESSION['gebruikersnaam']);
+  
   $voorwerp = array($titel, $beschrijving, $startbedrag, $betalingsmethode,
   $betalingsinstructie, $plaats, $land, $looptijd, $verzendkosten, 
-  $verzendinstructies, $verkoper, $looptijdeindedagtijdstip);
+  $verzendinstructies, $gebruiker['gebruikersnaam'], $looptijdeindedagtijdstip);
   
   VoegVoorwerpToe($voorwerp);
-  //VoegVoorwerpAanRubriekToe($rubriek, $voorwerpid);
-  //VoegIllustratieToe($bestand1, $bestand2, $bestand3, $bestand4,);
+  VoegVoorwerpAanRubriekToe($rubriek, $gebruiker['gebruikersnaam']);
   $_SESSION['status'] = 'Voorwerp';
   
   //echo '<script language="javascript">window.location.href ="index.php"</script>';
@@ -170,6 +171,10 @@ if(isset($_POST['Volgende'])){
 
 
 <?php
+}
+else {
+  include 'includes/404error.php'
+}
 include 'includes/footer.php';
 ?>
 

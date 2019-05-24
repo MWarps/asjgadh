@@ -3,8 +3,58 @@ include 'email.php';
 include 'email2.php';
 include 'emailBericht.php';
 
-function VoegVoorwerpToe($input){
+function VoegVoorwerpAanRubriekEnIllustratie($rubriek, $verkoper){
   
+  try {
+      // SQL insert statement
+      require('core/dbconnection.php');
+      $sqlInsert = $dbh->prepare("SELECT voorwerpnr from Voorwerp where verkoper = :verkoper
+      order by looptijdbegindagtijdstip desc");
+
+      $sqlInsert->execute(
+          array(        
+              ':verkoper' => $verkoper,  
+          ));
+  }
+  
+  $records = $sqlSelect->fetch(PDO::FETCH_ASSOC);
+  
+  try {
+      // SQL insert statement
+      require('core/dbconnection.php');
+      $sqlInsert = $dbh->prepare("INSERT INTO Voorwerp (rubrieknummer, voorwerpnr )
+    values (
+      :rubrieknr, :voorwerpnr,)");
+
+      $sqlInsert->execute(
+          array(
+              ':rubrieknr' => $rubriek,
+              ':voorwerpnr' => $records['voorwerpnr']
+      
+          ));
+  }
+  
+  try {
+      // SQL insert statement
+      require('core/dbconnection.php');
+      $sqlInsert = $dbh->prepare("INSERT INTO Illustratie (voorwerpnr, illustratieFile )
+    values (
+      :voorwerpnr, :IllustratieFile,)");
+
+      $sqlInsert->execute(
+          array(
+              ':voorwerpnr' => $records['voorwerpnr'],
+              ':IllustratieFile' => $illustratieFile
+      
+          ));
+  }
+  catch (PDOexception $e) {
+      echo "er ging iets mis insert {$e->getMessage()}";
+  }
+  
+}
+
+function VoegVoorwerpToe($input){
   try {
       // SQL insert statement
       require('core/dbconnection.php');
@@ -24,16 +74,15 @@ function VoegVoorwerpToe($input){
               ':beschrijving' => $input['1'],
               ':startprijs' => $input['2'],
               ':betalingswijze' => $input['3'],
-              ':betalingsinstructies' => $input['5'],
-              ':plaatsnaam' => $input['6'],
-              ':land' => $input['7'],
-              ':looptijd' => $input['8'],
-              ':verzendkosten' => $input['9'],
-              ':verzendinstructies' => $input['10'],
-              ':verkoper' => $input['11'],
-              ':koper' => $hashedWachtwoord,
-              ':looptijdbegindagtijdstip' => $input['12']
-              
+              ':betalingsinstructies' => $input['4'],
+              ':plaatsnaam' => $input['5'],
+              ':land' => $input['6'],
+              ':looptijd' => $input['7'],
+              ':verzendkosten' => $input['8'],
+              ':verzendinstructies' => $input['9'],
+              ':verkoper' => $input['10'],
+              ':koper' => $input['11'],
+              ':looptijdbegindagtijdstip' => $input['12']        
           ));
   }
   catch (PDOexception $e) {
@@ -41,28 +90,6 @@ function VoegVoorwerpToe($input){
   }
  }  
 
-
-function gebruikerBekeekVoorwerp($gebruikersnaam, $voorwerpnr) {
-    try {
-        require('core/dbconnection.php');
-        $sqlSelect = $dbh->prepare("
-                                    INSERT INTO Laatstbekeken
-                                    VALUES (:gebruikersnaam, :voorwerpnr, CURRENT_TIMESTAMP )
-                                    
-                                    INSERT INTO Aanbevolen
-                                    VALUES (:gebruikersnaam, select rubrieknr from Voorwerpinrubriek where voorwerpnr = :voorwerpnr, CURRENT_TIMESTAMP )                                    
-                                    ");
-
-        $sqlSelect->execute(
-            array(
-                ':voorwerpnr' => $voorwerpnr,
-                ':gebruikersnaam' => $gebruikersnaam
-            ));
-
-    } catch (PDOexception $e) {
-        echo "er ging iets mis error: {$e->getMessage()}";
-    }
-}
 
 function getPopulairsteArtikelen() {
     try {
@@ -89,7 +116,7 @@ function getProductenUitRubriek($rubriek, $aantal) {
         FROM dbo.Rubrieken
         WHERE superrubriek = :rubriek --nummer van rubriek waar in gezocht wordt
         UNION ALL
-
+        
         SELECT  a.superrubriek, a.rubrieknummer
         	FROM dbo.Rubrieken a
         	INNER JOIN cte s ON a.superrubriek = s.rubrieknummer
@@ -117,7 +144,7 @@ function getProductenUitRubriek($rubriek, $aantal) {
 function getAanbevolen($gebruiker) {
     try {
         require('core/dbconnection.php');
-        $sqlSelect = $dbh->prepare("SELECT TOP 1 * FROM Aanbevolen
+        $sqlSelect = $dbh->prepare("SELECT TOP 1 * FROM Aanbevoler
       WHERE gebruikersnaam = :gebruikersnaam
 	  ORDER BY datumtijd DESC");
 
@@ -138,7 +165,7 @@ function getAanbevolen($gebruiker) {
 function getLaatstBekeken($gebruiker) {
     try {
         require('core/dbconnection.php');
-        $sqlSelect = $dbh->prepare("SELECT TOP 3 * FROM Laatstbekeken
+        $sqlSelect = $dbh->prepare("SELECT TOP 3 * FROM LaatstBekeken
       WHERE gebruikersnaam = :gebruikersnaam
 	  ORDER BY datumtijd DESC");
 
@@ -157,43 +184,43 @@ function getLaatstBekeken($gebruiker) {
 }
 
 function HaalIllustratiesOp($voorwerpnr){
-
-    try {
-        require('core/dbconnection.php');
-        $sqlSelect = $dbh->prepare("select illustratieFile from Voorwerp, Illustratie
+  
+  try {
+      require('core/dbconnection.php');
+      $sqlSelect = $dbh->prepare("select illustratieFile from Voorwerp, Illustratie
       where Voorwerp.voorwerpnr = Illustratie.voorwerpnr
       AND Voorwerp.voorwerpnr = :voorwerpnr");
 
-        $sqlSelect->execute(
-            array(
-                ':voorwerpnr' => $voorwerpnr
-            ));
-
-        $records = $sqlSelect->fetchAll(PDO::FETCH_ASSOC);  
-        return $records;    
-
-
-    } catch (PDOexception $e) {
-        echo "er ging iets mis error: {$e->getMessage()}";
-    } 
+      $sqlSelect->execute(
+          array(
+          ':voorwerpnr' => $voorwerpnr
+          ));
+          
+          $records = $sqlSelect->fetchAll(PDO::FETCH_ASSOC);  
+          return $records;    
+        
+           
+  } catch (PDOexception $e) {
+      echo "er ging iets mis error: {$e->getMessage()}";
+  } 
 }
 
 function zijnErBiedingen($voorwerpnr){
-    try {
-        require('core/dbconnection.php');
-        $sqlSelect = $dbh->prepare("select * from bod where voorwerpnr = :voorwerpnr order by euro desc");
+  try {
+      require('core/dbconnection.php');
+      $sqlSelect = $dbh->prepare("select * from bod where voorwerpnr = :voorwerpnr order by euro desc");
 
-        $sqlSelect->execute(
-            array(
-                ':voorwerpnr' => $voorwerpnr
-            ));
-
-        $records = $sqlSelect->fetch(PDO::FETCH_ASSOC);  
-        return $records;     
-
-    } catch (PDOexception $e) {
-        echo "er ging iets mis error: {$e->getMessage()}";
-    }  
+      $sqlSelect->execute(
+          array(
+          ':voorwerpnr' => $voorwerpnr
+          ));
+          
+          $records = $sqlSelect->fetch(PDO::FETCH_ASSOC);  
+          return $records;     
+           
+  } catch (PDOexception $e) {
+      echo "er ging iets mis error: {$e->getMessage()}";
+  }  
 }
 
 function VoorwerpGezien($voorwerpnr) {
@@ -214,17 +241,17 @@ function VoorwerpGezien($voorwerpnr) {
 }
 
 function updateBieden($bod, $gebruikersnaam, $voorwerpnr){
-    try {
-        require('core/dbconnection.php');
-        $sqlSelect = $dbh->prepare("INSERT INTO bod (euro, gebruikersnaam, voorwerpnr)
+  try {
+      require('core/dbconnection.php');
+      $sqlSelect = $dbh->prepare("INSERT INTO bod (euro, gebruikersnaam, voorwerpnr)
       values (:bod, :gebruikersnaam, :voorwerpnr)");
 
-        $sqlSelect->execute(
-            array(
-                ':bod' => $bod,
-                ':gebruikersnaam' => $gebruikersnaam,
-                ':voorwerpnr' => $voorwerpnr
-            ));
+      $sqlSelect->execute(
+          array(
+              ':bod' => $bod,
+              ':gebruikersnaam' => $gebruikersnaam,
+              ':voorwerpnr' => $voorwerpnr
+          ));
 
     } catch (PDOexception $e) {
         echo "er ging iets mis error: {$e->getMessage()}";
@@ -233,18 +260,18 @@ function updateBieden($bod, $gebruikersnaam, $voorwerpnr){
 }
 
 function Biedingen($voorwerpnr){
-    try {
-        require('core/dbconnection.php');
-        $sqlSelect = $dbh->prepare("select top 5 * from Bod where voorwerpnr = :voorwerpnr order by euro desc");
+  try {
+      require('core/dbconnection.php');
+      $sqlSelect = $dbh->prepare("select top 5 * from Bod where voorwerpnr = :voorwerpnr order by euro desc");
 
-        $sqlSelect->execute(
-            array(
-                ':voorwerpnr' => $voorwerpnr
-            ));
-
-        while ($row = $sqlSelect->fetch(PDO::FETCH_ASSOC)) {
-            echo '<li class="list-group-item">€'.$row['euro'].' '.$row['gebruikersnaam'].' '.date("d.m.Y H:i", strtotime($row['datumentijd'])).'</li>';    
-        }
+      $sqlSelect->execute(
+          array(
+              ':voorwerpnr' => $voorwerpnr
+          ));
+        
+          while ($row = $sqlSelect->fetch(PDO::FETCH_ASSOC)) {
+              echo '<li class="list-group-item">€'.$row['euro'].' '.$row['gebruikersnaam'].' '.date("d.m.Y H:i", strtotime($row['datumentijd'])).'</li>';    
+          }
 
         while ($row = $sqlSelect->fetch(PDO::FETCH_ASSOC)) {
             echo '<li class="list-group-item"><a href="#">€'.$row['euro'].' '.$row['gebruikersnaam'].' '.$row['datumentijd'].'</a></li>';    
@@ -283,10 +310,10 @@ function haalAdvertentieOp($rubriek){
         $producten = getProductenUitRubriek($rubriek, 20);
 
         foreach ($producten as $rij => $id) {
-            if(strlen($rij['titel']) >= 40){
-                $rij['titel'] = substr($rij['titel'],0,40);
-                $rij['titel'] .= '...';
-            }
+          if(strlen($rij['titel']) >= 40){
+              $rij['titel'] = substr($rij['titel'],0,40);
+              $rij['titel'] .= '...';
+          }
             echo '
             <div class="col-md-4 pb-3">
             <div class="card" style="width: 18rem;">
@@ -1056,13 +1083,13 @@ function directorieVinden($pagina){
                     role="button">'.$print[$teller]['rubrieknaam'].'</a>';
             $teller++ ;
         }
-
+       
         if(empty($print)){
             $terug = $dbh -> prepare("select * from Rubrieken where rubrieknummer = :id");
             $terug -> execute (
-                array(
-                    ':id' => $id,
-                )
+            array(
+            ':id' => $id,
+            )
             );
             $resultaat = $terug->fetchAll(PDO::FETCH_ASSOC);
             
@@ -1181,10 +1208,10 @@ function gebruikerblok(){
 }
 
 function veilingenVinden($veilingnaam){
-    $teller = 0;
+    $teller =0;
     try {
         require('core/dbconnection.php');
-        $veilingen = $dbh ->prepare (" select voorwerpnr, titel, startprijs, verzendkosten, betalingswijze, plaatsnaam, land, looptijd, looptijdbegindagtijdstip, looptijdeindedagtijdstip, verkoper, koper, veilinggesloten, verkoopprijs, geblokkeerd, blokkeerdatum  from Voorwerp Where titel like :titel");
+        $veilingen = $dbh ->prepare (" select * from Voorwerp Where titel like :titel");
         $veilingen -> execute(
             array(
                 ':titel' => '%'.$veilingnaam.'%',
@@ -1192,12 +1219,11 @@ function veilingenVinden($veilingnaam){
         );
         $veiling = $veilingen ->fetchAll(PDO::FETCH_ASSOC);
         foreach ( $veiling as $resultaat ){
-            print_r($resultaat);
             $teller ++;
             $geblokeerd = "error";
-            if ($resultaat['geblokkeerd'] == 1){
+            if ($resultaat['geblokeerd'] == 1){
                 $geblokeerd = "Ja";
-            }else if ($resultaat['geblokkeerd'] == 0){
+            }else{
                 $geblokeerd = "Nee";
             }
             echo '<tr>
@@ -1216,7 +1242,7 @@ function veilingenVinden($veilingnaam){
                     <td>'.$resultaat['veilinggesloten'].'</td> 
                     <td>'.$resultaat['verkoopprijs'].'</td>
                     <td>'.$geblokeerd.'</td> 
-                    <td>'.$resultaat['blokeerdatum'].'</td>
+                    <td>'.$resultaat[blokeerdatum].'</td>
                       ';
             veilingblokeren($geblokeerd, $teller, $resultaat['titel'] ); 
 
