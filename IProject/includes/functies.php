@@ -218,6 +218,7 @@ function Biedingen($voorwerpnr){
 }
 function DetailAdvertentie($id)
 {
+    
     try {
         require('core/dbconnection.php');
         $sqlSelect = $dbh->prepare("select *, illustratieFile from Voorwerp, Illustratie
