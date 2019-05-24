@@ -156,7 +156,7 @@ CREATE TABLE Laatstbekeken
 gebruikersnaam		VARCHAR(50)		NOT NULL,
 voorwerpnr			BIGINT			NOT NULL,
 datumtijd			DATETIME		NOT NULL DEFAULT CURRENT_TIMESTAMP,
-CONSTRAINT PK_laatstbekeken PRIMARY KEY (gebruikersnaam, voorwerpnr)
+CONSTRAINT PK_laatstbekeken PRIMARY KEY (gebruikersnaam, voorwerpnr, datumtijd)
 );
 
 CREATE TABLE Aanbevolen

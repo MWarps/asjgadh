@@ -14,7 +14,7 @@ if(isset($_POST['bieden'])){
     $gebruikersnaam = $_SESSION['gebruikersnaam'];
     $voorwerpnr = $_GET['id'];  
     updateBieden($bod, $gebruikersnaam, $voorwerpnr);
-    
+    gebruikerBekeekVoorwerp($gebruikersnaam, $voorwerpnr);
   }  
   else {
     echo '<div class="container">

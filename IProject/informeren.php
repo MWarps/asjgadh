@@ -26,8 +26,8 @@
                 <a href="inloggen"><img class="img-responsive" src="http://placehold.it/350x200" alt="Foto Inloggen"></a>
             </div>
             <div class="col-md-7">
-                <h3>Hoe Kan ik inloggen?</h3>
-                <p>Om te kunnen inloggen moet u eerst een account hebben. Als u wilt registreren kunt u dat <a href="register.php">hier</a> doen.
+                <h3>Hoe kan ik inloggen?</h3>
+                <p>Om te kunnen inloggen moet u eerst een account hebben. Als u zich wilt registreren kunt u dat <a href="register.php">hier</a> doen.
                     Op het moment dat u al in het bezit bent van een account, kunt u rechtsbovenin op de inlogknop klikken. Zodra u hierop heeft geklikt zult u worden meegenomen naar het inlog formulier.
                     In dit formulier moet u uw gebruikersnaam en wachtwoord invullen om te kunnen inloggen.</p>
             </div>
@@ -53,7 +53,7 @@
                 <p>
                     Om een bod op een product te kunnen doen moet u eerst ingelogd zijn.(Kijk bij het kopje <span>hoe log ik in</span> om te zien hoe u dit doet.) Als u een bod wilt uitbrengen
                     gaat u naar het product waar u het bod wilt uitbrengen. Indien u een product hebt gevonden, kunt u door op de foto te klikken om naar de overzichtspagina van het product gaan.
-                    Op deze pagina komt rechts een veld te staan waar u uw bod kan plaatsen. Vul hier in hoe veel u wilt bieden in euro's. Dan komt er bij het overzicht uw bod te staan.
+                    Op deze pagina komt rechts een veld te staan waar u uw bod kan plaatsen. Vul hier in hoeveel u wilt bieden in euro's. Dan komt er bij het overzicht uw bod te staan.
                     U heeft hierna succesvol geboden op het product.
                 </p>
             </div>
@@ -62,7 +62,7 @@
             <div class="col-md-7">
                 <h2>Ik wil graag een product verkopen, hoe doe ik dat?</h2>
                 <p>
-                    Om een product te verkopen moet u eerst rechten krijgen om het te verkopen. Deze rechten krijgt u door naar "mijn profiel te gaan". Als u bent ingelogd staat dit boven aan de website.
+                    Om een product te verkopen moet u eerst rechten krijgen om het te verkopen. Deze rechten krijgt u door naar "mijn profiel te gaan". Als u bent ingelogd staat dit bovenaan de website.
                     Daar staat een knop met "Ik wil verkoper worden". Klik op de knop. Vervolgens wordt er een brief naar u toegestuurd met een verficatie code. Deze code is 10 dagen geldig.
                     Op het moment dat u de code hebt ontvangen moet u de code invullen bij het veld dat tevoorschijn komt als u de code aanvraagt. Als u de code hebt ingevuld zult u een nieuwe knop
                     boven aan de pagina krijgen met "Product aanbieden". Klik hierop en vul vervolgens het formulier in. Daarna wordt uw product op de pagina getoond en kunt u het eventueel
@@ -71,21 +71,6 @@
             </div>
             <div class="col-md-5">
                 <a href="#"><img class="img-responsive" src="http://placehold.it/350x200" alt="Verkoper worden"></a>
-            </div>
-        </div>
-        <div class="row mt-3 mb-3">
-            <div class="col-md-5">
-                <a href="#"><img class="img-responsive" src="http://placehold.it/350x200" alt="Verkoper worden"></a>
-            </div>
-            <div class="col-md-7">
-                <h2>Ik wil graag op een product bieden, hoe doe ik dat?</h2>
-                <p>
-                    Om een product te verkopen moet u eerst rechten krijgen om het te verkopen. Deze rechten krijgt u door naar "mijn profiel te gaan". Als u bent ingelogd staat dit boven aan de website.
-                    Daar staat een knop met "Ik wil verkoper worden". Klik op de knop. Vervolgens wordt er een brief naar u toegestuurd met een verficatie code. Deze code is 10 dagen geldig.
-                    Op het moment dat u de code hebt ontvangen moet u de code invullen bij het veld dat tevoorschijn komt als u de code aanvraagt. Als u de code hebt ingevuld zult u een nieuwe knop
-                    boven aan de pagina krijgen met "Product aanbieden". Klik hierop en vul vervolgens het formulier in. Daarna wordt uw product op de pagina getoond en kunt u het eventueel
-                    aanpassen.
-                </p>
             </div>
         </div>
     </div>
