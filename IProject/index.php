@@ -26,7 +26,7 @@ if(isset($_SESSION['status'])){
             $status = 'U wachtwoord is veranderd!';
             break;
         case 'verkoper':
-            $status = 'U bent geristreerd als verkoper';
+            $status = 'U bent geregistreerd als verkoper';
         default:
             // code...
             break;
@@ -130,6 +130,7 @@ if(isset($_SESSION['status'])){
 
     <div class="col-md-9">
     <div class="row">
+        <?php if (isset($_SESSION['gebruikersnaam'])) {?>
         <button type="button" class="btn btn-secondary btn-sm btn-block">Laatst Bekeken</button>
         <?php $laatstBekeken = getLaatstBekeken($_SESSION['gebruikersnaam']); ?>
         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
@@ -138,7 +139,7 @@ if(isset($_SESSION['status'])){
                 <img class="img-responsive" src="<?php echo $advertentie['illustratieFile']?>" alt="">
                 <div class="overlay">
                     <h2>Hover effect 1</h2>
-                    <a class="info" href="advertentie.php?id=<?php echo $advertentie['voorwerpnr']; ?>"><?php echo $advertentie['titel'];?></a>
+                    <a class="info" href=\"advertentie.php?id=<?php echo $advertentie['voorwerpnr']; ?>"><?php echo $advertentie['titel'];?></a>
                 </div>
             </div>
         </div>
@@ -190,13 +191,14 @@ if(isset($_SESSION['status'])){
         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
             <?php $advertentie = DetailAdvertentie($aanbevolen[2]);?>
             <div class="hovereffect">
-                <img class="img-responsive" src="<?php echo $advertentie['illustratieFile'];?>" alt="">
+                <img class="img-responsive" src=\"<?php echo $advertentie['illustratieFile'];?>" alt="">
                 <div class="overlay">
                     <h2>Hover effect 1</h2>
                     <a class="info" href="advertentie.php?id=<?php echo $advertentie['voorwerpnr']; ?>"><?php echo $advertentie['titel'];?></a>
                 </div>
             </div>
         </div>
+        <?php }?>
         <button type="button" class="btn btn-secondary btn-sm btn-block">Populairste Artikelen</button>
         <?php $populairst = getPopulairsteArtikelen(); ?>
         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">

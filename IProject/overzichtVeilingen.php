@@ -2,6 +2,13 @@
 include 'includes/header.php';
 //if (isset ($_SESSION['beheerder']) && $_SESSION['beheerder'] == true){     // veranderen naar admin variabel. 
 
+if (isset($_POST['veilingzoeken'])){
+    $veilingnaam = "";
+    $veilingnaam = $_POST['zoekopdracht'];
+    
+}
+
+
 ?>
 
 <div class="container">
@@ -57,7 +64,7 @@ include 'includes/header.php';
                 <tbody>
                     <?php
                     if (isset($_POST['veilingzoeken'])){
-                       veilingenVinden($_POST['veilingzoeken']);
+                       veilingenVinden($veilingnaam);
                     }
                     ?>
                 </tbody>
