@@ -5,8 +5,8 @@ include 'includes/header.php';
 if (isset($_POST['veilingzoeken'])){
     $veilingnaam = "";
     $veilingnaam = $_POST['zoekopdracht'];
-    
 }
+
 
 
 ?>
@@ -59,12 +59,13 @@ if (isset($_POST['veilingzoeken'])){
                         <th scope="col">verkoopprijs</th>
                         <th scope="col">geblokeerd</th>
                         <th scope="col">datum van blokeren</th>
+                        <th scope="col">blokeren</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php
                     if (isset($_POST['veilingzoeken'])){
-                       veilingenVinden($veilingnaam);
+                        veilingenVinden($veilingnaam);
                     }
                     ?>
                 </tbody>
