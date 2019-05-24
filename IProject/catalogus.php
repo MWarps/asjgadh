@@ -1,7 +1,7 @@
 <?php
 include 'includes/header.php';
 $pagina = 'catalogus.php';
-$_SESSION['catalogus'] = true;
+//$_SESSION['catalogus'] = true;
 
 if (!isset($_SESSION['catogorie'])){
     setupCatogorien();
@@ -34,7 +34,7 @@ if(isset($_GET['id'])){
         </div>
         <div class="col-md-9">
             <div class="row">
-                <?php haalAdvertentieOp($rubriek); ?>
+                <?php haalAdvertentieOp($_GET['id']) ?>
             </div> 
         </div>  
     </div>

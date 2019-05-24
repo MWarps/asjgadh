@@ -3,7 +3,7 @@ go
 
 --kolom met gebruikersnaam als foreign key altijd genoemd gebruikersnaam
 
-DROP TABLE IF EXISTS  Voorwerpinrubriek, Bod,  Rubrieken, Illustratie,  Voorwerp, Verificatie, Verificatietypen, Gebruikerstelefoon, Verkoper, Gebruiker, Landen, Vragen ;
+DROP TABLE IF EXISTS  Aanbevolen, Laatstbekeken, Voorwerpinrubriek, Bod,  Rubrieken, Illustratie,  Voorwerp, Verificatie, Verificatietypen, Gebruikerstelefoon, Verkoper, Gebruiker, Landen, Vragen ;
 go
 ----------------------------------------------------------
 -------------------- CREATE TABLES -----------------------
@@ -93,7 +93,7 @@ CONSTRAINT PK_Verificatie PRIMARY KEY (email)
 );
 
 CREATE TABLE Voorwerp (
-voorwerpnr			BIGINT			NOT NULL,
+voorwerpnr			BIGINT			IDENTITY(1,1) NOT NULL,
 titel				VARCHAR(100)	NOT NULL,
 beschrijving		VARCHAR(max)	NOT NULL,
 startprijs			VARCHAR(9)		NOT NULL,
@@ -102,13 +102,13 @@ betalingsinstructie	VARCHAR(70)		NULL,
 plaatsnaam			VARCHAR(28)		NOT NULL,
 land				VARCHAR(40)		NOT NULL,
 looptijd			TINYINT			NOT NULL,
-looptijdbegindagtijdstip DATETIME	NOT NULL,
+looptijdbegindagtijdstip DATETIME	NOT NULL DEFAULT CURRENT_TIMESTAMP,
 verzendkosten		VARCHAR(9)		NULL,
 verzendinstructies	VARCHAR(70)		NULL,
 verkoper			VARCHAR(50)		NOT NULL,
 koper				VARCHAR(50)		NULL,
 looptijdeindedagtijdstip DATETIME	NOT NULL,
-veilinggesloten		BIT				NOT NULL,
+veilinggesloten		BIT				NOT NULL DEFAULT 0,
 verkoopprijs		VARCHAR(9)		NULL,
 gezien				INT				NOT NULL DEFAULT 0,
 geblokkeerd			BIT				NOT NULL DEFAULT 0,
@@ -164,7 +164,7 @@ CREATE TABLE Aanbevolen
 gebruikersnaam		VARCHAR(50)		NOT NULL,
 rubrieknr			INT				NOT NULL,
 datumtijd			DATETIME		NOT NULL DEFAULT CURRENT_TIMESTAMP,
-CONSTRAINT PK_laatstbekeken PRIMARY KEY (gebruikersnaam, rubrieknr, datumtijd)
+CONSTRAINT PK_Aanbevolen PRIMARY KEY (gebruikersnaam, rubrieknr, datumtijd)
 );
 
 ----------------------------------------------------------

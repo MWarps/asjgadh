@@ -45,8 +45,7 @@ if (isset($_POST['rVolgende'])) {
     deleteVerificatieRij($_SESSION['validatie']['email'], $_SESSION['validatie']['type']);
     
    unset($_SESSION['validatie']);
-       
-    $url = 'index.php';
+
     echo '<script language="javascript">window.location.href ="index.php"</script>';
     exit();
     }
