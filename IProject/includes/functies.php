@@ -3,6 +3,45 @@ include 'email.php';
 include 'email2.php';
 include 'emailBericht.php';
 
+function VoegVoorwerpToe($input){
+  
+  try {
+      // SQL insert statement
+      require('core/dbconnection.php');
+      $sqlInsert = $dbh->prepare("INSERT INTO Voorwerp (
+     titel, beschrijving, startprijs, betalingswijze, betalingsinstructies,
+     plaatsnaam, land, looptijd, verzendkosten, verzendinstructies, verkoper, 
+     koper, looptijdbegindagtijdstip
+     )
+    values (
+      :titel, :beschrijving, :startprijs, :betalingswijze, :betalingsinstructies,
+      :plaatsnaam, :land, :looptijd, :verzendkosten, :verzendinstructies, :verkoper, 
+      :koper, :looptijdbegindagtijdstip)");
+
+      $sqlInsert->execute(
+          array(
+              ':titel' => $input['0'],
+              ':beschrijving' => $input['1'],
+              ':startprijs' => $input['2'],
+              ':betalingswijze' => $input['3'],
+              ':betalingsinstructies' => $input['5'],
+              ':plaatsnaam' => $input['6'],
+              ':land' => $input['7'],
+              ':looptijd' => $input['8'],
+              ':verzendkosten' => $input['9'],
+              ':verzendinstructies' => $input['10'],
+              ':verkoper' => $input['11'],
+              ':koper' => $hashedWachtwoord,
+              ':looptijdbegindagtijdstip' => $input['12']
+              
+          ));
+  }
+  catch (PDOexception $e) {
+      echo "er ging iets mis insert {$e->getMessage()}";
+  }
+ }  
+
+
 function getPopulairsteArtikelen() {
     try {
         require('core/dbconnection.php');
@@ -856,6 +895,11 @@ function gegevensIngevuld($gebruikersnaam){
 
 }
 
+function setupCatogorienVeilen(){
+    $_SESSION['catogorieVeilen'] = array("Home"=>"-1");
+    // print_r ( $_SESSION['catogorie']); test om de array de var_dumpen
+}
+
 function setupCatogorien(){
     $_SESSION['catogorie'] = array("Home"=>"-1");
     // print_r ( $_SESSION['catogorie']); test om de array de var_dumpen
@@ -931,8 +975,45 @@ function HaalRubriekop($id)
     }
 } 
 
+function DirectorieVindenVeilen(){
+  
+  $id = (end($_SESSION['catogorie']) );
+  $teller = 0;
+  try {
+      require('core/dbconnection.php');
+      $catogorien = $dbh->prepare("select * from Rubrieken where superrubriek = :id ");
+      $catogorien -> execute(
+          array(
+              ':id' =>  $id,
+          )
+      );
 
-
+      $print = $catogorien->fetchAll(PDO::FETCH_ASSOC);
+      foreach ( $print as $Name => $id){ 
+          echo '<a class="btn btn-outline-dark"  
+                  href="veilen.php?id='.$print[$teller]['rubrieknummer'].'&naam='.$print[$teller]['rubrieknaam'].'" 
+                  role="button">'.$print[$teller]['rubrieknaam'].'</a>';        
+          $teller++ ;
+      }
+       
+        if(empty($print)){
+            $terug = $dbh -> prepare("select * from Rubrieken where rubrieknummer = :id");
+            $terug -> execute(
+            array(
+            ':id' => $id,));
+            
+            $resultaat = $terug->fetchAll(PDO::FETCH_ASSOC);
+            //$_SESSION['rubriek'] = true;     
+        echo  '<p class="btn" >Uw gekozen rubriek is: <strong>'.$resultaat[0]['rubrieknaam'].'<br></strong>
+                   <a class="btn btn-lg bg-flame btn-block mt-1" href="veilen.php?id='.$resultaat[0]['superrubriek'].'&naam='.$resultaat[0]['rubrieknaam'].'">Vorige</a>
+                   <a class="btn btn-lg bg-flame btn-block mt-1" id="volgende" href=veilen2.php?'.$resultaat[0]['rubrieknummer'].'&naam='.$resultaat[0]['rubrieknaam'].' name="volgende">Volgende</a>';
+          }
+      }
+        
+     catch (PDOexception $e) {
+        // echo "er ging iets mis error: {$e->getMessage()}";
+    }
+}
 
 function directorieVinden($pagina){
     $id = (end($_SESSION['catogorie']) );
@@ -955,30 +1036,20 @@ function directorieVinden($pagina){
         }
        
         if(empty($print)){
-            $terug = $dbh -> prepare("select * from Rubrieken where rubrieknummer = ( select  superrubriek from Rubrieken where rubrieknummer = :id)");
+            $terug = $dbh -> prepare("select * from Rubrieken where rubrieknummer = :id");
             $terug -> execute (
             array(
             ':id' => $id,
             )
             );
             $resultaat = $terug->fetchAll(PDO::FETCH_ASSOC);
+            
             if($pagina == 'catalogus.php'){
            echo '<a class="btn btn-outline-dark"  
-                    href="'.$pagina.'?id='.$resultaat[0]['rubrieknummer'].'&naam='.$resultaat[0]['rubrieknaam'].'" 
+                    href="'.$pagina.'?id='.$resultaat[0]['superrubriek'].'&naam='.$resultaat[0]['rubrieknaam'].'" 
                     role="button">Er zijn geen sub-catogorien beschikbaar. Klik hier om terug te gaan</a>';
-        }
-        if($pagina == 'veilen.php'){
-          $terug1 = $dbh -> prepare("select * from Rubrieken where rubrieknummer = :id");
-          $terug1 -> execute (
-          array(
-          ':id' => $id));
-          $resultaat1 = $terug1->fetchAll(PDO::FETCH_ASSOC);
-          $_SESSION['rubriek'] = $resultaat1[0]['rubrieknummer'];
-        echo  '<a class="btn"  
-                   href="'.$pagina.'?id='.$resultaat[0]['rubrieknummer'].'&naam='.$resultaat[0]['rubrieknaam'].'" 
-                   role="button">Uw gekozen rubriek is: <strong>'.$resultaat1[0]['rubrieknaam'].'<br></strong> Klik <strong> hier</strong>
-                   om naar de vorige rubriek te gaan.</a>';
-          }
+              }
+              
       }
         
     } catch (PDOexception $e) {
