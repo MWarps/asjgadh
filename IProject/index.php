@@ -130,6 +130,7 @@ if(isset($_SESSION['status'])){
 
     <div class="col-md-9">
     <div class="row">
+        <?php if (isset($_SESSION['gebruikersnaam'])) {?>
         <button type="button" class="btn btn-secondary btn-sm btn-block">Laatst Bekeken</button>
         <?php $laatstBekeken = getLaatstBekeken($_SESSION['gebruikersnaam']); ?>
         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
@@ -197,6 +198,7 @@ if(isset($_SESSION['status'])){
                 </div>
             </div>
         </div>
+        <?php }?>
         <button type="button" class="btn btn-secondary btn-sm btn-block">Populairste Artikelen</button>
         <?php $populairst = getPopulairsteArtikelen(); ?>
         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
