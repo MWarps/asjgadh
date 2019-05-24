@@ -99,7 +99,7 @@ function getAanbevolen($gebruiker) {
 function getLaatstBekeken($gebruiker) {
     try {
         require('core/dbconnection.php');
-        $sqlSelect = $dbh->prepare("SELECT TOP 3 * FROM LaatstBekeken
+        $sqlSelect = $dbh->prepare("SELECT TOP 3 * FROM Laatstbekeken
       WHERE gebruikersnaam = :gebruikersnaam
 	  ORDER BY datumtijd DESC");
 
