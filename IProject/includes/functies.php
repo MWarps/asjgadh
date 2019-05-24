@@ -112,6 +112,41 @@ function getPopulairsteArtikelen() {
     }
 }
 
+function getProductenUitRubriek2($rubriek, $aantal) {
+  
+    try {
+        require('core/dbconnection.php');
+        $sqlSelect = $dbh->prepare("WITH cte AS
+        (
+        SELECT superrubriek, rubrieknummer
+        FROM dbo.Rubrieken
+        WHERE rubrieknummer = :rubriek
+        UNION ALL
+        
+        SELECT  a.superrubriek, a.rubrieknummer
+        	FROM dbo.Rubrieken a
+        	INNER JOIN cte s ON a.superrubriek = s.rubrieknummer
+        )
+        SELECT distinct top 21 * 
+        	FROM dbo.Voorwerpinrubriek
+        	JOIN dbo.Voorwerp on dbo.Voorwerpinrubriek.voorwerpnr = dbo.Voorwerp.voorwerpnr
+        	JOIN cte on dbo.Voorwerpinrubriek.rubrieknr = cte.rubrieknummer;");
+
+        $sqlSelect->execute(
+            array(
+                ':rubriek' => $rubriek,
+              //  ':aantal' => $aantal
+            ));
+
+        $records = $sqlSelect->fetchAll(PDO::FETCH_ASSOC);
+
+        return $records;
+    }
+    catch (PDOexception $e) {
+        echo "er ging iets mis error2: {$e->getMessage()}";
+    }
+}
+
 function getProductenUitRubriek($rubriek, $aantal) {
   
     try {
@@ -274,17 +309,19 @@ function Biedingen($voorwerpnr){
           array(
               ':voorwerpnr' => $voorwerpnr
           ));
+        $rows = $sqlSelect->fetchAll(PDO::FETCH_ASSOC);
+        //print_r($rows);
         
-          while ($row = $sqlSelect->fetch(PDO::FETCH_ASSOC)) {
-              echo '<li class="list-group-item">€'.$row['euro'].' '.$row['gebruikersnaam'].' '.date("d.m.Y H:i", strtotime($row['datumentijd'])).'</li>';    
+          foreach ($rows as $rij)
+           {
+              echo '<li class="list-group-item">€'.$rij['euro'].' '.$rij['gebruikersnaam'].' '.date("d.m.Y H:i", strtotime($rij['datumentijd'])).'</li>';
+                  
           }
 
-        while ($row = $sqlSelect->fetch(PDO::FETCH_ASSOC)) {
-            echo '<li class="list-group-item"><a href="#">€'.$row['euro'].' '.$row['gebruikersnaam'].' '.$row['datumentijd'].'</a></li>';    
-        }
+      
 
     } catch (PDOexception $e) {
-        echo "er ging iets mis error: {$e->getMessage()}";
+        echo "er ging iets mis errorbiedingen: {$e->getMessage()}";
     }
 
 }
@@ -313,8 +350,12 @@ function DetailAdvertentie($id)
 /* advertentie ophalen */
 function haalAdvertentieOp($rubriek){
     try {
-        $producten = getProductenUitRubriek($rubriek, 20);    
-        
+        $producten = getProductenUitRubriek($rubriek, 20); 
+           
+        if(empty($producten)){
+            $producten = getProductenUitRubriek2($rubriek, 20);                      
+      }
+      
         foreach ($producten as $rij) {
           $details = DetailAdvertentie($rij['voorwerpnr']);
           
@@ -329,9 +370,9 @@ function haalAdvertentieOp($rubriek){
             <h5 class="card-header"><a href="advertentie.php?id='.$details['voorwerpnr'].'">'.$details['titel'].'</a></h5>
             <div class="card-body">
             <h4 class="card-text">€ '.$details['startprijs'].'</h4>
-            <p class="card-text"><a href="#">'.$rij['verkoper'].'</a><br>
-            '.$rij['land'].', '.$rij['plaatsnaam'].'</p>
-            <a href="advertentie.php?id='.$rij['voorwerpnr'].'" class="btn btn-block btn-primary">Ga naar artikel</a>
+            <p class="card-text"><a href="#">'.$details['verkoper'].'</a><br>
+            '.$details['land'].', '.$details['plaatsnaam'].'</p>
+            <a href="advertentie.php?id='.$details['voorwerpnr'].'" class="btn btn-block btn-primary">Ga naar artikel</a>
             </div>
             </div>
             </div>';

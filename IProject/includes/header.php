@@ -58,12 +58,18 @@ if(isset($_SESSION['gebruikersnaam'])){
                             </li>
                         </ul>                      
                         <?php
-                        if (isset($_SESSION['gebruikersnaam'])){ ?>
+                        if (isset($_SESSION['gebruikersnaam'])){
+                          if ($VerkoperValidatie == false){                                              
+                        echo '<a class="btn btn-primary" href="veilen.php">Veilen</a>';                                            
+                          } ?>  
                               <ul class="navbar-nav">                            
                                       <div class="nav-item dropdown">
-                                        <button class="btn dropdown-toggle" type="button" id="accountbeheer" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        
+                                        <button class="btn btn-flame dropdown-toggle" type="button" id="accountbeheer" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                          
                                           <?php echo $_SESSION['gebruikersnaam']; ?>
-                                        </button>                                                           
+                                        </button>     
+                                                                                          
                                       <div class="dropdown-menu" aria-labelledby="accountbeheer">
                                           <a class="dropdown-item" href="#">Beheer</a>
                                           <a class="dropdown-item" href="#">Meldingen</a>

@@ -2,7 +2,7 @@
 include 'includes/header.php';
 if(isset($_GET['id'])){
 $advertentie = DetailAdvertentie($_GET['id']);
-
+$pagina = 'advertentie.php';
 if(!isset($_POST['bieden'])){
   $voorwerpnr = $_GET['id']; 
   VoorwerpGezien($voorwerpnr);
@@ -38,7 +38,7 @@ if(isset($_POST['bieden'])){
             <nav aria-label="breadcrumb">        
                 <ol class="breadcrumb">
                   <button class="btn btn-sm btn-primary mr-3" id="terug" name="terug" value="terug"><a href="#"></a>Vorige</button>              
-                    <?php catogorieSoort(); ?>                    
+                    <?php catogorieSoort($pagina); ?>                    
                 </ol>            
             </nav>
         </div>
@@ -151,10 +151,11 @@ if(isset($_POST['bieden'])){
        Biedingen
      </div>
      <ul class="list-group list-group-flush">
-       <?php if(!empty(zijnErBiedingen($advertentie['voorwerpnr']))){
+        <?php if(empty(zijnErBiedingen($advertentie['voorwerpnr']))){
+           echo '<li class="list-group-item"> Er zijn nog geen biedingen gedaan</li>';}
+           if(!empty(zijnErBiedingen($advertentie['voorwerpnr']))){
                 Biedingen($advertentie['voorwerpnr']);}
-            if(empty(zijnErBiedingen($advertentie['voorwerpnr']))){
-               echo '<li class="list-group-item"> Er zijn nog geen biedingen gedaan</li>';}
+            
         ?>
      </ul>
    </div>

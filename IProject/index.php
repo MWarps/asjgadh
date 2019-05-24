@@ -67,7 +67,13 @@ if(isset($_SESSION['status'])){
     <div class="row">
         <?php if (isset($_SESSION['gebruikersnaam'])) {?>
         <button type="button" class="btn btn-secondary btn-sm btn-block">Laatst Bekeken</button>
-        <?php $laatstBekeken = getLaatstBekeken($_SESSION['gebruikersnaam']); ?>
+        <?php $laatstBekeken = getLaatstBekeken($_SESSION['gebruikersnaam']);
+        if(empty($laatstBekeken)){ ?>
+          <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+            <p> U heeft nog geen adverties bekeken </p>
+          </div>
+      <?php }
+      if(!empty($laatstBekeken)) {?>
         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
             <?php $advertentie = DetailAdvertentie($laatstBekeken[0]); ?>
             <div class="hovereffect">
@@ -79,7 +85,7 @@ if(isset($_SESSION['status'])){
             </div>
         </div>
         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-            <?php $advertenti = DetailAdvertentie($laatstBekeken[1]); 
+            <?php $advertentie = DetailAdvertentie($laatstBekeken[1]); 
            ?>
             <div class="hovereffect">
                 <img class="img-responsive" src="<?php echo $advertentie['illustratieFile'];?>" alt="Geen afbeelding beschikbaar">
@@ -89,6 +95,7 @@ if(isset($_SESSION['status'])){
                 </div>
             </div>
         </div>
+      
         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
             <?php $advertentie = DetailAdvertentie($laatstBekeken[2]);?>
             <div class="hovereffect">
@@ -99,11 +106,19 @@ if(isset($_SESSION['status'])){
                 </div>
             </div>
         </div>
+        <?php } ?>
         <button type="button" class="btn btn-secondary btn-sm btn-block">Aanbevolen</button>
+        
         <?php
-        $rubriek = getAanbevolen($_SESSION['gebruikersnaam']);
+        $rubriek = getAanbevolen($_SESSION['gebruikersnaam']);         
         $aanbevolen = getProductenUitRubriek($rubriek, 3);
-        ?>
+        if(empty($aanbevolen)){ ?>
+         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+           <p> U heeft nog geen aanbevolen advertet </p>
+         </div>
+       <?php }
+       if(!empty($aanbevolen)) {?>
+        
         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 mb-2">
             <?php $advertentie = DetailAdvertentie($aanbevolen[0]);?>
             <div class="hovereffect">
@@ -134,7 +149,7 @@ if(isset($_SESSION['status'])){
                 </div>
             </div>
         </div>
-        <?php }?>
+      <?php }}?>
         <button type="button" class="btn btn-secondary btn-sm btn-block">Populairste Artikelen</button>
         <?php $populairst = getPopulairsteArtikelen();
         //print_r($populairst); ?>
@@ -242,4 +257,4 @@ if(isset($_SESSION['status'])){
 </div><!--/row-->
 </div><!--/.container-->
 
-<?php include 'includes/footer.php' ?>
+<?php include 'includes/footer.php'; ?>
