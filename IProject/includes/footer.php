@@ -11,7 +11,7 @@
               <h5>Over ons</h5>
               <ul class="list-unstyled text-small">
                 <li><a class="text-muted" href="#">Contact</a></li>
-                <li><a class="text-muted" href="#">Algemene voorwaardes</a></li>
+                <li><a class="text-muted" href="#">Algemene voorwaarden</a></li>
                 <li><a class="text-muted" href="#">Privacy</a></li>
               </ul>
             </div>
