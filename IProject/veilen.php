@@ -16,7 +16,6 @@ if (isset($_SESSION['catalogus'])){
 
 if(isset($_POST['volgende']) && !isset($_SESSION['rubriek'])){
     $melding = true;
-  
 }
 
 ?>
