@@ -35,7 +35,8 @@ ID			AS volgnr
 FROM dbo.Categorieen
 
 go 
-
+SET IDENTITY_INSERT Voorwerp ON
+go
 -- alle koersen komen van www.wisselkoers.nl op 23/05/2019 om 11:11
 INSERT INTO dbo.Voorwerp (voorwerpnr, titel, beschrijving, startprijs, betalingswijze, betalingsinstructie, plaatsnaam, 
 land, looptijd, looptijdbegindagtijdstip, verzendkosten, verzendinstructies, verkoper, koper, looptijdeindedagtijdstip, 
@@ -69,11 +70,11 @@ SELECT DISTINCT
 	ID		AS voorwerpnr,
 	Titel	AS titel,
 	Beschrijving AS beschrijving,
-	Prijs * 0.667	AS startprijs,
+	(Convert(Decimal(6, 2),(CONVERT(DECIMAL(6, 2), Items.Prijs) * 0.667))) AS startprijs,
 	'Paypal'AS betalingswijze,
 	NULL	AS betalingsinstructie,
 	Locatie AS plaatsnaam,
-Locatie AS land, 
+	Locatie AS land, 
 	7		AS looptijd,
 	CURRENT_TIMESTAMP AS looptijdbegindagtijdstip,
 	NULL	AS verzendkosten,
@@ -87,6 +88,7 @@ Locatie AS land,
 FROM dbo.Items
 WHERE Valuta = 'CAD'
 
+
 INSERT INTO dbo.Voorwerp (voorwerpnr, titel, beschrijving, startprijs, betalingswijze, betalingsinstructie, plaatsnaam, 
 land, looptijd, looptijdbegindagtijdstip, verzendkosten, verzendinstructies, verkoper, koper, looptijdeindedagtijdstip, 
 veilinggesloten, verkoopprijs, gezien)
@@ -94,11 +96,11 @@ SELECT DISTINCT
 	ID		AS voorwerpnr,
 	Titel	AS titel,
 	Beschrijving AS beschrijving,
-	Prijs * 0.898	AS startprijs,
+	Convert(Decimal(6, 2),(CONVERT(DECIMAL(6, 2), Items.Prijs) * 0.898)) 	AS startprijs,
 	'Paypal'AS betalingswijze,
 	NULL	AS betalingsinstructie,
 	Locatie AS plaatsnaam,
-Locatie AS land, 
+	Locatie AS land, 
 	7		AS looptijd,
 	CURRENT_TIMESTAMP AS looptijdbegindagtijdstip,
 	NULL	AS verzendkosten,
@@ -119,7 +121,7 @@ SELECT DISTINCT
 	ID		AS voorwerpnr,
 	Titel	AS titel,
 	Beschrijving AS beschrijving,
-	Prijs * 1.134	AS startprijs,
+	Convert(Decimal(6, 2),(CONVERT(DECIMAL(6, 2), Items.Prijs) * 1.134)) AS startprijs,
 	'Paypal'AS betalingswijze,
 	NULL	AS betalingsinstructie,
 	Locatie AS plaatsnaam,
@@ -136,6 +138,8 @@ Locatie AS land,
 	0		AS gezien
 FROM dbo.Items
 WHERE Valuta = 'GBP'
+
+SET IDENTITY_INSERT Voorwerp OFF
 
 INSERT INTO dbo.Illustratie (voorwerpnr, IllustratieFile)
 select DISTINCT
