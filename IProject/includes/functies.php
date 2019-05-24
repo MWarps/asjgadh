@@ -7,7 +7,7 @@ function gebruikerBekeekVoorwerp($gebruikersnaam, $voorwerpnr) {
     try {
         require('core/dbconnection.php');
         $sqlSelect = $dbh->prepare("
-                                    INSERT INTO LaatstBekeken
+                                    INSERT INTO Laatstbekeken
                                     VALUES (:gebruikersnaam, :voorwerpnr, CURRENT_TIMESTAMP )
                                     
                                     INSERT INTO Aanbevolen
