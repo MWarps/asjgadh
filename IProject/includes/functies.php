@@ -48,7 +48,7 @@ function gebruikerBekeekVoorwerp($gebruikersnaam, $voorwerpnr) {
         $sqlSelect = $dbh->prepare("
                                     INSERT INTO Laatstbekeken
                                     VALUES (:gebruikersnaam, :voorwerpnr, CURRENT_TIMESTAMP )
-                                    
+
                                     INSERT INTO Aanbevolen
                                     VALUES (:gebruikersnaam, select rubrieknr from Voorwerpinrubriek where voorwerpnr = :voorwerpnr, CURRENT_TIMESTAMP )                                    
                                     ");
@@ -1192,7 +1192,6 @@ function veilingenVinden($veilingnaam){
         );
         $veiling = $veilingen ->fetchAll(PDO::FETCH_ASSOC);
         foreach ( $veiling as $resultaat ){
-            print_r($resultaat);
             $teller ++;
             $geblokeerd = "error";
             if ($resultaat['geblokkeerd'] == 1){
@@ -1208,18 +1207,18 @@ function veilingenVinden($veilingnaam){
                     <td>'.$resultaat['verzendkosten'].'</td>
                     <td>'.$resultaat['betalingswijze'].'</td>
                     <td>'.$resultaat['plaatsnaam'].'</td>
+                    <td>'.$resultaat['land'].'</td>
                     <td>'.$resultaat['looptijd'].'</td>
-                    <td>'.$resultaat['looptijdbegindatum'].'</td> 
-                    <td>'.$resultaat['looptijdeinddatum'].'</td> 
+                    <td>'.date("d.m.Y H:i", strtotime($resultaat['looptijdbegindagtijdstip'])).'</td> 
+                    <td>'.date("d.m.Y H:i", strtotime($resultaat['looptijdeindedagtijdstip'])).'</td> 
                     <td>'.$resultaat['verkoper'].'</td> 
                     <td>'.$resultaat['koper'].'</td> 
                     <td>'.$resultaat['veilinggesloten'].'</td> 
                     <td>'.$resultaat['verkoopprijs'].'</td>
                     <td>'.$geblokeerd.'</td> 
-                    <td>'.$resultaat['blokeerdatum'].'</td>
                       ';
+            veilingBlokeerDatum($resultaat['blokkeerdatum']);
             veilingblokeren($geblokeerd, $teller, $resultaat['titel'] ); 
-
             echo '</tr>';
         }   
     } catch (PDOexception $e) {
@@ -1236,6 +1235,13 @@ function veilingblokeren($geblokeerd, $teller, $titel){
         echo ' <td>
     <a class="btn btn-primary" href="overzichtVeilingen.php?id='.$teller.'&naam='.$titel.'" role="button">Blokeer</a>
       </td>  ';
+    }
+}
+function veilingBlokeerDatum($datum){
+    if ($datum == NULL){
+        echo '<td>N.v.T</td> ';
+    } else {
+        echo '<td>'.date("d.m.Y H:i", strtotime($datum)).'</td>';
     }
 }
 ?>
