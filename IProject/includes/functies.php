@@ -78,7 +78,7 @@ function getProductenUitRubriek($rubriek, $aantal) {
 function getAanbevolen($gebruiker) {
     try {
         require('core/dbconnection.php');
-        $sqlSelect = $dbh->prepare("SELECT TOP 1 * FROM Aanbevoler
+        $sqlSelect = $dbh->prepare("SELECT TOP 1 * FROM Aanbevolen
       WHERE gebruikersnaam = :gebruikersnaam
 	  ORDER BY datumtijd DESC");
 
