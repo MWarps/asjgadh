@@ -9,7 +9,7 @@ if (!isset($_SESSION['catogorie'])){
 
 if(isset($_GET['id'])){
     $_SESSION['catogorie']['id'] = $_GET['id'];
-}
+    }
 
 ?>
 
@@ -34,7 +34,7 @@ if(isset($_GET['id'])){
         </div>
         <div class="col-md-9">
             <div class="row">
-                <?php haalAdvertentieOp($_GET['id']) ?>
+                <?php haalAdvertentieOp($_SESSION['catogorie']['id']) ?>
             </div> 
         </div>  
     </div>

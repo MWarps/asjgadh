@@ -50,72 +50,7 @@ if(isset($_SESSION['status'])){
                       ';
 }
 ?>
-<div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
-    <ol class="carousel-indicators">
-        <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-        <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-        <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
-        <li data-target="#carouselExampleIndicators" data-slide-to="3"></li>
-        <li data-target="#carouselExampleIndicators" data-slide-to="4"></li>
-        <li data-target="#carouselExampleIndicators" data-slide-to="5"></li>
-    </ol>
-    <div class="carousel-inner">
-        <div class="carousel-item active">
-          <div class="img-wrap-index">
-            <img src="assets/img/fantasy-1.jpg" alt="...">
-          </div>
-            <div class="carousel-caption d-none d-md-block">
-                <h5>...</h5>
-                <p>...</p>
-            </div>
-        </div>
-        <div class="carousel-item">
-          <div class="img-wrap-index">
-            <img src="assets/img/fantasy-2.jpg" alt="...">
-            <div class="carousel-caption d-none d-md-block">
-                </div>
-                <h5>...</h5>
-                <p>...</p>
-            </div>
-        </div>
-        <div class="carousel-item">
-            <img src="assets/img/fantasy-4.jpg" alt="...">
-            <div class="carousel-caption d-none d-md-block">
-                <h5>...</h5>
-                <p>...</p>
-            </div>
-        </div>
-        <div class="carousel-item">
-            <img src="assets/img/fantasy-5.jpg" alt="...">
-            <div class="carousel-caption d-none d-md-block">
-                <h5>...</h5>
-                <p>...</p>
-            </div>
-        </div>
-        <div class="carousel-item">
-            <img src="assets/img/fantasy-6.jpg" alt="...">
-            <div class="carousel-caption d-none d-md-block">
-                <h5>...</h5>
-                <p>...</p>
-            </div>
-        </div>
-        <div class="carousel-item">
-            <img src="assets/img/fantasy-7.jpg" alt="...">
-            <div class="carousel-caption d-none d-md-block">
-                <h5>...</h5>
-                <p>...</p>
-            </div>
-        </div>
-    </div>
-    <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="sr-only">Previous</span>
-    </a>
-    <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="sr-only">Next</span>
-    </a>
-</div>
+
 
 <div class="container-fluid">
     <div class="row mt-2">
@@ -144,7 +79,8 @@ if(isset($_SESSION['status'])){
             </div>
         </div>
         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-            <?php $advertentie = DetailAdvertentie($laatstBekeken[1]); ?>
+            <?php $advertenti = DetailAdvertentie($laatstBekeken[1]); 
+           ?>
             <div class="hovereffect">
                 <img class="img-responsive" src="<?php echo $advertentie['illustratieFile'];?>" alt="Geen afbeelding beschikbaar">
                 <div class="overlay">
@@ -168,7 +104,7 @@ if(isset($_SESSION['status'])){
         $rubriek = getAanbevolen($_SESSION['gebruikersnaam']);
         $aanbevolen = getProductenUitRubriek($rubriek, 3);
         ?>
-        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 mb-2">
             <?php $advertentie = DetailAdvertentie($aanbevolen[0]);?>
             <div class="hovereffect">
                 <img class="img-responsive" src="<?php echo $advertentie['illustratieFile'];?>" alt="Geen afbeelding beschikbaar">
@@ -178,7 +114,7 @@ if(isset($_SESSION['status'])){
                 </div>
             </div>
         </div>
-        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 mb-2">
             <?php $advertentie = DetailAdvertentie($aanbevolen[1]);?>
             <div class="hovereffect">
                 <img class="img-responsive" src="<?php echo $advertentie['illustratieFile'];?>" alt="Geen afbeelding beschikbaar">
@@ -188,7 +124,7 @@ if(isset($_SESSION['status'])){
                 </div>
             </div>
         </div>
-        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 mb-2">
             <?php $advertentie = DetailAdvertentie($aanbevolen[2]);?>
             <div class="hovereffect">
                 <img class="img-responsive" src=\"<?php echo $advertentie['illustratieFile'];?>" alt="Geen afbeelding beschikbaar">
@@ -200,37 +136,108 @@ if(isset($_SESSION['status'])){
         </div>
         <?php }?>
         <button type="button" class="btn btn-secondary btn-sm btn-block">Populairste Artikelen</button>
-        <?php $populairst = getPopulairsteArtikelen(); ?>
-        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-            <?php $advertentie = DetailAdvertentie($populairst[0]);?>
+        <?php $populairst = getPopulairsteArtikelen();
+        //print_r($populairst); ?>
+        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 mb-3">
+            <?php $advertentie = DetailAdvertentie($populairst[0]['voorwerpnr']);
+            //print_r($advertentie);?>
             <div class="hovereffect">
-                <img class="img-responsive" src="<?php echo $advertentie['illustratieFile'];?>" alt="Geen afbeelding beschikbaar">
+                <img class="img-responsive" src="../pics/<?php echo $advertentie['illustratieFile'];?>" alt="Geen afbeelding beschikbaar">
                 <div class="overlay">
-                    <h2>Hover effect 1</h2>
-                    <a class="info" href="advertentie.php?id=<?php echo $advertentie['voorwerpnr']; ?>"><?php echo $advertentie['titel'];?></a>
+                    <h2><?php echo $advertentie['titel'];?></h2>
+                    <a class="info" href="advertentie.php?id=<?php echo $advertentie['voorwerpnr']; ?>">€ <?php echo $advertentie['startprijs'];?></a>
                 </div>
             </div>
         </div>
-        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-            <?php $advertentie = DetailAdvertentie($populairst[1]);?>
+        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 mb-3">
+            <?php $advertentie = DetailAdvertentie($populairst[1]['voorwerpnr']);
+            //print_r($advertentie);?>
             <div class="hovereffect">
-                <img class="img-responsive" src="<?php echo $advertentie['illustratieFile'];?>" alt="Geen afbeelding beschikbaar">
+                <img class="img-responsive" src="../pics/<?php echo $advertentie['illustratieFile'];?>" alt="Geen afbeelding beschikbaar">
                 <div class="overlay">
-                    <h2>Hover effect 1</h2>
-                    <a class="info" href="advertentie.php?id=<?php echo $advertentie['voorwerpnr']; ?>"><?php echo $advertentie['titel'];?></a>
+                    <h2><?php echo $advertentie['titel'];?></h2>
+                    <a class="info" href="advertentie.php?id=<?php echo $advertentie['voorwerpnr']; ?>">€ <?php echo $advertentie['startprijs'];?></a>
                 </div>
             </div>
         </div>
-        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-            <?php $advertentie = DetailAdvertentie($populairst[2]);?>
+        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 mb-3">
+            <?php $advertentie = DetailAdvertentie($populairst[2]['voorwerpnr']);
+            //print_r($advertentie);?>
             <div class="hovereffect">
-                <img class="img-responsive" src="<?php echo $advertentie['illustratieFile'];?>" alt="Geen afbeelding beschikbaar">
+                <img class="img-responsive" src="../pics/<?php echo $advertentie['illustratieFile'];?>" alt="Geen afbeelding beschikbaar">
                 <div class="overlay">
-                    <h2>Hover effect 1</h2>
-                    <a class="info" href="advertentie.php?id=<?php echo $advertentie['voorwerpnr']; ?>"><?php echo $advertentie['titel'];?></a>
+                    <h2><?php echo $advertentie['titel'];?></h2>
+                    <a class="info" href="advertentie.php?id=<?php echo $advertentie['voorwerpnr']; ?>">€ <?php echo $advertentie['startprijs'];?></a>
                 </div>
             </div>
         </div>
+        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 mb-3">
+            <?php $advertentie = DetailAdvertentie($populairst[3]['voorwerpnr']);
+            //print_r($advertentie);?>
+            <div class="hovereffect">
+                <img class="img-responsive" src="../pics/<?php echo $advertentie['illustratieFile'];?>" alt="Geen afbeelding beschikbaar">
+                <div class="overlay">
+                    <h2><?php echo $advertentie['titel'];?></h2>
+                    <a class="info" href="advertentie.php?id=<?php echo $advertentie['voorwerpnr']; ?>">€ <?php echo $advertentie['startprijs'];?></a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 mb-3">
+            <?php $advertentie = DetailAdvertentie($populairst[4]['voorwerpnr']);
+            //print_r($advertentie);?>
+            <div class="hovereffect">
+                <img class="img-responsive" src="../pics/<?php echo $advertentie['illustratieFile'];?>" alt="Geen afbeelding beschikbaar">
+                <div class="overlay">
+                    <h2><?php echo $advertentie['titel'];?></h2>
+                    <a class="info" href="advertentie.php?id=<?php echo $advertentie['voorwerpnr']; ?>">€ <?php echo $advertentie['startprijs'];?></a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 mb-3">
+            <?php $advertentie = DetailAdvertentie($populairst[5]['voorwerpnr']);
+            //print_r($advertentie);?>
+            <div class="hovereffect">
+                <img class="img-responsive" src="../pics/<?php echo $advertentie['illustratieFile'];?>" alt="Geen afbeelding beschikbaar">
+                <div class="overlay">
+                    <h2><?php echo $advertentie['titel'];?></h2>
+                    <a class="info" href="advertentie.php?id=<?php echo $advertentie['voorwerpnr']; ?>">€ <?php echo $advertentie['startprijs'];?></a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 mb-3">
+            <?php $advertentie = DetailAdvertentie($populairst[6]['voorwerpnr']);
+            //print_r($advertentie);?>
+            <div class="hovereffect">
+                <img class="img-responsive" src="../pics/<?php echo $advertentie['illustratieFile'];?>" alt="Geen afbeelding beschikbaar">
+                <div class="overlay">
+                    <h2><?php echo $advertentie['titel'];?></h2>
+                    <a class="info" href="advertentie.php?id=<?php echo $advertentie['voorwerpnr']; ?>">€ <?php echo $advertentie['startprijs'];?></a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 mb-3">
+            <?php $advertentie = DetailAdvertentie($populairst[7]['voorwerpnr']);
+            //print_r($advertentie);?>
+            <div class="hovereffect">
+                <img class="img-responsive" src="../pics/<?php echo $advertentie['illustratieFile'];?>" alt="Geen afbeelding beschikbaar">
+                <div class="overlay">
+                    <h2><?php echo $advertentie['titel'];?></h2>
+                    <a class="info" href="advertentie.php?id=<?php echo $advertentie['voorwerpnr']; ?>">€ <?php echo $advertentie['startprijs'];?></a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 mb-3">
+            <?php $advertentie = DetailAdvertentie($populairst[8]['voorwerpnr']);
+            //print_r($advertentie);?>
+            <div class="hovereffect">
+                <img class="img-responsive" src="../pics/<?php echo $advertentie['illustratieFile'];?>" alt="Geen afbeelding beschikbaar">
+                <div class="overlay">
+                    <h2><?php echo $advertentie['titel'];?></h2>
+                    <a class="info" href="advertentie.php?id=<?php echo $advertentie['voorwerpnr']; ?>">€ <?php echo $advertentie['startprijs'];?></a>
+                </div>
+            </div>
+        </div>
+      
     </div>
 </div><!--/row-->
 </div><!--/.container-->

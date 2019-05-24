@@ -13,11 +13,14 @@ function VoegVoorwerpAanRubriekEnIllustratie($rubriek, $verkoper){
 
       $sqlInsert->execute(
           array(        
-              ':verkoper' => $verkoper,  
+              ':verkoper' => $verkoper  
           ));
+      $records = $sqlSelect->fetch(PDO::FETCH_ASSOC);    
   }
-  
-  $records = $sqlSelect->fetch(PDO::FETCH_ASSOC);
+    
+  catch (PDOexception $e) {
+      echo "er ging iets mis insert {$e->getMessage()}";
+  }
   
   try {
       // SQL insert statement
@@ -33,7 +36,9 @@ function VoegVoorwerpAanRubriekEnIllustratie($rubriek, $verkoper){
       
           ));
   }
-  
+  catch (PDOexception $e) {
+      echo "er ging iets mis insert {$e->getMessage()}";
+  }
   try {
       // SQL insert statement
       require('core/dbconnection.php');
@@ -91,32 +96,10 @@ function VoegVoorwerpToe($input){
  }  
 
 
-function gebruikerBekeekVoorwerp($gebruikersnaam, $voorwerpnr) {
-    try {
-        require('core/dbconnection.php');
-        $sqlSelect = $dbh->prepare("
-                                    INSERT INTO Laatstbekeken
-                                    VALUES (:gebruikersnaam, :voorwerpnr, CURRENT_TIMESTAMP )
-
-                                    INSERT INTO Aanbevolen
-                                    VALUES (:gebruikersnaam, select rubrieknr from Voorwerpinrubriek where voorwerpnr = :voorwerpnr, CURRENT_TIMESTAMP )                                    
-                                    ");
-
-        $sqlSelect->execute(
-            array(
-                ':voorwerpnr' => $voorwerpnr,
-                ':gebruikersnaam' => $gebruikersnaam
-            ));
-
-    } catch (PDOexception $e) {
-        echo "er ging iets mis error: {$e->getMessage()}";
-    }
-}
-
 function getPopulairsteArtikelen() {
     try {
         require('core/dbconnection.php');
-        $sqlSelect = $dbh->prepare("SELECT TOP 3 * FROM Voorwerp ORDER BY gezien DESC");
+        $sqlSelect = $dbh->prepare("SELECT TOP 9 * FROM Voorwerp ORDER BY gezien DESC");
 
         $sqlSelect->execute();
 
@@ -125,33 +108,34 @@ function getPopulairsteArtikelen() {
         return $records;
     }
     catch (PDOexception $e) {
-        echo "er ging iets mis error: {$e->getMessage()}";
+        echo "er ging iets mis errorteset: {$e->getMessage()}";
     }
 }
 
 function getProductenUitRubriek($rubriek, $aantal) {
+  
     try {
         require('core/dbconnection.php');
         $sqlSelect = $dbh->prepare("WITH cte AS
         (
         SELECT superrubriek, rubrieknummer
         FROM dbo.Rubrieken
-        WHERE superrubriek = :rubriek --nummer van rubriek waar in gezocht wordt
+        WHERE superrubriek = :rubriek
         UNION ALL
         
         SELECT  a.superrubriek, a.rubrieknummer
         	FROM dbo.Rubrieken a
         	INNER JOIN cte s ON a.superrubriek = s.rubrieknummer
         )
-        SELECT distinct top :aantal dbo.Voorwerp.voorwerpnr, dbo.Voorwerp.titel, dbo.Voorwerp.geblokkeerd  --hier aangeven hoeveel waardes gereturned
+        SELECT distinct top 21 * 
         	FROM dbo.Voorwerpinrubriek
-        	left JOIN dbo.Voorwerp on dbo.Voorwerpinrubriek.voorwerpnr = dbo.Voorwerp.voorwerpnr
-        	right JOIN cte on dbo.Voorwerpinrubriek.rubrieknr = cte.rubrieknummer;");
+        	JOIN dbo.Voorwerp on dbo.Voorwerpinrubriek.voorwerpnr = dbo.Voorwerp.voorwerpnr
+        	JOIN cte on dbo.Voorwerpinrubriek.rubrieknr = cte.rubrieknummer;");
 
         $sqlSelect->execute(
             array(
                 ':rubriek' => $rubriek,
-                ':aantal' => $aantal
+              //  ':aantal' => $aantal
             ));
 
         $records = $sqlSelect->fetchAll(PDO::FETCH_ASSOC);
@@ -159,14 +143,14 @@ function getProductenUitRubriek($rubriek, $aantal) {
         return $records;
     }
     catch (PDOexception $e) {
-        echo "er ging iets mis error: {$e->getMessage()}";
+        echo "er ging iets mis error2: {$e->getMessage()}";
     }
 }
 
 function getAanbevolen($gebruiker) {
     try {
         require('core/dbconnection.php');
-        $sqlSelect = $dbh->prepare("SELECT TOP 1 * FROM Aanbevoler
+        $sqlSelect = $dbh->prepare("SELECT TOP 1 * FROM Aanbevolen
       WHERE gebruikersnaam = :gebruikersnaam
 	  ORDER BY datumtijd DESC");
 
@@ -306,7 +290,6 @@ function Biedingen($voorwerpnr){
 }
 function DetailAdvertentie($id)
 {
-    
     try {
         require('core/dbconnection.php');
         $sqlSelect = $dbh->prepare("select *, illustratieFile from Voorwerp, Illustratie
@@ -330,9 +313,11 @@ function DetailAdvertentie($id)
 /* advertentie ophalen */
 function haalAdvertentieOp($rubriek){
     try {
-        $producten = getProductenUitRubriek($rubriek, 20);
-
-        foreach ($producten as $rij => $id) {
+        $producten = getProductenUitRubriek($rubriek, 20);    
+        
+        foreach ($producten as $rij) {
+          $details = DetailAdvertentie($rij['voorwerpnr']);
+          
           if(strlen($rij['titel']) >= 40){
               $rij['titel'] = substr($rij['titel'],0,40);
               $rij['titel'] .= '...';
@@ -340,17 +325,18 @@ function haalAdvertentieOp($rubriek){
             echo '
             <div class="col-md-4 pb-3">
             <div class="card" style="width: 18rem;">
-            <img class="card-img-top" src="../pics/'.$rij['illustratieFile'].'" alt="Foto bestaat niet">
-            <h5 class="card-header"><a href="advertentie.php?id='.$rij['voorwerpnr'].'">'.$rij['titel'].'</a></h5>
+            <img class="card-img-top" src="../pics/'.$details['illustratieFile'].'" alt="Foto bestaat niet">
+            <h5 class="card-header"><a href="advertentie.php?id='.$details['voorwerpnr'].'">'.$details['titel'].'</a></h5>
             <div class="card-body">
-            <h4 class="card-text">'.$rij['startprijs'].'</h4>
+            <h4 class="card-text">€ '.$details['startprijs'].'</h4>
             <p class="card-text"><a href="#">'.$rij['verkoper'].'</a><br>
             '.$rij['land'].', '.$rij['plaatsnaam'].'</p>
             <a href="advertentie.php?id='.$rij['voorwerpnr'].'" class="btn btn-block btn-primary">Ga naar artikel</a>
             </div>
             </div>
             </div>';
-        }
+        
+      }
 
     } catch (PDOexception $e) {
         echo "er ging iets mis error: {$e->getMessage()}";
@@ -1257,18 +1243,18 @@ function veilingenVinden($veilingnaam){
                     <td>'.$resultaat['verzendkosten'].'</td>
                     <td>'.$resultaat['betalingswijze'].'</td>
                     <td>'.$resultaat['plaatsnaam'].'</td>
-                    <td>'.$resultaat['land'].'</td>
                     <td>'.$resultaat['looptijd'].'</td>
-                    <td>'.date("d.m.Y H:i", strtotime($resultaat['looptijdbegindagtijdstip'])).'</td> 
-                    <td>'.date("d.m.Y H:i", strtotime($resultaat['looptijdeindedagtijdstip'])).'</td> 
+                    <td>'.$resultaat['looptijdbegindatum'].'</td> 
+                    <td>'.$resultaat['looptijdeinddatum'].'</td> 
                     <td>'.$resultaat['verkoper'].'</td> 
                     <td>'.$resultaat['koper'].'</td> 
                     <td>'.$resultaat['veilinggesloten'].'</td> 
                     <td>'.$resultaat['verkoopprijs'].'</td>
                     <td>'.$geblokeerd.'</td> 
+                    <td>'.$resultaat[blokeerdatum].'</td>
                       ';
-            veilingBlokeerDatum($resultaat['blokkeerdatum']);
             veilingblokeren($geblokeerd, $teller, $resultaat['titel'] ); 
+
             echo '</tr>';
         }   
     } catch (PDOexception $e) {
@@ -1285,13 +1271,6 @@ function veilingblokeren($geblokeerd, $teller, $titel){
         echo ' <td>
     <a class="btn btn-primary" href="overzichtVeilingen.php?id='.$teller.'&naam='.$titel.'" role="button">Blokeer</a>
       </td>  ';
-    }
-}
-function veilingBlokeerDatum($datum){
-    if ($datum == NULL){
-        echo '<td>N.v.T</td> ';
-    } else {
-        echo '<td>'.date("d.m.Y H:i", strtotime($datum)).'</td>';
     }
 }
 ?>
