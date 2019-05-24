@@ -2,7 +2,7 @@
 include 'includes/header.php';
 if(isset($_GET['id'])){
 $advertentie = DetailAdvertentie($_GET['id']);
-
+}
 if(!isset($_POST['bieden'])){
   $voorwerpnr = $_GET['id']; 
   VoorwerpGezien($voorwerpnr);
@@ -14,7 +14,7 @@ if(isset($_POST['bieden'])){
     $gebruikersnaam = $_SESSION['gebruikersnaam'];
     $voorwerpnr = $_GET['id'];  
     updateBieden($bod, $gebruikersnaam, $voorwerpnr);
-    
+    gebruikerBekeekVoorwerp($gebruikersnaam, $voorwerpnr);
   }  
   else {
     echo '<div class="container">

@@ -3,6 +3,28 @@ include 'email.php';
 include 'email2.php';
 include 'emailBericht.php';
 
+function gebruikerBekeekVoorwerp($gebruikersnaam, $voorwerpnr) {
+    try {
+        require('core/dbconnection.php');
+        $sqlSelect = $dbh->prepare("
+                                    INSERT INTO LaatstBekeken
+                                    VALUES (:gebruikersnaam, :voorwerpnr, CURRENT_TIMESTAMP )
+                                    
+                                    INSERT INTO Aanbevolen
+                                    VALUES (:gebruikersnaam, select rubrieknr from Voorwerpinrubriek where voorwerpnr = :voorwerpnr, CURRENT_TIMESTAMP )                                    
+                                    ");
+
+        $sqlSelect->execute(
+            array(
+                ':voorwerpnr' => $voorwerpnr,
+                ':gebruikersnaam' => $gebruikersnaam
+            ));
+
+    } catch (PDOexception $e) {
+        echo "er ging iets mis error: {$e->getMessage()}";
+    }
+}
+
 function getPopulairsteArtikelen() {
     try {
         require('core/dbconnection.php');
