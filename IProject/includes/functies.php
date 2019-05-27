@@ -8,8 +8,8 @@ function gebruikerBekeekVoorwerp($gebruikersnaam, $voorwerpnr) {
     try {
         require('core/dbconnection.php');
         $sqlSelect = $dbh->prepare("
-                                    INSERT INTO Laatstbekeken (gebruikersnaam, voorwerpnr)
-                                    VALUES (:gebruikersnaam, :voorwerpnr )                                                                  
+                                    INSERT INTO Laatstbekeken (gebruikersnaam, voorwerpnr, datumtijd)
+                                    VALUES (:gebruikersnaam, :voorwerpnr , CURRENT_TIMESTAMP )                                                                  
                                     ");
         $sqlSelect->execute(
             array(
@@ -25,8 +25,8 @@ function gebruikerAanbevolen($gebruikersnaam, $voorwerpnr) {
     try {
         require('core/dbconnection.php');
         $sqlSelect = $dbh->prepare("
-        INSERT INTO Aanbevolen (gebruikersnaam, rubrieknr)
-        VALUES (:gebruikersnaam, (select rubrieknr from Voorwerpinrubriek where voorwerpnr = :voorwerpnr))                                                                    
+        INSERT INTO Aanbevolen (gebruikersnaam, rubrieknr, datumtijd)
+        VALUES (:gebruikersnaam, (select rubrieknr from Voorwerpinrubriek where voorwerpnr = :voorwerpnr), CURRENT_TIMESTAMP )                                                                    
                                     ");
         $sqlSelect->execute(
             array(

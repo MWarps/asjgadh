@@ -138,7 +138,7 @@ if (isset($_POST['rVolgende'])) {
                               <select name="rGeslacht" class="form-control" id="inputGeslacht" value="<?php if($_POST) { echo $_POST['rGeboorte'];} ?>" required>
                                 <option value="X"> - </option>
                                 <option value="M"> Man </option>
-                                <option value="F"> Female </option>
+                                <option value="F"> Vrouw </option>
                               </select>
                           </div>
                         </div>
