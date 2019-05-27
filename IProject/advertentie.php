@@ -1,20 +1,23 @@
 <?php
 include 'includes/header.php';
 if(isset($_GET['id'])){
+  
 $advertentie = DetailAdvertentie($_GET['id']);
 $pagina = 'advertentie.php';
 if(!isset($_POST['bieden'])){
   $voorwerpnr = $_GET['id']; 
+  $gebruikersnaam = $_SESSION['gebruikersnaam'];
   VoorwerpGezien($voorwerpnr);
+  gebruikerBekeekVoorwerp($gebruikersnaam, $voorwerpnr);
+  gebruikerAanbevolen($gebruikersnaam, $voorwerpnr);
+  
 }  
 
 if(isset($_POST['bieden'])){
   if(isset($_SESSION['gebruikersnaam'])){
-    $bod = $_POST['bod'];
-    $gebruikersnaam = $_SESSION['gebruikersnaam'];
+    $bod = $_POST['bod'];  
     $voorwerpnr = $_GET['id'];  
     updateBieden($bod, $gebruikersnaam, $voorwerpnr);
-    //gebruikerBekeekVoorwerp($gebruikersnaam, $voorwerpnr);
   }  
   else {
     echo '<div class="container">

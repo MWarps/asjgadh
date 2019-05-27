@@ -3,15 +3,30 @@ include 'email.php';
 include 'email2.php';
 include 'emailBericht.php';
 
+
 function gebruikerBekeekVoorwerp($gebruikersnaam, $voorwerpnr) {
     try {
         require('core/dbconnection.php');
         $sqlSelect = $dbh->prepare("
-                                    INSERT INTO Laatstbekeken
-                                    VALUES (:gebruikersnaam, :voorwerpnr, CURRENT_TIMESTAMP )
-                                    
-                                    INSERT INTO Aanbevolen
-                                    VALUES (:gebruikersnaam, select rubrieknr from Voorwerpinrubriek where voorwerpnr = :voorwerpnr, CURRENT_TIMESTAMP )                                    
+                                    INSERT INTO Laatstbekeken (gebruikersnaam, voorwerpnr)
+                                    VALUES (:gebruikersnaam, :voorwerpnr )                                                                  
+                                    ");
+        $sqlSelect->execute(
+            array(
+                ':voorwerpnr' => $voorwerpnr,
+                ':gebruikersnaam' => $gebruikersnaam
+            ));
+    } catch (PDOexception $e) {
+        echo "er ging iets mis error: {$e->getMessage()}";
+    }
+}
+
+function gebruikerAanbevolen($gebruikersnaam, $voorwerpnr) {
+    try {
+        require('core/dbconnection.php');
+        $sqlSelect = $dbh->prepare("
+        INSERT INTO Aanbevolen (gebruikersnaam, rubrieknr)
+        VALUES (:gebruikersnaam, (select rubrieknr from Voorwerpinrubriek where voorwerpnr = :voorwerpnr))                                                                    
                                     ");
         $sqlSelect->execute(
             array(
