@@ -5,9 +5,6 @@ $gebruikersnaam = "";
 if (isset($_POST['zoeken'])){
     $gebruikersnaam = "";
     $gebruikersnaam = $_POST['zoekopdracht'];
-    //                        echo 'ingevulde naam = ';
-    //                        echo $gebruikersnaam;
-
 }
 
 if (isset( $_GET['id'])){
