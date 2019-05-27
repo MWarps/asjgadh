@@ -1,7 +1,7 @@
 <?php
 function Brief($records) {
     $naam = ($records['voornaam'].' '.$records['achternaam']);
-    $myfile = fopen("../".$naam.".txt", "x") or die("Unable to open file!");
+    $myfile = fopen("../brieven/".$naam.".txt", "x") or die("Unable to open file!");
 
     $aanhef = 'heer, mevrouw';
 
