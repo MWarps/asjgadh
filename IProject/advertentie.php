@@ -172,7 +172,7 @@ if(isset($_POST['bieden'])){
    <hr>
    
        <div class="icon-product">
-         <img src="assets/img/oog.jpg"></img> <?php echo $advertentie['gezien'] ?> x gezien <br>
+         <img src="assets/img/oog.jpg"></img> <?php echo $advertentie['gezien'] ?> x Bekeken <br>
          <img src="assets/img/clock.jpg"></img>  sinds <?php echo date("d.m.Y H:i", strtotime($advertentie['looptijdbegindagtijdstip'])); ?>  <br><br>
          <img src="assets/img/betalingswijze.png"></img>  betalingswijze: <strong><?php echo $advertentie['betalingswijze'] ?></strong> <br>
          <img src="assets/img/instructions.png"></img>  betalingsinstructies: <?php echo $advertentie['betalingsinstructie'] ?> <br><br>
