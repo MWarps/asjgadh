@@ -1370,13 +1370,14 @@ function veilingblokeren($geblokeerd, $teller, $titel){
     }
 }
 
-function checkGEBLOKEERD ($gebruiker){
+function checkGEBLOKEERD (){
     try {
         require('core/dbconnection.php');
-        $geblokeerd = $dbh ->prepare (" select gebruikersnaam, geblokeerd from Gebruiker where gebruikersnaam like  :gebruiker ");
+        $geblokeerd = $dbh ->prepare (" select gebruikersnaam, geblokeerd from Gebruiker where gebruikersnaam like :gebruiker  ");
         $geblokeerd-> execute(
             array(
-                ':gebruiker' => $gebruiker,
+                ':gebruiker' => $_SESSION['gebruikersnaam'],
+
             )
         );
 
@@ -1392,8 +1393,7 @@ function checkGEBLOKEERD ($gebruiker){
         }
 
     } catch (PDOexception $e) {
-        //echo "er ging iets mis error: {$e->getMessage()}";
-        // blijft error geven vanwegen het niet meer opkunnen halen van meet data. 
+        echo "er ging iets mis error: {$e->getMessage()}";
     }
 
 }
