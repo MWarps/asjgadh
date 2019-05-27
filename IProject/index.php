@@ -79,7 +79,7 @@ if(isset($_SESSION['status'])){
             <div class="hovereffect">
                 <img class="img-responsive" src="<?php echo $advertentie['illustratieFile']?>" alt="Geen afbeelding beschikbaar">
                 <div class="overlay">
-                    <h2>Hover effect 1</h2>
+                    <h2><?= $advertentie['titel']?></h2>
                     <a class="info" href=\"advertentie.php?id=<?php echo $advertentie['voorwerpnr']; ?>"><?php echo $advertentie['titel'];?></a>
                 </div>
             </div>
@@ -90,7 +90,7 @@ if(isset($_SESSION['status'])){
             <div class="hovereffect">
                 <img class="img-responsive" src="<?php echo $advertentie['illustratieFile'];?>" alt="Geen afbeelding beschikbaar">
                 <div class="overlay">
-                    <h2>Hover effect 1</h2>
+                    <h2><?= $advertentie['titel']?></h2>
                     <a class="info" href="advertentie.php?id=<?php echo $advertentie['voorwerpnr']; ?>"><?php echo $advertentie['titel'];?></a>
                 </div>
             </div>
@@ -101,7 +101,7 @@ if(isset($_SESSION['status'])){
             <div class="hovereffect">
                 <img class="img-responsive" src="<?php echo $advertentie['illustratieFile'];?>" alt="Geen afbeelding beschikbaar">
                 <div class="overlay">
-                    <h2>Hover effect 1</h2>
+                    <h2><?= $advertentie['titel']?></h2>
                     <a class="info" href="advertentie.php?id=<?php echo $advertentie['voorwerpnr']; ?>"><?php echo $advertentie['titel'];?></a>
                 </div>
             </div>
