@@ -22,7 +22,10 @@ if(isset($_SESSION['gebruikersnaam'])){
       $VerkoperValidatie = true;    
     }
   }
+    checkGEBLOKEERD (); // ophalen van variabelen. 
 }
+
+
 
 ?>
 <!DOCTYPE HTML>
