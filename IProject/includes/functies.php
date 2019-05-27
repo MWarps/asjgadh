@@ -4,26 +4,26 @@ include 'email2.php';
 include 'emailBericht.php';
 
 function BodVerhoging($Euro){
-  $Verhoging;
-  switch ($Euro) {
-    case ($Euro <50) :
+    $Verhoging;
+    switch ($Euro) {
+        case ($Euro <50) :
             $Verhoging = 0.50;
-      break;
-    case ($Euro >=50 && $Euro <500):
+            break;
+        case ($Euro >=50 && $Euro <500):
             $Verhoging = 1;
-      break;
-    case ($Euro >=500 && $Euro <1000) :
+            break;
+        case ($Euro >=500 && $Euro <1000) :
             $Verhoging = 5;
-      break;
-    case ($Euro >=1000 && $Euro <5000):
-              $Verhoging = 10;
-      break;
-    case ($Euro >=5000) :
-              $Verhoging = 50;                    
-    default:
-      break;
-  }
-  return $Verhoging;
+            break;
+        case ($Euro >=1000 && $Euro <5000):
+            $Verhoging = 10;
+            break;
+        case ($Euro >=5000) :
+            $Verhoging = 50;                    
+        default:
+            break;
+    }
+    return $Verhoging;
 }
 
 function gebruikerBekeekVoorwerp($gebruikersnaam, $voorwerpnr) {
@@ -304,9 +304,9 @@ function HaalIllustratiesOp($voorwerpnr){
 }
 
 function zijnErBiedingen($voorwerpnr){
-  try {
-      require('core/dbconnection.php');
-      $sqlSelect = $dbh->prepare("select * from bod where voorwerpnr = :voorwerpnr order by convert(decimal(9,2), euro) desc");
+    try {
+        require('core/dbconnection.php');
+        $sqlSelect = $dbh->prepare("select * from bod where voorwerpnr = :voorwerpnr order by convert(decimal(9,2), euro) desc");
 
         $sqlSelect->execute(
             array(
@@ -358,9 +358,9 @@ function updateBieden($bod, $gebruikersnaam, $voorwerpnr){
 }
 
 function Biedingen($voorwerpnr){
-  try {
-      require('core/dbconnection.php');
-      $sqlSelect = $dbh->prepare("select top 5 * from Bod where voorwerpnr = :voorwerpnr order by convert(decimal(9,2), euro) desc");
+    try {
+        require('core/dbconnection.php');
+        $sqlSelect = $dbh->prepare("select top 5 * from Bod where voorwerpnr = :voorwerpnr order by convert(decimal(9,2), euro) desc");
 
         $sqlSelect->execute(
             array(
@@ -368,12 +368,12 @@ function Biedingen($voorwerpnr){
             ));
         $rows = $sqlSelect->fetchAll(PDO::FETCH_ASSOC);
         //print_r($rows);
-        
-          foreach ($rows as $rij)
-           {
-              echo '<li class="list-group-item">€'.number_format($rij['euro'], 2, ',', '.').' - '.$rij['gebruikersnaam'].' - '.date("d.m.Y H:i", strtotime($rij['datumentijd'])).'</li>';
-                  
-          }
+
+        foreach ($rows as $rij)
+        {
+            echo '<li class="list-group-item">€'.number_format($rij['euro'], 2, ',', '.').' - '.$rij['gebruikersnaam'].' - '.date("d.m.Y H:i", strtotime($rij['datumentijd'])).'</li>';
+
+        }
 
         foreach ($rows as $rij)
         {
@@ -1389,21 +1389,17 @@ function checkGEBLOKEERD ($gebruiker){
         );
 
         while ($resultaat = $geblokeerd ->fetchAll(PDO::FETCH_ASSOC)){
-            print_r($resultaat);
-            if ($resultaat['geblokeerd'] == 1){
-                echo 'JE BENT GEBLOKEERD !!!';
-            }else if ($resultaat['geblokeerd'] == 0){
-                echo 'je bent welkom';
+            if ($resultaat[0]['geblokeerd'] == 1){
+                header("Location: includes/geblokeerd.php");
+            }else if ($resultaat[0]['geblokeerd'] == 0){  
             } else if (empty($resultaat['geblokeerd'])){
-                echo 'geblokeerd = onbekend !';
+                header("Location: includes/404error.php");
             }
         }
-
     } catch (PDOexception $e) {
         //echo "er ging iets mis error: {$e->getMessage()}";
         // blijft error geven vanwegen het niet meer opkunnen halen van meet data. 
     }
-
 }
 
 ?>

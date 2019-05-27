@@ -22,7 +22,10 @@ if(isset($_SESSION['gebruikersnaam'])){
       $VerkoperValidatie = true;    
     }
   }
-    checkGEBLOKEERD ($_SESSION['gebruikersnaam']) ; 
+    if (checkGEBLOKEERD ($_SESSION['gebruikersnaam']) ){
+        
+    }
+    
 }
 
 
