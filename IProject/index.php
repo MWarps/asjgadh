@@ -114,7 +114,7 @@ if(isset($_SESSION['status'])){
         $aanbevolen = getProductenUitRubriek($rubriek, 3);
         if(empty($aanbevolen)){ ?>
          <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-           <p> U heeft nog geen aanbevolen advertet </p>
+           <p> U heeft nog geen aanbevolen advertenties </p>
          </div>
        <?php }
        if(!empty($aanbevolen)) {?>
