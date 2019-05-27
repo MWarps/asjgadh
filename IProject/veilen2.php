@@ -2,13 +2,9 @@
 include 'includes/header.php';
 if(isset($_SESSION['gebruikersnaam'])){
 if(isset($_POST['Volgende'])){
-  $rubriek = $_POST['Rubriek'];
+  $rubriek = $_POST['rubriek'];
   $titel = $_POST['titel'];
   $beschrijving = $_POST['beschrijving'];
-  $bestand1 = $_POST['bestand1'];
-  $bestand2 = $_POST['bestand2'];
-  $bestand3 = $_POST['bestand3'];
-  $bestand4 = $_POST['bestand4'];
   $startbedrag = $_POST['startbedrag'];
   $betalingsmethode = $_POST['betalingsmethode'];
   $betalingsinstructie = $_POST['betalingsinstructie'];
@@ -22,11 +18,41 @@ if(isset($_POST['Volgende'])){
   
   $voorwerp = array($titel, $beschrijving, $startbedrag, $betalingsmethode,
   $betalingsinstructie, $plaats, $land, $looptijd, $verzendkosten, 
-  $verzendinstructies, $gebruiker['gebruikersnaam'], $looptijdeindedagtijdstip);
+$verzendinstructies, $gebruiker['gebruikersnaam'] /*$looptijdeindedagtijdstip*/);
   
-  VoegVoorwerpToe($voorwerp);
-  VoegVoorwerpAanRubriekToe($rubriek, $gebruiker['gebruikersnaam']);
-  $_SESSION['status'] = 'Voorwerp';
+    
+$target_dir = "upload/";
+// $_FILES["foto1"]["name"] = voorwerpnr;
+$target_file = $target_dir . basename($_FILES["foto1"]["name"]);
+$uploadOk = 1;
+$imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
+
+// Check if image file is a actual image or fake image
+    $check = getimagesize($_FILES["foto1"]["tmp_name"]);
+    if($check !== false) {
+        echo "File is an image - " . $check["mime"] . ".";
+        $uploadOk = 1;
+    } else {
+        echo "File is not an image.";
+        $uploadOk = 0;
+    }
+
+
+// Check if $uploadOk is set to 0 by an error
+if ($uploadOk == 0) {
+    echo "Sorry, your file was not uploaded.";
+// if everything is ok, try to upload file
+} else {
+    if (move_uploaded_file($_FILES["foto1"]["tmp_name"], $target_file)) {
+        echo "The file ". basename( $_FILES["foto1"]["name"]). " has been uploaded.";
+    } else {
+        echo "Sorry, there was an error uploading your file.";
+    }
+}
+
+  //VoegVoorwerpToe($voorwerp);
+  //VoegVoorwerpAanRubriekToe($rubriek, $gebruiker['gebruikersnaam']);
+  //$_SESSION['status'] = 'Voorwerp';
   
   //echo '<script language="javascript">window.location.href ="index.php"</script>';
   //exit();
@@ -37,7 +63,7 @@ if(isset($_POST['Volgende'])){
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-10 mt-2">
-          <form class="needs-validation" novalidate action="veilen2.php?id=<?php echo $_GET['naam'];?>" method="POST">
+          <form class="needs-validation" novalidate action="veilen2.php?id=<?php echo $_GET['naam'];?>" method="POST" enctype="multipart/form-data">
                 <h1 class="h3 mb-2 text-center "> Veiling starten </h1>
                 <p class=" mb-2 text-center " > Hier kunt u een voorwerp te koop aan bieden, vul alle onderstaande velden in.</p>                      
                 
@@ -48,7 +74,7 @@ if(isset($_POST['Volgende'])){
                   </div>
                     <div class="form-group col-md-10">
                         <label for="inputTitel">Titel (Vul een titel in. Denk aan belangrijke eigenschappen zoals kleur, merk of maat):</label>
-                        <input type="text" name="rTitel" class="form-control" id="inputTitel"
+                        <input type="text" name="titel" class="form-control" id="inputTitel"
                                pattern="[A-Za-z0-9]*" maxlength="100" placeholder="Titel" value="<?php if($_POST) { echo $_POST['rTitel'];} ?>" required>
                         <div class="invalid-feedback">
                             Voer een titel in.
@@ -56,7 +82,7 @@ if(isset($_POST['Volgende'])){
                     </div>                  
                     <div class="form-group col-md-8">  
                         <label for="Textarea">Beschrijving:</label>
-                        <textarea name="bericht" class="form-control" placeholder="Voer hier uw bericht in." id="Textarea" rows="10" required></textarea>                
+                        <textarea name="beschrijving" class="form-control" placeholder="Voer hier uw bericht in." id="Textarea" rows="10" required></textarea>                
                         <div class="invalid-feedback">
                           Voer een bericht in.
                         </div>                      
@@ -66,16 +92,16 @@ if(isset($_POST['Volgende'])){
                         
                             <div class="form-group">
                                 <label for="exampleFormControlFile1">Voeg minimaal 1 afbeelding toe</label>
-                                <input type="file" class="form-control-file" name="bestand1" accept="image/*" id="exampleFormControlFile1" required>
+                                <input type="file" class="form-control-file" name="foto1" accept="image/*" id="foto1" required>
                                 <div class="invalid-feedback">
                                   Geef minmaal 1 foto mee.
                                 </div>  
                                 <label for="exampleFormControlFile2">Afbeelding 2</label>
-                                <input type="file" class="form-control-file" accept="image/*" name="bestand2" id="exampleFormControlFile2">
+                                <input type="file" class="form-control-file" accept="image/*" name="foto2" id="foto2">
                                 <label for="exampleFormControlFile3">Afbeelding 3</label>
-                                <input type="file" class="form-control-file" accept="image/*" name="bestand3" id="exampleFormControlFile3">
+                                <input type="file" class="form-control-file" accept="image/*" name="foto3" id="foto3">
                                 <label for="exampleFormControlFile4">Afbeelding 4</label>
-                                <input type="file" class="form-control-file" accept="image/*" name="bestand4" id="exampleFormControlFile4">
+                                <input type="file" class="form-control-file" accept="image/*" name="foto4" id="foto4">
                             </div>                      
                     </div>
               
@@ -103,7 +129,7 @@ if(isset($_POST['Volgende'])){
                     </div>
                     <div class="form-group col-md-8">  
                         <label for="Textarea">Verzendinstructies(optioneel):</label>
-                        <textarea name="verzendinstucties" class="form-control" placeholder="Voer hier uw bericht in." id="Textarea" rows="10"></textarea>                                   
+                        <textarea name="verzendinstructies" class="form-control" placeholder="Voer hier uw bericht in." id="Textarea" rows="10"></textarea>                                   
                     </div>
                 
                     <div class="form-group col-md-4">
@@ -173,7 +199,7 @@ if(isset($_POST['Volgende'])){
 <?php
 }
 else {
-  include 'includes/404error.php'
+  include 'includes/404error.php';
 }
 include 'includes/footer.php';
 ?>

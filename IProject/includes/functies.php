@@ -375,14 +375,6 @@ function Biedingen($voorwerpnr){
                   
           }
 
-        foreach ($rows as $rij)
-        {
-            echo '<li class="list-group-item">€'.$rij['euro'].' '.$rij['gebruikersnaam'].' '.date("d.m.Y H:i", strtotime($rij['datumentijd'])).'</li>';
-
-        }
-
-
-
     } catch (PDOexception $e) {
         echo "er ging iets mis errorbiedingen: {$e->getMessage()}";
     }
@@ -1384,13 +1376,13 @@ function checkGEBLOKEERD (){
         $geblokeerd = $dbh ->prepare (" select gebruikersnaam, geblokeerd from Gebruiker where gebruikersnaam like :gebruiker  ");
         $geblokeerd-> execute(
             array(
-                ':gebruiker' => $SESSION_['gebruikersnaam'],
+                ':gebruiker' => $_SESSION['gebruikersnaam'],
 
             )
         );
 
         while ($resultaat = $geblokeerd ->fetchAll(PDO::FETCH_ASSOC)){
-            print_r($esultaat);
+            print_r($resultaat);
             if ($resultaat['geblokeerd'] == 1){
                 echo 'JE BENT GEBLOKEERD !!!';
             }else if ($resultaat['geblokeerd'] == 0){
