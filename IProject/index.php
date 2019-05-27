@@ -75,20 +75,21 @@ if(isset($_SESSION['status'])){
       <?php }
       if(!empty($laatstBekeken)) {?>
         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-            <?php $advertentie = DetailAdvertentie($laatstBekeken[0]); ?>
+            <?php $advertentie = DetailAdvertentie($laatstBekeken[0]['voorwerpnr']);
+             ?>
             <div class="hovereffect">
-                <img class="img-responsive" src="<?php echo $advertentie['illustratieFile']?>" alt="Geen afbeelding beschikbaar">
+                <img class="img-responsive" src="../pics/<?php echo $advertentie['illustratieFile']?>" alt="Geen afbeelding beschikbaar">
                 <div class="overlay">
                     <h2>Hover effect 1</h2>
-                    <a class="info" href=\"advertentie.php?id=<?php echo $advertentie['voorwerpnr']; ?>"><?php echo $advertentie['titel'];?></a>
+                    <a class="info" href="advertentie.php?id=<?php echo $advertentie['voorwerpnr']; ?>"><?php echo $advertentie['titel'];?></a>
                 </div>
             </div>
         </div>
         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-            <?php $advertentie = DetailAdvertentie($laatstBekeken[1]); 
+            <?php $advertentie = DetailAdvertentie($laatstBekeken[1]['voorwerpnr']); 
            ?>
             <div class="hovereffect">
-                <img class="img-responsive" src="<?php echo $advertentie['illustratieFile'];?>" alt="Geen afbeelding beschikbaar">
+                <img class="img-responsive" src="../pics/<?php echo $advertentie['illustratieFile'];?>" alt="Geen afbeelding beschikbaar">
                 <div class="overlay">
                     <h2>Hover effect 1</h2>
                     <a class="info" href="advertentie.php?id=<?php echo $advertentie['voorwerpnr']; ?>"><?php echo $advertentie['titel'];?></a>
@@ -97,9 +98,9 @@ if(isset($_SESSION['status'])){
         </div>
       
         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-            <?php $advertentie = DetailAdvertentie($laatstBekeken[2]);?>
+            <?php $advertentie = DetailAdvertentie($laatstBekeken[2]['voorwerpnr']);?>
             <div class="hovereffect">
-                <img class="img-responsive" src="<?php echo $advertentie['illustratieFile'];?>" alt="Geen afbeelding beschikbaar">
+                <img class="img-responsive" src="../pics/<?php echo $advertentie['illustratieFile'];?>" alt="Geen afbeelding beschikbaar">
                 <div class="overlay">
                     <h2>Hover effect 1</h2>
                     <a class="info" href="advertentie.php?id=<?php echo $advertentie['voorwerpnr']; ?>"><?php echo $advertentie['titel'];?></a>
@@ -111,7 +112,7 @@ if(isset($_SESSION['status'])){
         
         <?php
         $rubriek = getAanbevolen($_SESSION['gebruikersnaam']);         
-        $aanbevolen = getProductenUitRubriek($rubriek, 3);
+        $aanbevolen = getProductenUitRubriek2($rubriek['rubrieknr'], 3);
         if(empty($aanbevolen)){ ?>
          <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
            <p> U heeft nog geen aanbevolen advertenties </p>
@@ -120,9 +121,9 @@ if(isset($_SESSION['status'])){
        if(!empty($aanbevolen)) {?>
         
         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 mb-2">
-            <?php $advertentie = DetailAdvertentie($aanbevolen[0]);?>
+            <?php $advertentie = DetailAdvertentie($aanbevolen[0]['voorwerpnr']);?>
             <div class="hovereffect">
-                <img class="img-responsive" src="<?php echo $advertentie['illustratieFile'];?>" alt="Geen afbeelding beschikbaar">
+                <img class="img-responsive" src="../pics/<?php echo $advertentie['illustratieFile'];?>" alt="Geen afbeelding beschikbaar">
                 <div class="overlay">
                     <h2>Hover effect 1</h2>
                     <a class="info" href="advertentie.php?id=<?php echo $advertentie['voorwerpnr']; ?>"><?php echo $advertentie['titel'];?></a>
@@ -130,9 +131,9 @@ if(isset($_SESSION['status'])){
             </div>
         </div>
         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 mb-2">
-            <?php $advertentie = DetailAdvertentie($aanbevolen[1]);?>
+            <?php $advertentie = DetailAdvertentie($aanbevolen[1]['voorwerpnr']);?>
             <div class="hovereffect">
-                <img class="img-responsive" src="<?php echo $advertentie['illustratieFile'];?>" alt="Geen afbeelding beschikbaar">
+                <img class="img-responsive" src="../pics/<?php echo $advertentie['illustratieFile'];?>" alt="Geen afbeelding beschikbaar">
                 <div class="overlay">
                     <h2>Hover effect 1</h2>
                     <a class="info" href="advertentie.php?id=<?php echo $advertentie['voorwerpnr']; ?>"><?php echo $advertentie['titel'];?></a>
@@ -140,9 +141,9 @@ if(isset($_SESSION['status'])){
             </div>
         </div>
         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 mb-2">
-            <?php $advertentie = DetailAdvertentie($aanbevolen[2]);?>
+            <?php $advertentie = DetailAdvertentie($aanbevolen[2]['voorwerpnr']);?>
             <div class="hovereffect">
-                <img class="img-responsive" src=\"<?php echo $advertentie['illustratieFile'];?>" alt="Geen afbeelding beschikbaar">
+                <img class="img-responsive" src=../pics/"<?php echo $advertentie['illustratieFile'];?>" alt="Geen afbeelding beschikbaar">
                 <div class="overlay">
                     <h2>Hover effect 1</h2>
                     <a class="info" href="advertentie.php?id=<?php echo $advertentie['voorwerpnr']; ?>"><?php echo $advertentie['titel'];?></a>

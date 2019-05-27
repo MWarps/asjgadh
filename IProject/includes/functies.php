@@ -3,6 +3,28 @@ include 'email.php';
 include 'email2.php';
 include 'emailBericht.php';
 
+function BodVerhoging($Euro){
+  $Verhoging;
+  switch ($Euro) {
+    case ($Euro <50) :
+            $Verhoging = 0.50;
+      break;
+    case ($Euro >=50 && $Euro <500):
+            $Verhoging = 1;
+      break;
+    case ($Euro >=500 && $Euro <1000) :
+            $Verhoging = 5;
+      break;
+    case ($Euro >=1000 && $Euro <5000):
+              $Verhoging = 10;
+      break;
+    case ($Euro >=5000) :
+              $Verhoging = 50;                    
+    default:
+      break;
+  }
+  return $Verhoging;
+}
 
 function gebruikerBekeekVoorwerp($gebruikersnaam, $voorwerpnr) {
     try {
@@ -284,7 +306,7 @@ function HaalIllustratiesOp($voorwerpnr){
 function zijnErBiedingen($voorwerpnr){
   try {
       require('core/dbconnection.php');
-      $sqlSelect = $dbh->prepare("select * from bod where voorwerpnr = :voorwerpnr order by euro desc");
+      $sqlSelect = $dbh->prepare("select * from bod where voorwerpnr = :voorwerpnr order by convert(decimal(9,2), euro) desc");
 
       $sqlSelect->execute(
           array(
@@ -338,7 +360,7 @@ function updateBieden($bod, $gebruikersnaam, $voorwerpnr){
 function Biedingen($voorwerpnr){
   try {
       require('core/dbconnection.php');
-      $sqlSelect = $dbh->prepare("select top 5 * from Bod where voorwerpnr = :voorwerpnr order by euro desc");
+      $sqlSelect = $dbh->prepare("select top 5 * from Bod where voorwerpnr = :voorwerpnr order by convert(decimal(9,2), euro) desc");
 
       $sqlSelect->execute(
           array(
@@ -349,7 +371,7 @@ function Biedingen($voorwerpnr){
         
           foreach ($rows as $rij)
            {
-              echo '<li class="list-group-item">€'.$rij['euro'].' '.$rij['gebruikersnaam'].' '.date("d.m.Y H:i", strtotime($rij['datumentijd'])).'</li>';
+              echo '<li class="list-group-item">€'.number_format($rij['euro'], 2, ',', '.').' - '.$rij['gebruikersnaam'].' - '.date("d.m.Y H:i", strtotime($rij['datumentijd'])).'</li>';
                   
           }
 

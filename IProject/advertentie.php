@@ -1,16 +1,18 @@
 <?php
 include 'includes/header.php';
 if(isset($_GET['id'])){
-  
+  $gebruikersnaam = $_SESSION['gebruikersnaam'];
 $advertentie = DetailAdvertentie($_GET['id']);
 $pagina = 'advertentie.php';
 if(!isset($_POST['bieden'])){
   $voorwerpnr = $_GET['id']; 
-  $gebruikersnaam = $_SESSION['gebruikersnaam'];
+  
   VoorwerpGezien($voorwerpnr);
+  
+  if(isset($_SESSION['gebruikersnaam'])){
   gebruikerBekeekVoorwerp($gebruikersnaam, $voorwerpnr);
   gebruikerAanbevolen($gebruikersnaam, $voorwerpnr);
-  
+  }
 }  
 
 if(isset($_POST['bieden'])){
@@ -35,18 +37,7 @@ if(isset($_POST['bieden'])){
   }
 }
 ?>
-<div class="container-fluid">
-    <div class="row">
-        <div class="col">            
-            <nav aria-label="breadcrumb">        
-                <ol class="breadcrumb">
-                  <button class="btn btn-sm btn-primary mr-3" id="terug" name="terug" value="terug"><a href="#"></a>Vorige</button>              
-                    <?php catogorieSoort($pagina); ?>                    
-                </ol>            
-            </nav>
-        </div>
-    </div>
-</div>
+
 <!-- Page Content -->
 <div class="container-fluid">
   
@@ -124,22 +115,20 @@ if(isset($_POST['bieden'])){
      <div class="card-body">
          <form class="needs-validation" novalidate action='advertentie.php?id=<?php echo $advertentie['voorwerpnr']?>' method="post">
            <div class="form-row">
-        <label for="bod">Bieden: (vanaf: €<?php if(!empty(zijnErBiedingen($advertentie['voorwerpnr'])))
-                                                  {$hoogstebod = zijnErBiedingen($advertentie['voorwerpnr']);
-                                                    $hoogstebod['euro'] = $hoogstebod['euro'] + 0.01;
-                                                    echo $hoogstebod['euro'];}
-                                                else{echo $advertentie['startprijs'];} ?> )</label>
-         <input type="number" name="bod" class="form-control" id="bod" step="0.01" min="<?php if(!empty(zijnErBiedingen($advertentie['voorwerpnr'])))
-                                                   {$hoogstebod = zijnErBiedingen($advertentie['voorwerpnr']);
-                                                     $hoogstebod['euro'] = $hoogstebod['euro'] + 0.01;
-                                                     echo $hoogstebod['euro'];}
-                                                 else{echo $advertentie['startprijs'];} ?>" required>
+             <?php if(!empty(zijnErBiedingen($advertentie['voorwerpnr']))) { 
+                    $hoogstebod = zijnErBiedingen($advertentie['voorwerpnr']);                   
+                    $verhoging = BodVerhoging($hoogstebod['euro']);                    
+                    $hoogstebod = $hoogstebod['euro'] + $verhoging;                                       
+                    $hoogstebod = number_format($hoogstebod, 2, ',', '.');                    
+                }
+                  
+                else { $hoogstebod = $advertentie['startprijs'];
+                }       
+              ?>
+        <label for="bod">Bieden: (vanaf: €<?php echo $hoogstebod; ?>)</label>
+         <input type="number" name="bod" class="form-control" id="bod" step="0.01" min="<?php echo $hoogstebod; ?>" required>
          <div class="invalid-feedback">
-             Voer een bod vanaf €<?php if(!empty(zijnErBiedingen($advertentie['voorwerpnr'])))
-                                                       {$hoogstebod = zijnErBiedingen($advertentie['voorwerpnr']);
-                                                         $hoogstebod['euro'] = $hoogstebod['euro'] + 0.01;
-                                                         echo $hoogstebod['euro'];}
-                                                     else{echo $advertentie['startprijs'];} ?>.
+             Voer een bod vanaf €<?php echo $hoogstebod; ?>.
          </div>
          <button class="btn btn-lg btn-primary mt-3" type="submit" name="bieden" value="bieden"> Plaats bod </button>
          </form>
@@ -157,8 +146,7 @@ if(isset($_POST['bieden'])){
         <?php if(empty(zijnErBiedingen($advertentie['voorwerpnr']))){
            echo '<li class="list-group-item"> Er zijn nog geen biedingen gedaan</li>';}
            if(!empty(zijnErBiedingen($advertentie['voorwerpnr']))){
-                Biedingen($advertentie['voorwerpnr']);}
-            
+                Biedingen($advertentie['voorwerpnr']);}          
         ?>
      </ul>
    </div>
