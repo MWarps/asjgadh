@@ -52,7 +52,7 @@ $verkoper = gegevensIngevuld($_SESSION['gebruikersnaam']);
 
                             <label for="inputTussennaam">Bankrekeningnummer (Verplicht)</label>
                             <input type="text" name="bankrekeningnr" class="form-control" id="inputBankrekeningnr" placeholder="Bankrekeningnr"
-                            pattern="[A-Za-z0-9]*" maxlength="10" value="<?php if($_POST) { echo $_POST['bankrekeningnr'];} ?>">
+                            pattern="[A-Za-z0-9]*" maxlength="18" value="<?php if($_POST) { echo $_POST['bankrekeningnr'];} ?>">
 
                             <label for="inputAchternaam">Creditcard (optioneel)</label>
                             <input type="text" name="creditcard" class="form-control" id="inputcreditcard" placeholder="Creditcard"

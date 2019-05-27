@@ -21,7 +21,7 @@ if (isset($_SESSION['gebruikersnaam']) && isset($_GET['id'])){
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-6 mt-4">
-            <form class="needs-validation" novalidate action="stuurbericht.php" method="POST">
+            <form class="needs-validation" novalidate action="stuurbericht.php?id=<?php echo $_GET['id']?>" method="POST">
                 <h1 class="h3 mb-3 text-center">Stuur een bericht!</h1>
                 <?php
                 if($Verstuurd){
