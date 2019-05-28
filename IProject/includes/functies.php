@@ -960,7 +960,7 @@ function emailResetWachtwoord($gebruikersnaam)
 {
     try{
         require('core/dbconnection.php');
-        $sqlSelect = $dbh->prepare("select email, voornaam from gebruikers where gebruikersnaam = :gebruikersnaam");
+        $sqlSelect = $dbh->prepare("select email, voornaam from Gebruiker where gebruikersnaam = :gebruikersnaam");
 
         $sqlSelect->execute(
             array(
