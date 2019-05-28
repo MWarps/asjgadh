@@ -191,7 +191,7 @@ function getPopulairsteArtikelen() {
         echo '
         <div class="col-md-4 py-3">
         <div class="card" style="width: 18rem;">
-          <img class="card-img-top" src="'.$locatie.$details['illustratieFile'].'" alt="Foto bestaat niet">
+          <img class="card-img-boven" src="'.$locatie.$details['illustratieFile'].'" alt="Foto bestaat niet">
           <h5 class="card-header"><a href="advertentie.php?id='.$details['voorwerpnr'].'">'.$details['titel'].'</a></h5>
             <div class="card-body">
               <h4 class="card-text">€ '.$details['startprijs'].'</h4>
@@ -313,7 +313,7 @@ function getLaatstBekeken($gebruiker) {
         echo '
         <div class="col-md-4 py-3">
         <div class="card" style="width: 18rem;">
-          <img class="card-img-top" src="'.$locatie.$details['illustratieFile'].'" alt="Foto bestaat niet">
+          <img class="card-img-boven" src="'.$locatie.$details['illustratieFile'].'" alt="Foto bestaat niet">
           <h5 class="card-header"><a href="advertentie.php?id='.$details['voorwerpnr'].'">'.$details['titel'].'</a></h5>
             <div class="card-body">
               <h4 class="card-text">€ '.$details['startprijs'].'</h4>
@@ -365,7 +365,7 @@ function getAanbevolen($gebruiker) {
         echo '
         <div class="col-md-4 py-3">
         <div class="card" style="width: 18rem;">
-          <img class="card-img-top" src="../pics/'.$locatie.$details['illustratieFile'].'" alt="Foto bestaat niet">
+          <img class="card-img-boven" src="../pics/'.$locatie.$details['illustratieFile'].'" alt="Foto bestaat niet">
           <h5 class="card-header"><a href="advertentie.php?id='.$details['voorwerpnr'].'">'.$details['titel'].'</a></h5>
             <div class="card-body">
               <h4 class="card-text">€ '.$details['startprijs'].'</h4>
@@ -520,7 +520,7 @@ function haalAdvertentieOp($rubriek){
             echo '
             <div class="col-md-4 pb-3">
             <div class="card" style="width: 18rem;">
-              <img class="card-img-top" src="'.$locatie.$details['illustratieFile'].'" alt="Foto bestaat niet">
+              <img class="card-img-boven" src="'.$locatie.$details['illustratieFile'].'" alt="Foto bestaat niet">
               <h5 class="card-header"><a href="advertentie.php?id='.$details['voorwerpnr'].'">'.$details['titel'].'</a></h5>
                 <div class="card-body">
                   <h4 class="card-text">€ '.$details['startprijs'].'</h4>
