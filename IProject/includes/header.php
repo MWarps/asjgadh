@@ -24,7 +24,7 @@ if(isset($_SESSION['gebruikersnaam'])){
     }
     if (checkGEBLOKEERD ($_SESSION['gebruikersnaam']) == true){
         session_unset;
-    session_destroy ;
+        session_destroy ;
 }
 
 
