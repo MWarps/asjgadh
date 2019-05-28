@@ -18,8 +18,6 @@ if(isset($_POST['Volgende'])){
   $land =  $_POST['rLand'];
   $looptijd = $_POST['looptijd'];
   
-  // Informatie ophalen van de verkoper 
-  //$gebruiker = HaalGebruikerOp($_SESSION['gebruikersnaam']);
   
   // Alle inputvelden met verkoper in een array gezet
   $voorwerp = array($titel, $beschrijving, $startbedrag, $betalingsmethode,
@@ -100,9 +98,6 @@ if(isset($_POST['Volgende'])){
   echo '<script language="javascript">window.location.href ="index.php"</script>';
   exit();
 }
-
-  
-
 
 ?>
 

@@ -1530,22 +1530,7 @@ function checkGEBLOKEERD ($gebruiker){
     } catch (PDOexception $e) {
         echo "er ging iets mis error: {$e->getMessage()}";
     }
-
-}
-
-        while ($resultaat = $geblokeerd ->fetchAll(PDO::FETCH_ASSOC)){
-            if ($resultaat[0]['beheerder'] == 1){
-                return true;
-            }else if ($resultaat[0]['beheerder'] == 0){  
-                return false;
-            } else if (empty($resultaat['beheerder'])){
-                header("Location: includes/404error.php");
-            }
-        }
-    } catch (PDOexception $e) {
-        //echo "er ging iets mis error: {$e->getMessage()}";
-        // blijft error geven vanwegen het niet meer opkunnen halen van meet data. 
-    }
+     
 }
 
 function gebruikerBLOKEERemail($gebruikersnaam){
