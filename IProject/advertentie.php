@@ -63,15 +63,17 @@ if(isset($_POST['bieden'])){
          <!-- Indicators -->
          <ol class="carousel-indicators">
            
-           <?php $Illustratie1 = HaalIllustratiesOp($advertentie['voorwerpnr']);       
+           <?php 
+           $Illustratie1 = HaalIllustratiesOp($advertentie['voorwerpnr']); 
+                 
            $teller = 0;       
-          foreach ($Illustratie1 as $rij => $id) {
+          foreach ($Illustratie1 as $rij) {
             $locatie = '../pics/';
-            if(substr($Illustratie1[$teller]['illustratieFile'] , 0 ,2 ) == 'ea'){
+            if(substr($rij['illustratieFile'] , 0 ,2 ) == 'ea'){
               $locatie = 'upload/';
             } 
-            if(!empty($Illustratie1[$teller]['illustratieFile'])){
-             echo '<li data-target="#carousel-example-generic" data-slide-to="'.$teller.'"><img src="'.$locatie.$Illustratie1[$teller]['illustratieFile'].'" alt="..."></li>';
+            if(!empty($rij['illustratieFile'])){
+             echo '<li data-target="#carousel-example-generic" data-slide-to="'.$teller.'"><img src="'.$locatie.$rij['illustratieFile'].'" alt="..."></li>';
              $teller++;    
            }  }
            ?>           
@@ -79,19 +81,27 @@ if(isset($_POST['bieden'])){
         
          <!-- Wrapper for slides -->
          <div class="carousel-inner" role="listbox">
-                 
-          <?php 
-          $Illustratie2 = HaalIllustratiesOp($advertentie['voorwerpnr']);
-          $teller = 0;
-          foreach ($Illustratie2 as $rij) {
+           <div class="carousel-item active">
+                   <div class="img-big-wrap">
+                     <img src="<?php
+                     $locatie = '../pics/';
+                     if(substr($rij['illustratieFile'] , 0 ,2 ) == 'ea'){
+                       $locatie = 'upload/';
+                     }  echo $locatie.$Illustratie1[0]['illustratieFile'] ?>" alt="...">
+                   </div>           
+                </div>
+          <?php         
+          $teller = 1;
+        
+          foreach ($Illustratie1 as $rij) {
             $locatie = '../pics/';
-            if(substr($Illustratie1[$teller]['illustratieFile'] , 0 ,2 ) == 'ea'){
+            if(substr($rij['illustratieFile'] , 0 ,2 ) == 'ea'){
               $locatie = 'upload/';
             } 
-            if(!empty($Illustratie1[$teller]['illustratieFile'])){
+            if(!empty($rij['illustratieFile'])){
             echo '<div class="carousel-item">
                     <div class="img-big-wrap">
-                      <img src="'.$locatie.$Illustratie2[$teller]['illustratieFile'].'" alt="...">
+                      <img src="'.$locatie.$Illustratie1[$teller]['illustratieFile'].'" alt="...">
                     </div>           
                  </div>';
             $teller++;    
