@@ -7,7 +7,7 @@ AS
 BEGIN
 DECLARE @code CHAR(8) = CAST(RAND() * 1000000 AS INT)
 DECLARE @eindtijd smalldatetime
-DECLARE @verzonden BIT
+DECLARE @verzonden BIT = 0
 
 IF (@type = 'brief') 
 	BEGIN
@@ -16,7 +16,6 @@ IF (@type = 'brief')
 	else if (@type = 'email')
 	BEGIN
 	SET @eindtijd = DATEADD(hour, 4, CURRENT_TIMESTAMP)
-	SET @verzonden = 1
 	END
 	else if (@type = 'reset')
 	BEGIN
