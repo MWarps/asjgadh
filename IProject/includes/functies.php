@@ -1400,11 +1400,6 @@ function StuurGebruikerDeblockedEmail($gebruikersnaam)
 }
 
 
-
-
-
-
-
 function veilingenVinden($veilingnaam){
     $teller =0;
     try {
