@@ -1,9 +1,12 @@
 <?php
 include 'includes/header.php';
 if(isset($_SESSION['gebruikersnaam'])){
+  if(isset($_GET['id'])){
+    $_SESSION['rubrieknr'] =  $_GET['id'];
+  }
+  
   $uploadOk = 1;
 if(isset($_POST['Volgende'])){
-  $rubriek = $_POST['rubriek'];
   $titel = $_POST['titel'];
   $beschrijving = $_POST['beschrijving'];
   $startbedrag = $_POST['startbedrag'];
@@ -25,84 +28,79 @@ if(isset($_POST['Volgende'])){
   
   // Voorwerp toevoegen in database en voorwerpnr terughalen
   $voorwerpnr = VoegVoorwerpToe($voorwerp);
+  $voorwerpnr = $voorwerpnr['voorwerpnr'];
   
+  VoegVoorwerpAanRubriekToe($voorwerpnr, $_SESSION['rubrieknr']);
   // Foto1 uploaden naar server
   $target_dir = "upload/";
-  $ext = pathinfo($_FILES["foto1"]["name"], PATHINFO_EXTENSION);
-  $bestand_naam_db = "ea_1_" + $voorwerpnr + $ext;
+  
   $target_file = $target_dir . basename($_FILES["foto1"]["name"]);
-
   $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
+  $bestand_naam_db = strval("ea_1_".$voorwerpnr.".".$imageFileType);
 
   // Check if image file is a actual image or fake image
       $check = getimagesize($_FILES["foto1"]["tmp_name"]);
       if($check !== false) {       
-          move_uploaded_file($_FILES["foto1"]["tmp_name"], $target_file . $bestand_naam);
-          VoegVoorwerpToeAanIllustratie($voorwerpnr, $bestand_naam_db);
+          move_uploaded_file($_FILES["foto1"]["tmp_name"], $target_dir . $bestand_naam_db);
+         VoegVoorwerpToeAanIllustratie($voorwerpnr, $bestand_naam_db);
       } else {    
           $uploadOk = 0;
       } 
 
 
 // Foto2 uploaden naar server
-  if(isset($_FILES["foto2"])){
-    $bestand_naam = "ea_2_" + $voorwerpnr;
+  if(isset($_POST["foto2"])){
     $target_file = $target_dir . basename($_FILES["foto2"]["name"]);
-    $uploadOk = 1;
     $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
+    $bestand_naam_db = strval("ea_2_".$voorwerpnr.".".$imageFileType);
   
     // Check if image file is a actual image or fake image
-        $check = getimagesize($_FILES["foto4"]["tmp_name"]);
+        $check = getimagesize($_FILES["foto2"]["tmp_name"]);
         if($check !== false) {       
-            move_uploaded_file($_FILES["foto4"]["tmp_name"], $target_file . $bestand_naam);
-            VoegVoorwerpToeAanIllustratie($voorwerpnr, $bestand_naam_db);
+            move_uploaded_file($_FILES["foto2"]["tmp_name"], $target_dir . $bestand_naam_db);
+           VoegVoorwerpToeAanIllustratie($voorwerpnr, $bestand_naam_db);
         } else {    
             $uploadOk = 0;
-        }     
+        }    
   }
   
   // Foto3 uploaden naar server
-  if(isset($_FILES["foto3"])){
-    $bestand_naam = "ea_3_" + $voorwerpnr;
+  if(isset($_POST["foto3"])){
     $target_file = $target_dir . basename($_FILES["foto3"]["name"]);
-    $uploadOk = 1;
     $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
+    $bestand_naam_db = strval("ea_3_".$voorwerpnr.".".$imageFileType);
   
     // Check if image file is a actual image or fake image
-        $check = getimagesize($_FILES["foto4"]["tmp_name"]);
+        $check = getimagesize($_FILES["foto3"]["tmp_name"]);
         if($check !== false) {       
-            move_uploaded_file($_FILES["foto4"]["tmp_name"], $target_file . $bestand_naam);
-            VoegVoorwerpToeAanIllustratie($voorwerpnr, $bestand_naam_db);
+            move_uploaded_file($_FILES["foto3"]["tmp_name"], $target_dir . $bestand_naam_db);
+           VoegVoorwerpToeAanIllustratie($voorwerpnr, $bestand_naam_db);
         } else {    
             $uploadOk = 0;
         }     
   }
   
 // Foto4 uploaden naar server  
-  if(isset($_FILES["foto4"])){
-    $bestand_naam = "ea_4_" + $voorwerpnr;
-    $ext = pathinfo($_FILES["foto4"]["name"], PATHINFO_EXTENSION);
-    $bestand_naam_db = "ea_4_" + $voorwerpnr + $ext;
+  if(isset($_POST["foto4"])){
     $target_file = $target_dir . basename($_FILES["foto4"]["name"]);
-    $uploadOk = 1;
     $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
+    $bestand_naam_db = strval("ea_4_".$voorwerpnr.".".$imageFileType);
   
-  // Check if image file is a actual image or fake image
-      $check = getimagesize($_FILES["foto4"]["tmp_name"]);
-      if($check !== false) {       
-          move_uploaded_file($_FILES["foto4"]["tmp_name"], $target_file . $bestand_naam );
-          VoegVoorwerpToeAanIllustratie($voorwerpnr, $bestand_naam_db);
-      } else {    
-          $uploadOk = 0;
-      }     
+    // Check if image file is a actual image or fake image
+        $check = getimagesize($_FILES["foto4"]["tmp_name"]);
+        if($check !== false) {       
+            move_uploaded_file($_FILES["foto4"]["tmp_name"], $target_dir . $bestand_naam_db);
+           VoegVoorwerpToeAanIllustratie($voorwerpnr, $bestand_naam_db);
+        } else {    
+            $uploadOk = 0;
+        }    
   }
-  }
-  //VoegVoorwerpAanRubriekToe($voorwerpnr, $_GET['id'], $gebruiker['gebruikersnaam']);
+  $_SESSION['status'] = 'voorwerp';
+  
+  echo '<script language="javascript">window.location.href ="index.php"</script>';
+  exit();
+}
 
-  //$_SESSION['status'] = 'Voorwerp';
-  
-  //echo '<script language="javascript">window.location.href ="index.php"</script>';
-  //exit();
   
 
 
@@ -111,7 +109,7 @@ if(isset($_POST['Volgende'])){
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-10 mt-2">
-          <form class="needs-validation" novalidate action="veilen2.php?id=<?php echo $_GET['naam'];?>" method="POST" enctype="multipart/form-data">
+          <form class="needs-validation" novalidate action="veilen2.php" method="POST" enctype="multipart/form-data">
                 <h1 class="h3 mb-2 text-center "> Veiling starten </h1>
                 <p class=" mb-2 text-center " > Hier kunt u een voorwerp te koop aan bieden, vul alle onderstaande velden in.</p>                      
                 <?php 
@@ -130,15 +128,10 @@ if(isset($_POST['Volgende'])){
                       </div>';}
                 ?>
                 
-                  <div class="col-md-5">
-                      <label for="Rubriek">Rubriek</label>
-                      <input type="text" name="rubriek" class="form-control" id="rubriek" value="<?php echo $_GET['naam']; ?>" placeholder="<?php echo $_GET['naam']; ?>"
-                       readonly>
-                  </div>
                     <div class="form-group col-md-10">
                         <label for="inputTitel">Titel (Vul een titel in. Denk aan belangrijke eigenschappen zoals kleur, merk of maat):</label>
                         <input type="text" name="titel" class="form-control" id="inputTitel"
-                               pattern="[A-Za-z0-9]*" maxlength="100" placeholder="Titel" value="<?php if($_POST) { echo $_POST['rTitel'];} ?>" required>
+                               pattern="[A-Za-z0-9]*" maxlength="100" placeholder="Titel" value="<?php if($_POST) { echo $_POST['titel'];} ?>" required>
                         <div class="invalid-feedback">
                             Voer een titel in.
                         </div>

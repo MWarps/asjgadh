@@ -26,7 +26,9 @@ if(isset($_SESSION['status'])){
             $status = 'U wachtwoord is veranderd!';
             break;
         case 'verkoper':
-            $status = 'U bent geregistreerd als verkoper';
+            $status = 'U bent geregistreerd als verkoper!';
+        case 'voorwerp':
+            $status = 'Voorwerp is succesvol te koop gezet!';
         default:
             // code...
             break;
