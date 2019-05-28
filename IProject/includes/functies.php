@@ -1281,7 +1281,7 @@ function blokeren($geblokeerd, $teller, $gebruiker){
       </td>  ';
     }
 }
-function gebruikerblok($gebruiker){
+function gebruikerblok(){
     try {
         require('core/dbconnection.php');
         $blokeren = $dbh ->prepare (" UPDATE Gebruiker
@@ -1316,7 +1316,7 @@ function gebruikerblok($gebruiker){
             );
         }
     } catch (PDOexception $e) {
-        echo "er ging iets mis error: {$e->getMessage()}";
+//        echo "er ging iets mis error: {$e->getMessage()}";
     }
 }
 

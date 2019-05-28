@@ -8,7 +8,7 @@ if (checkBEHEERDER ($_SESSION['gebruikersnaam']) == true){     // veranderen naa
     }
 
     if (isset( $_GET['id'])){
-        gebruikerblok($_SESSION['gebruikersnaam']);
+        gebruikerblok();
     }
 ?>
 
