@@ -32,7 +32,7 @@ $verkoper = gegevensIngevuld($_SESSION['gebruikersnaam']);
   VerificatieCodeProcedure($gebruiker['email'], $type);
   $code = HaalVerficatiecodeOp($gebruiker['email'], $type);
   
-  MaakVerkoperBrief($_SESSION['gebruikersnaam']);
+  //MaakVerkoperBrief($_SESSION['gebruikersnaam']);
   
   echo '<script language="javascript">window.location.href ="verkoperValidatie.php"</script>';
   exit();

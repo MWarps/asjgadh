@@ -874,8 +874,40 @@ function StuurRegistreerEmail($Email, $Code){
 
 }
 
+function getWannabeVerkopers() {
+    try{
+        require('core/dbconnection.php');
+        $sqlSelect = $dbh->prepare("SELECT gebruikersnaam FROM Gebruiker INNER JOIN Verificatie ON Gebruiker.email = Verificatie.email WHERE type = 'brief' 
+        AND verzonden = 0");
 
-function MaakVerkoperBrief($gebruiker){
+        $sqlSelect->execute();
+
+        $records = $sqlSelect->fetch(PDO::FETCH_ASSOC);
+
+        return $records;
+
+    }
+    catch (PDOexception $e) {
+        echo "er ging iets mis erroreqrre: {$e->getMessage()}";
+    }
+}
+
+function verificatieVerzonden($email) {
+    try{
+        require('core/dbconnection.php');
+        $sqlSelect = $dbh->prepare("UPDATE Verificatie SET verzonden = 1 WHERE email = :email");
+
+        $sqlSelect->execute(
+            array(
+                ':email' => $email
+            ));
+    }
+    catch (PDOexception $e) {
+        echo "er ging iets mis erroreqrre: {$e->getMessage()}";
+    }
+}
+
+function maakVerkoperBrief($gebruiker){
     try{    
         require('core/dbconnection.php');
         $sqlSelect = $dbh->prepare("SELECT voornaam, achternaam, geslacht, adresregel1, adresregel2, postcode, plaatsnaam, land, verificatiecode, 
@@ -884,13 +916,16 @@ function MaakVerkoperBrief($gebruiker){
 
         $sqlSelect->execute(
             array(
-                ':gebruiker' => $_SESSION['gebruikersnaam']
+                ':gebruiker' => $gebruiker
             ));
 
         $records = $sqlSelect->fetch(PDO::FETCH_ASSOC);
-        return $records;
 
-        Brief($records);
+        $brief = Brief($records);
+
+        return $brief;
+
+
     }
     catch (PDOexception $e) {
         echo "er ging iets mis erroreqrre: {$e->getMessage()}";
@@ -1372,7 +1407,7 @@ function blokeren($geblokeerd, $teller, $gebruiker){
       </td>  ';
     }
 }
-function gebruikerblok($gebruiker){
+function gebruikerblok(){
     try {
         require('core/dbconnection.php');
         $blokeren = $dbh ->prepare (" UPDATE Gebruiker
@@ -1407,7 +1442,7 @@ function gebruikerblok($gebruiker){
             );
         }
     } catch (PDOexception $e) {
-        echo "er ging iets mis error: {$e->getMessage()}";
+//        echo "er ging iets mis error: {$e->getMessage()}";
     }
 }
 
@@ -1513,7 +1548,6 @@ function veilingenVinden($veilingnaam){
                     <td>'.$resultaat['voorwerpnr'].'</td>
                     <td>'.$resultaat['titel'].'</td>
                     <td>'.$resultaat['startprijs'].'</td>
-                    <td>'.$resultaat['verzendkosten'].'</td>
                     <td>'.$resultaat['betalingswijze'].'</td>
                     <td>'.$resultaat['plaatsnaam'].'</td>
                     <td>'.$resultaat['land'].'</td>
@@ -1521,11 +1555,9 @@ function veilingenVinden($veilingnaam){
                     <td>'.$resultaat['looptijdbegindatum'].'</td> 
                     <td>'.$resultaat['looptijdeinddatum'].'</td> 
                     <td>'.$resultaat['verkoper'].'</td> 
-                    <td>'.$resultaat['koper'].'</td> 
                     <td>'.$resultaat['veilinggesloten'].'</td> 
-                    <td>'.$resultaat['verkoopprijs'].'</td>
                     <td>'.$geblokeerd.'</td> 
-                    <td>'.$resultaat[blokeerdatum].'</td>
+                    <td>'.$resultaat['blokeerdatum'].'</td>
                       ';
             veilingblokeren($geblokkeerd, $resultaat['voorwerpnr'], $resultaat['titel'] ); 
 

@@ -21,6 +21,7 @@ if (isset( $_GET['voorwerpnummer'] ) ){
             <ul class="list-group">
                 <a class="list-group-item list-group-item-action" href="beheerder.php">Terug naar overzicht</a>
                 <a class="list-group-item list-group-item-action" href="overzichtGebruikers.php">Overzicht gebruikers</a>
+                <a class="list-group-item list-group-item-action" href="verkoperVerificatieBrief.php">verkoper verificatie brieven</a>
             </ul>
         </div>
     </div>
@@ -48,7 +49,6 @@ if (isset( $_GET['voorwerpnummer'] ) ){
                         <th scope="col">Voorwerpnr</th>
                         <th scope="col">Titel</th>
                         <th scope="col">Startprijs</th>
-                        <th scope="col">verzendkosten</th>
                         <th scope="col">Betalingswijze</th>
                         <th scope="col">Plaatsnaam</th>
                         <th scope="col">Land</th>
@@ -56,9 +56,7 @@ if (isset( $_GET['voorwerpnummer'] ) ){
                         <th scope="col">Looptijdbegindatum</th>
                         <th scope="col">looptrijdeinddatum</th>
                         <th scope="col">Verkoper</th>
-                        <th scope="col">koper</th>
                         <th scope="col">veilinggeloten</th>
-                        <th scope="col">verkoopprijs</th>
                         <th scope="col">geblokeerd</th>
                         <th scope="col">datum van blokeren</th>
                         <th scope="col">blokeren</th>
