@@ -72,7 +72,7 @@ function VoegVoorwerpAanRubriekEnIllustratie($rubriek, $verkoper){
             array(        
                 ':verkoper' => $verkoper  
             ));
-        $records = $sqlSelect->fetch(PDO::FETCH_ASSOC);    
+        $records = $sqlSelect->fetch(PDO::FETCH_ASSOC);
     }
 
     catch (PDOexception $e) {
@@ -783,8 +783,40 @@ function StuurRegistreerEmail($Email, $Code){
 
 }
 
+function getWannabeVerkopers() {
+    try{
+        require('core/dbconnection.php');
+        $sqlSelect = $dbh->prepare("SELECT gebruikersnaam FROM Gebruiker INNER JOIN Verificatie ON Gebruiker.email = Verificatie.email WHERE type = 'brief' 
+        AND verzonden = 0");
 
-function MaakVerkoperBrief($gebruiker){
+        $sqlSelect->execute();
+
+        $records = $sqlSelect->fetch(PDO::FETCH_ASSOC);
+
+        return $records;
+
+    }
+    catch (PDOexception $e) {
+        echo "er ging iets mis erroreqrre: {$e->getMessage()}";
+    }
+}
+
+function verificatieVerzonden($email) {
+    try{
+        require('core/dbconnection.php');
+        $sqlSelect = $dbh->prepare("UPDATE Verificatie SET verzonden = 1 WHERE email = :email");
+
+        $sqlSelect->execute(
+            array(
+                ':email' => $email
+            ));
+    }
+    catch (PDOexception $e) {
+        echo "er ging iets mis erroreqrre: {$e->getMessage()}";
+    }
+}
+
+function maakVerkoperBrief($gebruiker){
     try{    
         require('core/dbconnection.php');
         $sqlSelect = $dbh->prepare("SELECT voornaam, achternaam, geslacht, adresregel1, adresregel2, postcode, plaatsnaam, land, verificatiecode, 
@@ -793,14 +825,14 @@ function MaakVerkoperBrief($gebruiker){
 
         $sqlSelect->execute(
             array(
-                ':gebruiker' => $_SESSION['gebruikersnaam']
+                ':gebruiker' => $gebruiker
             ));
 
         $records = $sqlSelect->fetch(PDO::FETCH_ASSOC);
 
-        Brief($records);
-        
-        return $records;
+        $brief = Brief($records);
+
+        return $brief;
 
 
     }
