@@ -126,7 +126,7 @@ if(isset($_POST['Volgende'])){
                     <div class="form-group col-md-10">
                         <label for="inputTitel">Titel (Vul een titel in. Denk aan belangrijke eigenschappen zoals kleur, merk of maat):</label>
                         <input type="text" name="titel" class="form-control" id="inputTitel"
-                               pattern="[A-Za-z0-9]*" maxlength="100" placeholder="Titel" value="<?php if($_POST) { echo $_POST['titel'];} ?>" required>
+                               pattern="[A-Za-z0-9 ]{5,40}" maxlength="100" placeholder="Titel" value="<?php if($_POST) { echo $_POST['titel'];} ?>" required>
                         <div class="invalid-feedback">
                             Voer een titel in.
                         </div>

@@ -3,6 +3,10 @@ include 'includes/header.php';
 if(isset($_GET['id'])){
   $gebruikersnaam = $_SESSION['gebruikersnaam'];
 $advertentie = DetailAdvertentie($_GET['id']);
+$bieden = true;
+if($advertentie['verkoper'] == $_SESSION['gebruikersnaam']){
+  $bieden = false;
+}
 $pagina = 'advertentie.php';
 if(!isset($_POST['bieden'])){
   $voorwerpnr = $_GET['id']; 
@@ -129,19 +133,21 @@ if(isset($_POST['bieden'])){
              <?php if(!empty(zijnErBiedingen($advertentie['voorwerpnr']))) { 
                     $hoogstebod = zijnErBiedingen($advertentie['voorwerpnr']);                   
                     $verhoging = BodVerhoging($hoogstebod['euro']);                    
-                    $hoogstebod1 = $hoogstebod['euro'] + $verhoging;                                       
-                    $hoogstebod = number_format($hoogstebod1, 2, ',', '.');                    
+                    $hoogstebod = $hoogstebod['euro'] + $verhoging;                                       
+                    $hoogstebod1 = number_format($hoogstebod, 2, ',', '.');                    
                 }
                   
-                else { $hoogstebod = $advertentie['startprijs'];
+                else {  $hoogstebod = $advertentie['startprijs'];
+                        $hoogstebod1 = number_format($advertentie['startprijs'], 2, ',', '.');
                 }       
               ?>
-        <label for="bod">Bieden: (vanaf: €<?php echo $hoogstebod; ?>)</label>
-         <input type="number" name="bod" class="form-control" id="bod" step="0.01" min="<?php echo $hoogstebod1; ?>" required>
+        <label for="bod">Bieden: (vanaf: €<?php echo $hoogstebod1; ?>)</label>
+         <input type="number" name="bod" class="form-control" id="bod" step="0.01" min="<?php echo $hoogstebod; ?>"<?php if($bieden){echo 'required';} else{ echo 'readonly';} ?>>
          <div class="invalid-feedback">
-             Voer een bod vanaf €<?php echo $hoogstebod; ?>.
+             Voer een bod vanaf €<?php echo $hoogstebod1; ?>.
          </div>
-         <button class="btn btn-lg btn-primary mt-3" type="submit" name="bieden" value="bieden"> Plaats bod </button>
+         <?php if($bieden){echo '<button class="btn btn-lg btn-primary mt-3" type="submit" name="bieden" value="bieden"> Plaats bod </button>';} ?>
+         
          </form>
        </div>
        </div>
