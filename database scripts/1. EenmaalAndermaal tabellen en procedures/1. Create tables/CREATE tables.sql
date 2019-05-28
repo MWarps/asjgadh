@@ -89,6 +89,7 @@ email				VARCHAR(254)	NOT NULL,
 type				CHAR(5)			NOT NULL,
 verificatiecode		INT				NOT NULL,
 eindtijd			SMALLDATETIME	NOT NULL,
+verzonden			BIT				NULL,
 CONSTRAINT PK_Verificatie PRIMARY KEY (email)
 );
 

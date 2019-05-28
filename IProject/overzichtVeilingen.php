@@ -19,6 +19,7 @@ if (checkBEHEERDER ($_SESSION['gebruikersnaam']) == true){     // veranderen naa
             <ul class="list-group">
                 <a class="list-group-item list-group-item-action" href="beheerder.php">Terug naar overzicht</a>
                 <a class="list-group-item list-group-item-action" href="overzichtGebruikers.php">Overzicht gebruikers</a>
+                <a class="list-group-item list-group-item-action" href="verkoperVerificatieBrief.php">verkoper verificatie brieven</a>
             </ul>
         </div>
     </div>

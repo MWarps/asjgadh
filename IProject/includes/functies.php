@@ -797,9 +797,12 @@ function MaakVerkoperBrief($gebruiker){
             ));
 
         $records = $sqlSelect->fetch(PDO::FETCH_ASSOC);
-        return $records;
 
         Brief($records);
+        
+        return $records;
+
+
     }
     catch (PDOexception $e) {
         echo "er ging iets mis erroreqrre: {$e->getMessage()}";
