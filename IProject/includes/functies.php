@@ -1635,10 +1635,11 @@ function checkGEBLOKEERD ($gebruiker){
         while ($resultaat = $geblokeerd ->fetchAll(PDO::FETCH_ASSOC)){
             if ($resultaat['geblokeerd'] == 1){
                 header("Location: includes/geblokeerd.php");
+                return true;
             }else if ($resultaat['geblokeerd'] == 0){
-                // do niks
+                return false;
             } else if (empty($resultaat['geblokeerd'])){
-                //header("Location: includes/404error.php");
+                header("Location: includes/404error.php");
             }
         }
 
