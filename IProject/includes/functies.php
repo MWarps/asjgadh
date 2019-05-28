@@ -1388,7 +1388,9 @@ function gebruikersvinden($gebruikersnaam){
                     <td>'.$resultaat['gebruikersnaam'].'</td>
                     <td>'.$resultaat['voornaam'].'</td>
                     <td>'.$resultaat['achternaam'].'</td>
-                    <td>'.$resultaat['geslacht'].'</td>
+                  '. 
+                // <td>'.$resultaat['geslacht'].'</td>
+                   .'
                     <td>'.$resultaat['postcode'].'</td>
                     <td>'.$resultaat['plaatsnaam'].'</td>
                     <td>'.$resultaat['land'].'</td>
