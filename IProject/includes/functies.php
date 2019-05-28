@@ -1016,7 +1016,7 @@ function veranderWachtwoord($email,$wachtwoord)
 function controleVraag($vraag){
     try{
         require('core/dbconnection.php');
-        $sqlSelect = $dbh->prepare("select gebruiker.vraag from gebruikers join vragen
+        $sqlSelect = $dbh->prepare("select gebruiker.vraag from Gebruiker join vragen
         on gebruiker.vraag = vragen.vraagnr where gebruiker.email=:email");
 
         $sqlSelect->execute(
@@ -1452,7 +1452,7 @@ function StuurGebruikerBlockedEmail($gebruikersnaam)
 {
     try{
         require('core/dbconnection.php');
-        $sqlSelect = $dbh->prepare("select email, voornaam from gebruikers where gebruikersnaam = :gebruikersnaam");
+        $sqlSelect = $dbh->prepare("select email, voornaam from Gebruiker where gebruikersnaam = :gebruikersnaam");
 
         $sqlSelect->execute(
             array(
@@ -1491,7 +1491,7 @@ function StuurGebruikerDeblockedEmail($gebruikersnaam)
 {
     try{
         require('core/dbconnection.php');
-        $sqlSelect = $dbh->prepare("select email, voornaam from gebruikers where gebruikersnaam = :gebruikersnaam");
+        $sqlSelect = $dbh->prepare("select email, voornaam from Gebruiker where gebruikersnaam = :gebruikersnaam");
 
         $sqlSelect->execute(
             array(
