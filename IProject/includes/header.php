@@ -77,7 +77,7 @@ if(isset($_SESSION['gebruikersnaam'])){
                                 <a class="dropdown-item" href="../beheerder.php">Beheer</a>
                                 <a class="dropdown-item" href="#">Meldingen</a>
                                 <a class="dropdown-item" href="../informeren.php">FAQ</a>
-                                <a class="dropdown-item" href="../wachtwoordReset2.php">Wachtwoord Resetten</a>
+                                <a class="dropdown-item" href="wachtwoordReset.php">Wachtwoord Resetten</a>
                                 <?php if ($VerkoperValidatie){                                              
                             echo '<a class="dropdown-item" href="../verkoper.php">Verkoper worden</a>';                                            
                         } ?>    

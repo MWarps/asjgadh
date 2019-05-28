@@ -170,13 +170,39 @@ function getPopulairsteArtikelen() {
         $sqlSelect->execute();
 
         $records = $sqlSelect->fetchAll(PDO::FETCH_ASSOC);
-
-        return $records;
+        
     }
     catch (PDOexception $e) {
         echo "er ging iets mis errorteset: {$e->getMessage()}";
     }
-}
+    
+    foreach ($records as $rij) {
+        $details = DetailAdvertentie($rij['voorwerpnr']);
+        $locatie = '../pics/';
+        
+        if(substr($details['illustratieFile'] , 0 ,2 ) == 'ea'){
+          $locatie = 'upload/';
+        }        
+            
+        if(strlen($details['titel']) >= 40){
+            $details['titel'] = substr($details['titel'],0,40);
+            $details['titel'] .= '...';
+        }
+        echo '
+        <div class="col-md-4 py-3">
+        <div class="card" style="width: 18rem;">
+          <img class="card-img-top" src="'.$locatie.$details['illustratieFile'].'" alt="Foto bestaat niet">
+          <h5 class="card-header"><a href="advertentie.php?id='.$details['voorwerpnr'].'">'.$details['titel'].'</a></h5>
+            <div class="card-body">
+              <h4 class="card-text">€ '.$details['startprijs'].'</h4>
+              <p class="card-text"><a href="#">'.$details['verkoper'].'</a><br>
+              '.$details['land'].', '.$details['plaatsnaam'].'</p>
+              <a href="advertentie.php?id='.$details['voorwerpnr'].'" class="btn btn-block btn-primary">Ga naar artikel</a>
+            </div>
+        </div>
+        </div>';
+    }}
+
 
 function getProductenUitRubriek2($rubriek, $aantal) {
 
@@ -248,26 +274,7 @@ function getProductenUitRubriek($rubriek, $aantal) {
     }
 }
 
-function getAanbevolen($gebruiker) {
-    try {
-        require('core/dbconnection.php');
-        $sqlSelect = $dbh->prepare("SELECT TOP 1 * FROM Aanbevolen
-      WHERE gebruikersnaam = :gebruikersnaam
-	  ORDER BY datumtijd DESC");
 
-        $sqlSelect->execute(
-            array(
-                ':gebruikersnaam' => $gebruiker
-            ));
-
-        $record = $sqlSelect->fetch(PDO::FETCH_ASSOC);
-
-        return $record;
-    }
-    catch (PDOexception $e) {
-        echo "er ging iets mis error: {$e->getMessage()}";
-    }
-}
 
 function getLaatstBekeken($gebruiker) {
     try {
@@ -280,14 +287,95 @@ function getLaatstBekeken($gebruiker) {
             array(
                 ':gebruikersnaam' => $gebruiker
             ));
-
-        $records = $sqlSelect->fetchAll(PDO::FETCH_ASSOC);
-
-        return $records;
-    }
+        $records = $sqlSelect->fetchAll(PDO::FETCH_ASSOC);      
+      }      
     catch (PDOexception $e) {
         echo "er ging iets mis error: {$e->getMessage()}";
     }
+    if(empty($records)){
+      echo '<div class="alert alert-success" role="alert">
+              U heeft nog geen laatsbekeken voorwerpen!
+            </div>';
+    }
+    else{
+    foreach ($records as $rij) {
+        $details = DetailAdvertentie($rij['voorwerpnr']);
+        $locatie = '../pics/';
+        
+        if(substr($details['illustratieFile'] , 0 ,2 ) == 'ea'){
+          $locatie = 'upload/';
+        } 
+        
+        if(strlen($details['titel']) >= 40){
+            $details['titel'] = substr($details['titel'],0,40);
+            $details['titel'] .= '...';
+        }
+        echo '
+        <div class="col-md-4 py-3">
+        <div class="card" style="width: 18rem;">
+          <img class="card-img-top" src="'.$locatie.$details['illustratieFile'].'" alt="Foto bestaat niet">
+          <h5 class="card-header"><a href="advertentie.php?id='.$details['voorwerpnr'].'">'.$details['titel'].'</a></h5>
+            <div class="card-body">
+              <h4 class="card-text">€ '.$details['startprijs'].'</h4>
+              <p class="card-text"><a href="#">'.$details['verkoper'].'</a><br>
+              '.$details['land'].', '.$details['plaatsnaam'].'</p>
+              <a href="advertentie.php?id='.$details['voorwerpnr'].'" class="btn btn-block btn-primary">Ga naar artikel</a>
+            </div>
+        </div>
+        </div>';
+    }}
+}
+
+function getAanbevolen($gebruiker) {
+    try {
+        require('core/dbconnection.php');
+        $sqlSelect = $dbh->prepare("SELECT * FROM Aanbevolen
+      WHERE gebruikersnaam = :gebruikersnaam
+	  ORDER BY datumtijd DESC");
+
+        $sqlSelect->execute(
+            array(
+                ':gebruikersnaam' => $gebruiker
+            ));
+        $records = $sqlSelect->fetch(PDO::FETCH_ASSOC);      
+      }      
+    catch (PDOexception $e) {
+        echo "er ging iets mis error: {$e->getMessage()}";
+    }
+        
+    $records = getProductenUitRubriek2($records['rubrieknr'], 3) ;
+    
+    
+    if(empty($records)){
+      echo '<div class="alert alert-success" role="alert">
+              U heeft nog geen aanbevolen voorwerpen!
+            </div>';
+    }
+    else{
+    for ($teller = 0; $teller < 3; $teller++) {
+        $details = DetailAdvertentie($records[$teller]['voorwerpnr']);
+        $locatie = '../pics/';
+        if(substr($details['illustratieFile'] , 0 ,2 ) == 'ea'){
+          $locatie = 'upload/';
+        } 
+        if(strlen($details['titel']) >= 40){
+            $details['titel'] = substr($details['titel'],0,40);
+            $details['titel'] .= '...';
+        }
+        echo '
+        <div class="col-md-4 py-3">
+        <div class="card" style="width: 18rem;">
+          <img class="card-img-top" src="../pics/'.$locatie.$details['illustratieFile'].'" alt="Foto bestaat niet">
+          <h5 class="card-header"><a href="advertentie.php?id='.$details['voorwerpnr'].'">'.$details['titel'].'</a></h5>
+            <div class="card-body">
+              <h4 class="card-text">€ '.$details['startprijs'].'</h4>
+              <p class="card-text"><a href="#">'.$details['verkoper'].'</a><br>
+              '.$details['land'].', '.$details['plaatsnaam'].'</p>
+              <a href="advertentie.php?id='.$details['voorwerpnr'].'" class="btn btn-block btn-primary">Ga naar artikel</a>
+            </div>
+        </div>
+        </div>';
+    }}
 }
 
 function HaalIllustratiesOp($voorwerpnr){
@@ -421,7 +509,10 @@ function haalAdvertentieOp($rubriek){
 
         foreach ($producten as $rij) {
             $details = DetailAdvertentie($rij['voorwerpnr']);
-
+            $locatie = '../pics/';
+            if(substr($details['illustratieFile'] , 0 ,2 ) == 'ea'){
+              $locatie = 'upload/';
+            } 
             if(strlen($rij['titel']) >= 40){
                 $rij['titel'] = substr($rij['titel'],0,40);
                 $rij['titel'] .= '...';
@@ -429,14 +520,14 @@ function haalAdvertentieOp($rubriek){
             echo '
             <div class="col-md-4 pb-3">
             <div class="card" style="width: 18rem;">
-            <img class="card-img-top" src="../pics/'.$details['illustratieFile'].'" alt="Foto bestaat niet">
-            <h5 class="card-header"><a href="advertentie.php?id='.$details['voorwerpnr'].'">'.$details['titel'].'</a></h5>
-            <div class="card-body">
-            <h4 class="card-text">€ '.$details['startprijs'].'</h4>
-            <p class="card-text"><a href="#">'.$details['verkoper'].'</a><br>
-            '.$details['land'].', '.$details['plaatsnaam'].'</p>
-            <a href="advertentie.php?id='.$details['voorwerpnr'].'" class="btn btn-block btn-primary">Ga naar artikel</a>
-            </div>
+              <img class="card-img-top" src="'.$locatie.$details['illustratieFile'].'" alt="Foto bestaat niet">
+              <h5 class="card-header"><a href="advertentie.php?id='.$details['voorwerpnr'].'">'.$details['titel'].'</a></h5>
+                <div class="card-body">
+                  <h4 class="card-text">€ '.$details['startprijs'].'</h4>
+                  <p class="card-text"><a href="#">'.$details['verkoper'].'</a><br>
+                  '.$details['land'].', '.$details['plaatsnaam'].'</p>
+                  <a href="advertentie.php?id='.$details['voorwerpnr'].'" class="btn btn-block btn-primary">Ga naar artikel</a>
+                </div>
             </div>
             </div>';
 
@@ -1508,7 +1599,7 @@ function veilingblok($voorwerpnummer){
 function checkGEBLOKEERD ($gebruiker){
     try {
         require('core/dbconnection.php');
-        $geblokeerd = $dbh ->prepare (" select gebruikersnaam, geblokeerd from Gebruiker where gebruikersnaam like :gebruiker  ");
+        $geblokeerd = $dbh ->prepare ("select gebruikersnaam, geblokeerd from Gebruiker where gebruikersnaam like :gebruiker  ");
         $geblokeerd-> execute(
             array(
                 ':gebruiker' => $gebruiker,

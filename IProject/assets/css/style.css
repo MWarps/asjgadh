@@ -129,6 +129,7 @@ body {
   
   .card-size{
   width: 18rem;
+  height: 100%; 
   }
   
   .card-breedte{
