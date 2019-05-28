@@ -190,11 +190,13 @@ function getPopulairsteArtikelen() {
         }
         echo '
         <div class="col-md-4 py-3">
-        <div class="card" style="width: 18rem;">
-          <img class="card-img-boven" src="'.$locatie.$details['illustratieFile'].'" alt="Foto bestaat niet">
+          <div class="card" style="width: 18rem;">
+            <div class="card-img-boven">
+              <img src="'.$locatie.$details['illustratieFile'].'" alt="Foto bestaat niet">
+            </div>  
           <h5 class="card-header"><a href="advertentie.php?id='.$details['voorwerpnr'].'">'.$details['titel'].'</a></h5>
             <div class="card-body">
-              <h4 class="card-text">€ '.$details['startprijs'].'</h4>
+              <h4 class="card-text">€ '.number_format($details['startprijs'], 2, ',', '.').'</h4>
               <p class="card-text"><a href="#">'.$details['verkoper'].'</a><br>
               '.$details['land'].', '.$details['plaatsnaam'].'</p>
               <a href="advertentie.php?id='.$details['voorwerpnr'].'" class="btn btn-block btn-primary">Ga naar artikel</a>
@@ -313,10 +315,12 @@ function getLaatstBekeken($gebruiker) {
         echo '
         <div class="col-md-4 py-3">
         <div class="card" style="width: 18rem;">
-          <img class="card-img-boven" src="'.$locatie.$details['illustratieFile'].'" alt="Foto bestaat niet">
+        <div class="card-img-boven">
+          <img src="'.$locatie.$details['illustratieFile'].'" alt="Foto bestaat niet">
+        </div> 
           <h5 class="card-header"><a href="advertentie.php?id='.$details['voorwerpnr'].'">'.$details['titel'].'</a></h5>
             <div class="card-body">
-              <h4 class="card-text">€ '.$details['startprijs'].'</h4>
+              <h4 class="card-text">€ '.number_format($details['startprijs'], 2, ',', '.').'</h4>
               <p class="card-text"><a href="#">'.$details['verkoper'].'</a><br>
               '.$details['land'].', '.$details['plaatsnaam'].'</p>
               <a href="advertentie.php?id='.$details['voorwerpnr'].'" class="btn btn-block btn-primary">Ga naar artikel</a>
@@ -365,10 +369,12 @@ function getAanbevolen($gebruiker) {
         echo '
         <div class="col-md-4 py-3">
         <div class="card" style="width: 18rem;">
-          <img class="card-img-boven" src="../pics/'.$locatie.$details['illustratieFile'].'" alt="Foto bestaat niet">
+        <div class="card-img-boven">
+          <img src="'.$locatie.$details['illustratieFile'].'" alt="Foto bestaat niet">
+        </div> 
           <h5 class="card-header"><a href="advertentie.php?id='.$details['voorwerpnr'].'">'.$details['titel'].'</a></h5>
             <div class="card-body">
-              <h4 class="card-text">€ '.$details['startprijs'].'</h4>
+              <h4 class="card-text">€ '.number_format($details['startprijs'], 2, ',', '.').'</h4>
               <p class="card-text"><a href="#">'.$details['verkoper'].'</a><br>
               '.$details['land'].', '.$details['plaatsnaam'].'</p>
               <a href="advertentie.php?id='.$details['voorwerpnr'].'" class="btn btn-block btn-primary">Ga naar artikel</a>
@@ -520,10 +526,12 @@ function haalAdvertentieOp($rubriek){
             echo '
             <div class="col-md-4 pb-3">
             <div class="card" style="width: 18rem;">
-              <img class="card-img-boven" src="'.$locatie.$details['illustratieFile'].'" alt="Foto bestaat niet">
+            <div class="card-img-boven">
+              <img src="'.$locatie.$details['illustratieFile'].'" alt="Foto bestaat niet">
+            </div> 
               <h5 class="card-header"><a href="advertentie.php?id='.$details['voorwerpnr'].'">'.$details['titel'].'</a></h5>
                 <div class="card-body">
-                  <h4 class="card-text">€ '.$details['startprijs'].'</h4>
+                  <h4 class="card-text">€ '.number_format($details['startprijs'], 2, ',', '.').'</h4>
                   <p class="card-text"><a href="#">'.$details['verkoper'].'</a><br>
                   '.$details['land'].', '.$details['plaatsnaam'].'</p>
                   <a href="advertentie.php?id='.$details['voorwerpnr'].'" class="btn btn-block btn-primary">Ga naar artikel</a>

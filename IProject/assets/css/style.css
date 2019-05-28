@@ -126,7 +126,7 @@ body {
                       Product
    =============================================*/
 
- .card-img-boven{
+ .card-img-boven img{
    max-height: 200px;
    max-width: 200px;
    object-fit: scale-down;
