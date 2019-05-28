@@ -1,6 +1,7 @@
 <?php
 include 'includes/header.php';
 if(isset($_SESSION['gebruikersnaam'])){
+  $uploadOk = 1;
 if(isset($_POST['Volgende'])){
   $rubriek = $_POST['rubriek'];
   $titel = $_POST['titel'];
@@ -13,77 +14,98 @@ if(isset($_POST['Volgende'])){
   $plaats = $_POST['plaats'];
   $land =  $_POST['rLand'];
   $looptijd = $_POST['looptijd'];
-   
-  $gebruiker = HaalGebruikerOp($_SESSION['gebruikersnaam']);
   
+  // Informatie ophalen van de verkoper 
+  //$gebruiker = HaalGebruikerOp($_SESSION['gebruikersnaam']);
+  
+  // Alle inputvelden met verkoper in een array gezet
   $voorwerp = array($titel, $beschrijving, $startbedrag, $betalingsmethode,
   $betalingsinstructie, $plaats, $land, $looptijd, $verzendkosten, 
-  $verzendinstructies, $gebruiker['gebruikersnaam'], $looptij);
+  $verzendinstructies, $_SESSION['gebruikersnaam']);
   
-  //VoegVoorwerpToe($voorwerp);
-    
+  // Voorwerp toevoegen in database en voorwerpnr terughalen
+  $voorwerpnr = VoegVoorwerpToe($voorwerp);
+  
+  // Foto1 uploaden naar server
   $target_dir = "upload/";
-  
-  $bestand_naam = "dt_1_" + $voorwerpnr;
+  $ext = pathinfo($_FILES["foto1"]["name"], PATHINFO_EXTENSION);
+  $bestand_naam_db = "ea_1_" + $voorwerpnr + $ext;
   $target_file = $target_dir . basename($_FILES["foto1"]["name"]);
-  $uploadOk = 1;
+
   $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
 
-// Check if image file is a actual image or fake image
-    $check = getimagesize($_FILES["foto1"]["tmp_name"]);
-    if($check !== false) {
-        echo "File is an image - " . $check["mime"] . ".";
-        $uploadOk = 1;
-    } else {
-        echo "File is not an image.";
-        $uploadOk = 0;
-    }
+  // Check if image file is a actual image or fake image
+      $check = getimagesize($_FILES["foto1"]["tmp_name"]);
+      if($check !== false) {       
+          move_uploaded_file($_FILES["foto1"]["tmp_name"], $target_file . $bestand_naam);
+          VoegVoorwerpToeAanIllustratie($voorwerpnr, $bestand_naam_db);
+      } else {    
+          $uploadOk = 0;
+      } 
 
-// Check if $uploadOk is set to 0 by an error
-if ($uploadOk == 0) {
-    echo "Sorry, your file was not uploaded.";
-// if everything is ok, try to upload file
-} else {
-    if (move_uploaded_file($_FILES["foto1"]["tmp_name"], $target_file . $bestand_naam )) {
-    } else {
-        echo "Sorry, there was an error uploading your file.";
-    }
-}
 
+// Foto2 uploaden naar server
   if(isset($_FILES["foto2"])){
-    $bestand_naam = "dt_1_" + $voorwerpnr;
-    $target_file = $target_dir . basename($_FILES["foto1"]["name"]);
+    $bestand_naam = "ea_2_" + $voorwerpnr;
+    $target_file = $target_dir . basename($_FILES["foto2"]["name"]);
+    $uploadOk = 1;
+    $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
+  
+    // Check if image file is a actual image or fake image
+        $check = getimagesize($_FILES["foto4"]["tmp_name"]);
+        if($check !== false) {       
+            move_uploaded_file($_FILES["foto4"]["tmp_name"], $target_file . $bestand_naam);
+            VoegVoorwerpToeAanIllustratie($voorwerpnr, $bestand_naam_db);
+        } else {    
+            $uploadOk = 0;
+        }     
+  }
+  
+  // Foto3 uploaden naar server
+  if(isset($_FILES["foto3"])){
+    $bestand_naam = "ea_3_" + $voorwerpnr;
+    $target_file = $target_dir . basename($_FILES["foto3"]["name"]);
+    $uploadOk = 1;
+    $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
+  
+    // Check if image file is a actual image or fake image
+        $check = getimagesize($_FILES["foto4"]["tmp_name"]);
+        if($check !== false) {       
+            move_uploaded_file($_FILES["foto4"]["tmp_name"], $target_file . $bestand_naam);
+            VoegVoorwerpToeAanIllustratie($voorwerpnr, $bestand_naam_db);
+        } else {    
+            $uploadOk = 0;
+        }     
+  }
+  
+// Foto4 uploaden naar server  
+  if(isset($_FILES["foto4"])){
+    $bestand_naam = "ea_4_" + $voorwerpnr;
+    $ext = pathinfo($_FILES["foto4"]["name"], PATHINFO_EXTENSION);
+    $bestand_naam_db = "ea_4_" + $voorwerpnr + $ext;
+    $target_file = $target_dir . basename($_FILES["foto4"]["name"]);
     $uploadOk = 1;
     $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
   
   // Check if image file is a actual image or fake image
-      $check = getimagesize($_FILES["foto1"]["tmp_name"]);
-      if($check !== false) {
-          echo "File is an image - " . $check["mime"] . ".";
-          $uploadOk = 1;
-      } else {
-          echo "File is not an image.";
+      $check = getimagesize($_FILES["foto4"]["tmp_name"]);
+      if($check !== false) {       
+          move_uploaded_file($_FILES["foto4"]["tmp_name"], $target_file . $bestand_naam );
+          VoegVoorwerpToeAanIllustratie($voorwerpnr, $bestand_naam_db);
+      } else {    
           $uploadOk = 0;
-      }
-  
-  // Check if $uploadOk is set to 0 by an error
-  if ($uploadOk == 0) {
-      echo "Sorry, your file was not uploaded.";
-  // if everything is ok, try to upload file
-  } else {
-      if (move_uploaded_file($_FILES["foto1"]["tmp_name"], $target_file . $bestand_naam )) {
-      } else {
-          echo "Sorry, there was an error uploading your file.";
-      }
-  }    
+      }     
   }
-  //VoegVoorwerpAanRubriekToe($rubriek, $gebruiker['gebruikersnaam']);
+  }
+  //VoegVoorwerpAanRubriekToe($voorwerpnr, $_GET['id'], $gebruiker['gebruikersnaam']);
+
   //$_SESSION['status'] = 'Voorwerp';
   
   //echo '<script language="javascript">window.location.href ="index.php"</script>';
   //exit();
   
-}
+
+
 ?>
 
 <div class="container">
@@ -92,6 +114,21 @@ if ($uploadOk == 0) {
           <form class="needs-validation" novalidate action="veilen2.php?id=<?php echo $_GET['naam'];?>" method="POST" enctype="multipart/form-data">
                 <h1 class="h3 mb-2 text-center "> Veiling starten </h1>
                 <p class=" mb-2 text-center " > Hier kunt u een voorwerp te koop aan bieden, vul alle onderstaande velden in.</p>                      
+                <?php 
+                if($uploadOk == 0){
+                echo '<div class="container">
+                        <div class="h-100 row align-items-center">
+                          <div class="col">
+                              <div class="alert alert-warning alert-dismissible fade show mt-3" role="alert">
+                                <strong>Foto is niet geupload</strong> Het geuploade bestand is geen foto.
+                                <button type="button" class="close pt-0" data-dismiss="alert" aria-label="Close">
+                                 <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>';}
+                ?>
                 
                   <div class="col-md-5">
                       <label for="Rubriek">Rubriek</label>
@@ -148,10 +185,8 @@ if ($uploadOk == 0) {
                     <div class="form-group col-md-4">
                         <label for="inputStartbedrag">Verzendkosten</label>
                         <input type="number" min="0" name="verzendkosten" class="form-control" id="inputStartbedrag" placeholder="€..."
-                               pattern="^[a-zA-Z][a-zA-Z0-9-_\.]{1,49}$" maxlength="5" value="<?php if($_POST) { echo $_POST['startbedrag'];} ?>" required>
-                        <div class="invalid-feedback">
-                            Voer een geldig startbedrag in, dit getal moet hoger zijn dan 0.
-                        </div>
+                               pattern="^[a-zA-Z][a-zA-Z0-9-_\.]{1,49}$" maxlength="5" value="<?php if($_POST) { echo $_POST['startbedrag'];} ?>">
+                      
                     </div>
                     <div class="form-group col-md-8">  
                         <label for="Textarea">Verzendinstructies(optioneel):</label>
@@ -182,19 +217,19 @@ if ($uploadOk == 0) {
                       <p> looptijd: </p>
                       <!-- Group of default radios - option 1 -->
                       <div class="custom-control custom-radio">
-                        <input type="radio" class="custom-control-input" id="defaultGroupExample1" name="looptijd" checked>
+                        <input type="radio" value="5" class="custom-control-input" id="defaultGroupExample1" name="looptijd" checked>
                         <label class="custom-control-label" for="defaultGroupExample1">5 dagen</label>
                       </div>
 
                       <!-- Group of default radios - option 2 -->
                       <div class="custom-control custom-radio">
-                        <input type="radio" class="custom-control-input" id="defaultGroupExample2" name="looptijd">
+                        <input type="radio" value="7" class="custom-control-input" id="defaultGroupExample2" name="looptijd">
                         <label class="custom-control-label" for="defaultGroupExample2">7 dagen</label>
                       </div>
 
                       <!-- Group of default radios - option 3 -->
                       <div class="custom-control custom-radio">
-                        <input type="radio" class="custom-control-input" id="defaultGroupExample3" name="looptijd">
+                        <input type="radio" value="10" class="custom-control-input" id="defaultGroupExample3" name="looptijd">
                         <label class="custom-control-label" for="defaultGroupExample3">10 dagen</label>
                       </div>  
                     </div>

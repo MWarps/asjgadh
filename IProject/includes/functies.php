@@ -4,26 +4,31 @@ include 'email2.php';
 include 'emailBericht.php';
 
 function BodVerhoging($Euro){
-    $Verhoging;
-    switch ($Euro) {
-        case ($Euro <50) :
+  $Verhoging;
+  switch ($Euro) {
+    case ($Euro <50) :
             $Verhoging = 0.50;
-            break;
-        case ($Euro >=50 && $Euro <500):
+      break;
+    case ($Euro >=50 && $Euro <500):
             $Verhoging = 1;
-            break;
-        case ($Euro >=500 && $Euro <1000) :
+      break;
+    case ($Euro >=500 && $Euro <1000) :
             $Verhoging = 5;
-            break;
-        case ($Euro >=1000 && $Euro <5000):
-            $Verhoging = 10;
-            break;
-        case ($Euro >=5000) :
-            $Verhoging = 50;                    
-        default:
-            break;
-    }
-    return $Verhoging;
+      break;
+    case ($Euro >=1000 && $Euro <5000):
+              $Verhoging = 10;
+      break;
+    case ($Euro >=5000) :
+              $Verhoging = 50;                    
+    default:
+      break;
+  }
+  return $Verhoging;
+}
+
+function HaalVoorwerpOp($gebruikersnaam){
+  
+  
 }
 
 function gebruikerBekeekVoorwerp($gebruikersnaam, $voorwerpnr) {
@@ -60,24 +65,28 @@ function gebruikerAanbevolen($gebruikersnaam, $voorwerpnr) {
     }
 }
 
-function VoegVoorwerpAanRubriekEnIllustratie($rubriek, $verkoper){
+function VoegVoorwerpToeAanIllustratie($voorwerpnr, $illustratieFile){
+  try {
+      // SQL insert statement
+      require('core/dbconnection.php');
+      $sqlInsert = $dbh->prepare("INSERT INTO Illustratie (voorwerpnr, illustratieFile )
+  values (
+    :voorwerpnr, :IllustratieFile,)");
 
-    try {
-        // SQL insert statement
-        require('core/dbconnection.php');
-        $sqlInsert = $dbh->prepare("SELECT voorwerpnr from Voorwerp where verkoper = :verkoper
-      order by looptijdbegindagtijdstip desc");
+      $sqlInsert->execute(
+          array(
+              ':voorwerpnr' => $voorwerpnr,
+              ':IllustratieFile' => $illustratieFile
 
-        $sqlInsert->execute(
-            array(        
-                ':verkoper' => $verkoper  
-            ));
-        $records = $sqlSelect->fetch(PDO::FETCH_ASSOC);    
-    }
+          ));
+  }
+  catch (PDOexception $e) {
+      echo "er ging iets mis insert {$e->getMessage()}";
+  }
 
-    catch (PDOexception $e) {
-        echo "er ging iets mis insert {$e->getMessage()}";
-    }
+}
+
+function VoegVoorwerpAanRubriekToe($voorwerpnr, $rubriek, $verkoper){
 
     try {
         // SQL insert statement
@@ -89,31 +98,13 @@ function VoegVoorwerpAanRubriekEnIllustratie($rubriek, $verkoper){
         $sqlInsert->execute(
             array(
                 ':rubrieknr' => $rubriek,
-                ':voorwerpnr' => $records['voorwerpnr']
+                ':voorwerpnr' => $voorwerpnr
 
             ));
     }
     catch (PDOexception $e) {
         echo "er ging iets mis insert {$e->getMessage()}";
     }
-    try {
-        // SQL insert statement
-        require('core/dbconnection.php');
-        $sqlInsert = $dbh->prepare("INSERT INTO Illustratie (voorwerpnr, illustratieFile )
-    values (
-      :voorwerpnr, :IllustratieFile,)");
-
-        $sqlInsert->execute(
-            array(
-                ':voorwerpnr' => $records['voorwerpnr'],
-                ':IllustratieFile' => $illustratieFile
-
-            ));
-    }
-    catch (PDOexception $e) {
-        echo "er ging iets mis insert {$e->getMessage()}";
-    }
-
 }
 
 function VoegVoorwerpToe($input){
@@ -121,14 +112,14 @@ function VoegVoorwerpToe($input){
         // SQL insert statement
         require('core/dbconnection.php');
         $sqlInsert = $dbh->prepare("INSERT INTO Voorwerp (
-     titel, beschrijving, startprijs, betalingswijze, betalingsinstructies,
+     titel, beschrijving, startprijs, betalingswijze, betalingsinstructie,
      plaatsnaam, land, looptijd, verzendkosten, verzendinstructies, verkoper, 
-     koper, looptijdbegindagtijdstip
+     looptijdeindedagtijdstip
      )
     values (
-      :titel, :beschrijving, :startprijs, :betalingswijze, :betalingsinstructies,
+      :titel, :beschrijving, :startprijs, :betalingswijze, :betalingsinstructie,
       :plaatsnaam, :land, :looptijd, :verzendkosten, :verzendinstructies, :verkoper, 
-      :koper, :looptijdbegindagtijdstip)");
+      DATEADD(day, 7, CURRENT_TIMESTAMP)) ");
 
         $sqlInsert->execute(
             array(
@@ -136,20 +127,37 @@ function VoegVoorwerpToe($input){
                 ':beschrijving' => $input['1'],
                 ':startprijs' => $input['2'],
                 ':betalingswijze' => $input['3'],
-                ':betalingsinstructies' => $input['4'],
+                ':betalingsinstructie' => $input['4'],
                 ':plaatsnaam' => $input['5'],
                 ':land' => $input['6'],
                 ':looptijd' => $input['7'],
                 ':verzendkosten' => $input['8'],
                 ':verzendinstructies' => $input['9'],
-                ':verkoper' => $input['10'],
-                ':koper' => $input['11'],
-                ':looptijdbegindagtijdstip' => $input['12']        
+                ':verkoper' => $input['10']
+                                 
             ));
     }
     catch (PDOexception $e) {
         echo "er ging iets mis insert {$e->getMessage()}";
     }
+    
+    try {
+        // SQL insert statement
+        require('core/dbconnection.php');
+        $sqlSelect = $dbh->prepare("SELECT voorwerpnr from Voorwerp where verkoper = :verkoper
+      order by looptijdbegindagtijdstip desc");
+
+        $sqlInsert->execute(
+            array(        
+                ':verkoper' => $input['10']  
+            ));
+        $records = $sqlSelect->fetch(PDO::FETCH_ASSOC);    
+    }
+
+    catch (PDOexception $e) {
+        echo "er ging iets mis insert {$e->getMessage()}";
+    }
+    
 }  
 
 
@@ -304,9 +312,9 @@ function HaalIllustratiesOp($voorwerpnr){
 }
 
 function zijnErBiedingen($voorwerpnr){
-    try {
-        require('core/dbconnection.php');
-        $sqlSelect = $dbh->prepare("select * from bod where voorwerpnr = :voorwerpnr order by convert(decimal(9,2), euro) desc");
+  try {
+      require('core/dbconnection.php');
+      $sqlSelect = $dbh->prepare("select * from bod where voorwerpnr = :voorwerpnr order by convert(decimal(9,2), euro) desc");
 
         $sqlSelect->execute(
             array(
@@ -358,9 +366,9 @@ function updateBieden($bod, $gebruikersnaam, $voorwerpnr){
 }
 
 function Biedingen($voorwerpnr){
-    try {
-        require('core/dbconnection.php');
-        $sqlSelect = $dbh->prepare("select top 5 * from Bod where voorwerpnr = :voorwerpnr order by convert(decimal(9,2), euro) desc");
+  try {
+      require('core/dbconnection.php');
+      $sqlSelect = $dbh->prepare("select top 5 * from Bod where voorwerpnr = :voorwerpnr order by convert(decimal(9,2), euro) desc");
 
         $sqlSelect->execute(
             array(
@@ -368,12 +376,11 @@ function Biedingen($voorwerpnr){
             ));
         $rows = $sqlSelect->fetchAll(PDO::FETCH_ASSOC);
         //print_r($rows);
-
-        foreach ($rows as $rij)
-        {
-            echo '<li class="list-group-item">€'.number_format($rij['euro'], 2, ',', '.').' - '.$rij['gebruikersnaam'].' - '.date("d.m.Y H:i", strtotime($rij['datumentijd'])).'</li>';
-
-        }
+        
+          foreach ($rows as $rij)
+           {
+              echo '<li class="list-group-item">€'.number_format($rij['euro'], 2, ',', '.').' - '.$rij['gebruikersnaam'].' - '.date("d.m.Y H:i", strtotime($rij['datumentijd'])).'</li>';                
+          }
 
     } catch (PDOexception $e) {
         echo "er ging iets mis errorbiedingen: {$e->getMessage()}";
@@ -1160,7 +1167,7 @@ function DirectorieVindenVeilen(){
             //$_SESSION['rubriek'] = true;     
             echo  '<p class="btn" >Uw gekozen rubriek is: <strong>'.$resultaat[0]['rubrieknaam'].'<br></strong>
                    <a class="btn btn-lg bg-flame btn-block mt-1" href="veilen.php?id='.$resultaat[0]['superrubriek'].'&naam='.$resultaat[0]['rubrieknaam'].'">Vorige</a>
-                   <a class="btn btn-lg bg-flame btn-block mt-1" id="volgende" href=veilen2.php?'.$resultaat[0]['rubrieknummer'].'&naam='.$resultaat[0]['rubrieknaam'].' name="volgende">Volgende</a>';
+                   <a class="btn btn-lg bg-flame btn-block mt-1" id="volgende" href=veilen2.php?id='.$resultaat[0]['rubrieknummer'].'&naam='.$resultaat[0]['rubrieknaam'].' name="volgende">Volgende</a>';
         }
     }
 
@@ -1299,6 +1306,7 @@ function gebruikerblok(){
                 )
             );
         }else if ($resultaat[0]['geblokeerd'] == 0){
+            
             $blokeren -> execute(
                 array(
                     ':gebruiker' => $resultaat[0]['gebruikersnaam'],
@@ -1382,16 +1390,20 @@ function checkGEBLOKEERD (){
         );
 
         while ($resultaat = $geblokeerd ->fetchAll(PDO::FETCH_ASSOC)){
-            if ($resultaat[0]['geblokeerd'] == 1){
-                header("Location: includes/geblokeerd.php");
-            }else if ($resultaat[0]['geblokeerd'] == 0){  
+            print_r($resultaat);
+            if ($resultaat['geblokeerd'] == 1){
+                echo 'JE BENT GEBLOKEERD !!!';
+            }else if ($resultaat['geblokeerd'] == 0){
+                echo 'je bent welkom';
             } else if (empty($resultaat['geblokeerd'])){
-                header("Location: includes/404error.php");
+                echo 'geblokeerd = onbekend !';
             }
         }
+
     } catch (PDOexception $e) {
         echo "er ging iets mis error: {$e->getMessage()}";
     }
+
 }
 
 ?>
