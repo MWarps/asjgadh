@@ -13,6 +13,31 @@ if (checkBEHEERDER ($_SESSION['gebruikersnaam']) == true){     // veranderen naa
     ?>
 
     <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6 mt-4">
+                <h1 class="h3 mb-3 font-weight-normal text-center">Beheerders omgeving</h1>
+                <h2 class="h3 mb-3 font-weight-normal text-center">Toegestane acties:</h2>
+                <ul class="list-group">
+                    <a class="list-group-item list-group-item-action" href="beheerder.php">Terug naar overzicht</a>
+                    <a class="list-group-item list-group-item-action" href="overzichtVeilingen.php">Overzicht actieve veilingen</a>
+                    <a class="list-group-item list-group-item-action" href="verkoperVerificatieBrief.php">verkoper verificatie brieven</a>
+                </ul>
+            </div>
+        </div><!--/row-->
+        <form class="needs-validation" novalidate action='overzichtGebruikers.php' method="post">
+            <div class="row justify-content-center">
+                <div class="col-md-10">
+                    <h1 class="h3 mb-3 font-weight-normal text-center">Gebruikers zoeken</h1>
+                    <div class="input-group mb-6">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="zoekopdracht" >Gebruikersnaam:</span>
+                        </div>
+                        <input type="text" class="form-control" placeholder="Gebruikersnaam" aria-label="gebruikersnaam" aria-describedby="basic-addon1"name="zoekopdracht">
+                        <button class="btn btn-primary" type="submit" value="zoeken" id="zoeken" name="zoeken">Zoeken</button>
+                    </div>
+                </div>
+            </div><!--/row-->
+        </form>
 
     <?php
     $verkopers = getWannabeVerkopers();

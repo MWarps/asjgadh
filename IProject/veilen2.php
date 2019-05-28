@@ -47,7 +47,7 @@ if(isset($_POST['Volgende'])){
 
 
 // Foto2 uploaden naar server
-  if(isset($_POST["foto2"])){
+  if($_FILES["foto2"]["error"] != 4) {
     $target_file = $target_dir . basename($_FILES["foto2"]["name"]);
     $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
     $bestand_naam_db = strval("ea_2_".$voorwerpnr.".".$imageFileType);
@@ -63,7 +63,7 @@ if(isset($_POST['Volgende'])){
   }
   
   // Foto3 uploaden naar server
-  if(isset($_POST["foto3"])){
+  if($_FILES["foto3"]["error"] != 4){
     $target_file = $target_dir . basename($_FILES["foto3"]["name"]);
     $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
     $bestand_naam_db = strval("ea_3_".$voorwerpnr.".".$imageFileType);
@@ -79,7 +79,7 @@ if(isset($_POST['Volgende'])){
   }
   
 // Foto4 uploaden naar server  
-  if(isset($_POST["foto4"])){
+  if($_FILES["foto4"]["error"] != 4) {
     $target_file = $target_dir . basename($_FILES["foto4"]["name"]);
     $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
     $bestand_naam_db = strval("ea_4_".$voorwerpnr.".".$imageFileType);

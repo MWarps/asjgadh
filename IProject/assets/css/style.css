@@ -126,6 +126,13 @@ body {
                       Product
    =============================================*/
 
+ .card-img-boven{
+   max-height: 200px;
+   max-width: 200px;
+   object-fit: scale-down;
+   display: block;
+   margin: auto;
+ }
   
   .card-size{
   width: 18rem;
