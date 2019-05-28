@@ -170,20 +170,20 @@ function getPopulairsteArtikelen() {
         $sqlSelect->execute();
 
         $records = $sqlSelect->fetchAll(PDO::FETCH_ASSOC);
-        
+
     }
     catch (PDOexception $e) {
         echo "er ging iets mis errorteset: {$e->getMessage()}";
     }
-    
+
     foreach ($records as $rij) {
         $details = DetailAdvertentie($rij['voorwerpnr']);
         $locatie = '../pics/';
-        
+
         if(substr($details['illustratieFile'] , 0 ,2 ) == 'ea'){
-          $locatie = 'upload/';
+            $locatie = 'upload/';
         }        
-            
+
         if(strlen($details['titel']) >= 40){
             $details['titel'] = substr($details['titel'],0,40);
             $details['titel'] .= '...';
@@ -290,29 +290,29 @@ function getLaatstBekeken($gebruiker) {
                 ':gebruikersnaam' => $gebruiker
             ));
         $records = $sqlSelect->fetchAll(PDO::FETCH_ASSOC);      
-      }      
+    }      
     catch (PDOexception $e) {
         echo "er ging iets mis error: {$e->getMessage()}";
     }
     if(empty($records)){
-      echo '<div class="alert alert-success" role="alert">
+        echo '<div class="alert alert-success" role="alert">
               U heeft nog geen laatsbekeken voorwerpen!
             </div>';
     }
     else{
-    foreach ($records as $rij) {
-        $details = DetailAdvertentie($rij['voorwerpnr']);
-        $locatie = '../pics/';
-        
-        if(substr($details['illustratieFile'] , 0 ,2 ) == 'ea'){
-          $locatie = 'upload/';
-        } 
-        
-        if(strlen($details['titel']) >= 40){
-            $details['titel'] = substr($details['titel'],0,40);
-            $details['titel'] .= '...';
-        }
-        echo '
+        foreach ($records as $rij) {
+            $details = DetailAdvertentie($rij['voorwerpnr']);
+            $locatie = '../pics/';
+
+            if(substr($details['illustratieFile'] , 0 ,2 ) == 'ea'){
+                $locatie = 'upload/';
+            } 
+
+            if(strlen($details['titel']) >= 40){
+                $details['titel'] = substr($details['titel'],0,40);
+                $details['titel'] .= '...';
+            }
+            echo '
         <div class="col-md-4 py-3">
         <div class="card" style="width: 18rem;">
         <div class="card-img-boven">
@@ -327,7 +327,7 @@ function getLaatstBekeken($gebruiker) {
             </div>
         </div>
         </div>';
-    }}
+        }}
 }
 
 function getAanbevolen($gebruiker) {
@@ -342,31 +342,31 @@ function getAanbevolen($gebruiker) {
                 ':gebruikersnaam' => $gebruiker
             ));
         $records = $sqlSelect->fetch(PDO::FETCH_ASSOC);      
-      }      
+    }      
     catch (PDOexception $e) {
         echo "er ging iets mis error: {$e->getMessage()}";
     }
-        
+
     $records = getProductenUitRubriek2($records['rubrieknr'], 3) ;
-    
-    
+
+
     if(empty($records)){
-      echo '<div class="alert alert-success" role="alert">
+        echo '<div class="alert alert-success" role="alert">
               U heeft nog geen aanbevolen voorwerpen!
             </div>';
     }
     else{
-    for ($teller = 0; $teller < 3; $teller++) {
-        $details = DetailAdvertentie($records[$teller]['voorwerpnr']);
-        $locatie = '../pics/';
-        if(substr($details['illustratieFile'] , 0 ,2 ) == 'ea'){
-          $locatie = 'upload/';
-        } 
-        if(strlen($details['titel']) >= 40){
-            $details['titel'] = substr($details['titel'],0,40);
-            $details['titel'] .= '...';
-        }
-        echo '
+        for ($teller = 0; $teller < 3; $teller++) {
+            $details = DetailAdvertentie($records[$teller]['voorwerpnr']);
+            $locatie = '../pics/';
+            if(substr($details['illustratieFile'] , 0 ,2 ) == 'ea'){
+                $locatie = 'upload/';
+            } 
+            if(strlen($details['titel']) >= 40){
+                $details['titel'] = substr($details['titel'],0,40);
+                $details['titel'] .= '...';
+            }
+            echo '
         <div class="col-md-4 py-3">
         <div class="card" style="width: 18rem;">
         <div class="card-img-boven">
@@ -381,7 +381,7 @@ function getAanbevolen($gebruiker) {
             </div>
         </div>
         </div>';
-    }}
+        }}
 }
 
 function HaalIllustratiesOp($voorwerpnr){
@@ -517,7 +517,7 @@ function haalAdvertentieOp($rubriek){
             $details = DetailAdvertentie($rij['voorwerpnr']);
             $locatie = '../pics/';
             if(substr($details['illustratieFile'] , 0 ,2 ) == 'ea'){
-              $locatie = 'upload/';
+                $locatie = 'upload/';
             } 
             if(strlen($rij['titel']) >= 40){
                 $rij['titel'] = substr($rij['titel'],0,40);
@@ -968,7 +968,7 @@ function emailResetWachtwoord($gebruikersnaam)
 {
     try{
         require('core/dbconnection.php');
-        $sqlSelect = $dbh->prepare("select email, voornaam from gebruikers where gebruikersnaam = :gebruikersnaam");
+        $sqlSelect = $dbh->prepare("select email, voornaam from Gebruiker where gebruikersnaam = :gebruikersnaam");
 
         $sqlSelect->execute(
             array(
@@ -1024,7 +1024,7 @@ function veranderWachtwoord($email,$wachtwoord)
 function controleVraag($vraag){
     try{
         require('core/dbconnection.php');
-        $sqlSelect = $dbh->prepare("select gebruiker.vraag from gebruikers join vragen
+        $sqlSelect = $dbh->prepare("select gebruiker.vraag from Gebruiker join vragen
         on gebruiker.vraag = vragen.vraagnr where gebruiker.email=:email");
 
         $sqlSelect->execute(
@@ -1435,14 +1435,14 @@ function gebruikerblok(){
         );
         $resultaat =  $gebruiker ->fetchAll(PDO::FETCH_ASSOC);
         if ($resultaat[0]['geblokeerd'] == 1){
-              StuurGebruikerDeblockedEmail($resultaat[0]['gebruikersnaam']);
+            StuurGebruikerDeblockedEmail($resultaat[0]['gebruikersnaam']);
             $deblokeren -> execute(
                 array(
                     ':gebruiker' => $resultaat[0]['gebruikersnaam'],
                 )
             );
         }else if ($resultaat[0]['geblokeerd'] == 0){
-               StuurGebruikerBlockedEmail($resultaat[0]['gebruikersnaam']);
+            StuurGebruikerBlockedEmail($resultaat[0]['gebruikersnaam']);
             $blokeren -> execute(
                 array(
                     ':gebruiker' => $resultaat[0]['gebruikersnaam'],
@@ -1450,7 +1450,7 @@ function gebruikerblok(){
             );
         }
     } catch (PDOexception $e) {
-//        echo "er ging iets mis error: {$e->getMessage()}";
+        //        echo "er ging iets mis error: {$e->getMessage()}";
     }
 }
 
@@ -1460,7 +1460,7 @@ function StuurGebruikerBlockedEmail($gebruikersnaam)
 {
     try{
         require('core/dbconnection.php');
-        $sqlSelect = $dbh->prepare("select email, voornaam from gebruikers where gebruikersnaam = :gebruikersnaam");
+        $sqlSelect = $dbh->prepare("select email, voornaam from Gebruiker where gebruikersnaam = :gebruikersnaam");
 
         $sqlSelect->execute(
             array(
@@ -1499,7 +1499,7 @@ function StuurGebruikerDeblockedEmail($gebruikersnaam)
 {
     try{
         require('core/dbconnection.php');
-        $sqlSelect = $dbh->prepare("select email, voornaam from gebruikers where gebruikersnaam = :gebruikersnaam");
+        $sqlSelect = $dbh->prepare("select email, voornaam from Gebruiker where gebruikersnaam = :gebruikersnaam");
 
         $sqlSelect->execute(
             array(
@@ -1642,9 +1642,11 @@ function checkGEBLOKEERD ($gebruiker){
 
         while ($resultaat = $geblokeerd ->fetchAll(PDO::FETCH_ASSOC)){
             if ($resultaat['geblokeerd'] == 1){
+                return true;
                 header("Location: includes/geblokeerd.php");
+
             }else if ($resultaat['geblokeerd'] == 0){
-                // do niks
+                return false;
             } else if (empty($resultaat['geblokeerd'])){
                 //header("Location: includes/404error.php");
             }
@@ -1672,7 +1674,7 @@ function checkBEHEERDER ($gebruiker){
             }else if ($resultaat[0]['beheerder'] == 0){  
                 return false;
             } else if (empty($resultaat['beheerder'])){
-                header("Location: includes/404error.php");
+                //header("Location: includes/404error.php");
             }
         }
     } catch (PDOexception $e) {
