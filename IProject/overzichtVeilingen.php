@@ -7,7 +7,9 @@ if (checkBEHEERDER ($_SESSION['gebruikersnaam']) == true){     // veranderen naa
         $veilingnaam = $_POST['zoekopdracht'];
     }
 
-
+if (isset( $_GET['id'] ) ){
+        veilingblok($_GET['id']);
+    }
 
 ?>
 
@@ -76,7 +78,6 @@ if (checkBEHEERDER ($_SESSION['gebruikersnaam']) == true){     // veranderen naa
 <?php
 }else{
     include 'includes/404error.php';
-}
 }
 include 'includes/footer.php'
 ?>

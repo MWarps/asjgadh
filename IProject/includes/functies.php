@@ -1281,7 +1281,7 @@ function blokeren($geblokeerd, $teller, $gebruiker){
       </td>  ';
     }
 }
-function gebruikerblok(){
+function gebruikerblok($gebruiker){
     try {
         require('core/dbconnection.php');
         $blokeren = $dbh ->prepare (" UPDATE Gebruiker
@@ -1296,7 +1296,7 @@ function gebruikerblok(){
                                     ");
         $gebruiker -> execute(
             array(
-                ':gebruiker' => $_GET['naam'],
+                ':gebruiker' => $gebruiker,
             )
         );
         $resultaat =  $gebruiker ->fetchAll(PDO::FETCH_ASSOC);
@@ -1324,7 +1324,7 @@ function veilingenVinden($veilingnaam){
     $teller =0;
     try {
         require('core/dbconnection.php');
-        $veilingen = $dbh ->prepare (" select top 100 * from Voorwerp Where titel like :titel");
+        $veilingen = $dbh ->prepare (" select * from Voorwerp Where titel like :titel");
         $veilingen -> execute(
             array(
                 ':titel' => '%'.$veilingnaam.'%',
@@ -1333,11 +1333,11 @@ function veilingenVinden($veilingnaam){
         $veiling = $veilingen ->fetchAll(PDO::FETCH_ASSOC);
         foreach ( $veiling as $resultaat ){
             $teller ++;
-            $geblokeerd = "error";
-            if ($resultaat['geblokeerd'] == 1){
-                $geblokeerd = "Ja";
+            $geblokkeerd = "error";
+            if ($resultaat['geblokkeerd'] == 1){
+                $geblokkeerd = "Ja";
             }else{
-                $geblokeerd = "Nee";
+                $geblokkeerd = "Nee";
             }
             echo '<tr>
                     <th scope="row">'.$teller.'</th>
@@ -1347,6 +1347,7 @@ function veilingenVinden($veilingnaam){
                     <td>'.$resultaat['verzendkosten'].'</td>
                     <td>'.$resultaat['betalingswijze'].'</td>
                     <td>'.$resultaat['plaatsnaam'].'</td>
+                    <td>'.$resultaat['land'].'</td>
                     <td>'.$resultaat['looptijd'].'</td>
                     <td>'.$resultaat['looptijdbegindatum'].'</td> 
                     <td>'.$resultaat['looptijdeinddatum'].'</td> 
@@ -1357,7 +1358,7 @@ function veilingenVinden($veilingnaam){
                     <td>'.$geblokeerd.'</td> 
                     <td>'.$resultaat[blokeerdatum].'</td>
                       ';
-            veilingblokeren($geblokeerd, $teller, $resultaat['titel'] ); 
+            veilingblokeren($geblokkeerd, $resultaat['voorwerpnr'], $resultaat['titel'] ); 
 
             echo '</tr>';
         }   
@@ -1366,15 +1367,56 @@ function veilingenVinden($veilingnaam){
     }
 }
 
-function veilingblokeren($geblokeerd, $teller, $titel){
-    if ($geblokeerd == "Ja"){
+function veilingblokeren($geblokkeerd, $voorwerpnummer, $titel){
+    if ($geblokkeerd == "Ja"){
         echo ' <td>   
-    <a class="btn btn-primary" href="overzichtVeilingen.php?id='.$teller.'&naam='.$titel.'" role="button">Deblokeer</a> 
+    <a class="btn btn-primary" href="overzichtVeilingen.php?id='.$voorwerpnummer.'&naam='.$titel.'" role="button">Deblokeer</a> 
    </td> ';
-    } else if ($geblokeerd == "Nee"){
+    } else if ($geblokkeerd == "Nee"){
         echo ' <td>
-    <a class="btn btn-primary" href="overzichtVeilingen.php?id='.$teller.'&naam='.$titel.'" role="button">Blokeer</a>
+    <a class="btn btn-primary" href="overzichtVeilingen.php?id='.$voorwerpnummer.'&naam='.$titel.'" role="button">Blokeer</a>
       </td>  ';
+    }
+}
+
+function veilingblok($voorwerpnummer){
+    try {
+        require('core/dbconnection.php');
+        $blokeren = $dbh ->prepare (" UPDATE Voorwerp
+                                    SET geblokkeerd = 1, blokkeerdatum = CURRENT_TIMESTAMP
+                                    WHERE voorwerpnr like :voorwerpnummer
+                                    ");
+        $deblokeren = $dbh ->prepare (" UPDATE Voorwerp
+                                    SET geblokkeerd = 0
+                                    WHERE voorwerpnr like :voorwerpnummer
+                                    ");
+        $veiling = $dbh ->prepare (" SELECT * FROM Voorwerp where voorwerpnr like :voorwerpnummer
+                                    ");
+        $veiling -> execute(
+            array(
+                ':voorwerpnummer' => $voorwerpnummer,
+            )
+        );
+        
+        
+        $resultaat = $veiling ->fetchAll(PDO::FETCH_ASSOC);
+        if ($resultaat[0]['geblokkeerd'] == 1){
+            $deblokeren -> execute(
+                array(
+                    ':voorwerpnummer' => $resultaat[0]['voorwerpnr'],
+                )
+            );
+        }else if ($resultaat[0]['geblokkeerd'] == 0){
+            $blokeren -> execute(
+                array(
+                    ':voorwerpnummer' => $resultaat[0]['voorwerpnr'],
+                )
+            );
+        }
+
+
+    } catch (PDOexception $e) {
+        echo "er ging iets mis error: {$e->getMessage()}";
     }
 }
 
@@ -1427,7 +1469,7 @@ function checkBEHEERDER ($gebruiker){
 }
 
 function gebruikerBLOKEERemail($gebruikersnaam){
-     try{
+    try{
         require('core/dbconnection.php');
         $sqlSelect = $dbh->prepare("select email, voornaam from gebruikers where gebruikersnaam = :gebruikersnaam");
 
