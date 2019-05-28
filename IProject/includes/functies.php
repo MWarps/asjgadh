@@ -1300,13 +1300,14 @@ function gebruikerblok(){
         );
         $resultaat =  $gebruiker ->fetchAll(PDO::FETCH_ASSOC);
         if ($resultaat[0]['geblokeerd'] == 1){
+            StuurGebruikerDeblockedEmail($gebruikersnaam);
             $deblokeren -> execute(
                 array(
                     ':gebruiker' => $resultaat[0]['gebruikersnaam'],
                 )
             );
         }else if ($resultaat[0]['geblokeerd'] == 0){
-            
+            StuurGebruikerBlockedEmail($gebruikersnaam);
             $blokeren -> execute(
                 array(
                     ':gebruiker' => $resultaat[0]['gebruikersnaam'],
@@ -1319,6 +1320,89 @@ function gebruikerblok(){
         echo "er ging iets mis error: {$e->getMessage()}";
     }
 }
+
+
+/* stuurt email naar gebruiker wanneer deze geblokkeerd is */
+function StuurGebruikerBlockedEmail($gebruikersnaam)
+{
+    try{
+        require('core/dbconnection.php');
+        $sqlSelect = $dbh->prepare("select email, voornaam from gebruikers where gebruikersnaam = :gebruikersnaam");
+
+        $sqlSelect->execute(
+            array(
+                ':gebruikersnaam' => $gebruikersnaam,
+            ));
+        $records = $sqlSelect->fetch(PDO::FETCH_ASSOC);
+
+        ini_set( 'display_errors', 1 );
+        error_reporting( E_ALL );
+        $from = "no-reply@iconcepts.nl";
+        $to = $records['email'];
+        $subject = "Account geblokkeerd";
+        $message = '<h1> Beste '.$records['voornaam'].',</h1>,
+                  <br>
+                  <br>
+                        <p>Helaas moeten wij u op de hoogte stellen dat uw account is geblokkeerd. Dit kan meerdere redenen hebben.</p>
+                        <p>Om meer informatie te krijgen kunt u contact met ons opnemen door een mail te sturen naar: EenmaalAndermaal@gmail.com</p>
+                        <p>Vermeld in deze mail uw gebruikersnaam.</p>
+                        <p>Wij hopen u zodoende genoeg geïnformeerd te hebben.
+                        <br>
+                        Met vriendelijke groeten,
+                        <br>
+                        EenmaalAndermaal</p>     
+';
+        $headers = "From:" .$from;
+        mail($to,$subject,$message, $headers);
+
+    }
+    catch (PDOexception $e) {
+        echo "er ging iets mis error: {$e->getMessage()}";
+    }
+}
+
+/* stuurt email naar gebruiker wanneer deze gedeblokkeerd is */
+function StuurGebruikerDeblockedEmail($gebruikersnaam)
+{
+    try{
+        require('core/dbconnection.php');
+        $sqlSelect = $dbh->prepare("select email, voornaam from gebruikers where gebruikersnaam = :gebruikersnaam");
+
+        $sqlSelect->execute(
+            array(
+                ':gebruikersnaam' => $gebruikersnaam,
+            ));
+        $records = $sqlSelect->fetch(PDO::FETCH_ASSOC);
+
+        ini_set( 'display_errors', 1 );
+        error_reporting( E_ALL );
+        $from = "no-reply@iconcepts.nl";
+        $to = $records['email'];
+        $subject = "Account geblokkeerd";
+        $message = '<h1> Beste '.$records['voornaam'].',</h1>,
+                  <br>
+                  <br>
+                        <p>Uw account is gedeblokkeerd. U kunt nu weer inloggen.</p>
+                        <p>Wij hopen u zodoende genoeg geïnformeerd te hebben.
+                        <br>
+                        Met vriendelijke groeten,
+                        <br>
+                        EenmaalAndermaal</p>     
+';
+        $headers = "From:" .$from;
+        mail($to,$subject,$message, $headers);
+
+    }
+    catch (PDOexception $e) {
+        echo "er ging iets mis error: {$e->getMessage()}";
+    }
+}
+
+
+
+
+
+
 
 function veilingenVinden($veilingnaam){
     $teller =0;
