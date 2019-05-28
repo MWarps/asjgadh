@@ -1527,5 +1527,29 @@ function checkGEBLOKEERD ($gebruiker){
      
 }
 
+function checkBEHEERDER ($gebruiker){
+    try {
+        require('core/dbconnection.php');
+        $geblokeerd = $dbh ->prepare (" select gebruikersnaam, beheerder from Gebruiker where gebruikersnaam like :gebruiker ");
+        $geblokeerd-> execute(
+            array(
+                ':gebruiker' => $gebruiker,
+            )
+        );
+
+        while ($resultaat = $geblokeerd ->fetchAll(PDO::FETCH_ASSOC)){
+            if ($resultaat[0]['beheerder'] == 1){
+                return true;
+            }else if ($resultaat[0]['beheerder'] == 0){  
+                return false;
+            } else if (empty($resultaat['beheerder'])){
+                header("Location: includes/404error.php");
+            }
+        }
+    } catch (PDOexception $e) {
+        //echo "er ging iets mis error: {$e->getMessage()}";
+        // blijft error geven vanwegen het niet meer opkunnen halen van meet data. 
+    }
+}
 
 ?>
