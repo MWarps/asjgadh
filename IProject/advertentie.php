@@ -118,15 +118,15 @@ if(isset($_POST['bieden'])){
              <?php if(!empty(zijnErBiedingen($advertentie['voorwerpnr']))) { 
                     $hoogstebod = zijnErBiedingen($advertentie['voorwerpnr']);                   
                     $verhoging = BodVerhoging($hoogstebod['euro']);                    
-                    $hoogstebod = $hoogstebod['euro'] + $verhoging;                                       
-                    $hoogstebod = number_format($hoogstebod, 2, ',', '.');                    
+                    $hoogstebod1 = $hoogstebod['euro'] + $verhoging;                                       
+                    $hoogstebod = number_format($hoogstebod1, 2, ',', '.');                    
                 }
                   
                 else { $hoogstebod = $advertentie['startprijs'];
                 }       
               ?>
         <label for="bod">Bieden: (vanaf: €<?php echo $hoogstebod; ?>)</label>
-         <input type="number" name="bod" class="form-control" id="bod" step="0.01" min="<?php echo $hoogstebod; ?>" required>
+         <input type="number" name="bod" class="form-control" id="bod" step="0.01" min="<?php echo $hoogstebod1; ?>" required>
          <div class="invalid-feedback">
              Voer een bod vanaf €<?php echo $hoogstebod; ?>.
          </div>
