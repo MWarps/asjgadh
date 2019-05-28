@@ -1,0 +1,1 @@
+update Gebruiker set beheerder = 1 where gebruikersnaam like 'RGerrits'

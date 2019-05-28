@@ -1,11 +1,11 @@
 <?php 
 include 'includes/header.php';
-//if (isset ($_SESSION['beheerder']) && $_SESSION['beheerder'] == true){     // veranderen naar admin variabel. 
+if (checkBEHEERDER ($_SESSION['gebruikersnaam']) == true){     // veranderen naar admin variabel. 
 
-if (isset($_POST['veilingzoeken'])){
-    $veilingnaam = "";
-    $veilingnaam = $_POST['zoekopdracht'];
-}
+    if (isset($_POST['veilingzoeken'])){
+        $veilingnaam = "";
+        $veilingnaam = $_POST['zoekopdracht'];
+    }
 
 
 
@@ -64,9 +64,9 @@ if (isset($_POST['veilingzoeken'])){
                 </thead>
                 <tbody>
                     <?php
-                    if (isset($_POST['veilingzoeken'])){
-                        veilingenVinden($veilingnaam);
-                    }
+    if (isset($_POST['veilingzoeken'])){
+        veilingenVinden($veilingnaam);
+    }
                     ?>
                 </tbody>
             </table>
@@ -74,8 +74,9 @@ if (isset($_POST['veilingzoeken'])){
     </div>
 </div>
 <?php
-//}else{
-//   include 'includes/404error.php';
-//}
+}else{
+    include 'includes/404error.php';
+}
+}
 include 'includes/footer.php'
 ?>

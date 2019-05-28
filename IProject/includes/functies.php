@@ -1405,5 +1405,66 @@ function checkGEBLOKEERD (){
     }
 
 }
+function checkBEHEERDER ($gebruiker){
+    try {
+        require('core/dbconnection.php');
+        $geblokeerd = $dbh ->prepare (" select gebruikersnaam, beheerder from Gebruiker where gebruikersnaam like :gebruiker ");
+        $geblokeerd-> execute(
+            array(
+                ':gebruiker' => $gebruiker,
+            )
+        );
+
+        while ($resultaat = $geblokeerd ->fetchAll(PDO::FETCH_ASSOC)){
+            if ($resultaat[0]['beheerder'] == 1){
+                return true;
+            }else if ($resultaat[0]['beheerder'] == 0){  
+                return false;
+            } else if (empty($resultaat['beheerder'])){
+                header("Location: includes/404error.php");
+            }
+        }
+    } catch (PDOexception $e) {
+        //echo "er ging iets mis error: {$e->getMessage()}";
+        // blijft error geven vanwegen het niet meer opkunnen halen van meet data. 
+    }
+}
+
+function gebruikerBLOKEERemail($gebruikersnaam){
+     try{
+        require('core/dbconnection.php');
+        $sqlSelect = $dbh->prepare("select email, voornaam from gebruikers where gebruikersnaam = :gebruikersnaam");
+
+        $sqlSelect->execute(
+            array(
+                ':gebruikersnaam' => $gebruikersnaam,
+            ));
+        $records = $sqlSelect->fetch(PDO::FETCH_ASSOC);
+
+        ini_set( 'display_errors', 1 );
+        error_reporting( E_ALL );
+        $from = "no-reply@iconcepts.nl";
+        $to = $records['email'];
+        $subject = "Validatie code account registreren";
+        $message = '<h1> Hallo '.$records['voornaam'].'</h1>,
+                  <br>
+                  <br>
+                  Bedankt voor het registreren. Hieronder staat de code die ingevoerd
+                  moet worden om het registeren te voltooien:
+                  <br>
+                  <h1>'.rand(1000,9999).'
+                  <br>
+                  Als u dit niet bent, wijzig dan uw wachtwoord
+                  en overweeg ook om uw e-mailwachtwoord te wijzigen om uw
+                  accountbeveiliging te garanderen.';
+        $headers = "From:" .$from;
+        mail($to,$subject,$message, $headers);
+
+
+    }
+    catch (PDOexception $e) {
+        echo "er ging iets mis error: {$e->getMessage()}";
+    }
+}
 
 ?>

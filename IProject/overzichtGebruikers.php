@@ -1,15 +1,15 @@
 <?php 
 include 'includes/header.php';
 $gebruikersnaam = "";
-//if (isset ($_SESSION['beheerder']) && $_SESSION['beheerder'] == true){     // veranderen naar admin variabel. 
-if (isset($_POST['zoeken'])){
-    $gebruikersnaam = "";
-    $gebruikersnaam = $_POST['zoekopdracht'];
-}
+if (checkBEHEERDER ($_SESSION['gebruikersnaam']) == true){     // veranderen naar admin variabel. 
+    if (isset($_POST['zoeken'])){
+        $gebruikersnaam = "";
+        $gebruikersnaam = $_POST['zoekopdracht'];
+    }
 
-if (isset( $_GET['id'])){
-    gebruikerblok();
-}
+    if (isset( $_GET['id'])){
+        gebruikerblok();
+    }
 ?>
 
 <div class="container">
@@ -59,9 +59,9 @@ if (isset( $_GET['id'])){
                 </thead>
                 <tbody>
                     <?php
-                    if (isset($_POST['zoeken'])){
-                        gebruikersvinden($gebruikersnaam); 
-                    }
+    if (isset($_POST['zoeken'])){
+        gebruikersvinden($gebruikersnaam); 
+    }
                     ?>
                 </tbody>
             </table>
@@ -69,8 +69,8 @@ if (isset( $_GET['id'])){
     </div>
 </div> <!--/.container-->
 <?php
-//}else{
-//   include 'includes/404error.php';
-//}
+}else{
+    include 'includes/404error.php';
+}
 //include 'includes/footer-fixed.php'
 ?>
