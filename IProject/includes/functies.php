@@ -1548,7 +1548,6 @@ function veilingenVinden($veilingnaam){
                     <td>'.$resultaat['voorwerpnr'].'</td>
                     <td>'.$resultaat['titel'].'</td>
                     <td>'.$resultaat['startprijs'].'</td>
-                    <td>'.$resultaat['verzendkosten'].'</td>
                     <td>'.$resultaat['betalingswijze'].'</td>
                     <td>'.$resultaat['plaatsnaam'].'</td>
                     <td>'.$resultaat['land'].'</td>
@@ -1556,11 +1555,9 @@ function veilingenVinden($veilingnaam){
                     <td>'.$resultaat['looptijdbegindatum'].'</td> 
                     <td>'.$resultaat['looptijdeinddatum'].'</td> 
                     <td>'.$resultaat['verkoper'].'</td> 
-                    <td>'.$resultaat['koper'].'</td> 
                     <td>'.$resultaat['veilinggesloten'].'</td> 
-                    <td>'.$resultaat['verkoopprijs'].'</td>
                     <td>'.$geblokeerd.'</td> 
-                    <td>'.$resultaat[blokeerdatum].'</td>
+                    <td>'.$resultaat['blokeerdatum'].'</td>
                       ';
             veilingblokeren($geblokkeerd, $resultaat['voorwerpnr'], $resultaat['titel'] ); 
 
