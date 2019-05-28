@@ -48,7 +48,7 @@ if (checkBEHEERDER ($_SESSION['gebruikersnaam']) == true){     // veranderen naa
                         <th scope="col">Gebruikersnaam</th>
                         <th scope="col">Voornaam</th>
                         <th scope="col">Achternaam</th>
-                        <th scope="col">Geslacht</th>
+                   <!---     <th scope="col">Geslacht</th>-->
                         <th scope="col">Postcode</th>
                         <th scope="col">Plaatsnaam</th>
                         <th scope="col">Land</th>
