@@ -1493,15 +1493,15 @@ function StuurGebruikerBlockedEmail($gebruikersnaam)
         $to = $records['email'];
         $subject = "Account geblokkeerd";
         $message = 'Beste'.$records['voornaam'].',
-                  
-                 
+
+
                         Helaas moeten wij u op de hoogte stellen dat uw account is geblokkeerd. Dit kan meerdere redenen hebben.
                         Om meer informatie te krijgen kunt u contact met ons opnemen door een mail te sturen naar: EenmaalAndermaal@gmail.com
                         Vermeld in deze mail uw gebruikersnaam.
                         Wij hopen u zodoende genoeg geïnformeerd te hebben.
-                        
+
                         Met vriendelijke groeten,
-                        
+
                         EenmaalAndermaal    
 ';
         $headers = "From:" .$from;
@@ -1532,13 +1532,13 @@ function StuurGebruikerDeblockedEmail($gebruikersnaam)
         $to = $records['email'];
         $subject = "Account gedeblokkeerd";
         $message = ' Beste '.$records['voornaam'].',,
-                  
-                  
+
+
                         Uw account is gedeblokkeerd. U kunt nu weer inloggen.
                         Wij hopen u zodoende genoeg geïnformeerd te hebben.
-                        
+
                         Met vriendelijke groeten,
-                        
+
                         EenmaalAndermaal   
 ';
         $headers = "From:" .$from;
@@ -1660,19 +1660,20 @@ function checkGEBLOKEERD ($gebruiker){
 
             )
         );
-
         while ($resultaat = $geblokeerd ->fetchAll(PDO::FETCH_ASSOC)){
+            print_r($resultaat);
             if ($resultaat['geblokeerd'] == 1){
-                return true;
                 header("Location: includes/geblokeerd.php");
-
+                session_unset;
+                session_destroy;
+                return true;
             }else if ($resultaat['geblokeerd'] == 0){
                 return false;
             } else if (empty($resultaat['geblokeerd'])){
+                return false;
                 //header("Location: includes/404error.php");
             }
         }
-
     } catch (PDOexception $e) {
         //    echo "er ging iets mis error: {$e->getMessage()}";
     }
@@ -1693,7 +1694,7 @@ function checkBEHEERDER ($gebruiker){
             if ($resultaat[0]['beheerder'] == 1){
                 return true;
             }else if ($resultaat[0]['beheerder'] == 0){  
-                return false;
+                 return false;
             } else if (empty($resultaat['beheerder'])){
                 //header("Location: includes/404error.php");
             }
