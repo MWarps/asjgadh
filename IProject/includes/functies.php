@@ -1661,8 +1661,7 @@ function checkGEBLOKEERD ($gebruiker){
             )
         );
         while ($resultaat = $geblokeerd ->fetchAll(PDO::FETCH_ASSOC)){
-            print_r($resultaat);
-            if ($resultaat[0]['geblokeerd'] != 0){
+            if ($resultaat[0]['geblokeerd'] == 1){
               //  header("Location: includes/geblokeerd.php");
               //  session_unset;
               //  session_destroy;
