@@ -2,6 +2,10 @@
 include 'email.php';
 include 'email2.php';
 include 'emailBericht.php';
+include 'emailVerkocht.php';
+include 'emailGekocht.php';
+include 'emailVerwijderdVerkoper.php';
+include 'emailVerwijderdHoogstebod.php';
 
 function BodVerhoging($Euro){
     $Verhoging;
@@ -1076,106 +1080,6 @@ function stuurbericht($titel, $bericht, $Verzender, $Ontvanger){
 
 }
 
-/*
-Komen de wachtwoorden overeen bij het registreren en wachtwoord reset
-function controleerWachtwoord($rWachtwoord, $rHerhaalWachtwoord)
-{
-    if ($rWachtwoord == $rHerhaalWachtwoord) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
-
-function haalPostsOp($rubriek)
-{
-    if (empty($rubriek) || $rubriek == 'Alle rubrieken') {
-        $query = 'select * from posts order by unixtijd desc';
-    } else {
-        $query = "select * from posts where rubriek like '$rubriek' order by unixtijd desc";
-    }
-    try {
-        require('connecting.php');
-
-        $sqlSelect = $dbh->prepare("$query");
-
-        $sqlSelect->execute();
-
-        $records = $sqlSelect->fetchAll(PDO::FETCH_ASSOC);
-        return $records;
-
-    } catch (PDOexception $e) {
-        echo "er ging iets mis error: {$e->getMessage()}";
-    }
-}
-
-
-function plaatsPost($kopje, $tekst, $rubriek, $dbh, $unixtijd)
-{
-
-    if ($kopje == null || $tekst == null || $rubriek == null) {
-        echo 'Één van de velden is niet ingevuld ';
-        header("Refresh: 2; url=forum.php");
-        die();
-    } else {
-
-        try {
-            require('connecting.php');
-
-            $insertQuery = $dbh->prepare("insert into posts (kopje, tekst, bezoeker, rubriek, unixtijd) values(:kopje, :tekst, :bezoeker, :rubriek, :unixtijd)");
-            $insertQuery->execute(
-                array(
-                    ':kopje' => $kopje,
-                    ':tekst' => $tekst,
-                    ':bezoeker' => $_SESSION['loginnaam'],
-                    ':rubriek' => $rubriek,
-                    ':unixtijd' => $unixtijd
-                )
-            );
-        } catch (PDOexception $e) {
-            echo "er ging iets mis error: {$e->getMessage()}";
-        }
-    }
-}
-
-
-function geefVideoDetails($id)
-{
-    try {
-        require('connecting.php');
-        $sqlSelect = $dbh->prepare("select * from videos where id = $id");
-        $sqlSelect->execute();
-        $records = $sqlSelect->fetchAll(PDO::FETCH_ASSOC);
-        return $records;
-
-    } catch (PDOexception $e) {
-        echo "er ging iets mis error: {$e->getMessage()}";
-    }
-}
-
-function haalVideosOp($rubriek)
-{
-    if (empty($rubriek) || $rubriek == 'Alle rubrieken') {
-        $query = 'select * from videos';
-    } else {
-        $query = "select * from videos where rubriek like '$rubriek'";
-    }
-    try {
-        require('connecting.php');
-
-        $sqlSelect = $dbh->prepare("$query");
-
-        $sqlSelect->execute();
-
-        $records = $sqlSelect->fetchAll(PDO::FETCH_ASSOC);
-        return $records;
-
-    } catch (PDOexception $e) {
-        echo "er ging iets mis error: {$e->getMessage()}";
-    }
-}
-*/
 function statusOpValidatieZetten($gebruikersnaam){
     try {
         require('core/dbconnection.php');
@@ -1742,4 +1646,144 @@ function veilingeindberekenen ($voorwerpnummer){
     }
 }
 
+function HaalMijnAdvertentieOp($gebruikersnaam){
+  
+  try {
+      require('core/dbconnection.php');
+      $sqlSelect = $dbh ->prepare ("SELECT voorwerpnr from Voorwerp where verkoper = :gebruiker ");
+      $sqlSelect-> execute(
+          array(
+              ':gebruiker' => $gebruikersnaam
+          )
+      );
+      $resultaat = $sqlSelect ->fetchAll(PDO::FETCH_ASSOC);
+      return $resultaat;
+
+  } catch (PDOexception $e) {
+      "er ging iets mis error: {$e->getMessage()}";
+      
+  }
+}
+
+function VerkoopVeiling($voorwerpnr){
+  
+  try {
+      require('core/dbconnection.php');
+      $sqlUpdate = $dbh ->prepare ("UPDATE Voorwerp
+                                    SET koper = (select gebruikersnaam from bod where voorwerpnr = :voorwerpnr),
+                                        verkoopprijs = (select euro from bod where voorwerpnr = :voorwerpnr order by convert(decimal(9,2), euro) desc),
+                                        veilinggesloten = 1;
+                                    WHERE voorwerpnr = :voorwerpnr");
+      $sqlUpdate-> execute(
+          array(
+              ':voorwerpnr' => $voorwerpnr
+          ));
+          
+      $sqlSelect = $dbh ->prepare ("SELECT * from Voorwerp where voorwerpnr = :voorwerpnr");
+          $sqlSelect-> execute(
+              array(
+                  ':voorwerpnr' => $voorwerpnr
+              ));   
+              
+              $records = $sqlSelect ->fetch(PDO::FETCH_ASSOC);
+              return $records; 
+              
+  } catch (PDOexception $e) {
+      "er ging iets mis error: {$e->getMessage()}";      
+  }  
+}
+
+function VerwijderVeiling($voorwerpnr, $verkoper){
+  
+  try {
+      require('core/dbconnection.php');
+      $sqlSelect = $dbh ->prepare ("SELECT * from Gebruiker where gebruikersnaam = (select gebruikersnaam from bod where voorwerpnr = :voorwerpnr order by convert(decimal(9,2), euro) desc )
+                                    UNION
+                                    SELECT * from Gebruiker where gebruikersnaam = :verkoper
+                                    UNION
+                                    SELECT * from Voorwerp where voorwerpnr = :voorwerpnr");
+      $sqlDelete1 = $dbh ->prepare ("DELETE FROM Voorwerpinrubriek where voorwerpnr = :voorwerpnr");
+      $sqlDelete2 = $dbh ->prepare ("DELETE FROM laatstbekeken where voorwerpnr = :voorwerpnr"); 
+      $sqlDelete3 = $dbh ->prepare ("DELETE FROM Voorwerp where voorwerpnr = :voorwerpnr");
+      
+      $sqlSelect-> execute( array(':voorwerpnr' => $voorwerpnr,
+                                  ':verkoper' => $verkoper      ));
+      $sqlDelete1-> execute( array(':voorwerpnr' => $voorwerpnr ));
+      $sqlDelete2-> execute( array(':voorwerpnr' => $voorwerpnr ));
+      $sqlDelete3-> execute( array(':voorwerpnr' => $voorwerpnr ));
+      
+      
+      $records = $sqlSelect ->fetch(PDO::FETCH_ASSOC);
+      return $records;
+      
+  } catch (PDOexception $e) {
+      "er ging iets mis error: {$e->getMessage()}";      
+  }  
+}
+
+function VerstuurVerkoopMail($veiling, $ontvanger){
+  
+  if($ontvanger){
+    ini_set( 'display_errors', 1 );
+    error_reporting( E_ALL );
+    $from = "no-reply@iconcepts.nl";
+    $to = $Email;
+    $subject = "EenmaalAndermaal u heeft een voorwerp Verkocht!";
+    $message = EmailVerkocht($Veiling);
+  
+    $headers = 'MIME-Version: 1.0' . "\r\n";
+    $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+    $headers .= "From:" .$from;
+  
+    mail($to,$subject,$message, $headers);
+  }
+  
+  if($ontvanger == false){
+    ini_set( 'display_errors', 1 );
+    error_reporting( E_ALL );
+    $from = "no-reply@iconcepts.nl";
+    $to = $Email;
+    $subject = "EenmaalAndermaal u heeft een voorwerp Gekocht!";
+    $message = EmailGekocht($Veiling);
+  
+    $headers = 'MIME-Version: 1.0' . "\r\n";
+    $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+    $headers .= "From:" .$from;
+  
+    mail($to,$subject,$message, $headers);
+  }  
+}
+
+function VerstuurVerwijderMail($veiling, $ontvanger){
+  
+  if($ontvanger){
+    ini_set( 'display_errors', 1 );
+    error_reporting( E_ALL );
+    $from = "no-reply@iconcepts.nl";
+    $to = $Email;
+    $subject = "EenmaalAndermaal uw voorwerp is verwijderd";
+    $message = EmailVerwijderdVerkoper($veiling);
+  
+    $headers = 'MIME-Version: 1.0' . "\r\n";
+    $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+    $headers .= "From:" .$from;
+  
+    mail($to,$subject,$message, $headers);
+  }
+  
+  if($ontvanger == false){
+    ini_set( 'display_errors', 1 );
+    error_reporting( E_ALL );
+    $from = "no-reply@iconcepts.nl";
+    $to = $Email;
+    $subject = "EenmaalAndermaal geboden voorwerp is verwijderd";
+    $message = EmailVerwijderdHoogstebod($veiling);
+  
+    $headers = 'MIME-Version: 1.0' . "\r\n";
+    $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+    $headers .= "From:" .$from;
+  
+    mail($to,$subject,$message, $headers);
+  }  
+}
 ?>

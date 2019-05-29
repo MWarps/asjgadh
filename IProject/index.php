@@ -47,11 +47,10 @@ if(isset($_SESSION['status'])){
                           <button type="button" class="close pt-0" data-dismiss="alert" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                             </button>
-                            </div>
-                            </div>
-                          </div>
-                       </div>
-                      ';
+                        </div>
+                </div>
+              </div>
+            </div>';
 }
 ?>
 
