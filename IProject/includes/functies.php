@@ -1492,7 +1492,7 @@ function StuurGebruikerBlockedEmail($gebruikersnaam)
         $from = "no-reply@iconcepts.nl";
         $to = $records['email'];
         $subject = "Account geblokkeerd";
-        $message = 'Beste'.$records['voornaam'].',
+        $message ='     Beste  '.$records['voornaam'].',
 
 
                         Helaas moeten wij u op de hoogte stellen dat uw account is geblokkeerd. Dit kan meerdere redenen hebben.
@@ -1531,7 +1531,7 @@ function StuurGebruikerDeblockedEmail($gebruikersnaam)
         $from = "no-reply@iconcepts.nl";
         $to = $records['email'];
         $subject = "Account gedeblokkeerd";
-        $message = ' Beste '.$records['voornaam'].',
+        $message = '    Beste '.$records['voornaam'].',
                   
                   
                         Uw account is gedeblokkeerd. U kunt nu weer inloggen.
