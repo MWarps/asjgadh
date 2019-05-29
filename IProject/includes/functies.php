@@ -2,6 +2,10 @@
 include 'email.php';
 include 'email2.php';
 include 'emailBericht.php';
+include 'emailVerkocht.php';
+include 'emailGekocht.php';
+include 'emailVerwijderdVerkoper.php';
+include 'emailVerwijderdHoogstebod.php';
 
 function BodVerhoging($Euro){
     $Verhoging;
@@ -882,30 +886,6 @@ function StuurRegistreerEmail($Email, $Code){
 
 }
 
-function verificatiesvinden(){
-    $teller = 0;
-    try {
-        $verkopers = getWannabeVerkopers();
-        foreach ( $verkopers as $verkoper ){
-            $teller ++;
-
-            $resultaat = maakVerkoperBrief($verkoper);
-            $email = $resultaat['email'];
-            echo '<tr>
-                    <th scope="row">'.$teller.'</th>
-                    <td>'.$resultaat['adress'].'</td>
-                    <td>'.$resultaat['brief'].'</td>
-                    <td>'.$email.'</td>                    
-                    <td><a class="btn btn-primary" href="verkoperVerificatieBrief.php?email='.$email.'" role="button">verzonden</a></td>';
-            echo ' </tr>';
-
-        }
-
-    } catch (PDOexception $e) {
-        // echo "er ging iets mis error: {$e->getMessage()}";
-    }
-}
-
 function getWannabeVerkopers() {
     try{
         require('core/dbconnection.php');
@@ -1080,106 +1060,6 @@ function stuurbericht($titel, $bericht, $Verzender, $Ontvanger){
 
 }
 
-/*
-Komen de wachtwoorden overeen bij het registreren en wachtwoord reset
-function controleerWachtwoord($rWachtwoord, $rHerhaalWachtwoord)
-{
-    if ($rWachtwoord == $rHerhaalWachtwoord) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
-
-function haalPostsOp($rubriek)
-{
-    if (empty($rubriek) || $rubriek == 'Alle rubrieken') {
-        $query = 'select * from posts order by unixtijd desc';
-    } else {
-        $query = "select * from posts where rubriek like '$rubriek' order by unixtijd desc";
-    }
-    try {
-        require('connecting.php');
-
-        $sqlSelect = $dbh->prepare("$query");
-
-        $sqlSelect->execute();
-
-        $records = $sqlSelect->fetchAll(PDO::FETCH_ASSOC);
-        return $records;
-
-    } catch (PDOexception $e) {
-        echo "er ging iets mis error: {$e->getMessage()}";
-    }
-}
-
-
-function plaatsPost($kopje, $tekst, $rubriek, $dbh, $unixtijd)
-{
-
-    if ($kopje == null || $tekst == null || $rubriek == null) {
-        echo 'Één van de velden is niet ingevuld ';
-        header("Refresh: 2; url=forum.php");
-        die();
-    } else {
-
-        try {
-            require('connecting.php');
-
-            $insertQuery = $dbh->prepare("insert into posts (kopje, tekst, bezoeker, rubriek, unixtijd) values(:kopje, :tekst, :bezoeker, :rubriek, :unixtijd)");
-            $insertQuery->execute(
-                array(
-                    ':kopje' => $kopje,
-                    ':tekst' => $tekst,
-                    ':bezoeker' => $_SESSION['loginnaam'],
-                    ':rubriek' => $rubriek,
-                    ':unixtijd' => $unixtijd
-                )
-            );
-        } catch (PDOexception $e) {
-            echo "er ging iets mis error: {$e->getMessage()}";
-        }
-    }
-}
-
-
-function geefVideoDetails($id)
-{
-    try {
-        require('connecting.php');
-        $sqlSelect = $dbh->prepare("select * from videos where id = $id");
-        $sqlSelect->execute();
-        $records = $sqlSelect->fetchAll(PDO::FETCH_ASSOC);
-        return $records;
-
-    } catch (PDOexception $e) {
-        echo "er ging iets mis error: {$e->getMessage()}";
-    }
-}
-
-function haalVideosOp($rubriek)
-{
-    if (empty($rubriek) || $rubriek == 'Alle rubrieken') {
-        $query = 'select * from videos';
-    } else {
-        $query = "select * from videos where rubriek like '$rubriek'";
-    }
-    try {
-        require('connecting.php');
-
-        $sqlSelect = $dbh->prepare("$query");
-
-        $sqlSelect->execute();
-
-        $records = $sqlSelect->fetchAll(PDO::FETCH_ASSOC);
-        return $records;
-
-    } catch (PDOexception $e) {
-        echo "er ging iets mis error: {$e->getMessage()}";
-    }
-}
-*/
 function statusOpValidatieZetten($gebruikersnaam){
     try {
         require('core/dbconnection.php');
@@ -1707,46 +1587,6 @@ function checkBEHEERDER ($gebruiker){
     }
 }
 
-function veilingeindberekenen ($voorwerpnummer){
-    $looptijd; // opgegeven aantal dagen van de openhied van veilingen. 
-    $tijd;     // de overgebleven dagen die de veiling nog open is.
-    try {
-        require('core/dbconnection.php');
-        $informatie = $dbh -> prepare("select * from Voorwerp where voorwerpnr = :voorwerpnr");
-        // haalt de algemene informatie op die nodig is voor de berekening
-        $datum = $dbh ->prepare ("SELECT DATEDIFF(DAY, looptijdbegindagtijdstip, blokkeerdatum) AS begintotblokeer from Voorwerp where blokkeerdatum > '2000-01-01' and voorwerpnr =  :voorwerpnummer "); // berekend het verschil tussen de begindatum en de blokeerdatum in dagen.
-        $einddatum = $dbh -> prepare ("update Voorwerp set looptijdeindedagtijdstip =  DATEADD(day, 1, blokkeerdatum) where blokkeerdatum > '2000-01-01' and voorwerpnr = :voorwerpnr"); // insert de nieuwe einddatum gebaseerd op de ( looptijd - het aantal dagen tussen begin- en blokeer- datum )
-//====================================================================================================//
-// informatie query runnen en afhandelen.
-        $informatie -> execute(
-            array(
-                ':voorwerpnr' => $voorwerpnummer,
-            )
-        );
-        $informatie = $informatie ->fetchAll(PDO::FETCH_ASSOC);
-        foreach ($informatie as $info){
-            $looptijd = $info['looptijd']; // 29-05-2019 15:35 WERKT!
-        } // ophalen algemene informatie die later nodig is in de berekeningen
-//===================================================================================================//
-// datum verschil tussen de opening van de veiling en de datum van blokeren.
-        $datum-> execute(
-            array(
-                ':voorwerpnr' => $voorwerpnummer,
-            )
-        );
-        $resultaat = $datum ->fetchAll(PDO::FETCH_ASSOC);
-        foreach ($resultaat as $actie){
-            print_r($actie); // kijken wat $actie[] returned
-            $tijd = $looptijd - $actie['begintotblokeer']; // berekenen hoeveel dagen de veiling nog open moet staan.      
-        }
-        echo $tijd;
-        
-        
-    } catch (PDOexception $e) {
-        echo "er ging iets mis error: {$e->getMessage()}";
-    }
-}
-
 function HaalMijnAdvertentieOp($gebruikersnaam){
   
   try {
@@ -1794,10 +1634,10 @@ function HaalBiederEnVerkoperOp($voorwerpnr, $verkoper){
   
 }
 
-function VerkoopVeiling($voorwerpnr, $verkoper){
+function VerkoopVeiling($voorwerpnr){
   
   try {
-      require('core/dbconnection.php');
+      require('core/dbconnection.php');      
       $sqlUpdate = $dbh ->prepare ("UPDATE Voorwerp
                                     SET koper = (select gebruikersnaam from bod where voorwerpnr = :voorwerpnr),
                                         verkoopprijs = (select euro from bod where voorwerpnr = :voorwerpnr order by convert(decimal(9,2), euro) desc),
@@ -1807,10 +1647,6 @@ function VerkoopVeiling($voorwerpnr, $verkoper){
           array(
               ':voorwerpnr' => $voorwerpnr
           ));
-                        
-           $records =  HaalBiederEnVerkoperOp($voorwerpnr, $verkoper);    
-           
-           return $records;
               
   } catch (PDOexception $e) {
       "er ging iets mis error: {$e->getMessage()}";      
@@ -1845,8 +1681,7 @@ function VerstuurVerkoopMail($veiling, $ontvanger){
     $from = "no-reply@iconcepts.nl";
     $to = $veiling[1]['email'];
     $subject = "EenmaalAndermaal u heeft een voorwerp Verkocht!";
-    $message = EmailVerkocht($Veiling);
-  
+    $message = emailVerkocht($veiling);
     $headers = 'MIME-Version: 1.0' . "\r\n";
     $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
     $headers .= "From:" .$from;
@@ -1858,9 +1693,9 @@ function VerstuurVerkoopMail($veiling, $ontvanger){
     ini_set( 'display_errors', 1 );
     error_reporting( E_ALL );
     $from = "no-reply@iconcepts.nl";
-    $to = $veiling[1]['email'];
+    $to = $veiling[0]['email'];
     $subject = "EenmaalAndermaal u heeft een voorwerp Gekocht!";
-    $message = EmailGekocht($Veiling);
+    $message = EmailGekocht($veiling);
   
     $headers = 'MIME-Version: 1.0' . "\r\n";
     $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";

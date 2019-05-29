@@ -1,5 +1,5 @@
 <?php
-function EmailVerkocht($veiling)
+function emailVerkocht($veiling)
 {
   // https://github.com/leemunroe/responsive-html-email-template
     $tekst = '

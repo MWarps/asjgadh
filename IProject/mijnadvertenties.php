@@ -6,7 +6,8 @@ if(isset($_SESSION['gebruikersnaam'])){
 
 if(isset($_GET['status'])){
   if($_GET['status'] == 'verkopen'){
-    $Veiling = VerkoopVeiling($_GET['id'], $_SESSION['gebruikersnaam']);
+    VerkoopVeiling($_GET['id']);
+    $Veiling = HaalBiederEnVerkoperOp($_GET['id'], $_SESSION['gebruikersnaam']);
     VerstuurVerkoopMail($Veiling, true);
     VerstuurVerkoopMail($Veiling, false);
 
@@ -62,7 +63,7 @@ if(isset($_GET['status'])){
                         $details['titel'] .= '...';
                     }
                     $Bieder = HaalBiederEnVerkoperOp($details['voorwerpnr'], $_SESSION['gebruikersnaam']);
-                    if(!empty($Bieder[0]['gebruikersnaam'])){
+                    if(empty($Bieder[1]['gebruikersnaam'])){
                       $knop = 'disabled';
                     }
                     echo '
@@ -77,7 +78,7 @@ if(isset($_GET['status'])){
                           <p class="card-text"><a href="#">'.$details['verkoper'].'</a><br>
                           '.$details['land'].', '.$details['plaatsnaam'].'</p>
                           <a href="advertentie.php?id='.$details['voorwerpnr'].'" class="btn btn-block btn-primary py-2">Ga naar artikel</a>                                                                         
-                          <a class="btn btn-block btn-success py-2 '.$disabled.'" href="mijnadvertenties.php?id='.$details['voorwerpnr'].'&status=verkopen" >Verkopen</a>
+                          <a class="btn btn-block btn-success py-2 '.$knop.'" href="mijnadvertenties.php?id='.$details['voorwerpnr'].'&status=verkopen" >Verkopen</a>
                           <a class="btn btn-block btn-danger py-2" href="mijnadvertenties.php?id='.$details['voorwerpnr'].'&status=verwijderen">Verwijderen</a>
                           
                         </div>
