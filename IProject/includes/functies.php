@@ -1662,14 +1662,14 @@ function checkGEBLOKEERD ($gebruiker){
         );
         while ($resultaat = $geblokeerd ->fetchAll(PDO::FETCH_ASSOC)){
             print_r($resultaat);
-            if ($resultaat['geblokeerd'] == 1){
-                header("Location: includes/geblokeerd.php");
-                session_unset;
-                session_destroy;
+            if ($resultaat[0]['geblokeerd'] != 0){
+              //  header("Location: includes/geblokeerd.php");
+              //  session_unset;
+              //  session_destroy;
                 return true;
-            }else if ($resultaat['geblokeerd'] == 0){
+            }else if ($resultaat[0]['geblokeerd'] == 0){
                 return false;
-            } else if (empty($resultaat['geblokeerd'])){
+            } else if (empty($resultaat[0]['geblokeerd'])){
                 return false;
                 //header("Location: includes/404error.php");
             }
