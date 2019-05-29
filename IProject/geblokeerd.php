@@ -1,9 +1,7 @@
 <?php 
-$_SESSION['gebruikersnaam'] == '';
-echo $DP;
+$_SESSION['gebruikersnaam'] == 'null';
 include 'includes/header.php';
 echo 'hieronder moet de array van session weegeven worden:';
-print_r($_SESSION);
 ?>
 <div class="container">
   <div class="row">
