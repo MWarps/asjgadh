@@ -1734,7 +1734,7 @@ function veilingeindberekenen ($voorwerpnummer){
         require('core/dbconnection.php');
         $informatie = $dbh -> prepare("select * from Voorwerp where voorwerpnr = :voorwerpnr");
         // haalt de algemene informatie op die nodig is voor de berekening
-        $datum = $dbh ->prepare ("SELECT DATEDIFF(DAY, looptijdbegindagtijdstip, blokkeerdatum) AS begintotblokeer from Voorwerp where blokkeerdatum > '2000-01-01' and voorwerpnr =  :voorwerpnummer "); // berekend het verschil tussen de begindatum en de blokeerdatum in dagen.
+        $datum = $dbh ->prepare ("SELECT DATEDIFF(DAY, looptijdbegindagtijdstip, blokkeerdatum) AS begintotblokeer from Voorwerp where blokkeerdatum > '2000-01-01' and voorwerpnr = :voorwerpnr "); // berekend het verschil tussen de begindatum en de blokeerdatum in dagen.
         $einddatum = $dbh -> prepare ("update Voorwerp set looptijdeindedagtijdstip =  DATEADD(day, 1, blokkeerdatum) where blokkeerdatum > '2000-01-01' and voorwerpnr = :voorwerpnr"); // insert de nieuwe einddatum gebaseerd op de ( looptijd - het aantal dagen tussen begin- en blokeer- datum )
 //====================================================================================================//
 // informatie query runnen en afhandelen.
