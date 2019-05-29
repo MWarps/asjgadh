@@ -1634,6 +1634,7 @@ function veilingblok($voorwerpnummer){
                     ':voorwerpnummer' => $resultaat[0]['voorwerpnr'],
                 )
             );
+            veilingeindberekenen ($resultaat[0]['voorwerpnr']);
             $datumReset -> execute();
         }else if ($resultaat[0]['geblokkeerd'] == 0){
             $blokeren -> execute(
@@ -1702,6 +1703,24 @@ function checkBEHEERDER ($gebruiker){
         // blijft error geven vanwegen het niet meer opkunnen halen van meet data. 
     }
 }
-
+function veilingeindberekenen ($voorwerpnummer){
+    try {
+        require('core/dbconnection.php');
+        $datum = $dbh ->prepare ("select voorwerpnr, looptijd, looptijdbegindagtijdstip, looptijdeindedagtijdstip, blokkeerdatum  from Voorwerp where blokkeerdatum > '2000-01-01' and voorwerpnr = :voorwerpnummer ");
+        $datum-> execute(
+            array(
+                ':voorwerpnummer' => $voorwerpnummer,
+            )
+        );
+         $resultaat = $datum ->fetchAll(PDO::FETCH_ASSOC);
+        	
+        foreach ($resultaat as $actie){
+            print_r($actie);
+        }
+    } catch (PDOexception $e) {
+        //echo "er ging iets mis error: {$e->getMessage()}";
+        
+    }
+}
 
 ?>
