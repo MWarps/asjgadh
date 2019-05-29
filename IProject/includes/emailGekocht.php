@@ -326,18 +326,21 @@ function EmailGekocht($veiling)
                   <table role="presentation" border="0" cellpadding="0" cellspacing="0">
                     <tr>
                       <td>
-                      <h2> Hallo '.$veiling['koper'].',</h2>
+                      <h2> Hallo '.$veiling[0]['voornaam'].',</h2>
                       <br>
-                      <p>'.$veiling['verkoper'].' heeft het voorwerp: '.$veiling['voorwerpnr'].', verkocht <br>
-                         Voorwerptitel: '.$veiling['titel'].'<br>
+                      <p>'.$veiling[1]['gebruikersnaam'].' heeft het voorwerp: '.$veiling[2]['voorwerpnr'].', verkocht <br>
+                         Voorwerptitel: '.$veiling[2]['titel'].'<br>
                          </p>
                       <br>
-                      <p>U heeft het voorwerp gekocht voor: € '.$veiling['verkoopprijs'].'. Deze wordt via '.$veiling['betalingsmethode'].' betaald.<br>
-                         De betalingsinstructie is als volgt: '.$veiling['betalingsinstructie'].' <br>
-                         De locatie van het voorwerp is: Land - '.$veiling['land'].', Plaats: '.$veiling['plaats'].'. <br>
-                         De verzendkosten zijn: '.$veiling['verzendkosten'].' <br>                      
-                         <p>
+                      <p>U heeft het voorwerp gekocht voor: € '.$veiling[2]['verkoopprijs'].'. Deze wordt via '.$veiling[2]['betalingsmethode'].' betaald.<br>
+                         De betalingsinstructie is als volgt: '.$veiling[2]['betalingsinstructie'].' <br>
+                         De locatie van het voorwerp is: Land - '.$veiling[2]['land'].', Plaats: '.$veiling[2]['plaats'].'. <br>
+                         De verzendkosten zijn: '.$veiling[2]['verzendkosten'].' <br>                      
+                         
                       <br>
+                      <br>
+                        U kunt een bericht sturen naar de verkoper:
+                        Emailadres: '.$veiling[1]['email'].'</p>
                       <p>Heeft uw de advertentie niet op <strong>Verkocht</strong> gezet neem dan contact op met onze klantenservice.</p>
                       <br>
                       <p>Klik hier om naar de website te gaan: <a href="http://iproject34.icasites.nl">EenmaalAndermaal.nl</a>
