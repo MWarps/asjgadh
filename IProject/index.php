@@ -75,13 +75,12 @@ if(isset($_SESSION['status'])){
       <?php }
       if(!empty($laatstBekeken)) {?>
         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-            <?php $advertentie = DetailAdvertentie($laatstBekeken[0]['voorwerpnr']);
-             ?>
+            <?php $advertentie = DetailAdvertentie($laatstBekeken[0]['voorwerpnr']); ?>
             <div class="hovereffect">
                 <img class="img-responsive" src="../pics/<?php echo $advertentie['illustratieFile']?>" alt="Geen afbeelding beschikbaar">
                 <div class="overlay">
                     <h2><?php echo $advertentie['titel'];?></h2>
-                    <a class="info" href=\"advertentie.php?id=<?php echo $advertentie['voorwerpnr']; ?>"><?php echo $advertentie['titel'];?></a>
+                    <a class="info" href=\"advertentie.php?id=<?php echo $advertentie['voorwerpnr']; ?>">€ <?php echo $advertentie['startprijs'];?></a>
                 </div>
             </div>
         </div>
@@ -91,7 +90,7 @@ if(isset($_SESSION['status'])){
                 <img class="img-responsive" src="../pics/<?php echo $advertentie['illustratieFile'];?>" alt="Geen afbeelding beschikbaar">
                 <div class="overlay">
                     <h2><?php echo $advertentie['titel'];?></h2>
-                    <a class="info" href="advertentie.php?id=<?php echo $advertentie['voorwerpnr']; ?>"><?php echo $advertentie['titel'];?></a>
+                    <a class="info" href="advertentie.php?id=<?php echo $advertentie['voorwerpnr']; ?>">€ <?php echo $advertentie['startprijs'];?></a>
                 </div>
             </div>
         </div>
@@ -102,7 +101,7 @@ if(isset($_SESSION['status'])){
                 <img class="img-responsive" src="../pics/<?php echo $advertentie['illustratieFile'];?>" alt="Geen afbeelding beschikbaar">
                 <div class="overlay">
                     <h2><?php echo $advertentie['titel'];?></h2>
-                    <a class="info" href="advertentie.php?id=<?php echo $advertentie['voorwerpnr']; ?>"><?php echo $advertentie['titel'];?></a>
+                    <a class="info" href="advertentie.php?id=<?php echo $advertentie['voorwerpnr']; ?>">€ <?php echo $advertentie['startprijs'];?></a>
                 </div>
             </div>
         </div>
@@ -125,7 +124,7 @@ if(isset($_SESSION['status'])){
                 <img class="img-responsive" src="../pics/<?php echo $advertentie['illustratieFile'];?>" alt="Geen afbeelding beschikbaar">
                 <div class="overlay">
                     <h2><?php echo $advertentie['titel'];?></h2>
-                    <a class="info" href="advertentie.php?id=<?php echo $advertentie['voorwerpnr']; ?>"><?php echo $advertentie['titel'];?></a>
+                    <a class="info" href="advertentie.php?id=<?php echo $advertentie['voorwerpnr']; ?>">€ <?php echo $advertentie['startprijs'];?></a>
                 </div>
             </div>
         </div>
@@ -135,7 +134,7 @@ if(isset($_SESSION['status'])){
                 <img class="img-responsive" src="../pics/<?php echo $advertentie['illustratieFile'];?>" alt="Geen afbeelding beschikbaar">
                 <div class="overlay">
                     <h2><?php echo $advertentie['titel'];?></h2>
-                    <a class="info" href="advertentie.php?id=<?php echo $advertentie['voorwerpnr']; ?>"><?php echo $advertentie['titel'];?></a>
+                    <a class="info" href="advertentie.php?id=<?php echo $advertentie['voorwerpnr']; ?>">€ <?php echo $advertentie['startprijs'];?></a>
                 </div>
             </div>
         </div>
@@ -145,7 +144,7 @@ if(isset($_SESSION['status'])){
                 <img class="img-responsive" src=../pics/"<?php echo $advertentie['illustratieFile'];?>" alt="Geen afbeelding beschikbaar">
                 <div class="overlay">
                     <h2><?php echo $advertentie['titel'];?></h2>
-                    <a class="info" href="advertentie.php?id=<?php echo $advertentie['voorwerpnr']; ?>"><?php echo $advertentie['titel'];?></a>
+                    <a class="info" href="advertentie.php?id=<?php echo $advertentie['voorwerpnr']; ?>">€ <?php echo $advertentie['startprijs'];?></a>
                 </div>
             </div>
         </div>

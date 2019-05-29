@@ -23,9 +23,16 @@ function Brief($records) {
 
     fclose($myfile);
 }
-/**
- * Created by PhpStorm.
- * User: yodas
- * Date: 09/05/2019
- * Time: 14:36
- */
+
+function ratingBrief($records){
+    $naam = ($records['voornaam'].' '.$records['achternaam']);
+    $myfile = fopen("../brieven/".$naam.".txt.","x") or die("Unable to open file!");
+
+    $txt = (
+    "Beste".$naam.",\n
+    Uw transactie met".$records['gebruikersnaam']."is gelukt. Beoordeel het contact met".$records['gebruikersnaam']."tijdens en na afloop van de veiling".$records['objectitel']."\n
+    hier".$records['rating']."
+    \n \n Met vriendelijke groet, \n \n EenmaalAndermaal \n Iproject34.icasites.nl\""
+
+    );
+}

@@ -806,6 +806,26 @@ function MaakVerkoperBrief($gebruiker){
     }
 }
 
+function maakRatingBrief($gebruiker){
+    try {
+        require('core/dbconnection.php');
+        $sqlSelect = $dbh->prepare("SELECT voornaam, achternaam, geslacht FROM Gebruiker");
+
+        $sqlSelect->execute(
+            array(
+                ':gebruiker' => $_SESSION['gebruikersnaam']
+            )
+        );
+        $records = $sqlSelect->fetch(PDO::FETCH_ASSOC);
+        return $records;
+
+        ratingBrief($records);
+    }
+    catch (PDOexception $e) {
+        echo "er is iets mis erroreqrre: {$e->getMessage()}";
+    }
+}
+
 function geslacht()
 {
 
@@ -1405,5 +1425,6 @@ function checkGEBLOKEERD ($gebruiker){
     }
 
 }
+
 
 ?>
