@@ -882,6 +882,30 @@ function StuurRegistreerEmail($Email, $Code){
 
 }
 
+function verificatiesvinden(){
+    $teller = 0;
+    try {
+        $verkopers = getWannabeVerkopers();
+        foreach ( $verkopers as $verkoper ){
+            $teller ++;
+
+            $resultaat = maakVerkoperBrief($verkoper);
+            $email = $resultaat['email']
+            echo '<tr>
+                    <th scope="row">'.$teller.'</th>
+                    <td>'.$resultaat['adress'].'</td>
+                    <td>'.$resultaat['brief'].'</td>
+                    <td>'.$email.'</td>                    
+                    <td><a class="btn btn-primary" href="verkoperVerificatieBrief.php?email='.$email'" role="button">verzonden</a></td> ';
+            echo ' </tr>';
+
+        }
+
+    } catch (PDOexception $e) {
+        // echo "er ging iets mis error: {$e->getMessage()}";
+    }
+}
+
 function getWannabeVerkopers() {
     try{
         require('core/dbconnection.php');
