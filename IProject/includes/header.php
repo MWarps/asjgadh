@@ -45,12 +45,13 @@ if ( checkGEBLOKEERD($_SESSION['gebruikersnaam']) == true){
         <!-- Zorgt voor dat css die voor mobiel worden gebruikt ook alleen worden gezien bij mobiel window. -->
         <!-- Bootstrap core CSS -->
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-        <link href="/assets/css/bootstrap/bootstrap.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <!-- <link href="/assets/css/bootstrap/bootstrap.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"> -->
         <!-- Custom css -->
         <link rel="stylesheet" type="text/css"  href="../assets/css/style.css"/>
         <link rel="stylesheet" type="text/css"  href="assets/css/style.css"/>
-
-
+        <!-- Font-Awesome -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <!-- Rating -->
     </head>
     <body>          
         <nav class="navbar navbar-expand-lg navbar-light bg-flame">
@@ -106,6 +107,5 @@ if ( checkGEBLOKEERD($_SESSION['gebruikersnaam']) == true){
                                    </ul>';
                     } ?>
             </div>
-            </div>          
         </nav>
 
