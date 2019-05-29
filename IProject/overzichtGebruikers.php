@@ -55,7 +55,7 @@ if (checkBEHEERDER ($_SESSION['gebruikersnaam']) == true){     // veranderen naa
                         <th scope="col">email</th>
                         <th scope="col">Verkoper</th>
                         <th scope="col">Geblokeerd</th>
-                        <th scope="cxol">Vink aan:</th>
+                        <th scope="col">Vink aan:</th>
                     </tr>
                 </thead>
                 <tbody>
