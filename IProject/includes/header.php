@@ -22,13 +22,16 @@ if(isset($_SESSION['gebruikersnaam'])){
             $VerkoperValidatie = true;    
         }
     }
-    if (checkGEBLOKEERD ($_SESSION['gebruikersnaam']) == true){
-        session_unset;
-        session_destroy;
-    }
 }
-
-
+    
+if ( checkGEBLOKEERD($_SESSION['gebruikersnaam']) == true){
+    session_unset;
+    session_destroy;
+   //header("Location:geblokeerd.php");
+   $url = 'geblokeerd.php';
+    echo '<script language="javascript">window.location.href ="'.$url.'"</script>';
+    die();
+}
 ?>
 <!DOCTYPE HTML>
 <html lang="nl">
@@ -63,10 +66,10 @@ if(isset($_SESSION['gebruikersnaam'])){
                         </li>
                     </ul>                      
                     <?php
-    if (isset($_SESSION['gebruikersnaam'])){
-        if ($VerkoperValidatie == false){                                              
-            echo '<a class="btn btn-primary" href="veilen.php">Veilen</a>';                                            
-        } ?>  
+                    if (isset($_SESSION['gebruikersnaam'])){
+                        if ($VerkoperValidatie == false){                                              
+                            echo '<a class="btn btn-primary" href="veilen.php">Veilen</a>';                                            
+                        } ?>  
                     <ul class="navbar-nav">                            
                         <div class="nav-item dropdown">
 
@@ -92,8 +95,8 @@ if(isset($_SESSION['gebruikersnaam'])){
                     </ul>
                 </div>                                    
                 <?php  } // einde if session actief is
-    else{
-        echo'<ul class="navbar-nav">
+                    else{
+                        echo'<ul class="navbar-nav">
                                       <li class="nav-item">
                                         <a class="nav-link" href="login.php">Login</a>
                                       </li>
@@ -101,7 +104,7 @@ if(isset($_SESSION['gebruikersnaam'])){
                                         <a class="nav-link" href="register.php">Registreren</a>
                                       </li>
                                    </ul>';
-    } ?>
+                    } ?>
             </div>
             </div>          
         </nav>

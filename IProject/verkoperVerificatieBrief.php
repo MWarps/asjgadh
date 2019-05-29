@@ -24,7 +24,7 @@ if (checkBEHEERDER ($_SESSION['gebruikersnaam']) == true){     // veranderen naa
                 </ul>
             </div>
         </div><!--/row-->
-        <form class="needs-validation" novalidate action='overzichtGebruikers.php' method="post">
+        <form class="needs-validation" novalidate action='verkoperVerificatieBrief.php.php' method="post">
             <div class="row justify-content-center">
                 <div class="col-md-10">
                     <h1 class="h3 mb-3 font-weight-normal text-center">Gebruikers zoeken</h1>
