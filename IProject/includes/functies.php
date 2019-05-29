@@ -1563,7 +1563,6 @@ function veilingenVinden($veilingnaam){
         );
         $veiling = $veilingen ->fetchAll(PDO::FETCH_ASSOC);
         foreach ( $veiling as $resultaat ){
-            print_r($resultaat);
             $teller ++;
             $geblokkeerd = "error";
             if ($resultaat['geblokkeerd'] == 1){
@@ -1704,22 +1703,42 @@ function checkBEHEERDER ($gebruiker){
     }
 }
 function veilingeindberekenen ($voorwerpnummer){
+    $looptijd; // opgegeven aantal dagen van de openhied van veilingen. 
+    $tijd;     // de overgebleven dagen die de veiling nog open is.
     try {
         require('core/dbconnection.php');
-        $datum = $dbh ->prepare ("select voorwerpnr, looptijd, looptijdbegindagtijdstip, looptijdeindedagtijdstip, blokkeerdatum  from Voorwerp where blokkeerdatum > '2000-01-01' and voorwerpnr = :voorwerpnummer ");
-        $datum-> execute(
+        $informatie = $dbh -> prepare("select * from Voorwerp where voorwerpnr = :voorwerpnr");
+        // haalt de algemene informatie op die nodig is voor de berekening
+        $datum = $dbh ->prepare ("SELECT DATEDIFF(DAY, looptijdbegindagtijdstip, blokkeerdatum) AS begintotblokeer from Voorwerp where blokkeerdatum > '2000-01-01' and voorwerpnr =  :voorwerpnummer "); // berekend het verschil tussen de begindatum en de blokeerdatum in dagen.
+        $einddatum = $dbh -> prepare ("update Voorwerp set looptijdeindedagtijdstip =  DATEADD(day, 1, blokkeerdatum) where blokkeerdatum > '2000-01-01' and voorwerpnr = :voorwerpnr"); // insert de nieuwe einddatum gebaseerd op de looptijd - het aantal dagen tussen begin- en blokeer- datum
+//====================================================================================================//
+// informatie query runnen en afhandelen.
+        $informatie -> execute(
             array(
-                ':voorwerpnummer' => $voorwerpnummer,
+                ':voorwerpnr' => $voorwerpnummer,
             )
         );
-         $resultaat = $datum ->fetchAll(PDO::FETCH_ASSOC);
-        	
+        $informatie = $informatie ->fetchAll(PDO::FETCH_ASSOC);
+        foreach ($informatie as $info){
+            $looptijd = $info['looptijd'];
+        } // ophalen algemene informatie die later nodig is in de berekeningen
+//===================================================================================================//
+// datum verschil tussen de opening van de veiling en de datum van blokeren.
+        $datum-> execute(
+            array(
+                ':voorwerpnr' => $voorwerpnummer,
+            )
+        );
+        $resultaat = $datum ->fetchAll(PDO::FETCH_ASSOC);
         foreach ($resultaat as $actie){
-            print_r($actie);
+            print_r($actie); // kijken wat $actie[] returned
+            $tijd = $looptijd - $actie['begintotblokeer']; // berekenen hoeveel dagen de veiling nog open moet staan.      
         }
+        
+        
+        
     } catch (PDOexception $e) {
         //echo "er ging iets mis error: {$e->getMessage()}";
-        
     }
 }
 

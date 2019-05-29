@@ -1,6 +1,6 @@
 <?php 
 include 'includes/header.php';
-if (checkBEHEERDER ($_SESSION['gebruikersnaam']) == true){     // veranderen naar admin variabel. 
+if (checkBEHEERDER ($_SESSION['gebruikersnaam']) == true){  // veranderen naar admin variabel. 
 
     if (isset($_POST['veilingzoeken'])){
         $veilingnaam = "";
