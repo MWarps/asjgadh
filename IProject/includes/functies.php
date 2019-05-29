@@ -1498,8 +1498,8 @@ function StuurGebruikerBlockedEmail($gebruikersnaam)
                         Helaas moeten wij u op de hoogte stellen dat uw account is geblokkeerd. Dit kan meerdere redenen hebben.
                         Om meer informatie te krijgen kunt u contact met ons opnemen door een mail te sturen naar: EenmaalAndermaal@gmail.com
                         Vermeld in deze mail uw gebruikersnaam.
-                        Wij hopen u zodoende genoeg geïnformeerd te hebben.
-
+                        Wij hopen u zodoende genoeg informatie te hebben gegeven.
+                        
                         Met vriendelijke groeten,
 
                         EenmaalAndermaal    
@@ -1531,12 +1531,12 @@ function StuurGebruikerDeblockedEmail($gebruikersnaam)
         $from = "no-reply@iconcepts.nl";
         $to = $records['email'];
         $subject = "Account gedeblokkeerd";
-        $message = ' Beste '.$records['voornaam'].',,
-
-
+        $message = ' Beste '.$records['voornaam'].',
+                  
+                  
                         Uw account is gedeblokkeerd. U kunt nu weer inloggen.
-                        Wij hopen u zodoende genoeg geïnformeerd te hebben.
-
+                        Wij hopen u zodoende genoeg informatie te hebben gegeven.
+                        
                         Met vriendelijke groeten,
 
                         EenmaalAndermaal   
