@@ -82,10 +82,11 @@ if ( checkGEBLOKEERD($_SESSION['gebruikersnaam']) == true){
                                 <a class="dropdown-item" href="beheerder.php">Beheer</a>
                                 <a class="dropdown-item" href="#">Meldingen</a>
                                 <a class="dropdown-item" href="../informeren.php">FAQ</a>
-                                <a class="dropdown-item" href="wachtwoordReset.php">Wachtwoord Resetten</a>
+                                <a class="dropdown-item" href="wachtwoordReset.php">Wachtwoord Resetten</a>                                
                                 <?php if ($VerkoperValidatie){                                              
-                            echo '<a class="dropdown-item" href="../verkoper.php">Verkoper worden</a>';                                            
-                        } ?>    
+            echo '<a class="dropdown-item" href="verkoper.php">Verkoper worden</a>
+                  <a class="dropdown-item" href="mijnadvertenties.php">Mijn advertenties</a>';                                            
+        } ?>    
                             </div>
                         </div>
                         <li class="nav-item">
