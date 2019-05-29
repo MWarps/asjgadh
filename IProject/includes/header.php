@@ -22,14 +22,16 @@ if(isset($_SESSION['gebruikersnaam'])){
             $VerkoperValidatie = true;    
         }
     }
-    if (checkGEBLOKEERD ($_SESSION['gebruikersnaam']) == true){
-        header("Location: includes/geblokeerd.php");
-        session_unset;
-       // session_destroy;
-    }
 }
-
-
+    
+if ( checkGEBLOKEERD($_SESSION['gebruikersnaam']) == true){
+    session_unset;
+    session_destroy;
+   //header("Location:geblokeerd.php");
+   $url = 'geblokeerd.php';
+    echo '<script language="javascript">window.location.href ="'.$url.'"</script>';
+    die();
+}
 ?>
 <!DOCTYPE HTML>
 <html lang="nl">
@@ -65,10 +67,10 @@ if(isset($_SESSION['gebruikersnaam'])){
                         </li>
                     </ul>                      
                     <?php
-    if (isset($_SESSION['gebruikersnaam'])){
-        if ($VerkoperValidatie == false){                                              
-            echo '<a class="btn btn-primary" href="veilen.php">Veilen</a>';                                            
-        } ?>  
+                    if (isset($_SESSION['gebruikersnaam'])){
+                        if ($VerkoperValidatie == false){                                              
+                            echo '<a class="btn btn-primary" href="veilen.php">Veilen</a>';                                            
+                        } ?>  
                     <ul class="navbar-nav">                            
                         <div class="nav-item dropdown">
 
@@ -81,9 +83,10 @@ if(isset($_SESSION['gebruikersnaam'])){
                                 <a class="dropdown-item" href="beheerder.php">Beheer</a>
                                 <a class="dropdown-item" href="#">Meldingen</a>
                                 <a class="dropdown-item" href="../informeren.php">FAQ</a>
-                                <a class="dropdown-item" href="wachtwoordReset.php">Wachtwoord Resetten</a>
+                                <a class="dropdown-item" href="wachtwoordReset.php">Wachtwoord Resetten</a>                                
                                 <?php if ($VerkoperValidatie){                                              
-            echo '<a class="dropdown-item" href="../verkoper.php">Verkoper worden</a>';                                            
+            echo '<a class="dropdown-item" href="verkoper.php">Verkoper worden</a>
+                  <a class="dropdown-item" href="mijnadvertenties.php">Mijn advertenties</a>';                                            
         } ?>    
                             </div>
                         </div>
@@ -93,8 +96,8 @@ if(isset($_SESSION['gebruikersnaam'])){
                     </ul>
                 </div>                                    
                 <?php  } // einde if session actief is
-    else{
-        echo'<ul class="navbar-nav">
+                    else{
+                        echo'<ul class="navbar-nav">
                                       <li class="nav-item">
                                         <a class="nav-link" href="login.php">Login</a>
                                       </li>
@@ -102,7 +105,7 @@ if(isset($_SESSION['gebruikersnaam'])){
                                         <a class="nav-link" href="register.php">Registreren</a>
                                       </li>
                                    </ul>';
-    } ?>
+                    } ?>
             </div>
             </div>          
         </nav>
