@@ -940,6 +940,26 @@ function maakVerkoperBrief($gebruiker){
     }
 }
 
+function maakRatingBrief($gebruiker){
+    try {
+        require('core/dbconnection.php');
+        $sqlSelect = $dbh->prepare("SELECT voornaam, achternaam, geslacht FROM Gebruiker");
+
+        $sqlSelect->execute(
+            array(
+                ':gebruiker' => $_SESSION['gebruikersnaam']
+            )
+        );
+        $records = $sqlSelect->fetch(PDO::FETCH_ASSOC);
+        return $records;
+
+        ratingBrief($records);
+    }
+    catch (PDOexception $e) {
+        echo "er is iets mis erroreqrre: {$e->getMessage()}";
+    }
+}
+
 function geslacht()
 {
 
@@ -1388,9 +1408,6 @@ function gebruikersvinden($gebruikersnaam){
                     <td>'.$resultaat['gebruikersnaam'].'</td>
                     <td>'.$resultaat['voornaam'].'</td>
                     <td>'.$resultaat['achternaam'].'</td>
-                  '. 
-                // <td>'.$resultaat['geslacht'].'</td>
-                   .'
                     <td>'.$resultaat['postcode'].'</td>
                     <td>'.$resultaat['plaatsnaam'].'</td>
                     <td>'.$resultaat['land'].'</td>
@@ -1475,17 +1492,17 @@ function StuurGebruikerBlockedEmail($gebruikersnaam)
         $from = "no-reply@iconcepts.nl";
         $to = $records['email'];
         $subject = "Account geblokkeerd";
-        $message = '<h1> Beste '.$records['voornaam'].',</h1>,
-                  <br>
-                  <br>
-                        <p>Helaas moeten wij u op de hoogte stellen dat uw account is geblokkeerd. Dit kan meerdere redenen hebben.</p>
-                        <p>Om meer informatie te krijgen kunt u contact met ons opnemen door een mail te sturen naar: EenmaalAndermaal@gmail.com</p>
-                        <p>Vermeld in deze mail uw gebruikersnaam.</p>
-                        <p>Wij hopen u zodoende genoeg geïnformeerd te hebben.
-                        <br>
+        $message ='     Beste  '.$records['voornaam'].',
+
+
+                        Helaas moeten wij u op de hoogte stellen dat uw account is geblokkeerd. Dit kan meerdere redenen hebben.
+                        Om meer informatie te krijgen kunt u contact met ons opnemen door een mail te sturen naar: EenmaalAndermaal@gmail.com
+                        Vermeld in deze mail uw gebruikersnaam.
+                        Wij hopen u zodoende genoeg informatie te hebben gegeven.
+
                         Met vriendelijke groeten,
-                        <br>
-                        EenmaalAndermaal</p>     
+
+                        EenmaalAndermaal    
 ';
         $headers = "From:" .$from;
         mail($to,$subject,$message, $headers);
@@ -1513,16 +1530,16 @@ function StuurGebruikerDeblockedEmail($gebruikersnaam)
         error_reporting( E_ALL );
         $from = "no-reply@iconcepts.nl";
         $to = $records['email'];
-        $subject = "Account geblokkeerd";
-        $message = '<h1> Beste '.$records['voornaam'].',</h1>,
-                  <br>
-                  <br>
-                        <p>Uw account is gedeblokkeerd. U kunt nu weer inloggen.</p>
-                        <p>Wij hopen u zodoende genoeg geïnformeerd te hebben.
-                        <br>
+        $subject = "Account gedeblokkeerd";
+        $message = '    Beste '.$records['voornaam'].',
+
+
+                        Uw account is gedeblokkeerd. U kunt nu weer inloggen.
+                        Wij hopen u zodoende genoeg informatie te hebben gegeven.
+
                         Met vriendelijke groeten,
-                        <br>
-                        EenmaalAndermaal</p>     
+
+                        EenmaalAndermaal   
 ';
         $headers = "From:" .$from;
         mail($to,$subject,$message, $headers);
@@ -1546,6 +1563,7 @@ function veilingenVinden($veilingnaam){
         );
         $veiling = $veilingen ->fetchAll(PDO::FETCH_ASSOC);
         foreach ( $veiling as $resultaat ){
+            print_r($resultaat);
             $teller ++;
             $geblokkeerd = "error";
             if ($resultaat['geblokkeerd'] == 1){
@@ -1593,6 +1611,7 @@ function veilingblokeren($geblokkeerd, $voorwerpnummer, $titel){
 function veilingblok($voorwerpnummer){
     try {
         require('core/dbconnection.php');
+        $datumReset = $dbh -> prepare ("update Voorwerp SET blokkeerdatum = '' WHERE geblokkeerd = 0 AND blokkeerdatum IS NOT NULL");
         $blokeren = $dbh ->prepare (" UPDATE Voorwerp
                                     SET geblokkeerd = 1, blokkeerdatum = CURRENT_TIMESTAMP
                                     WHERE voorwerpnr like :voorwerpnummer
@@ -1608,8 +1627,6 @@ function veilingblok($voorwerpnummer){
                 ':voorwerpnummer' => $voorwerpnummer,
             )
         );
-
-
         $resultaat = $veiling ->fetchAll(PDO::FETCH_ASSOC);
         if ($resultaat[0]['geblokkeerd'] == 1){
             $deblokeren -> execute(
@@ -1617,6 +1634,8 @@ function veilingblok($voorwerpnummer){
                     ':voorwerpnummer' => $resultaat[0]['voorwerpnr'],
                 )
             );
+            veilingeindberekenen ($resultaat[0]['voorwerpnr']);
+            $datumReset -> execute();
         }else if ($resultaat[0]['geblokkeerd'] == 0){
             $blokeren -> execute(
                 array(
@@ -1641,19 +1660,19 @@ function checkGEBLOKEERD ($gebruiker){
 
             )
         );
-
         while ($resultaat = $geblokeerd ->fetchAll(PDO::FETCH_ASSOC)){
-            if ($resultaat['geblokeerd'] == 1){
+            if ($resultaat[0]['geblokeerd'] == 1){
+                //  header("Location: includes/geblokeerd.php");
+                //  session_unset;
+                //  session_destroy;
                 return true;
-                header("Location: includes/geblokeerd.php");
-
-            }else if ($resultaat['geblokeerd'] == 0){
+            }else if ($resultaat[0]['geblokeerd'] == 0){
                 return false;
-            } else if (empty($resultaat['geblokeerd'])){
+            } else if (empty($resultaat[0]['geblokeerd'])){
+                return false;
                 //header("Location: includes/404error.php");
             }
         }
-
     } catch (PDOexception $e) {
         //    echo "er ging iets mis error: {$e->getMessage()}";
     }
@@ -1682,6 +1701,25 @@ function checkBEHEERDER ($gebruiker){
     } catch (PDOexception $e) {
         //echo "er ging iets mis error: {$e->getMessage()}";
         // blijft error geven vanwegen het niet meer opkunnen halen van meet data. 
+    }
+}
+function veilingeindberekenen ($voorwerpnummer){
+    try {
+        require('core/dbconnection.php');
+        $datum = $dbh ->prepare ("select voorwerpnr, looptijd, looptijdbegindagtijdstip, looptijdeindedagtijdstip, blokkeerdatum  from Voorwerp where blokkeerdatum > '2000-01-01' and voorwerpnr = :voorwerpnummer ");
+        $datum-> execute(
+            array(
+                ':voorwerpnummer' => $voorwerpnummer,
+            )
+        );
+         $resultaat = $datum ->fetchAll(PDO::FETCH_ASSOC);
+        	
+        foreach ($resultaat as $actie){
+            print_r($actie);
+        }
+    } catch (PDOexception $e) {
+        //echo "er ging iets mis error: {$e->getMessage()}";
+        
     }
 }
 
