@@ -474,7 +474,7 @@ function Biedingen($voorwerpnr){
 
         foreach ($rows as $rij)
         {
-            echo '<li class="list-group-item">€'.number_format($rij['euro'], 2, ',', '.').' - '.$rij['gebruikersnaam'].' - '.date("d.m.Y H:i", strtotime($rij['datumentijd'])).'</li>';                
+            echo '<li class="list-group-item">€'.number_format($rij['euro'], 2, ',', '.').' - '.$rij['gebruikersnaam'].' - '.date("d.m.Y H:i", strtotime($rij['datumentijd'])).'</li>';
         }
 
     } catch (PDOexception $e) {
