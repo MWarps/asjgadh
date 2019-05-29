@@ -25,7 +25,7 @@ if(isset($_SESSION['gebruikersnaam'])){
     if (checkGEBLOKEERD ($_SESSION['gebruikersnaam']) == true){
         header("Location: includes/geblokeerd.php");
         session_unset;
-        session_destroy;
+       // session_destroy;
     }
 }
 
