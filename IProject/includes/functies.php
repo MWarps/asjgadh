@@ -890,13 +890,13 @@ function verificatiesvinden(){
             $teller ++;
 
             $resultaat = maakVerkoperBrief($verkoper);
-            $email = $resultaat['email']
+            $email = $resultaat['email'];
             echo '<tr>
                     <th scope="row">'.$teller.'</th>
                     <td>'.$resultaat['adress'].'</td>
                     <td>'.$resultaat['brief'].'</td>
                     <td>'.$email.'</td>                    
-                    <td><a class="btn btn-primary" href="verkoperVerificatieBrief.php?email='.$email'" role="button">verzonden</a></td> ';
+                    <td><a class="btn btn-primary" href="verkoperVerificatieBrief.php?email='.$email.'" role="button">verzonden</a></td>';
             echo ' </tr>';
 
         }
