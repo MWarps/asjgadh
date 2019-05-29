@@ -1721,7 +1721,7 @@ function veilingeindberekenen ($voorwerpnummer){
         );
         $informatie = $informatie ->fetchAll(PDO::FETCH_ASSOC);
         foreach ($informatie as $info){
-            $looptijd = $info['looptijd'];
+            $looptijd = $info['looptijd']; // 29-05-2019 15:35 WERKT!
         } // ophalen algemene informatie die later nodig is in de berekeningen
 //===================================================================================================//
 // datum verschil tussen de opening van de veiling en de datum van blokeren.
