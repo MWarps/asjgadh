@@ -3,6 +3,10 @@ include 'includes/header.php';
 if(isset($_GET['id'])){
   $gebruikersnaam = $_SESSION['gebruikersnaam'];
 $advertentie = DetailAdvertentie($_GET['id']);
+$bieden = true;
+if($advertentie['verkoper'] == $_SESSION['gebruikersnaam']){
+  $bieden = false;
+}
 $pagina = 'advertentie.php';
 if(!isset($_POST['bieden'])){
   $voorwerpnr = $_GET['id']; 
@@ -62,13 +66,18 @@ if(isset($_POST['bieden'])){
        <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
          <!-- Indicators -->
          <ol class="carousel-indicators">
-           <li data-target="#carousel-example-generic" data-slide-to="0" class="active"><img src="../pics/<?php echo $advertentie['illustratieFile']; ?>" alt="..."></li>
-           <?php $Illustratie1 = HaalIllustratiesOp($advertentie['voorwerpnr']);
            
-           $teller = 1;       
-          foreach ($Illustratie1 as $rij => $id) {
-            if(!empty($Illustratie1[$teller]['illustratieFile'])){
-             echo '<li data-target="#carousel-example-generic" data-slide-to="'.$teller.'"><img src="../pics/'.$Illustratie1[$teller]['illustratieFile'].'" alt="..."></li>';
+           <?php 
+           $Illustratie1 = HaalIllustratiesOp($advertentie['voorwerpnr']); 
+                 
+           $teller = 0;       
+          foreach ($Illustratie1 as $rij) {
+            $locatie = '../pics/';
+            if(substr($rij['illustratieFile'] , 0 ,2 ) == 'ea'){
+              $locatie = 'upload/';
+            } 
+            if(!empty($rij['illustratieFile'])){
+             echo '<li data-target="#carousel-example-generic" data-slide-to="'.$teller.'"><img src="'.$locatie.$rij['illustratieFile'].'" alt="..."></li>';
              $teller++;    
            }  }
            ?>           
@@ -76,21 +85,27 @@ if(isset($_POST['bieden'])){
         
          <!-- Wrapper for slides -->
          <div class="carousel-inner" role="listbox">
-           
            <div class="carousel-item active">
-             <div class="img-big-wrap">
-               <img src="../pics/<?php echo $advertentie['illustratieFile']; ?>" alt="...">
-             </div>           
-          </div> 
-                 
-          <?php 
-          $Illustratie2 = HaalIllustratiesOp($advertentie['voorwerpnr']);
+                   <div class="img-big-wrap">
+                     <img src="<?php
+                     $locatie = '../pics/';
+                     if(substr($rij['illustratieFile'] , 0 ,2 ) == 'ea'){
+                       $locatie = 'upload/';
+                     }  echo $locatie.$Illustratie1[0]['illustratieFile'] ?>" alt="...">
+                   </div>           
+                </div>
+          <?php         
           $teller = 1;
-          foreach ($Illustratie2 as $rij) {
-            if(!empty($Illustratie1[$teller]['illustratieFile'])){
+        
+          foreach ($Illustratie1 as $rij) {
+            $locatie = '../pics/';
+            if(substr($rij['illustratieFile'] , 0 ,2 ) == 'ea'){
+              $locatie = 'upload/';
+            } 
+            if(!empty($rij['illustratieFile'])){
             echo '<div class="carousel-item">
                     <div class="img-big-wrap">
-                      <img src="../pics/'.$Illustratie2[$teller]['illustratieFile'].'" alt="...">
+                      <img src="'.$locatie.$Illustratie1[$teller]['illustratieFile'].'" alt="...">
                     </div>           
                  </div>';
             $teller++;    
@@ -119,18 +134,20 @@ if(isset($_POST['bieden'])){
                     $hoogstebod = zijnErBiedingen($advertentie['voorwerpnr']);                   
                     $verhoging = BodVerhoging($hoogstebod['euro']);                    
                     $hoogstebod = $hoogstebod['euro'] + $verhoging;                                       
-                    $hoogstebod = number_format($hoogstebod, 2, ',', '.');                    
+                    $hoogstebod1 = number_format($hoogstebod, 2, ',', '.');                    
                 }
                   
-                else { $hoogstebod = $advertentie['startprijs'];
+                else {  $hoogstebod = $advertentie['startprijs'];
+                        $hoogstebod1 = number_format($advertentie['startprijs'], 2, ',', '.');
                 }       
               ?>
-        <label for="bod">Bieden: (vanaf: €<?php echo $hoogstebod; ?>)</label>
-         <input type="number" name="bod" class="form-control" id="bod" step="0.01" min="<?php echo $hoogstebod; ?>" required>
+        <label for="bod">Bieden: (vanaf: €<?php echo $hoogstebod1; ?>)</label>
+         <input type="number" name="bod" class="form-control" id="bod" step="0.01" min="<?php echo $hoogstebod; ?>"<?php if($bieden){echo 'required';} else{ echo 'readonly';} ?>>
          <div class="invalid-feedback">
-             Voer een bod vanaf €<?php echo $hoogstebod; ?>.
+             Voer een bod vanaf €<?php echo $hoogstebod1; ?>.
          </div>
-         <button class="btn btn-lg btn-primary mt-3" type="submit" name="bieden" value="bieden"> Plaats bod </button>
+         <?php if($bieden){echo '<button class="btn btn-lg btn-primary mt-3" type="submit" name="bieden" value="bieden"> Plaats bod </button>';} ?>
+         
          </form>
        </div>
        </div>

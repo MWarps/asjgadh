@@ -7,6 +7,7 @@ AS
 BEGIN
 DECLARE @code CHAR(8) = CAST(RAND() * 1000000 AS INT)
 DECLARE @eindtijd smalldatetime
+DECLARE @verzonden BIT = 0
 
 IF (@type = 'brief') 
 	BEGIN
@@ -22,5 +23,5 @@ IF (@type = 'brief')
 	END
 
 insert into Verificatie
-values(@mail, @type, @code, @eindtijd);
+values(@mail, @type, @code, @eindtijd, @verzonden);
 END 

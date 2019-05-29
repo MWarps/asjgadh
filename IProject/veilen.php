@@ -12,9 +12,7 @@ $melding = false;
  }
 
  if(isset($_POST['volgende'])){
-  
-    $melding = true;
-  
+    $melding = true;  
  }
 
 ?>

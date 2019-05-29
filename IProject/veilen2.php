@@ -1,14 +1,14 @@
 <?php
 include 'includes/header.php';
 if(isset($_SESSION['gebruikersnaam'])){
+  if(isset($_GET['id'])){
+    $_SESSION['rubrieknr'] =  $_GET['id'];
+  }
+  
+  $uploadOk = 1;
 if(isset($_POST['Volgende'])){
-  $rubriek = $_POST['Rubriek'];
   $titel = $_POST['titel'];
   $beschrijving = $_POST['beschrijving'];
-  $bestand1 = $_POST['bestand1'];
-  $bestand2 = $_POST['bestand2'];
-  $bestand3 = $_POST['bestand3'];
-  $bestand4 = $_POST['bestand4'];
   $startbedrag = $_POST['startbedrag'];
   $betalingsmethode = $_POST['betalingsmethode'];
   $betalingsinstructie = $_POST['betalingsinstructie'];
@@ -17,46 +17,123 @@ if(isset($_POST['Volgende'])){
   $plaats = $_POST['plaats'];
   $land =  $_POST['rLand'];
   $looptijd = $_POST['looptijd'];
-   
-  $gebruiker = HaalGebruikerOp($_SESSION['gebruikersnaam']);
   
+  
+  // Alle inputvelden met verkoper in een array gezet
   $voorwerp = array($titel, $beschrijving, $startbedrag, $betalingsmethode,
   $betalingsinstructie, $plaats, $land, $looptijd, $verzendkosten, 
-  $verzendinstructies, $gebruiker['gebruikersnaam'], $looptijdeindedagtijdstip);
+  $verzendinstructies, $_SESSION['gebruikersnaam']);
   
-  VoegVoorwerpToe($voorwerp);
-  VoegVoorwerpAanRubriekToe($rubriek, $gebruiker['gebruikersnaam']);
-  $_SESSION['status'] = 'Voorwerp';
+  // Voorwerp toevoegen in database en voorwerpnr terughalen
+  $voorwerpnr = VoegVoorwerpToe($voorwerp);
+  $voorwerpnr = $voorwerpnr['voorwerpnr'];
   
-  //echo '<script language="javascript">window.location.href ="index.php"</script>';
-  //exit();
+  VoegVoorwerpAanRubriekToe($voorwerpnr, $_SESSION['rubrieknr']);
+  // Foto1 uploaden naar server
+  $target_dir = "upload/";
   
+  $target_file = $target_dir . basename($_FILES["foto1"]["name"]);
+  $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
+  $bestand_naam_db = strval("ea_1_".$voorwerpnr.".".$imageFileType);
+
+  // Check if image file is a actual image or fake image
+      $check = getimagesize($_FILES["foto1"]["tmp_name"]);
+      if($check !== false) {       
+          move_uploaded_file($_FILES["foto1"]["tmp_name"], $target_dir . $bestand_naam_db);
+         VoegVoorwerpToeAanIllustratie($voorwerpnr, $bestand_naam_db);
+      } else {    
+          $uploadOk = 0;
+      } 
+
+
+// Foto2 uploaden naar server
+  if($_FILES["foto2"]["error"] != 4) {
+    $target_file = $target_dir . basename($_FILES["foto2"]["name"]);
+    $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
+    $bestand_naam_db = strval("ea_2_".$voorwerpnr.".".$imageFileType);
+  
+    // Check if image file is a actual image or fake image
+        $check = getimagesize($_FILES["foto2"]["tmp_name"]);
+        if($check !== false) {       
+            move_uploaded_file($_FILES["foto2"]["tmp_name"], $target_dir . $bestand_naam_db);
+           VoegVoorwerpToeAanIllustratie($voorwerpnr, $bestand_naam_db);
+        } else {    
+            $uploadOk = 0;
+        }    
+  }
+  
+  // Foto3 uploaden naar server
+  if($_FILES["foto3"]["error"] != 4){
+    $target_file = $target_dir . basename($_FILES["foto3"]["name"]);
+    $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
+    $bestand_naam_db = strval("ea_3_".$voorwerpnr.".".$imageFileType);
+  
+    // Check if image file is a actual image or fake image
+        $check = getimagesize($_FILES["foto3"]["tmp_name"]);
+        if($check !== false) {       
+            move_uploaded_file($_FILES["foto3"]["tmp_name"], $target_dir . $bestand_naam_db);
+           VoegVoorwerpToeAanIllustratie($voorwerpnr, $bestand_naam_db);
+        } else {    
+            $uploadOk = 0;
+        }     
+  }
+  
+// Foto4 uploaden naar server  
+  if($_FILES["foto4"]["error"] != 4) {
+    $target_file = $target_dir . basename($_FILES["foto4"]["name"]);
+    $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
+    $bestand_naam_db = strval("ea_4_".$voorwerpnr.".".$imageFileType);
+  
+    // Check if image file is a actual image or fake image
+        $check = getimagesize($_FILES["foto4"]["tmp_name"]);
+        if($check !== false) {       
+            move_uploaded_file($_FILES["foto4"]["tmp_name"], $target_dir . $bestand_naam_db);
+           VoegVoorwerpToeAanIllustratie($voorwerpnr, $bestand_naam_db);
+        } else {    
+            $uploadOk = 0;
+        }    
+  }
+  $_SESSION['status'] = 'voorwerp';
+  
+  echo '<script language="javascript">window.location.href ="index.php"</script>';
+  exit();
 }
+
 ?>
 
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-10 mt-2">
-          <form class="needs-validation" novalidate action="veilen2.php?id=<?php echo $_GET['naam'];?>" method="POST">
+          <form class="needs-validation" novalidate action="veilen2.php" method="POST" enctype="multipart/form-data">
                 <h1 class="h3 mb-2 text-center "> Veiling starten </h1>
                 <p class=" mb-2 text-center " > Hier kunt u een voorwerp te koop aan bieden, vul alle onderstaande velden in.</p>                      
+                <?php 
+                if($uploadOk == 0){
+                echo '<div class="container">
+                        <div class="h-100 row align-items-center">
+                          <div class="col">
+                              <div class="alert alert-warning alert-dismissible fade show mt-3" role="alert">
+                                <strong>Foto is niet geupload</strong> Het geuploade bestand is geen foto.
+                                <button type="button" class="close pt-0" data-dismiss="alert" aria-label="Close">
+                                 <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>';}
+                ?>
                 
-                  <div class="col-md-5">
-                      <label for="Rubriek">Rubriek</label>
-                      <input type="text" name="rubriek" class="form-control" id="rubriek" value="<?php echo $_GET['naam']; ?>" placeholder="<?php echo $_GET['naam']; ?>"
-                       readonly>
-                  </div>
                     <div class="form-group col-md-10">
                         <label for="inputTitel">Titel (Vul een titel in. Denk aan belangrijke eigenschappen zoals kleur, merk of maat):</label>
-                        <input type="text" name="rTitel" class="form-control" id="inputTitel"
-                               pattern="[A-Za-z0-9]*" maxlength="100" placeholder="Titel" value="<?php if($_POST) { echo $_POST['rTitel'];} ?>" required>
+                        <input type="text" name="titel" class="form-control" id="inputTitel"
+                               pattern="[A-Za-z0-9 ]{5,40}" maxlength="100" placeholder="Titel" value="<?php if($_POST) { echo $_POST['titel'];} ?>" required>
                         <div class="invalid-feedback">
                             Voer een titel in.
                         </div>
                     </div>                  
                     <div class="form-group col-md-8">  
                         <label for="Textarea">Beschrijving:</label>
-                        <textarea name="bericht" class="form-control" placeholder="Voer hier uw bericht in." id="Textarea" rows="10" required></textarea>                
+                        <textarea name="beschrijving" class="form-control" placeholder="Voer hier uw bericht in." id="Textarea" rows="10" required></textarea>                
                         <div class="invalid-feedback">
                           Voer een bericht in.
                         </div>                      
@@ -66,16 +143,16 @@ if(isset($_POST['Volgende'])){
                         
                             <div class="form-group">
                                 <label for="exampleFormControlFile1">Voeg minimaal 1 afbeelding toe</label>
-                                <input type="file" class="form-control-file" name="bestand1" accept="image/*" id="exampleFormControlFile1" required>
+                                <input type="file" class="form-control-file" name="foto1" accept="image/*" id="foto1" required>
                                 <div class="invalid-feedback">
                                   Geef minmaal 1 foto mee.
                                 </div>  
                                 <label for="exampleFormControlFile2">Afbeelding 2</label>
-                                <input type="file" class="form-control-file" accept="image/*" name="bestand2" id="exampleFormControlFile2">
+                                <input type="file" class="form-control-file" accept="image/*" name="foto2" id="foto2">
                                 <label for="exampleFormControlFile3">Afbeelding 3</label>
-                                <input type="file" class="form-control-file" accept="image/*" name="bestand3" id="exampleFormControlFile3">
+                                <input type="file" class="form-control-file" accept="image/*" name="foto3" id="foto3">
                                 <label for="exampleFormControlFile4">Afbeelding 4</label>
-                                <input type="file" class="form-control-file" accept="image/*" name="bestand4" id="exampleFormControlFile4">
+                                <input type="file" class="form-control-file" accept="image/*" name="foto4" id="foto4">
                             </div>                      
                     </div>
               
@@ -96,14 +173,12 @@ if(isset($_POST['Volgende'])){
                     <div class="form-group col-md-4">
                         <label for="inputStartbedrag">Verzendkosten</label>
                         <input type="number" min="0" name="verzendkosten" class="form-control" id="inputStartbedrag" placeholder="€..."
-                               pattern="^[a-zA-Z][a-zA-Z0-9-_\.]{1,49}$" maxlength="5" value="<?php if($_POST) { echo $_POST['startbedrag'];} ?>" required>
-                        <div class="invalid-feedback">
-                            Voer een geldig startbedrag in, dit getal moet hoger zijn dan 0.
-                        </div>
+                               pattern="^[a-zA-Z][a-zA-Z0-9-_\.]{1,49}$" maxlength="5" value="<?php if($_POST) { echo $_POST['startbedrag'];} ?>">
+                      
                     </div>
                     <div class="form-group col-md-8">  
                         <label for="Textarea">Verzendinstructies(optioneel):</label>
-                        <textarea name="verzendinstucties" class="form-control" placeholder="Voer hier uw bericht in." id="Textarea" rows="10"></textarea>                                   
+                        <textarea name="verzendinstructies" class="form-control" placeholder="Voer hier uw bericht in." id="Textarea" rows="10"></textarea>                                   
                     </div>
                 
                     <div class="form-group col-md-4">
@@ -130,19 +205,19 @@ if(isset($_POST['Volgende'])){
                       <p> looptijd: </p>
                       <!-- Group of default radios - option 1 -->
                       <div class="custom-control custom-radio">
-                        <input type="radio" class="custom-control-input" id="defaultGroupExample1" name="looptijd" checked>
+                        <input type="radio" value="5" class="custom-control-input" id="defaultGroupExample1" name="looptijd" checked>
                         <label class="custom-control-label" for="defaultGroupExample1">5 dagen</label>
                       </div>
 
                       <!-- Group of default radios - option 2 -->
                       <div class="custom-control custom-radio">
-                        <input type="radio" class="custom-control-input" id="defaultGroupExample2" name="looptijd">
+                        <input type="radio" value="7" class="custom-control-input" id="defaultGroupExample2" name="looptijd">
                         <label class="custom-control-label" for="defaultGroupExample2">7 dagen</label>
                       </div>
 
                       <!-- Group of default radios - option 3 -->
                       <div class="custom-control custom-radio">
-                        <input type="radio" class="custom-control-input" id="defaultGroupExample3" name="looptijd">
+                        <input type="radio" value="10" class="custom-control-input" id="defaultGroupExample3" name="looptijd">
                         <label class="custom-control-label" for="defaultGroupExample3">10 dagen</label>
                       </div>  
                     </div>
@@ -173,7 +248,7 @@ if(isset($_POST['Volgende'])){
 <?php
 }
 else {
-  include 'includes/404error.php'
+  include 'includes/404error.php';
 }
 include 'includes/footer.php';
 ?>
