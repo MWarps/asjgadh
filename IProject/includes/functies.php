@@ -1593,6 +1593,7 @@ function veilingblokeren($geblokkeerd, $voorwerpnummer, $titel){
 function veilingblok($voorwerpnummer){
     try {
         require('core/dbconnection.php');
+        $datumReset = $dbh -> prepare ("update Voorwerp SET blokkeerdatum = '' WHERE geblokkeerd = 0 AND blokkeerdatum IS NOT NULL");
         $blokeren = $dbh ->prepare (" UPDATE Voorwerp
                                     SET geblokkeerd = 1, blokkeerdatum = CURRENT_TIMESTAMP
                                     WHERE voorwerpnr like :voorwerpnummer
@@ -1617,6 +1618,7 @@ function veilingblok($voorwerpnummer){
                     ':voorwerpnummer' => $resultaat[0]['voorwerpnr'],
                 )
             );
+            $datumReset -> execute();
         }else if ($resultaat[0]['geblokkeerd'] == 0){
             $blokeren -> execute(
                 array(
