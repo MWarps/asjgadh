@@ -886,27 +886,6 @@ function StuurRegistreerEmail($Email, $Code){
 
 }
 
-function verificatiesvinden(){
-    $teller = 0;
-    try {
-        $verkopers = getWannabeVerkopers();
-        foreach ( $verkopers as $verkoper ){
-            $teller ++;
-            $resultaat = maakVerkoperBrief($verkoper);
-            $email = $resultaat['email'];
-            echo '<tr>
-                    <th scope="row">'.$teller.'</th>
-                    <td>'.$resultaat['adress'].'</td>
-                    <td>'.$resultaat['brief'].'</td>
-                    <td>'.$email.'</td>                    
-                    <td><a class="btn btn-primary" href="verkoperVerificatieBrief.php?email='.$email.'" role="button">verzonden</a></td>';
-            echo ' </tr>';
-        }
-    } catch (PDOexception $e) {
-        // echo "er ging iets mis error: {$e->getMessage()}";
-    }
-}
-
 function getWannabeVerkopers() {
     try{
         require('core/dbconnection.php');
@@ -1313,7 +1292,7 @@ function gebruikersvinden($gebruikersnaam){
                     <td>'.$resultaat['gebruikersnaam'].'</td>
                     <td>'.$resultaat['voornaam'].'</td>
                     <td>'.$resultaat['achternaam'].'</td>
-
+                  
                     <td>'.$resultaat['postcode'].'</td>
                     <td>'.$resultaat['plaatsnaam'].'</td>
                     <td>'.$resultaat['land'].'</td>
@@ -1398,17 +1377,17 @@ function StuurGebruikerBlockedEmail($gebruikersnaam)
         $from = "no-reply@iconcepts.nl";
         $to = $records['email'];
         $subject = "Account geblokkeerd";
-        $message = '<h1> Beste '.$records['voornaam'].',</h1>,
-                  <br>
-                  <br>
-                        <p>Helaas moeten wij u op de hoogte stellen dat uw account is geblokkeerd. Dit kan meerdere redenen hebben.</p>
-                        <p>Om meer informatie te krijgen kunt u contact met ons opnemen door een mail te sturen naar: EenmaalAndermaal@gmail.com</p>
-                        <p>Vermeld in deze mail uw gebruikersnaam.</p>
-                        <p>Wij hopen u zodoende genoeg geïnformeerd te hebben.
-                        <br>
-                        Met vriendelijke groeten,
-                        <br>
-                        EenmaalAndermaal</p>     
+        $message = 'Beste  '.$records['voornaam'].',
+                 
+                  
+         Helaas moeten wij u op de hoogte stellen dat uw account is geblokkeerd. Dit kan meerdere redenen hebben.
+         Om meer informatie te krijgen kunt u contact met ons opnemen door een mail te sturen naar: EenmaalAndermaal@gmail.com
+         Vermeld in deze mail uw gebruikersnaam.
+         Wij hopen u zodoende genoeg informatie te hebben gegeven.
+                       
+         Met vriendelijke groeten,
+                        
+         EenmaalAndermaal  
 ';
         $headers = "From:" .$from;
         mail($to,$subject,$message, $headers);
@@ -1436,16 +1415,15 @@ function StuurGebruikerDeblockedEmail($gebruikersnaam)
         error_reporting( E_ALL );
         $from = "no-reply@iconcepts.nl";
         $to = $records['email'];
-        $subject = "Account geblokkeerd";
-        $message = '<h1> Beste '.$records['voornaam'].',</h1>,
-                  <br>
-                  <br>
-                        <p>Uw account is gedeblokkeerd. U kunt nu weer inloggen.</p>
-                        <p>Wij hopen u zodoende genoeg geïnformeerd te hebben.
-                        <br>
-                        Met vriendelijke groeten,
-                        <br>
-                        EenmaalAndermaal</p>     
+        $subject = "Account gedeblokkeerd";
+        $message = ' Beste '.$records['voornaam'].',
+                 
+        Uw account is gedeblokkeerd. U kunt nu weer inloggen.
+        Wij hopen u zodoende genoeg informatie te hebben gegeven.
+                       
+        Met vriendelijke groeten,
+                        
+        EenmaalAndermaal     
 ';
         $headers = "From:" .$from;
         mail($to,$subject,$message, $headers);
@@ -1540,7 +1518,6 @@ function veilingblok($voorwerpnummer){
                     ':voorwerpnummer' => $resultaat[0]['voorwerpnr'],
                 )
             );
-            veilingeindberekenen($resultaat[0]['voorwerpnr']);
         }else if ($resultaat[0]['geblokkeerd'] == 0){
             $blokeren -> execute(
                 array(
@@ -1609,134 +1586,90 @@ function checkBEHEERDER ($gebruiker){
     }
 }
 
-function veilingeindberekenen ($voorwerpnummer){
-    $looptijd; // opgegeven aantal dagen van de openhied van veilingen. 
-    $tijd;     // de overgebleven dagen die de veiling nog open is.
-    try {
-        require('core/dbconnection.php');
-        $informatie = $dbh -> prepare("select * from Voorwerp where voorwerpnr = :voorwerpnr");
-        // haalt de algemene informatie op die nodig is voor de berekening
-        $datum = $dbh ->prepare ("SELECT DATEDIFF(DAY, looptijdbegindagtijdstip, blokkeerdatum) AS  begintotblokeer from Voorwerp where blokkeerdatum > '2000-01-01' and voorwerpnr = :voorwerpnr ");       // berekend het verschil tussen de begindatum en de blokeerdatum in dagen.
-        $einddatum = $dbh -> prepare ("update Voorwerp set looptijdeindedagtijdstip =  DATEADD(day, :tijd, blokkeerdatum) where blokkeerdatum > '2000-01-01' and voorwerpnr = :voorwerpnr"); // insert de       nieuwe einddatum gebaseerd op de ( looptijd - het aantal dagen tussen begin- en blokeer- datum )
-        //====================================================================================================//
-        // informatie query runnen en afhandelen.
-        $informatie -> execute(
-            array(
-                ':voorwerpnr' => $voorwerpnummer,
-            )
-        );
-        $informatie = $informatie ->fetchAll(PDO::FETCH_ASSOC);
-        foreach ($informatie as $info){
-            $looptijd = $info['looptijd']; // 29-05-2019 15:35 WERKT!
-        } // ophalen algemene informatie die later nodig is in de berekeningen
-        //===================================================================================================//
-        // datum verschil tussen de opening van de veiling en de datum van blokeren.
-        $datum-> execute(
-            array(
-                ':voorwerpnr' => $voorwerpnummer,
-            )
-        );
-        $resultaat = $datum ->fetchAll(PDO::FETCH_ASSOC);
-        foreach ($resultaat as $actie){
-            print_r($actie); // kijken wat $actie[] returned
-            $tijd = $looptijd - $actie['begintotblokeer']; // berekenen hoeveel dagen de veiling nog open moet staan.      
-        }
-
-        $einddatum -> execute (
-            array (
-                ':voorwerpnr' => $voorwerpnummer,
-                ':tijd' =>$tijd,
-            )
-        );
-    } catch (PDOexception $e) {
-        echo "er ging iets mis error: {$e->getMessage()}";
-    }
-}
-
 function HaalMijnAdvertentieOp($gebruikersnaam){
+  
+  try {
+      require('core/dbconnection.php');
+      $sqlSelect = $dbh ->prepare ("SELECT voorwerpnr from Voorwerp where verkoper = :gebruiker ");
+      $sqlSelect-> execute(
+          array(
+              ':gebruiker' => $gebruikersnaam
+          )
+      );
+      $resultaat = $sqlSelect ->fetchAll(PDO::FETCH_ASSOC);
+      return $resultaat;
 
-    try {
-        require('core/dbconnection.php');
-        $sqlSelect = $dbh ->prepare ("SELECT voorwerpnr from Voorwerp where verkoper = :gebruiker ");
-        $sqlSelect-> execute(
-            array(
-                ':gebruiker' => $gebruikersnaam
-            )
-        );
-        $resultaat = $sqlSelect ->fetchAll(PDO::FETCH_ASSOC);
-        return $resultaat;
-
-    } catch (PDOexception $e) {
-        "er ging iets mis error: {$e->getMessage()}";
-
-    }
+  } catch (PDOexception $e) {
+      "er ging iets mis error: {$e->getMessage()}";
+      
+  }
 }
 
 function HaalBiederEnVerkoperOp($voorwerpnr, $verkoper){
-
-    try {
-        require('core/dbconnection.php');
-        $sqlSelect = $dbh ->prepare ("SELECT * from Gebruiker where gebruikersnaam = (select top 1 gebruikersnaam from bod where voorwerpnr = :voorwerpnr order by convert(decimal(9,2), euro) desc )
+  
+  try {
+      require('core/dbconnection.php');
+      $sqlSelect = $dbh ->prepare ("SELECT * from Gebruiker where gebruikersnaam = (select top 1 gebruikersnaam from bod where voorwerpnr = :voorwerpnr order by convert(decimal(9,2), euro) desc )
                                     UNION
                                     SELECT * from Gebruiker where gebruikersnaam = :verkoper
                                     ");
-        $sqlSelect2 = $dbh ->prepare ("SELECT * from Voorwerp where voorwerpnr = :voorwerpnr");
-
-        $sqlSelect ->execute( 
-            array(':voorwerpnr' => $voorwerpnr,
-                  ':verkoper' => $verkoper));
-
-        $sqlSelect2 ->execute( array(':voorwerpnr' => $voorwerpnr));
-
-        $records = $sqlSelect ->fetchAll(PDO::FETCH_ASSOC);
-
-        array_push($records, $sqlSelect2 ->fetch(PDO::FETCH_ASSOC));
-
-        return $records;
-
-    } catch (PDOexception $e) {
-        "er ging iets mis error: {$e->getMessage()}";      
-    }  
-
+      $sqlSelect2 = $dbh ->prepare ("SELECT * from Voorwerp where voorwerpnr = :voorwerpnr");
+        
+          $sqlSelect ->execute( 
+                     array(':voorwerpnr' => $voorwerpnr,
+                           ':verkoper' => $verkoper));
+                           
+           $sqlSelect2 ->execute( array(':voorwerpnr' => $voorwerpnr));
+                        
+           $records = $sqlSelect ->fetchAll(PDO::FETCH_ASSOC);
+           
+           array_push($records, $sqlSelect2 ->fetch(PDO::FETCH_ASSOC));
+           
+           return $records;
+              
+  } catch (PDOexception $e) {
+      "er ging iets mis error: {$e->getMessage()}";      
+  }  
+  
 }
 
 function VerkoopVeiling($voorwerpnr){
-
-    try {
-        require('core/dbconnection.php');      
-        $sqlUpdate = $dbh ->prepare ("UPDATE Voorwerp
+  
+  try {
+      require('core/dbconnection.php');      
+      $sqlUpdate = $dbh ->prepare ("UPDATE Voorwerp
                                     SET koper = (select gebruikersnaam from bod where voorwerpnr = :voorwerpnr),
                                         verkoopprijs = (select top 1 euro from bod where voorwerpnr = :voorwerpnr order by convert(decimal(9,2), euro) desc),
                                         veilinggesloten = 1
                                     WHERE voorwerpnr = :voorwerpnr");      
-        $sqlUpdate-> execute(
-            array(
-                ':voorwerpnr' => $voorwerpnr
-            ));
-
-    } catch (PDOexception $e) {
-        "er ging iets mis error: {$e->getMessage()}";      
-    }  
+      $sqlUpdate-> execute(
+          array(
+              ':voorwerpnr' => $voorwerpnr
+          ));
+              
+  } catch (PDOexception $e) {
+      "er ging iets mis error: {$e->getMessage()}";      
+  }  
 }
 
 function VerwijderVeiling($voorwerpnr, $verkoper){
-
-    try {
-        require('core/dbconnection.php');   
-        $records =  HaalBiederEnVerkoperOp($voorwerpnr, $verkoper);                             
-        $sqlDelete1 = $dbh ->prepare ("DELETE FROM Voorwerpinrubriek where voorwerpnr = :voorwerpnr");
-        $sqlDelete2 = $dbh ->prepare ("DELETE FROM laatstbekeken where voorwerpnr = :voorwerpnr"); 
-        $sqlDelete3 = $dbh ->prepare ("DELETE FROM Voorwerp where voorwerpnr = :voorwerpnr");
-
-        $sqlDelete1-> execute( array(':voorwerpnr' => $voorwerpnr ));
-        $sqlDelete2-> execute( array(':voorwerpnr' => $voorwerpnr ));
-        $sqlDelete3-> execute( array(':voorwerpnr' => $voorwerpnr ));         
-
-        return $records;
-
-    } catch (PDOexception $e) {
-        "er ging iets mis error: {$e->getMessage()}";      
-    }  
+  
+  try {
+      require('core/dbconnection.php');   
+      $records =  HaalBiederEnVerkoperOp($voorwerpnr, $verkoper);                             
+      $sqlDelete1 = $dbh ->prepare ("DELETE FROM Voorwerpinrubriek where voorwerpnr = :voorwerpnr");
+      $sqlDelete2 = $dbh ->prepare ("DELETE FROM laatstbekeken where voorwerpnr = :voorwerpnr"); 
+      $sqlDelete3 = $dbh ->prepare ("DELETE FROM Voorwerp where voorwerpnr = :voorwerpnr");
+      
+     $sqlDelete1-> execute( array(':voorwerpnr' => $voorwerpnr ));
+     $sqlDelete2-> execute( array(':voorwerpnr' => $voorwerpnr ));
+     $sqlDelete3-> execute( array(':voorwerpnr' => $voorwerpnr ));         
+      
+      return $records;
+      
+  } catch (PDOexception $e) {
+      "er ging iets mis error: {$e->getMessage()}";      
+  }  
 }
 
 function VerstuurVerkoopMail($veiling, $ontvanger){
@@ -1772,37 +1705,37 @@ function VerstuurVerkoopMail($veiling, $ontvanger){
 }
 
 function VerstuurVerwijderMail($veiling, $ontvanger){
-    $id = 2;
-    if(empty($veiling[2])){$id = 1;}
-
-    if($ontvanger){
-        ini_set( 'display_errors', 1 );
-        error_reporting( E_ALL );
-        $from = "no-reply@iconcepts.nl";
-        $to = $veiling[1]['email'];
-        $subject = "EenmaalAndermaal uw voorwerp is verwijderd";
-        $message = EmailVerwijderdVerkoper($veiling, $id);
-
-        $headers = 'MIME-Version: 1.0' . "\r\n";
-        $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-        $headers .= "From:" .$from;
-
-        mail($to,$subject,$message, $headers);
-    }
-
-    if($ontvanger == false){
-        ini_set( 'display_errors', 1 );
-        error_reporting( E_ALL );
-        $from = "no-reply@iconcepts.nl";
-        $to = $veiling[0]['email'];
-        $subject = "EenmaalAndermaal geboden voorwerp is verwijderd";
-        $message = EmailVerwijderdHoogstebod($veiling);
-
-        $headers = 'MIME-Version: 1.0' . "\r\n";
-        $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-        $headers .= "From:" .$from;
-
-        mail($to,$subject,$message, $headers);
-    }  
+  $id = 2;
+  if(empty($veiling[2])){$id = 1;}
+  
+  if($ontvanger){
+    ini_set( 'display_errors', 1 );
+    error_reporting( E_ALL );
+    $from = "no-reply@iconcepts.nl";
+    $to = $veiling[0]['email'];
+    $subject = "EenmaalAndermaal uw voorwerp is verwijderd";
+    $message = EmailVerwijderdVerkoper($veiling, $id);
+  
+    $headers = 'MIME-Version: 1.0' . "\r\n";
+    $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+    $headers .= "From:" .$from;
+  
+    mail($to,$subject,$message, $headers);
+  }
+  
+  if($ontvanger == false){
+    ini_set( 'display_errors', 1 );
+    error_reporting( E_ALL );
+    $from = "no-reply@iconcepts.nl";
+    $to = $veiling[0]['email'];
+    $subject = "EenmaalAndermaal geboden voorwerp is verwijderd";
+    $message = EmailVerwijderdHoogstebod($veiling);
+  
+    $headers = 'MIME-Version: 1.0' . "\r\n";
+    $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+    $headers .= "From:" .$from;
+  
+    mail($to,$subject,$message, $headers);
+  }  
 }
 ?>
