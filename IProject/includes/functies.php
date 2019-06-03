@@ -1631,7 +1631,7 @@ function veilingeindberekenen ($voorwerpnummer){
         // haalt de algemene informatie op die nodig is voor de berekening
         $datum = $dbh ->prepare ("SELECT DATEDIFF(DAY, looptijdbegindagtijdstip, blokkeerdatum) AS  begintotblokeer from Voorwerp where blokkeerdatum > '2000-01-01' and voorwerpnr = :voorwerpnr ");       // berekend het verschil tussen de begindatum en de blokeerdatum in dagen.
         $einddatum = $dbh -> prepare ("update Voorwerp set looptijdeindedagtijdstip =  DATEADD(day, :tijd, blokkeerdatum) where blokkeerdatum > '2000-01-01' and voorwerpnr = :voorwerpnr"); // insert de nieuwe einddatum gebaseerd op de ( looptijd - het aantal dagen tussen begin- en blokeer- datum )
-        //====================================================================================================//
+        //============================================================================================//
         // informatie query runnen en afhandelen.
         $informatie -> execute(
             array(
@@ -1642,7 +1642,7 @@ function veilingeindberekenen ($voorwerpnummer){
         foreach ($informatie as $info){
             $looptijd = $info['looptijd']; // 29-05-2019 15:35 WERKT!
         } // ophalen algemene informatie die later nodig is in de berekeningen
-        //===================================================================================================//
+        //===========================================================================================//
         // datum verschil tussen de opening van de veiling en de datum van blokeren.
         $datum-> execute(
             array(
