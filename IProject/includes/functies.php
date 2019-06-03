@@ -1530,6 +1530,7 @@ function veilingblokeren($geblokkeerd, $voorwerpnummer, $titel){
 function veilingblok($voorwerpnummer){
     try {
         require('core/dbconnection.php');
+        $records =  HaalBiederEnVerkoperOp($voorwerpnr, $verkoper);
         $blokeren = $dbh ->prepare (" UPDATE Voorwerp
                                     SET geblokkeerd = 1, blokkeerdatum = CURRENT_TIMESTAMP
                                     WHERE voorwerpnr like :voorwerpnummer
@@ -1557,6 +1558,7 @@ function veilingblok($voorwerpnummer){
             veilingeindberekenen ($resultaat[0]['voorwerpnr']);
         }else if ($resultaat[0]['geblokkeerd'] == 0){
             $blokeren -> execute(
+                VerstuurVeilingBlockedMail($veiling, $ontvanger);
                 array(
                     ':voorwerpnummer' => $resultaat[0]['voorwerpnr'],
                 )
@@ -1780,6 +1782,41 @@ function VerstuurVerkoopMail($veiling, $ontvanger){
         mail($to,$subject,$message, $headers);
     }  
 }
+
+
+
+function VerstuurVeilingBlockedMail($veiling, $ontvanger){
+
+    if($ontvanger){
+        ini_set( 'display_errors', 1 );
+        error_reporting( E_ALL );
+        $from = "no-reply@iconcepts.nl";
+        $to = $veiling[0]['email'];
+        $subject = "EenmaalAndermaal u heeft een voorwerp Verkocht!";
+        $message = emailVeilingBlockedVerkoper($veiling);
+        $headers = 'MIME-Version: 1.0' . "\r\n";
+        $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+        $headers .= "From:" .$from;
+
+        mail($to,$subject,$message, $headers);
+    }
+
+    if($ontvanger == false){
+        ini_set( 'display_errors', 1 );
+        error_reporting( E_ALL );
+        $from = "no-reply@iconcepts.nl";
+        $to = $veiling[1]['email'];
+        $subject = "EenmaalAndermaal u heeft een voorwerp Gekocht!";
+        $message = emailVeilingBlockedKoper($veiling);
+
+        $headers = 'MIME-Version: 1.0' . "\r\n";
+        $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+        $headers .= "From:" .$from;
+
+        mail($to,$subject,$message, $headers);
+    }
+}
+
 
 function VerstuurVerwijderMail($veiling, $ontvanger){
   $id = 2;
