@@ -885,7 +885,7 @@ function StuurRegistreerEmail($Email, $Code){
     mail($to,$subject,$message, $headers);
 
 }
-
+/*
 function verificatiesVinden(){
     $teller = 0;
     //echo 'verificaties gevonden';
@@ -896,7 +896,8 @@ function verificatiesVinden(){
         ");
 
         $sqlSelect->execute();
-        $verkopers = $sqlSelect->fetchall(PDO::FETCH_ASSOC);
+
+        $verkopers = $sqlSelect->fetch(PDO::FETCH_ASSOC);
 
         foreach ( $verkopers as $verkoper ){
             $teller ++;
@@ -917,7 +918,7 @@ function verificatiesVinden(){
         // echo "er ging iets mis error: {$e->getMessage()}";
     }
 }
-
+/*
 function getWannabeVerkopers() {
     //echo 'verkopers gevonden';
     try{
@@ -939,7 +940,7 @@ function getWannabeVerkopers() {
         echo "er ging iets mis erroreqrre: {$e->getMessage()}";
     }
 }
-
+*/
 function verificatieVerzonden($email) {
     try{
         require('core/dbconnection.php');
@@ -951,10 +952,10 @@ function verificatieVerzonden($email) {
             ));
     }
     catch (PDOexception $e) {
-        echo "er ging iets mis erroreqrre: {$e->getMessage()}";
+        echo "er ging iets mis error: {$e->getMessage()}";
     }
 }
-
+/*
 function maakVerkoperBrief($gebruiker){
     try{    
         require('core/dbconnection.php');
@@ -972,14 +973,12 @@ function maakVerkoperBrief($gebruiker){
         $brief = Brief($records);
 
         return $brief;
-
-
     }
     catch (PDOexception $e) {
         echo "er ging iets mis erroreqrre: {$e->getMessage()}";
     }
 }
-
+*/
 function geslacht()
 {
 

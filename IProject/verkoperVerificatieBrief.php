@@ -49,7 +49,7 @@ if (checkBEHEERDER ($_SESSION['gebruikersnaam']) == true){
                     </thead>
                     <tbody>
                     <?php
-                        verificatiesVinden();
+                        //verificatiesVinden();
                     ?>
                     </tbody>
                 </table>
