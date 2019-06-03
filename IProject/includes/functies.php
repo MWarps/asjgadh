@@ -918,27 +918,27 @@ function verificatiesVinden(){
     //echo 'verificaties gevonden';
     try {
         require('core/dbconnection.php');
-        $sqlSelect = $dbh->prepare("SELECT voornaam, achternaam, geslacht, adresregel1, adresregel2, postcode, plaatsnaam, land, verificatiecode, 
-        eindtijd FROM Gebruiker INNER JOIN Verificatie ON Gebruiker.email = Verificatie.email WHERE type = 'brief'  
+        $sqlSelect = $dbh->prepare("SELECT Gebruiker.voornaam, Gebruiker.achternaam, Gebruiker.email, Gebruiker.geslacht, Gebruiker.adresregel1, Gebruiker.adresregel2, Gebruiker.postcode, Gebruiker.plaatsnaam, Gebruiker.land, Verificatie.verificatiecode, 
+        Verificatie.eindtijd FROM Gebruiker INNER JOIN Verificatie ON Gebruiker.email = Verificatie.email WHERE type = 'brief'  
         ");
 
         $sqlSelect->execute();
 
         $verkopers = $sqlSelect->fetchAll(PDO::FETCH_ASSOC);
-        var_dump($verkopers);
+        //var_dump($verkopers);
+
         foreach ( $verkopers as $verkoper ){
             $teller ++;
             $resultaat = Brief($verkoper);
 
-            echo 'var dump brief ';
-            var_dump($resultaat);
-            $email = $resultaat['email'];
+            //var_dump($resultaat);
+
             echo '<tr>
                     <th scope="row">'.$teller.'</th>
                     <td>'.$resultaat['adress'].'</td>
                     <td>'.$resultaat['brief'].'</td>
-                    <td>'.$email.'</td>                    
-                    <td><a class="btn btn-primary" href="verkoperVerificatieBrief.php?email='.$email.'" role="button">verzonden</a></td>';
+                    <td>'.$resultaat['email'].'</td>                    
+                    <td><a class="btn btn-primary" href="verkoperVerificatieBrief.php?email='.$resultaat['email'].'" role="button">verzonden</a></td>';
             echo ' </tr>';
         }
 
