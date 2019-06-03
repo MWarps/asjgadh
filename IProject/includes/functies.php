@@ -1539,6 +1539,7 @@ function veilingblok($voorwerpnummer){
                     ':voorwerpnummer' => $resultaat[0]['voorwerpnr'],
                 )
             );
+            veilingeindberekenen ($resultaat[0]['voorwerpnr']);
         }else if ($resultaat[0]['geblokkeerd'] == 0){
             $blokeren -> execute(
                 array(
@@ -1566,11 +1567,8 @@ function checkGEBLOKEERD($gebruiker){
 
         while ($resultaat = $geblokeerd ->fetchAll(PDO::FETCH_ASSOC)){
             if ($resultaat[0]['geblokeerd'] == 1){
-               // die('functie returned true');
                 return true;
             }else if ($resultaat[0]['geblokeerd'] == 0){
-                //print_r($resultaat); 
-               // die('functie returned false ');
                 return false;
             } else if (empty($resultaat[0]['geblokeerd'])){
                 //header("Location: includes/404error.php");
