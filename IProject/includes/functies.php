@@ -890,12 +890,18 @@ function verificatiesVinden(){
     $teller = 0;
     //echo 'verificaties gevonden';
     try {
-        $verkopers = getWannabeVerkopers();
+        require('core/dbconnection.php');
+        $sqlSelect = $dbh->prepare("SELECT voornaam, achternaam, geslacht, adresregel1, adresregel2, postcode, plaatsnaam, land, verificatiecode, 
+        eindtijd FROM Gebruiker INNER JOIN Verificatie ON Gebruiker.email = Verificatie.email WHERE type = 'brief' 
+        ");
+
+        $sqlSelect->execute();
+        $verkopers = $sqlSelect->fetchall(PDO::FETCH_ASSOC);
 
         foreach ( $verkopers as $verkoper ){
             $teller ++;
-            $resultaat = maakVerkoperBrief($verkoper);
-            echo 'var dump brief';
+            $resultaat = Brief($verkoper);
+            echo 'var dump brief ';
             var_dump($resultaat);
             $email = $resultaat['email'];
             echo '<tr>
@@ -921,7 +927,7 @@ function getWannabeVerkopers() {
 
         $sqlSelect->execute();
 
-        $records = $sqlSelect->fetch(PDO::FETCH_ASSOC);
+        $records = $sqlSelect->fetchall(PDO::FETCH_ASSOC);
 
         echo 'var dump verkopers';
         var_dump($records);
@@ -961,7 +967,7 @@ function maakVerkoperBrief($gebruiker){
                 ':gebruiker' => $gebruiker
             ));
 
-        $records = $sqlSelect->fetch(PDO::FETCH_ASSOC);
+        $records = $sqlSelect->fetchall(PDO::FETCH_ASSOC);
 
         $brief = Brief($records);
 
