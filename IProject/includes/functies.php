@@ -6,6 +6,7 @@ include 'emailVerkocht.php';
 include 'emailGekocht.php';
 include 'emailVerwijderdVerkoper.php';
 include 'emailVerwijderdHoogstebod.php';
+include 'brief.php';
 
 function BodVerhoging($Euro){
     $Verhoging;
@@ -940,25 +941,27 @@ function verificatiesVinden(){
     //echo 'verificaties gevonden';
     try {
         require('core/dbconnection.php');
-        $sqlSelect = $dbh->prepare("SELECT voornaam, achternaam, geslacht, adresregel1, adresregel2, postcode, plaatsnaam, land, verificatiecode, 
-        eindtijd FROM Gebruiker INNER JOIN Verificatie ON Gebruiker.email = Verificatie.email WHERE type = 'brief' 
+        $sqlSelect = $dbh->prepare("SELECT Gebruiker.voornaam, Gebruiker.achternaam, Gebruiker.email, Gebruiker.geslacht, Gebruiker.adresregel1, Gebruiker.adresregel2, Gebruiker.postcode, Gebruiker.plaatsnaam, Gebruiker.land, Verificatie.verificatiecode, 
+        Verificatie.eindtijd FROM Gebruiker INNER JOIN Verificatie ON Gebruiker.email = Verificatie.email WHERE type = 'brief'  
         ");
 
         $sqlSelect->execute();
-        $verkopers = $sqlSelect->fetchall(PDO::FETCH_ASSOC);
+
+        $verkopers = $sqlSelect->fetchAll(PDO::FETCH_ASSOC);
+        //var_dump($verkopers);
 
         foreach ( $verkopers as $verkoper ){
             $teller ++;
             $resultaat = Brief($verkoper);
-            echo 'var dump brief ';
-            var_dump($resultaat);
-            $email = $resultaat['email'];
+
+            //var_dump($resultaat);
+
             echo '<tr>
                     <th scope="row">'.$teller.'</th>
                     <td>'.$resultaat['adress'].'</td>
                     <td>'.$resultaat['brief'].'</td>
-                    <td>'.$email.'</td>                    
-                    <td><a class="btn btn-primary" href="verkoperVerificatieBrief.php?email='.$email.'" role="button">verzonden</a></td>';
+                    <td>'.$resultaat['email'].'</td>                    
+                    <td><a class="btn btn-primary" href="verkoperVerificatieBrief.php?email='.$resultaat['email'].'" role="button">verzonden</a></td>';
             echo ' </tr>';
         }
 
@@ -966,7 +969,7 @@ function verificatiesVinden(){
         // echo "er ging iets mis error: {$e->getMessage()}";
     }
 }
-
+/*
 function getWannabeVerkopers() {
     //echo 'verkopers gevonden';
     try{
@@ -988,7 +991,7 @@ function getWannabeVerkopers() {
         echo "er ging iets mis erroreqrre: {$e->getMessage()}";
     }
 }
-
+*/
 function verificatieVerzonden($email) {
     try{
         require('core/dbconnection.php');
@@ -1000,10 +1003,10 @@ function verificatieVerzonden($email) {
             ));
     }
     catch (PDOexception $e) {
-        echo "er ging iets mis erroreqrre: {$e->getMessage()}";
+        echo "er ging iets mis error: {$e->getMessage()}";
     }
 }
-
+/*
 function maakVerkoperBrief($gebruiker){
     try{    
         require('core/dbconnection.php');
@@ -1021,14 +1024,12 @@ function maakVerkoperBrief($gebruiker){
         $brief = Brief($records);
 
         return $brief;
-
-
     }
     catch (PDOexception $e) {
         echo "er ging iets mis erroreqrre: {$e->getMessage()}";
     }
 }
-
+*/
 function geslacht()
 {
 
@@ -1606,8 +1607,8 @@ function veilingblok($voorwerpnummer){
             );
             veilingeindberekenen ($resultaat[0]['voorwerpnr']);
         }else if ($resultaat[0]['geblokkeerd'] == 0){
+            VerstuurVeilingBlockedMail($veiling, $ontvanger);
             $blokeren -> execute(
-              //  VerstuurVeilingBlockedMail($veiling, $ontvanger);
                 array(
                     ':voorwerpnummer' => $resultaat[0]['voorwerpnr'],
                 )
