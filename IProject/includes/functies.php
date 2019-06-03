@@ -1380,14 +1380,14 @@ function StuurGebruikerBlockedEmail($gebruikersnaam)
         $message = 'Beste  '.$records['voornaam'].',
                  
                   
-                    Helaas moeten wij u op de hoogte stellen dat uw account is geblokkeerd. Dit kan meerdere redenen hebben.
-                    Om meer informatie te krijgen kunt u contact met ons opnemen door een mail te sturen naar: EenmaalAndermaal@gmail.com
-                    Vermeld in deze mail uw gebruikersnaam.
-                    Wij hopen u zodoende genoeg informatie te hebben gegeven.
+         Helaas moeten wij u op de hoogte stellen dat uw account is geblokkeerd. Dit kan meerdere redenen hebben.
+         Om meer informatie te krijgen kunt u contact met ons opnemen door een mail te sturen naar: EenmaalAndermaal@gmail.com
+         Vermeld in deze mail uw gebruikersnaam.
+         Wij hopen u zodoende genoeg informatie te hebben gegeven.
                        
-                    Met vriendelijke groeten,
+         Met vriendelijke groeten,
                         
-                    EenmaalAndermaal  
+         EenmaalAndermaal  
 ';
         $headers = "From:" .$from;
         mail($to,$subject,$message, $headers);
@@ -1418,12 +1418,12 @@ function StuurGebruikerDeblockedEmail($gebruikersnaam)
         $subject = "Account gedeblokkeerd";
         $message = ' Beste '.$records['voornaam'].',
                  
-                     Uw account is gedeblokkeerd. U kunt nu weer inloggen.
-                     Wij hopen u zodoende genoeg informatie te hebben gegeven.
+        Uw account is gedeblokkeerd. U kunt nu weer inloggen.
+        Wij hopen u zodoende genoeg informatie te hebben gegeven.
                        
-                     Met vriendelijke groeten,
+        Met vriendelijke groeten,
                         
-                     EenmaalAndermaal     
+        EenmaalAndermaal     
 ';
         $headers = "From:" .$from;
         mail($to,$subject,$message, $headers);
