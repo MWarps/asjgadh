@@ -49,7 +49,7 @@ if (checkBEHEERDER ($_SESSION['gebruikersnaam']) == true){     // veranderen naa
                     </thead>
                     <tbody>
                     <?php
-                    if (isset($_POST['laden'])){
+                    if (isset($_POST['zoeken'])){
                         verificatiesvinden();
                     }
                     ?>

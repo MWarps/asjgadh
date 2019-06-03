@@ -326,23 +326,24 @@ function emailVerkocht($veiling)
                   <table role="presentation" border="0" cellpadding="0" cellspacing="0">
                     <tr>
                       <td>
-                      <h2> Hallo '.$veiling[1]['voornaam'].',</h2>
+                      <h2> Hallo '.$veiling[0]['voornaam'].',</h2>
                       <br>
-                      <p>U heeft uw advertentie op <strong>Verkocht</strong> gezet.
-                         Voorwerpnummer: '.$veiling[2]['voorwerpnr'].'<br>
-                         Titel: '.$veiling[2]['titel'].'
+                      <p>U heeft uw advertentie op <strong>Verkocht</strong> gezet.<br>
+                         Voorwerpnummer: <strong>'.$veiling[2]['voorwerpnr'].'</strong><br>
+                         Titel: <strong>'.$veiling[2]['titel'].'</strong>
                          </p>
                       <br>
-                      <p>De hoogste bieder en dus de koper is: € '.$veiling[0]['gebruikersnaam'].' <br>
-                         Het product wordt verkocht voor: € '.$veiling[2]['verkoopprijs'].'. Deze wordt via '.$veiling[2]['betalingsmethode'].' betaald.
-                         De betaalinstructies zijn: '.$veiling[2]['betaalinstructies'].'<br>
-                         De verzendinstructies zijn: '.$veiling[2]['verzendinstructies'].'<br><br>
+                      <p>De hoogste bieder en dus de koper is: <strong>'.$veiling[1]['gebruikersnaam'].'</strong> <br>
+                         Het product wordt verkocht voor: <strong> &euro; '.number_format($veiling[2]['verkoopprijs'], 2, ',', '.').'</strong><br>
+                         Deze wordt via <strong>'.$veiling[2]['betalingswijze'].'</strong> betaald.<br>
+                         De betaalinstructies zijn: <strong>'.$veiling[2]['betalingsinstructie'].'</strong><br>
+                         De verzendinstructies zijn: <strong>'.$veiling[2]['verzendinstructies'].'</strong><br><br>
                          Uw veiling wordt op gesloten gezet. Dit betekent dat de veiling niet meer gezien kan worden.                                      
                       <br>
                       <br>
-                        U kunt contact opnemen met de koper.
-                        Emailadres: '.$veiling[0]['email'].' </p>
-                      <p>Heeft uw de advertentie niet op <strong>Verkocht</strong> gezet neem dan contact op met onze klantenservice.</p>
+                        U kunt contact opnemen met de koper.<br>
+                        Emailadres: <strong>'.$veiling[1]['email'].'</strong> </p>
+                      <p>Heeft u de advertentie niet op <strong>Verkocht</strong> gezet neem dan contact op met onze klantenservice.</p>
                       <br>
                       <p>Klik hier om naar de website te gaan: <a href="http://iproject34.icasites.nl">EenmaalAndermaal.nl</a>
                               

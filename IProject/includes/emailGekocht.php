@@ -326,22 +326,23 @@ function EmailGekocht($veiling)
                   <table role="presentation" border="0" cellpadding="0" cellspacing="0">
                     <tr>
                       <td>
-                      <h2> Hallo '.$veiling[0]['voornaam'].',</h2>
+                      <h2> Hallo '.$veiling[1]['voornaam'].',</h2>
                       <br>
-                      <p>'.$veiling[1]['gebruikersnaam'].' heeft het voorwerp: '.$veiling[2]['voorwerpnr'].', verkocht <br>
-                         Voorwerptitel: '.$veiling[2]['titel'].'<br>
+                      <p>'.$veiling[0]['gebruikersnaam'].' heeft het voorwerp: <strong>'.$veiling[2]['voorwerpnr'].'</strong>, verkocht <br>
+                         Voorwerptitel: <strong>'.$veiling[2]['titel'].'</strong><br>
                          </p>
                       <br>
-                      <p>U heeft het voorwerp gekocht voor: € '.$veiling[2]['verkoopprijs'].'. Deze wordt via '.$veiling[2]['betalingsmethode'].' betaald.<br>
+                      <p>U heeft het voorwerp gekocht voor: <strong> &euro; '.number_format($veiling[2]['verkoopprijs'], 2, ',', '.').' </strong><br> 
+                      Deze wordt via <strong>'.$veiling[2]['betalingswijze'].'</strong> betaald.<br>
                          De betalingsinstructie is als volgt: '.$veiling[2]['betalingsinstructie'].' <br>
-                         De locatie van het voorwerp is: Land - '.$veiling[2]['land'].', Plaats: '.$veiling[2]['plaats'].'. <br>
-                         De verzendkosten zijn: '.$veiling[2]['verzendkosten'].' <br>                      
-                         
+                         De locatie van het voorwerp is: <br>
+                         Land: <strong>'.$veiling[2]['land'].'</strong><br>
+                         Plaats: <strong>'.$veiling[2]['plaatsnaam'].'</strong> <br>
+                         De verzendkosten zijn: '.$veiling[2]['verzendkosten'].' <br>                                     
                       <br>
                       <br>
-                        U kunt een bericht sturen naar de verkoper:
-                        Emailadres: '.$veiling[1]['email'].'</p>
-                      <p>Heeft uw de advertentie niet op <strong>Verkocht</strong> gezet neem dan contact op met onze klantenservice.</p>
+                        U kunt een bericht sturen naar de verkoper:<br>
+                        Emailadres: <strong>'.$veiling[0]['email'].'</strong</p>
                       <br>
                       <p>Klik hier om naar de website te gaan: <a href="http://iproject34.icasites.nl">EenmaalAndermaal.nl</a>
                               
