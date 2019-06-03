@@ -109,6 +109,5 @@ if ( checkGEBLOKEERD($_SESSION['gebruikersnaam']) == true){
                                    </ul>';
                     } ?>
             </div>
-            </div>          
         </nav>
 
