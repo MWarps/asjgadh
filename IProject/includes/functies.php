@@ -6,6 +6,7 @@ include 'emailVerkocht.php';
 include 'emailGekocht.php';
 include 'emailVerwijderdVerkoper.php';
 include 'emailVerwijderdHoogstebod.php';
+include 'brief.php';
 
 function BodVerhoging($Euro){
     $Verhoging;
@@ -885,23 +886,24 @@ function StuurRegistreerEmail($Email, $Code){
     mail($to,$subject,$message, $headers);
 
 }
-/*
+
 function verificatiesVinden(){
     $teller = 0;
     //echo 'verificaties gevonden';
     try {
         require('core/dbconnection.php');
         $sqlSelect = $dbh->prepare("SELECT voornaam, achternaam, geslacht, adresregel1, adresregel2, postcode, plaatsnaam, land, verificatiecode, 
-        eindtijd FROM Gebruiker INNER JOIN Verificatie ON Gebruiker.email = Verificatie.email WHERE type = 'brief' 
+        eindtijd FROM Gebruiker INNER JOIN Verificatie ON Gebruiker.email = Verificatie.email WHERE type = 'brief'  
         ");
 
         $sqlSelect->execute();
 
-        $verkopers = $sqlSelect->fetch(PDO::FETCH_ASSOC);
-
+        $verkopers = $sqlSelect->fetchAll(PDO::FETCH_ASSOC);
+        var_dump($verkopers);
         foreach ( $verkopers as $verkoper ){
             $teller ++;
             $resultaat = Brief($verkoper);
+
             echo 'var dump brief ';
             var_dump($resultaat);
             $email = $resultaat['email'];
@@ -1556,8 +1558,8 @@ function veilingblok($voorwerpnummer){
             );
             veilingeindberekenen ($resultaat[0]['voorwerpnr']);
         }else if ($resultaat[0]['geblokkeerd'] == 0){
+            VerstuurVeilingBlockedMail($veiling, $ontvanger);
             $blokeren -> execute(
-                VerstuurVeilingBlockedMail($veiling, $ontvanger);
                 array(
                     ':voorwerpnummer' => $resultaat[0]['voorwerpnr'],
                 )
