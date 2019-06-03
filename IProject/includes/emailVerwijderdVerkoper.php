@@ -1,5 +1,5 @@
 <?php
-function EmailVerwijderdVerkoper($veiling)
+function EmailVerwijderdVerkoper($veiling, $id)
 {
   // https://github.com/leemunroe/responsive-html-email-template
     $tekst = '
@@ -326,12 +326,12 @@ function EmailVerwijderdVerkoper($veiling)
                   <table role="presentation" border="0" cellpadding="0" cellspacing="0">
                     <tr>
                       <td>
-                      <h2> Hallo '.$veiling[1]['voornaam'].',</h2>
+                      <h2> Hallo '.$veiling[0]['voornaam'].',</h2>
                       <br>
                       <p>U heeft een veiling verwijderd van EenmaalAndermaal. </p>
                       <br>
-                      <p>Voorwerpnr: '.$veiling[2]['voorwerpnr'].'<br>
-                         Titel: '.$veiling[2]['titel'].'<br>
+                      <p>Voorwerpnr: '.$veiling[$id]['voorwerpnr'].'<br>
+                         Titel: '.$veiling[$id]['titel'].'<br>
                          <p>
                       <br>
                       <p>Als u de veiling niet heeft verwijderd neem dan contact op met onze klantenservice.</p>

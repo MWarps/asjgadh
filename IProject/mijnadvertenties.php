@@ -10,17 +10,14 @@ if(isset($_GET['status'])){
     $Veiling = HaalBiederEnVerkoperOp($_GET['id'], $_SESSION['gebruikersnaam']);
     VerstuurVerkoopMail($Veiling, true);
     VerstuurVerkoopMail($Veiling, false);
-
   }
   if($_GET['status'] == 'verwijderen'){
     $Veiling = VerwijderVeiling($_GET['id'], $_SESSION['gebruikersnaam']);
-    print_r($Veiling);
     
       VerstuurVerwijderMail($Veiling, true);
-      if(!empty($Veiling[0]['gebruikersnaam'])){
+      if(!empty($Veiling[1]['gebruikersnaam'])){
       VerstuurVerwijderMail($Veiling, false);
-  }
-
+      }
     $verwijderen = true;
   }
 }  
@@ -63,7 +60,7 @@ if(isset($_GET['status'])){
                         $details['titel'] .= '...';
                     }
                     $Bieder = HaalBiederEnVerkoperOp($details['voorwerpnr'], $_SESSION['gebruikersnaam']);
-                    if(empty($Bieder[1]['gebruikersnaam'])){
+                    if(empty($Bieder[1]['gebruikersnaam']) || $Bieder[2]['veilinggesloten'] == 1){
                       $knop = 'disabled';
                     }
                     echo '
