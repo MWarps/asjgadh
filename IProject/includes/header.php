@@ -100,13 +100,13 @@ if ( checkGEBLOKEERD($_SESSION['gebruikersnaam']) == true){
                 <?php  } // einde if session actief is
                     else{
                         echo'<ul class="navbar-nav">
-                                      <li class="nav-item">
-                                        <a class="nav-link" href="login.php">Login</a>
-                                      </li>
-                                      <li class="nav-item">
-                                        <a class="nav-link" href="register.php">Registreren</a>
-                                      </li>
-                                   </ul>';
+                                  <li class="nav-item">
+                                    <a class="nav-link" href="login.php">Login</a>
+                                  </li>
+                                  <li class="nav-item">
+                                    <a class="nav-link" href="register.php">Registreren</a>
+                                  </li>
+                             </ul>';
                     } ?>
             </div>
         </nav>

@@ -1377,17 +1377,17 @@ function StuurGebruikerBlockedEmail($gebruikersnaam)
         $from = "no-reply@iconcepts.nl";
         $to = $records['email'];
         $subject = "Account geblokkeerd";
-        $message = '<h1> Beste '.$records['voornaam'].',</h1>,
-                  <br>
-                  <br>
-                        <p>Helaas moeten wij u op de hoogte stellen dat uw account is geblokkeerd. Dit kan meerdere redenen hebben.</p>
-                        <p>Om meer informatie te krijgen kunt u contact met ons opnemen door een mail te sturen naar: EenmaalAndermaal@gmail.com</p>
-                        <p>Vermeld in deze mail uw gebruikersnaam.</p>
-                        <p>Wij hopen u zodoende genoeg geïnformeerd te hebben.
-                        <br>
-                        Met vriendelijke groeten,
-                        <br>
-                        EenmaalAndermaal</p>     
+        $message = 'Beste  '.$records['voornaam'].',
+                 
+                  
+                    Helaas moeten wij u op de hoogte stellen dat uw account is geblokkeerd. Dit kan meerdere redenen hebben.
+                    Om meer informatie te krijgen kunt u contact met ons opnemen door een mail te sturen naar: EenmaalAndermaal@gmail.com
+                    Vermeld in deze mail uw gebruikersnaam.
+                    Wij hopen u zodoende genoeg informatie te hebben gegeven.
+                       
+                    Met vriendelijke groeten,
+                        
+                    EenmaalAndermaal  
 ';
         $headers = "From:" .$from;
         mail($to,$subject,$message, $headers);
@@ -1415,16 +1415,15 @@ function StuurGebruikerDeblockedEmail($gebruikersnaam)
         error_reporting( E_ALL );
         $from = "no-reply@iconcepts.nl";
         $to = $records['email'];
-        $subject = "Account geblokkeerd";
-        $message = '<h1> Beste '.$records['voornaam'].',</h1>,
-                  <br>
-                  <br>
-                        <p>Uw account is gedeblokkeerd. U kunt nu weer inloggen.</p>
-                        <p>Wij hopen u zodoende genoeg geïnformeerd te hebben.
-                        <br>
-                        Met vriendelijke groeten,
-                        <br>
-                        EenmaalAndermaal</p>     
+        $subject = "Account gedeblokkeerd";
+        $message = ' Beste '.$records['voornaam'].',
+                 
+                     Uw account is gedeblokkeerd. U kunt nu weer inloggen.
+                     Wij hopen u zodoende genoeg informatie te hebben gegeven.
+                       
+                     Met vriendelijke groeten,
+                        
+                     EenmaalAndermaal     
 ';
         $headers = "From:" .$from;
         mail($to,$subject,$message, $headers);
