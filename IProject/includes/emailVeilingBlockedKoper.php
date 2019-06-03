@@ -326,7 +326,7 @@ function EmailVerwijderdVerkoper($veiling, $id)
                   <table role="presentation" border="0" cellpadding="0" cellspacing="0">
                     <tr>
                       <td>
-                      <h2> Beste '.$veiling[0]['voornaam'].',</h2>
+                      <h2> Beste '.$veiling[1]['voornaam'].',</h2>
                       <br>
                       <p> Een veiling waar u op heeft gereageerd is geblokkeerd, dit kan meerdere redenen hebben. Het betreft het onderstaande artikel. </p>
                       <br>
