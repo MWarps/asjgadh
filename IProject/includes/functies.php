@@ -888,11 +888,15 @@ function StuurRegistreerEmail($Email, $Code){
 
 function verificatiesVinden(){
     $teller = 0;
+    //echo 'verificaties gevonden';
     try {
         $verkopers = getWannabeVerkopers();
+
         foreach ( $verkopers as $verkoper ){
             $teller ++;
             $resultaat = maakVerkoperBrief($verkoper);
+            echo 'var dump brief';
+            var_dump($resultaat);
             $email = $resultaat['email'];
             echo '<tr>
                     <th scope="row">'.$teller.'</th>
@@ -902,12 +906,14 @@ function verificatiesVinden(){
                     <td><a class="btn btn-primary" href="verkoperVerificatieBrief.php?email='.$email.'" role="button">verzonden</a></td>';
             echo ' </tr>';
         }
+
     } catch (PDOexception $e) {
         // echo "er ging iets mis error: {$e->getMessage()}";
     }
 }
 
 function getWannabeVerkopers() {
+    //echo 'verkopers gevonden';
     try{
         require('core/dbconnection.php');
         $sqlSelect = $dbh->prepare("SELECT gebruikersnaam FROM Gebruiker INNER JOIN Verificatie ON Gebruiker.email = Verificatie.email WHERE type = 'brief' 
@@ -916,6 +922,9 @@ function getWannabeVerkopers() {
         $sqlSelect->execute();
 
         $records = $sqlSelect->fetch(PDO::FETCH_ASSOC);
+
+        echo 'var dump verkopers';
+        var_dump($records);
 
         return $records;
 
