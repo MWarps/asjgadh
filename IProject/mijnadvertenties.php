@@ -10,6 +10,7 @@ if(isset($_GET['id'])){
     $Veiling = HaalBiederEnVerkoperOp($_GET['id'], $_SESSION['gebruikersnaam']);
     VerstuurVerkoopMail($Veiling, true);
     VerstuurVerkoopMail($Veiling, false);
+    
   }
   if($_GET['status'] == 'verwijderen'){
     $Veiling = VerwijderVeiling($_GET['id'], $_SESSION['gebruikersnaam']);
@@ -51,7 +52,7 @@ if(isset($_GET['id'])){
                 $verkocht = false;
                 if(!empty($advertenties)){ 
                 foreach ($advertenties as $rij) {
-                    $details = DetailAdvertentie($rij['voorwerpnr']);
+                    $details = DetailAdvertentieMijnAdvertenties($rij['voorwerpnr']);
                     $locatie = '../pics/';
                     
                     $hoogstebieder = zijnErBiedingen($details['voorwerpnr']);
@@ -74,7 +75,7 @@ if(isset($_GET['id'])){
                     }
                     $verkocht = '<a class="btn btn-block btn-success py-2 '.$knop.'" href="mijnadvertenties.php?id='.$details['voorwerpnr'].'&status=verkopen" >Verkopen</a>';
                     if(!empty($details['koper'])){
-                      $verkocht = "";
+                      $verkocht = '<button type="button" class="btn btn-block btn-success py-2 '.$knop.'" >Advertentie is verkocht</button>';
                     }
                     
                     echo '

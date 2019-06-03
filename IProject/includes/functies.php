@@ -526,6 +526,29 @@ function DetailAdvertentie($id)
 
 }
 
+function DetailAdvertentieMijnAdvertenties($id)
+{
+    try {
+        require('core/dbconnection.php');
+        $sqlSelect = $dbh->prepare("select *, illustratieFile from Voorwerp, Illustratie
+        where Voorwerp.voorwerpnr = Illustratie.voorwerpnr
+        AND Voorwerp.voorwerpnr = :id
+        ");
+
+        $sqlSelect->execute(
+            array(
+                ':id' => $id              
+            ));
+        $records = $sqlSelect->fetch(PDO::FETCH_ASSOC);
+
+        return $records;
+
+    } catch (PDOexception $e) {
+        echo "er ging iets mis error: {$e->getMessage()}";
+    }
+
+}
+
 /* advertentie ophalen */
 function haalAdvertentieOp($rubriek){
     try {
@@ -1772,7 +1795,7 @@ function VerstuurVerkoopMail($veiling, $ontvanger){
         ini_set( 'display_errors', 1 );
         error_reporting( E_ALL );
         $from = "no-reply@iconcepts.nl";
-        $to = $veiling[0]['email'];
+        $to = $veiling[1]['email'];
         $subject = "EenmaalAndermaal u heeft een voorwerp Verkocht!";
         $message = emailVerkocht($veiling);
         $headers = 'MIME-Version: 1.0' . "\r\n";
@@ -1786,7 +1809,7 @@ function VerstuurVerkoopMail($veiling, $ontvanger){
         ini_set( 'display_errors', 1 );
         error_reporting( E_ALL );
         $from = "no-reply@iconcepts.nl";
-        $to = $veiling[1]['email'];
+        $to = $veiling[0]['email'];
         $subject = "EenmaalAndermaal u heeft een voorwerp Gekocht!";
         $message = EmailGekocht($veiling);
 
