@@ -1,7 +1,7 @@
 <?php
 include 'includes/header.php';
 $gebruikersnaam = "";
-if (checkBEHEERDER ($_SESSION['gebruikersnaam']) == true){     // veranderen naar admin variabel.
+if (checkBEHEERDER ($_SESSION['gebruikersnaam']) == true){     
 
     if (isset( $_GET['email'])){
         verificatieVerzonden($_GET['email']);
@@ -49,10 +49,7 @@ if (checkBEHEERDER ($_SESSION['gebruikersnaam']) == true){     // veranderen naa
                     </thead>
                     <tbody>
                     <?php
-                    if (isset($_POST['zoeken'])){
-                        echo 'laden aangeroepen';
                         verificatiesVinden();
-                    }
                     ?>
                     </tbody>
                 </table>

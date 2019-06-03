@@ -888,11 +888,21 @@ function StuurRegistreerEmail($Email, $Code){
 
 function verificatiesVinden(){
     $teller = 0;
+    //echo 'verificaties gevonden';
     try {
-        $verkopers = getWannabeVerkopers();
+        require('core/dbconnection.php');
+        $sqlSelect = $dbh->prepare("SELECT voornaam, achternaam, geslacht, adresregel1, adresregel2, postcode, plaatsnaam, land, verificatiecode, 
+        eindtijd FROM Gebruiker INNER JOIN Verificatie ON Gebruiker.email = Verificatie.email WHERE type = 'brief' 
+        ");
+
+        $sqlSelect->execute();
+        $verkopers = $sqlSelect->fetchall(PDO::FETCH_ASSOC);
+
         foreach ( $verkopers as $verkoper ){
             $teller ++;
-            $resultaat = maakVerkoperBrief($verkoper);
+            $resultaat = Brief($verkoper);
+            echo 'var dump brief ';
+            var_dump($resultaat);
             $email = $resultaat['email'];
             echo '<tr>
                     <th scope="row">'.$teller.'</th>
@@ -902,12 +912,14 @@ function verificatiesVinden(){
                     <td><a class="btn btn-primary" href="verkoperVerificatieBrief.php?email='.$email.'" role="button">verzonden</a></td>';
             echo ' </tr>';
         }
+
     } catch (PDOexception $e) {
         // echo "er ging iets mis error: {$e->getMessage()}";
     }
 }
 
 function getWannabeVerkopers() {
+    //echo 'verkopers gevonden';
     try{
         require('core/dbconnection.php');
         $sqlSelect = $dbh->prepare("SELECT gebruikersnaam FROM Gebruiker INNER JOIN Verificatie ON Gebruiker.email = Verificatie.email WHERE type = 'brief' 
@@ -915,7 +927,10 @@ function getWannabeVerkopers() {
 
         $sqlSelect->execute();
 
-        $records = $sqlSelect->fetch(PDO::FETCH_ASSOC);
+        $records = $sqlSelect->fetchall(PDO::FETCH_ASSOC);
+
+        echo 'var dump verkopers';
+        var_dump($records);
 
         return $records;
 
@@ -952,7 +967,7 @@ function maakVerkoperBrief($gebruiker){
                 ':gebruiker' => $gebruiker
             ));
 
-        $records = $sqlSelect->fetch(PDO::FETCH_ASSOC);
+        $records = $sqlSelect->fetchall(PDO::FETCH_ASSOC);
 
         $brief = Brief($records);
 
@@ -1515,6 +1530,7 @@ function veilingblokeren($geblokkeerd, $voorwerpnummer, $titel){
 function veilingblok($voorwerpnummer){
     try {
         require('core/dbconnection.php');
+        $records =  HaalBiederEnVerkoperOp($voorwerpnr, $verkoper);
         $blokeren = $dbh ->prepare (" UPDATE Voorwerp
                                     SET geblokkeerd = 1, blokkeerdatum = CURRENT_TIMESTAMP
                                     WHERE voorwerpnr like :voorwerpnummer
@@ -1542,6 +1558,7 @@ function veilingblok($voorwerpnummer){
             veilingeindberekenen ($resultaat[0]['voorwerpnr']);
         }else if ($resultaat[0]['geblokkeerd'] == 0){
             $blokeren -> execute(
+              //  VerstuurVeilingBlockedMail($veiling, $ontvanger);
                 array(
                     ':voorwerpnummer' => $resultaat[0]['voorwerpnr'],
                 )
@@ -1606,37 +1623,34 @@ function checkBEHEERDER ($gebruiker){
 }
 
 function veilingeindberekenen ($voorwerpnummer){
-    $looptijd; // opgegeven aantal dagen van de openhied van veilingen.
-    $tijd;     // de overgebleven dagen die de veiling nog open is.
+       // de overgebleven dagen die de veiling nog open is.
     try {
         require('core/dbconnection.php');
         $informatie = $dbh -> prepare("SELECT * from Voorwerp where voorwerpnr = :voorwerpnr");
         // haalt de algemene informatie op die nodig is voor de berekening
         $einddatum = $dbh -> prepare ("UPDATE Voorwerp set looptijdeindedagtijdstip = (select  
-          DATEADD(DAY, (SELECT DATEDIFF(DAY, looptijdbegindagtijdstip, blokkeerdatum) from Voorwerp where blokkeerdatum > '2000-01-01' and voorwerpnr = :voorwerpnr),
-          (select looptijdeindedagtijdstip from Voorwerp where voorwerpnr = :voorwerpnr)))"); // insert de       nieuwe einddatum gebaseerd op de ( looptijd - het aantal dagen tussen begin- en blokeer- datum )
+          DATEADD(DAY, (SELECT DATEDIFF(DAY, CURRENT_TIMESTAMP, blokkeerdatum) from Voorwerp where blokkeerdatum > '2000-01-01' and voorwerpnr = :voorwerpnr),
+          (select looptijdeindedagtijdstip from Voorwerp where voorwerpnr = :voorwerpnr1)))
+		        where voorwerpnr = :voorwerpnr2"); // insert de       nieuwe einddatum gebaseerd op de ( looptijd - het aantal dagen tussen begin- en blokeer- datum )
         //====================================================================================================//
         // informatie query runnen en afhandelen.
         $informatie -> execute(
             array(
-                ':voorwerpnr' => $voorwerpnummer,
+                ':voorwerpnr' => $voorwerpnummer
+              
             )
         );
-        $informatie = $informatie ->fetch(PDO::FETCH_ASSOC);
-        
-            $looptijd = $informatie['looptijd']; // 29-05-2019 15:35 WERKT!
-         // ophalen algemene informatie die later nodig is in de berekeningen
-        //===================================================================================================//
-        // datum verschil tussen de opening van de veiling en de datum van blokeren.      
-        
+      
         $einddatum -> execute (
             array (
                 ':voorwerpnr' => $voorwerpnummer,
-              //  ':tijd' => $tijd
+                ':voorwerpnr1' => $voorwerpnummer,
+                ':voorwerpnr2' => $voorwerpnummer
+              
             )
         );
     } catch (PDOexception $e) {
-        echo "er ging iets mis error: {$e->getMessage()}";
+        echo "er ging iets mis error123: {$e->getMessage()}";
     }
 }
 
@@ -1757,6 +1771,41 @@ function VerstuurVerkoopMail($veiling, $ontvanger){
         mail($to,$subject,$message, $headers);
     }  
 }
+
+
+
+function VerstuurVeilingBlockedMail($veiling, $ontvanger){
+
+    if($ontvanger){
+        ini_set( 'display_errors', 1 );
+        error_reporting( E_ALL );
+        $from = "no-reply@iconcepts.nl";
+        $to = $veiling[0]['email'];
+        $subject = "EenmaalAndermaal u heeft een voorwerp Verkocht!";
+        $message = emailVeilingBlockedVerkoper($veiling);
+        $headers = 'MIME-Version: 1.0' . "\r\n";
+        $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+        $headers .= "From:" .$from;
+
+        mail($to,$subject,$message, $headers);
+    }
+
+    if($ontvanger == false){
+        ini_set( 'display_errors', 1 );
+        error_reporting( E_ALL );
+        $from = "no-reply@iconcepts.nl";
+        $to = $veiling[1]['email'];
+        $subject = "EenmaalAndermaal u heeft een voorwerp Gekocht!";
+        $message = emailVeilingBlockedKoper($veiling);
+
+        $headers = 'MIME-Version: 1.0' . "\r\n";
+        $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+        $headers .= "From:" .$from;
+
+        mail($to,$subject,$message, $headers);
+    }
+}
+
 
 function VerstuurVerwijderMail($veiling, $ontvanger){
   $id = 2;
