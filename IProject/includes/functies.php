@@ -6,6 +6,7 @@ include 'emailVerkocht.php';
 include 'emailGekocht.php';
 include 'emailVerwijderdVerkoper.php';
 include 'emailVerwijderdHoogstebod.php';
+include 'brief.php';
 
 function BodVerhoging($Euro){
     $Verhoging;
@@ -170,20 +171,25 @@ function getPopulairsteArtikelen() {
     try {
         require('core/dbconnection.php');
         $sqlSelect = $dbh->prepare("SELECT TOP 9 * FROM Voorwerp ORDER BY gezien DESC");
-
         $sqlSelect->execute();
-
         $records = $sqlSelect->fetchAll(PDO::FETCH_ASSOC);
-
     }
     catch (PDOexception $e) {
         echo "er ging iets mis errorteset: {$e->getMessage()}";
     }
 
+
     foreach ($records as $rij) {
         $details = DetailAdvertentie($rij['voorwerpnr']);
         $locatie = '../pics/';
-
+        
+        $hoogstebieder = zijnErBiedingen($details['voorwerpnr']);
+        $hoogstbieder = $hoogstebieder['euro'];
+        
+        if(!empty($hoogstbieder)){
+          $details['startprijs'] = $hoogstbieder;
+        }  
+        
         if(substr($details['illustratieFile'] , 0 ,2 ) == 'ea'){
             $locatie = 'upload/';
         }        
@@ -308,6 +314,12 @@ function getLaatstBekeken($gebruiker) {
             $details = DetailAdvertentie($rij['voorwerpnr']);
             $locatie = '../pics/';
 
+            $hoogstebieder = zijnErBiedingen($details['voorwerpnr']);
+            $hoogstbieder = $hoogstebieder['euro'];
+            
+            if(!empty($hoogstbieder)){
+              $details['startprijs'] = $hoogstbieder;
+            }  
             if(substr($details['illustratieFile'] , 0 ,2 ) == 'ea'){
                 $locatie = 'upload/';
             } 
@@ -338,9 +350,8 @@ function getAanbevolen($gebruiker) {
     try {
         require('core/dbconnection.php');
         $sqlSelect = $dbh->prepare("SELECT * FROM Aanbevolen
-      WHERE gebruikersnaam = :gebruikersnaam
-	  ORDER BY datumtijd DESC");
-
+                                    WHERE gebruikersnaam = :gebruikersnaam
+	                                   ORDER BY datumtijd DESC");
         $sqlSelect->execute(
             array(
                 ':gebruikersnaam' => $gebruiker
@@ -350,9 +361,7 @@ function getAanbevolen($gebruiker) {
     catch (PDOexception $e) {
         echo "er ging iets mis error: {$e->getMessage()}";
     }
-
     $records = getProductenUitRubriek2($records['rubrieknr'], 3) ;
-
 
     if(empty($records)){
         echo '<div class="alert alert-success" role="alert">
@@ -361,8 +370,17 @@ function getAanbevolen($gebruiker) {
     }
     else{
         for ($teller = 0; $teller < 3; $teller++) {
+          
             $details = DetailAdvertentie($records[$teller]['voorwerpnr']);
             $locatie = '../pics/';
+            
+            $hoogstebieder = zijnErBiedingen($details['voorwerpnr']);
+            $hoogstbieder = $hoogstebieder['euro'];
+            
+            if(!empty($hoogstbieder)){
+              $details['startprijs'] = $hoogstbieder;
+            } 
+            
             if(substr($details['illustratieFile'] , 0 ,2 ) == 'ea'){
                 $locatie = 'upload/';
             } 
@@ -492,7 +510,8 @@ function DetailAdvertentie($id)
         require('core/dbconnection.php');
         $sqlSelect = $dbh->prepare("select *, illustratieFile from Voorwerp, Illustratie
         where Voorwerp.voorwerpnr = Illustratie.voorwerpnr
-        AND Voorwerp.voorwerpnr = :id");
+        AND Voorwerp.voorwerpnr = :id
+        AND Voorwerp.veilinggesloten = 0");
 
         $sqlSelect->execute(
             array(
@@ -520,6 +539,14 @@ function haalAdvertentieOp($rubriek){
         foreach ($producten as $rij) {
             $details = DetailAdvertentie($rij['voorwerpnr']);
             $locatie = '../pics/';
+            
+            $hoogstebieder = zijnErBiedingen($details['voorwerpnr']);
+            $hoogstbieder = $hoogstebieder['euro'];
+            
+            if(!empty($hoogstbieder)){
+              $details['startprijs'] = $hoogstbieder;
+            }
+            
             if(substr($details['illustratieFile'] , 0 ,2 ) == 'ea'){
                 $locatie = 'upload/';
             } 
@@ -892,15 +919,17 @@ function verificatiesVinden(){
     try {
         require('core/dbconnection.php');
         $sqlSelect = $dbh->prepare("SELECT voornaam, achternaam, geslacht, adresregel1, adresregel2, postcode, plaatsnaam, land, verificatiecode, 
-        eindtijd FROM Gebruiker INNER JOIN Verificatie ON Gebruiker.email = Verificatie.email WHERE type = 'brief' 
+        eindtijd FROM Gebruiker INNER JOIN Verificatie ON Gebruiker.email = Verificatie.email WHERE type = 'brief'  
         ");
 
         $sqlSelect->execute();
-        $verkopers = $sqlSelect->fetchall(PDO::FETCH_ASSOC);
 
+        $verkopers = $sqlSelect->fetchAll(PDO::FETCH_ASSOC);
+        var_dump($verkopers);
         foreach ( $verkopers as $verkoper ){
             $teller ++;
             $resultaat = Brief($verkoper);
+
             echo 'var dump brief ';
             var_dump($resultaat);
             $email = $resultaat['email'];
@@ -917,7 +946,7 @@ function verificatiesVinden(){
         // echo "er ging iets mis error: {$e->getMessage()}";
     }
 }
-
+/*
 function getWannabeVerkopers() {
     //echo 'verkopers gevonden';
     try{
@@ -939,7 +968,7 @@ function getWannabeVerkopers() {
         echo "er ging iets mis erroreqrre: {$e->getMessage()}";
     }
 }
-
+*/
 function verificatieVerzonden($email) {
     try{
         require('core/dbconnection.php');
@@ -951,10 +980,10 @@ function verificatieVerzonden($email) {
             ));
     }
     catch (PDOexception $e) {
-        echo "er ging iets mis erroreqrre: {$e->getMessage()}";
+        echo "er ging iets mis error: {$e->getMessage()}";
     }
 }
-
+/*
 function maakVerkoperBrief($gebruiker){
     try{    
         require('core/dbconnection.php');
@@ -972,14 +1001,12 @@ function maakVerkoperBrief($gebruiker){
         $brief = Brief($records);
 
         return $brief;
-
-
     }
     catch (PDOexception $e) {
         echo "er ging iets mis erroreqrre: {$e->getMessage()}";
     }
 }
-
+*/
 function geslacht()
 {
 
@@ -1557,8 +1584,8 @@ function veilingblok($voorwerpnummer){
             );
             veilingeindberekenen ($resultaat[0]['voorwerpnr']);
         }else if ($resultaat[0]['geblokkeerd'] == 0){
+            VerstuurVeilingBlockedMail($veiling, $ontvanger);
             $blokeren -> execute(
-              //  VerstuurVeilingBlockedMail($veiling, $ontvanger);
                 array(
                     ':voorwerpnummer' => $resultaat[0]['voorwerpnr'],
                 )
@@ -1706,7 +1733,7 @@ function VerkoopVeiling($voorwerpnr){
   try {
       require('core/dbconnection.php');      
       $sqlUpdate = $dbh ->prepare ("UPDATE Voorwerp
-                                    SET koper = (select gebruikersnaam from bod where voorwerpnr = :voorwerpnr),
+                                    SET koper = (select top 1 gebruikersnaam from bod where voorwerpnr = :voorwerpnr order by convert(decimal(9,2), euro) desc),
                                         verkoopprijs = (select top 1 euro from bod where voorwerpnr = :voorwerpnr order by convert(decimal(9,2), euro) desc),
                                         veilinggesloten = 1
                                     WHERE voorwerpnr = :voorwerpnr");      

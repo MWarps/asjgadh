@@ -4,7 +4,7 @@ include 'includes/header.php';
 if(isset($_SESSION['gebruikersnaam'])){
   $verwijderen = false;
 
-if(isset($_GET['status'])){
+if(isset($_GET['id'])){
   if($_GET['status'] == 'verkopen'){
     VerkoopVeiling($_GET['id']);
     $Veiling = HaalBiederEnVerkoperOp($_GET['id'], $_SESSION['gebruikersnaam']);
@@ -48,10 +48,19 @@ if(isset($_GET['status'])){
                 <?php 
                 $advertenties = HaalMijnAdvertentieOp($_SESSION['gebruikersnaam']);
                 $knop = '';
+                $verkocht = false;
                 if(!empty($advertenties)){ 
                 foreach ($advertenties as $rij) {
                     $details = DetailAdvertentie($rij['voorwerpnr']);
                     $locatie = '../pics/';
+                    
+                    $hoogstebieder = zijnErBiedingen($details['voorwerpnr']);
+                    $hoogstbieder = $hoogstebieder['euro'];
+                    
+                    if(!empty($hoogstbieder)){
+                      $details['startprijs'] = $hoogstbieder;
+                    }    
+                    
                     if(substr($details['illustratieFile'] , 0 ,2 ) == 'ea'){
                         $locatie = 'upload/';
                     } 
@@ -63,6 +72,11 @@ if(isset($_GET['status'])){
                     if(empty($Bieder[1]['gebruikersnaam']) || $Bieder[2]['veilinggesloten'] == 1){
                       $knop = 'disabled';
                     }
+                    $verkocht = '<a class="btn btn-block btn-success py-2 '.$knop.'" href="mijnadvertenties.php?id='.$details['voorwerpnr'].'&status=verkopen" >Verkopen</a>';
+                    if(!empty($details['koper'])){
+                      $verkocht = "";
+                    }
+                    
                     echo '
                     <div class="col-md-3 p-2">
                     <div class="card">
@@ -75,7 +89,7 @@ if(isset($_GET['status'])){
                           <p class="card-text"><a href="#">'.$details['verkoper'].'</a><br>
                           '.$details['land'].', '.$details['plaatsnaam'].'</p>
                           <a href="advertentie.php?id='.$details['voorwerpnr'].'" class="btn btn-block btn-primary py-2">Ga naar artikel</a>                                                                         
-                          <a class="btn btn-block btn-success py-2 '.$knop.'" href="mijnadvertenties.php?id='.$details['voorwerpnr'].'&status=verkopen" >Verkopen</a>
+                          '.$verkocht.'
                           <a class="btn btn-block btn-danger py-2" href="mijnadvertenties.php?id='.$details['voorwerpnr'].'&status=verwijderen">Verwijderen</a>
                           
                         </div>
