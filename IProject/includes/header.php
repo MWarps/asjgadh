@@ -85,9 +85,9 @@ if ( checkGEBLOKEERD($_SESSION['gebruikersnaam']) == true){
                                 <a class="dropdown-item" href="../informeren.php">FAQ</a>
                                 <a class="dropdown-item" href="wachtwoordReset.php">Wachtwoord Resetten</a>                                
                                 <?php if ($VerkoperValidatie){                                              
-            echo '<a class="dropdown-item" href="verkoper.php">Verkoper worden</a>
-                  <a class="dropdown-item" href="mijnadvertenties.php">Mijn advertenties</a>';                                            
-        } ?>    
+                                echo '<a class="dropdown-item" href="verkoper.php">Verkoper worden</a>
+                                <a class="dropdown-item" href="mijnadvertenties.php">Mijn advertenties</a>';
+                                } ?>
                             </div>
                         </div>
                         <li class="nav-item">
@@ -98,13 +98,13 @@ if ( checkGEBLOKEERD($_SESSION['gebruikersnaam']) == true){
                 <?php  } // einde if session actief is
                     else{
                         echo'<ul class="navbar-nav">
-                                      <li class="nav-item">
-                                        <a class="nav-link" href="login.php">Login</a>
-                                      </li>
-                                      <li class="nav-item">
-                                        <a class="nav-link" href="register.php">Registreren</a>
-                                      </li>
-                                   </ul>';
+                                  <li class="nav-item">
+                                    <a class="nav-link" href="login.php">Login</a>
+                                  </li>
+                                  <li class="nav-item">
+                                    <a class="nav-link" href="register.php">Registreren</a>
+                                  </li>
+                             </ul>';
                     } ?>
             </div>
         </nav>
