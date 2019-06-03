@@ -86,7 +86,7 @@ if(isset($_GET['id'])){
                                 </div>
                             </div>
                             <?php
-                            $teller = 1;
+                            $teller = 0;
 
                             foreach ($Illustratie1 as $rij) {
                                 $locatie = '../pics/';
