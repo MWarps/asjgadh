@@ -1757,12 +1757,14 @@ function VerkoopVeiling($voorwerpnr){
       require('core/dbconnection.php');      
       $sqlUpdate = $dbh ->prepare ("UPDATE Voorwerp
                                     SET koper = (select top 1 gebruikersnaam from bod where voorwerpnr = :voorwerpnr order by convert(decimal(9,2), euro) desc),
-                                        verkoopprijs = (select top 1 euro from bod where voorwerpnr = :voorwerpnr order by convert(decimal(9,2), euro) desc),
+                                        verkoopprijs = (select top 1 euro from bod where voorwerpnr = :voorwerpnr1 order by convert(decimal(9,2), euro) desc),
                                         veilinggesloten = 1
-                                    WHERE voorwerpnr = :voorwerpnr");      
+                                    WHERE voorwerpnr = :voorwerpnr2");      
       $sqlUpdate-> execute(
           array(
-              ':voorwerpnr' => $voorwerpnr
+              ':voorwerpnr' => $voorwerpnr,
+              ':voorwerpnr1' => $voorwerpnr,
+              ':voorwerpnr2' => $voorwerpnr
           ));
               
   } catch (PDOexception $e) {
@@ -1796,7 +1798,7 @@ function VerstuurVerkoopMail($veiling, $ontvanger){
         ini_set( 'display_errors', 1 );
         error_reporting( E_ALL );
         $from = "no-reply@iconcepts.nl";
-        $to = $veiling[1]['email'];
+        $to = $veiling[0]['email'];
         $subject = "EenmaalAndermaal u heeft een voorwerp Verkocht!";
         $message = emailVerkocht($veiling);
         $headers = 'MIME-Version: 1.0' . "\r\n";
@@ -1810,7 +1812,7 @@ function VerstuurVerkoopMail($veiling, $ontvanger){
         ini_set( 'display_errors', 1 );
         error_reporting( E_ALL );
         $from = "no-reply@iconcepts.nl";
-        $to = $veiling[0]['email'];
+        $to = $veiling[1]['email'];
         $subject = "EenmaalAndermaal u heeft een voorwerp Gekocht!";
         $message = EmailGekocht($veiling);
 
@@ -1827,6 +1829,7 @@ function VerstuurVerkoopMail($veiling, $ontvanger){
 function VerstuurVeilingBlockedMail($veiling, $ontvanger){
 
     if($ontvanger){
+      
         ini_set( 'display_errors', 1 );
         error_reporting( E_ALL );
         $from = "no-reply@iconcepts.nl";
@@ -1841,6 +1844,7 @@ function VerstuurVeilingBlockedMail($veiling, $ontvanger){
     }
 
     if($ontvanger == false){
+      
         ini_set( 'display_errors', 1 );
         error_reporting( E_ALL );
         $from = "no-reply@iconcepts.nl";
@@ -1865,7 +1869,7 @@ function VerstuurVerwijderMail($veiling, $ontvanger){
     ini_set( 'display_errors', 1 );
     error_reporting( E_ALL );
     $from = "no-reply@iconcepts.nl";
-    $to = $veiling[0]['email'];
+    $to = $veiling[1]['email'];
     $subject = "EenmaalAndermaal uw voorwerp is verwijderd";
     $message = EmailVerwijderdVerkoper($veiling, $id);
   
