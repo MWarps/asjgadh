@@ -1,8 +1,11 @@
 <?php 
-$_SESSION['gebruikersnaam'] == 'null';
-include 'includes/header.php';
-echo 'hieronder moet de array van session weegeven worden:';
+die('Je bent geblokkeerd neem contact met ons op via de instructies in de e-mail.');
+
+//$_SESSION['gebruikersnaam'] = 'null';
+//include 'includes/header.php';
+//echo 'hieronder moet de array van session weegeven worden:';
 ?>
+<!--
 <div class="container">
   <div class="row">
       <div class="offset-3 col-md-6 mt-4">
@@ -18,5 +21,5 @@ echo 'hieronder moet de array van session weegeven worden:';
   </div>
 </div>
 <?php 
-include 'includes/footer.php'
-?>
+//include 'includes/footer.php'
+?>-->

@@ -1380,14 +1380,14 @@ function StuurGebruikerBlockedEmail($gebruikersnaam)
         $message = 'Beste  '.$records['voornaam'].',
                  
                   
-                    Helaas moeten wij u op de hoogte stellen dat uw account is geblokkeerd. Dit kan meerdere redenen hebben.
-                    Om meer informatie te krijgen kunt u contact met ons opnemen door een mail te sturen naar: EenmaalAndermaal@gmail.com
-                    Vermeld in deze mail uw gebruikersnaam.
-                    Wij hopen u zodoende genoeg informatie te hebben gegeven.
+         Helaas moeten wij u op de hoogte stellen dat uw account is geblokkeerd. Dit kan meerdere redenen hebben.
+         Om meer informatie te krijgen kunt u contact met ons opnemen door een mail te sturen naar: EenmaalAndermaal@gmail.com
+         Vermeld in deze mail uw gebruikersnaam.
+         Wij hopen u zodoende genoeg informatie te hebben gegeven.
                        
-                    Met vriendelijke groeten,
+         Met vriendelijke groeten,
                         
-                    EenmaalAndermaal  
+         EenmaalAndermaal  
 ';
         $headers = "From:" .$from;
         mail($to,$subject,$message, $headers);
@@ -1418,12 +1418,12 @@ function StuurGebruikerDeblockedEmail($gebruikersnaam)
         $subject = "Account gedeblokkeerd";
         $message = ' Beste '.$records['voornaam'].',
                  
-                     Uw account is gedeblokkeerd. U kunt nu weer inloggen.
-                     Wij hopen u zodoende genoeg informatie te hebben gegeven.
+        Uw account is gedeblokkeerd. U kunt nu weer inloggen.
+        Wij hopen u zodoende genoeg informatie te hebben gegeven.
                        
-                     Met vriendelijke groeten,
+        Met vriendelijke groeten,
                         
-                     EenmaalAndermaal     
+        EenmaalAndermaal     
 ';
         $headers = "From:" .$from;
         mail($to,$subject,$message, $headers);
@@ -1532,7 +1532,7 @@ function veilingblok($voorwerpnummer){
     }
 }
 
-function checkGEBLOKEERD ($gebruiker){
+function checkGEBLOKEERD($gebruiker){
     try {
         require('core/dbconnection.php');
         $geblokeerd = $dbh ->prepare ("select gebruikersnaam, geblokeerd from Gebruiker where gebruikersnaam like :gebruiker  ");
@@ -1544,17 +1544,17 @@ function checkGEBLOKEERD ($gebruiker){
         );
 
         while ($resultaat = $geblokeerd ->fetchAll(PDO::FETCH_ASSOC)){
-            if ($resultaat['geblokeerd'] == 1){
+            if ($resultaat[0]['geblokeerd'] == 1){
+               // die('functie returned true');
                 return true;
-                header("Location: includes/geblokeerd.php");
-
-            }else if ($resultaat['geblokeerd'] == 0){
+            }else if ($resultaat[0]['geblokeerd'] == 0){
+                //print_r($resultaat); 
+               // die('functie returned false ');
                 return false;
-            } else if (empty($resultaat['geblokeerd'])){
+            } else if (empty($resultaat[0]['geblokeerd'])){
                 //header("Location: includes/404error.php");
             }
         }
-
     } catch (PDOexception $e) {
         //    echo "er ging iets mis error: {$e->getMessage()}";
     }
@@ -1673,35 +1673,35 @@ function VerwijderVeiling($voorwerpnr, $verkoper){
 }
 
 function VerstuurVerkoopMail($veiling, $ontvanger){
-  
-  if($ontvanger){
-    ini_set( 'display_errors', 1 );
-    error_reporting( E_ALL );
-    $from = "no-reply@iconcepts.nl";
-    $to = $veiling[0]['email'];
-    $subject = "EenmaalAndermaal u heeft een voorwerp Verkocht!";
-    $message = emailVerkocht($veiling);
-    $headers = 'MIME-Version: 1.0' . "\r\n";
-    $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-    $headers .= "From:" .$from;
-  
-    mail($to,$subject,$message, $headers);
-  }
-  
-  if($ontvanger == false){
-    ini_set( 'display_errors', 1 );
-    error_reporting( E_ALL );
-    $from = "no-reply@iconcepts.nl";
-    $to = $veiling[1]['email'];
-    $subject = "EenmaalAndermaal u heeft een voorwerp Gekocht!";
-    $message = EmailGekocht($veiling);
-  
-    $headers = 'MIME-Version: 1.0' . "\r\n";
-    $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-    $headers .= "From:" .$from;
-  
-    mail($to,$subject,$message, $headers);
-  }  
+
+    if($ontvanger){
+        ini_set( 'display_errors', 1 );
+        error_reporting( E_ALL );
+        $from = "no-reply@iconcepts.nl";
+        $to = $veiling[0]['email'];
+        $subject = "EenmaalAndermaal u heeft een voorwerp Verkocht!";
+        $message = emailVerkocht($veiling);
+        $headers = 'MIME-Version: 1.0' . "\r\n";
+        $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+        $headers .= "From:" .$from;
+
+        mail($to,$subject,$message, $headers);
+    }
+
+    if($ontvanger == false){
+        ini_set( 'display_errors', 1 );
+        error_reporting( E_ALL );
+        $from = "no-reply@iconcepts.nl";
+        $to = $veiling[1]['email'];
+        $subject = "EenmaalAndermaal u heeft een voorwerp Gekocht!";
+        $message = EmailGekocht($veiling);
+
+        $headers = 'MIME-Version: 1.0' . "\r\n";
+        $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+        $headers .= "From:" .$from;
+
+        mail($to,$subject,$message, $headers);
+    }  
 }
 
 function VerstuurVerwijderMail($veiling, $ontvanger){

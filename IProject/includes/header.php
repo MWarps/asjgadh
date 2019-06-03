@@ -25,12 +25,12 @@ if(isset($_SESSION['gebruikersnaam'])){
 }
     
 if ( checkGEBLOKEERD($_SESSION['gebruikersnaam']) == true){
+   // die('je bent geblokeerd die functie');
     session_unset;
     session_destroy;
-   //header("Location:geblokeerd.php");
-   $url = 'geblokeerd.php';
-    echo '<script language="javascript">window.location.href ="'.$url.'"</script>';
-    die();
+   header("Location:geblokeerd.php");
+ //  $url = 'geblokeerd.php';
+ //   echo '<script language="javascript">window.location.href ="'.$url.'"</script>';   
 }
 ?>
 <!DOCTYPE HTML>
