@@ -171,20 +171,25 @@ function getPopulairsteArtikelen() {
     try {
         require('core/dbconnection.php');
         $sqlSelect = $dbh->prepare("SELECT TOP 9 * FROM Voorwerp ORDER BY gezien DESC");
-
         $sqlSelect->execute();
-
         $records = $sqlSelect->fetchAll(PDO::FETCH_ASSOC);
-
     }
     catch (PDOexception $e) {
         echo "er ging iets mis errorteset: {$e->getMessage()}";
     }
 
+
     foreach ($records as $rij) {
         $details = DetailAdvertentie($rij['voorwerpnr']);
         $locatie = '../pics/';
-
+        
+        $hoogstebieder = zijnErBiedingen($details['voorwerpnr']);
+        $hoogstbieder = $hoogstebieder['euro'];
+        
+        if(!empty($hoogstbieder)){
+          $details['startprijs'] = $hoogstbieder;
+        }  
+        
         if(substr($details['illustratieFile'] , 0 ,2 ) == 'ea'){
             $locatie = 'upload/';
         }        
@@ -309,6 +314,12 @@ function getLaatstBekeken($gebruiker) {
             $details = DetailAdvertentie($rij['voorwerpnr']);
             $locatie = '../pics/';
 
+            $hoogstebieder = zijnErBiedingen($details['voorwerpnr']);
+            $hoogstbieder = $hoogstebieder['euro'];
+            
+            if(!empty($hoogstbieder)){
+              $details['startprijs'] = $hoogstbieder;
+            }  
             if(substr($details['illustratieFile'] , 0 ,2 ) == 'ea'){
                 $locatie = 'upload/';
             } 
@@ -339,9 +350,8 @@ function getAanbevolen($gebruiker) {
     try {
         require('core/dbconnection.php');
         $sqlSelect = $dbh->prepare("SELECT * FROM Aanbevolen
-      WHERE gebruikersnaam = :gebruikersnaam
-	  ORDER BY datumtijd DESC");
-
+                                    WHERE gebruikersnaam = :gebruikersnaam
+	                                   ORDER BY datumtijd DESC");
         $sqlSelect->execute(
             array(
                 ':gebruikersnaam' => $gebruiker
@@ -351,9 +361,7 @@ function getAanbevolen($gebruiker) {
     catch (PDOexception $e) {
         echo "er ging iets mis error: {$e->getMessage()}";
     }
-
     $records = getProductenUitRubriek2($records['rubrieknr'], 3) ;
-
 
     if(empty($records)){
         echo '<div class="alert alert-success" role="alert">
@@ -362,8 +370,17 @@ function getAanbevolen($gebruiker) {
     }
     else{
         for ($teller = 0; $teller < 3; $teller++) {
+          
             $details = DetailAdvertentie($records[$teller]['voorwerpnr']);
             $locatie = '../pics/';
+            
+            $hoogstebieder = zijnErBiedingen($details['voorwerpnr']);
+            $hoogstbieder = $hoogstebieder['euro'];
+            
+            if(!empty($hoogstbieder)){
+              $details['startprijs'] = $hoogstbieder;
+            } 
+            
             if(substr($details['illustratieFile'] , 0 ,2 ) == 'ea'){
                 $locatie = 'upload/';
             } 
@@ -493,7 +510,8 @@ function DetailAdvertentie($id)
         require('core/dbconnection.php');
         $sqlSelect = $dbh->prepare("select *, illustratieFile from Voorwerp, Illustratie
         where Voorwerp.voorwerpnr = Illustratie.voorwerpnr
-        AND Voorwerp.voorwerpnr = :id");
+        AND Voorwerp.voorwerpnr = :id
+        AND Voorwerp.veilinggesloten = 0");
 
         $sqlSelect->execute(
             array(
@@ -521,6 +539,14 @@ function haalAdvertentieOp($rubriek){
         foreach ($producten as $rij) {
             $details = DetailAdvertentie($rij['voorwerpnr']);
             $locatie = '../pics/';
+            
+            $hoogstebieder = zijnErBiedingen($details['voorwerpnr']);
+            $hoogstbieder = $hoogstebieder['euro'];
+            
+            if(!empty($hoogstbieder)){
+              $details['startprijs'] = $hoogstbieder;
+            }
+            
             if(substr($details['illustratieFile'] , 0 ,2 ) == 'ea'){
                 $locatie = 'upload/';
             } 
@@ -1624,45 +1650,34 @@ function checkBEHEERDER ($gebruiker){
 }
 
 function veilingeindberekenen ($voorwerpnummer){
-    $looptijd; // opgegeven aantal dagen van de openhied van veilingen.
-    $tijd;     // de overgebleven dagen die de veiling nog open is.
+       // de overgebleven dagen die de veiling nog open is.
     try {
         require('core/dbconnection.php');
-        $informatie = $dbh -> prepare("select * from Voorwerp where voorwerpnr = :voorwerpnr");
+        $informatie = $dbh -> prepare("SELECT * from Voorwerp where voorwerpnr = :voorwerpnr");
         // haalt de algemene informatie op die nodig is voor de berekening
-        $datum = $dbh ->prepare ("SELECT DATEDIFF(DAY, looptijdbegindagtijdstip, blokkeerdatum) AS  begintotblokeer from Voorwerp where blokkeerdatum > '2000-01-01' and voorwerpnr = :voorwerpnr ");       // berekend het verschil tussen de begindatum en de blokeerdatum in dagen.
-        $einddatum = $dbh -> prepare ("update Voorwerp set looptijdeindedagtijdstip =  DATEADD(day, :tijd, blokkeerdatum) where blokkeerdatum > '2000-01-01' and voorwerpnr = :voorwerpnr"); // insert de nieuwe einddatum gebaseerd op de ( looptijd - het aantal dagen tussen begin- en blokeer- datum )
+        $einddatum = $dbh -> prepare ("UPDATE Voorwerp set looptijdeindedagtijdstip = (select  
+          DATEADD(DAY, (SELECT DATEDIFF(DAY, CURRENT_TIMESTAMP, blokkeerdatum) from Voorwerp where blokkeerdatum > '2000-01-01' and voorwerpnr = :voorwerpnr),
+          (select looptijdeindedagtijdstip from Voorwerp where voorwerpnr = :voorwerpnr1)))
+		        where voorwerpnr = :voorwerpnr2"); // insert de       nieuwe einddatum gebaseerd op de ( looptijd - het aantal dagen tussen begin- en blokeer- datum )
         //====================================================================================================//
         // informatie query runnen en afhandelen.
         $informatie -> execute(
             array(
-                ':voorwerpnr' => $voorwerpnummer,
+                ':voorwerpnr' => $voorwerpnummer
+              
             )
         );
-        $informatie = $informatie ->fetchAll(PDO::FETCH_ASSOC);
-        foreach ($informatie as $info){
-            $looptijd = $info['looptijd']; // 29-05-2019 15:35 WERKT!
-        } // ophalen algemene informatie die later nodig is in de berekeningen
-        //===================================================================================================//
-        // datum verschil tussen de opening van de veiling en de datum van blokeren.
-        $datum-> execute(
-            array(
-                ':voorwerpnr' => $voorwerpnummer,
-            )
-        );
-        $resultaat = $datum ->fetchAll(PDO::FETCH_ASSOC);
-        foreach ($resultaat as $actie){
-            print_r($actie); // kijken wat $actie[] returned
-            $tijd = $looptijd - $actie['begintotblokeer']; // berekenen hoeveel dagen de veiling nog open moet staan.
-        }
+      
         $einddatum -> execute (
             array (
                 ':voorwerpnr' => $voorwerpnummer,
-                ':tijd' =>$tijd,
+                ':voorwerpnr1' => $voorwerpnummer,
+                ':voorwerpnr2' => $voorwerpnummer
+              
             )
         );
     } catch (PDOexception $e) {
-        echo "er ging iets mis error: {$e->getMessage()}";
+        echo "er ging iets mis error123: {$e->getMessage()}";
     }
 }
 
@@ -1718,7 +1733,7 @@ function VerkoopVeiling($voorwerpnr){
   try {
       require('core/dbconnection.php');      
       $sqlUpdate = $dbh ->prepare ("UPDATE Voorwerp
-                                    SET koper = (select gebruikersnaam from bod where voorwerpnr = :voorwerpnr),
+                                    SET koper = (select top 1 gebruikersnaam from bod where voorwerpnr = :voorwerpnr order by convert(decimal(9,2), euro) desc),
                                         verkoopprijs = (select top 1 euro from bod where voorwerpnr = :voorwerpnr order by convert(decimal(9,2), euro) desc),
                                         veilinggesloten = 1
                                     WHERE voorwerpnr = :voorwerpnr");      

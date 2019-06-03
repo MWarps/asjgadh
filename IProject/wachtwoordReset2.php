@@ -5,7 +5,7 @@ if (isset($_GET['id']) || isset($_POST['veranderWachtwoord'])) {
 
  if (isset($_GET['id'])) {
   $_SESSION['validatie'] = haalCodeOp($_GET['id']);
-  print_r($_SESSION['validatie']);
+  //print_r($_SESSION['validatie']);
  }    
 
     if (isset($_POST['veranderWachtwoord'])){
