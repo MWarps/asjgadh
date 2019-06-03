@@ -51,7 +51,7 @@ if (checkBEHEERDER ($_SESSION['gebruikersnaam']) == true){     // veranderen naa
                     <?php
                     if (isset($_POST['zoeken'])){
                         echo 'laden aangeroepen';
-                        verificatiesvinden();
+                        verificatiesVinden();
                     }
                     ?>
                     </tbody>
