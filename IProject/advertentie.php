@@ -132,7 +132,7 @@ if(isset($_GET['id'])){
                         }
                         ?>
                         <label for="bod">Bieden: (vanaf: €<?php echo $hoogstebod1; ?>)</label>
-                        <input type="number" name="bod" class="form-control" id="bod" step="0.01" max="99999999.99" min="<?php echo $hoogstebod; ?>"<?php if($bieden){echo 'required';} else{ echo 'readonly';} ?>>
+                        <input type="number" name="bod" class="form-control" id="bod" step="0.01" max="999999.99" min="<?php echo $hoogstebod; ?>"<?php if($bieden){echo 'required';} else{ echo 'readonly';} ?>>
                         <div class="invalid-feedback">
                             Voer een bod vanaf €<?php echo $hoogstebod1; ?>.
                         </div>

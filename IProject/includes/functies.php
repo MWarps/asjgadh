@@ -527,6 +527,29 @@ function DetailAdvertentie($id)
 
 }
 
+function DetailAdvertentieMijnAdvertenties($id)
+{
+    try {
+        require('core/dbconnection.php');
+        $sqlSelect = $dbh->prepare("select *, illustratieFile from Voorwerp, Illustratie
+        where Voorwerp.voorwerpnr = Illustratie.voorwerpnr
+        AND Voorwerp.voorwerpnr = :id
+        ");
+
+        $sqlSelect->execute(
+            array(
+                ':id' => $id              
+            ));
+        $records = $sqlSelect->fetch(PDO::FETCH_ASSOC);
+
+        return $records;
+
+    } catch (PDOexception $e) {
+        echo "er ging iets mis error: {$e->getMessage()}";
+    }
+
+}
+
 /* advertentie ophalen */
 function haalAdvertentieOp($rubriek){
     try {
@@ -918,27 +941,27 @@ function verificatiesVinden(){
     //echo 'verificaties gevonden';
     try {
         require('core/dbconnection.php');
-        $sqlSelect = $dbh->prepare("SELECT voornaam, achternaam, geslacht, adresregel1, adresregel2, postcode, plaatsnaam, land, verificatiecode, 
-        eindtijd FROM Gebruiker INNER JOIN Verificatie ON Gebruiker.email = Verificatie.email WHERE type = 'brief'  
+        $sqlSelect = $dbh->prepare("SELECT Gebruiker.voornaam, Gebruiker.achternaam, Gebruiker.email, Gebruiker.geslacht, Gebruiker.adresregel1, Gebruiker.adresregel2, Gebruiker.postcode, Gebruiker.plaatsnaam, Gebruiker.land, Verificatie.verificatiecode, 
+        Verificatie.eindtijd FROM Gebruiker INNER JOIN Verificatie ON Gebruiker.email = Verificatie.email WHERE type = 'brief'  
         ");
 
         $sqlSelect->execute();
 
         $verkopers = $sqlSelect->fetchAll(PDO::FETCH_ASSOC);
-        var_dump($verkopers);
+        //var_dump($verkopers);
+
         foreach ( $verkopers as $verkoper ){
             $teller ++;
             $resultaat = Brief($verkoper);
 
-            echo 'var dump brief ';
-            var_dump($resultaat);
-            $email = $resultaat['email'];
+            //var_dump($resultaat);
+
             echo '<tr>
                     <th scope="row">'.$teller.'</th>
                     <td>'.$resultaat['adress'].'</td>
                     <td>'.$resultaat['brief'].'</td>
-                    <td>'.$email.'</td>                    
-                    <td><a class="btn btn-primary" href="verkoperVerificatieBrief.php?email='.$email.'" role="button">verzonden</a></td>';
+                    <td>'.$resultaat['email'].'</td>                    
+                    <td><a class="btn btn-primary" href="verkoperVerificatieBrief.php?email='.$resultaat['email'].'" role="button">verzonden</a></td>';
             echo ' </tr>';
         }
 
@@ -1773,7 +1796,7 @@ function VerstuurVerkoopMail($veiling, $ontvanger){
         ini_set( 'display_errors', 1 );
         error_reporting( E_ALL );
         $from = "no-reply@iconcepts.nl";
-        $to = $veiling[0]['email'];
+        $to = $veiling[1]['email'];
         $subject = "EenmaalAndermaal u heeft een voorwerp Verkocht!";
         $message = emailVerkocht($veiling);
         $headers = 'MIME-Version: 1.0' . "\r\n";
@@ -1787,7 +1810,7 @@ function VerstuurVerkoopMail($veiling, $ontvanger){
         ini_set( 'display_errors', 1 );
         error_reporting( E_ALL );
         $from = "no-reply@iconcepts.nl";
-        $to = $veiling[1]['email'];
+        $to = $veiling[0]['email'];
         $subject = "EenmaalAndermaal u heeft een voorwerp Gekocht!";
         $message = EmailGekocht($veiling);
 
