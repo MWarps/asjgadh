@@ -1577,9 +1577,9 @@ function veilingblok($voorwerpnummer){
             );
             veilingeindberekenen ($resultaat[0]['voorwerpnr']);
         }else if ($resultaat[0]['geblokkeerd'] == 0){
-            $Veiling = HaalBiederEnVerkoperOp($_GET['id'], $_SESSION['gebruikersnaam']);
-            VerstuurVeilingBlockedMail($Veiling, true);
-            VerstuurVeilingBlockedMail($Veiling, false);
+            //$Veiling = HaalBiederEnVerkoperOp($voorwerpnummer, $verkoper);
+            VerstuurVeilingBlockedMail($veiling, true);
+            VerstuurVeilingBlockedMail($veiling, false);
             $blokeren -> execute(
                 array(
                     ':voorwerpnummer' => $resultaat[0]['voorwerpnr'],
@@ -1806,8 +1806,24 @@ function VerstuurVeilingBlockedMail($veiling, $ontvanger){
         error_reporting( E_ALL );
         $from = "no-reply@iconcepts.nl";
         $to = $veiling[0]['email'];
-        $subject = "EenmaalAndermaal u heeft een voorwerp Verkocht!";
-        $message = emailVeilingBlockedVerkoper($veiling);
+        $subject = "EenmaalAndermaal uw veiling is geblokkeerd";
+      //  $message = emailVeilingBlockedVerkoper($veiling);
+
+        $message = 'Beste  '.$veiling[0]['gebruikersnaam'].',
+                 
+                  
+         Helaas moeten wij u op de hoogte stellen dat uw veiling is geblokkeerd. Dit kan meerdere redenen hebben.
+         Om meer informatie te krijgen kunt u contact met ons opnemen door een mail te sturen naar: EenmaalAndermaal@gmail.com
+         Vermeld in deze mail over welke advertentie het gaat.
+         Wij hopen u zodoende genoeg informatie te hebben gegeven.
+                       
+         Met vriendelijke groeten,
+                        
+         EenmaalAndermaal  
+';
+
+
+
         $headers = 'MIME-Version: 1.0' . "\r\n";
         $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
         $headers .= "From:" .$from;
@@ -1821,8 +1837,24 @@ function VerstuurVeilingBlockedMail($veiling, $ontvanger){
         error_reporting( E_ALL );
         $from = "no-reply@iconcepts.nl";
         $to = $veiling[1]['email'];
-        $subject = "EenmaalAndermaal u heeft een voorwerp Gekocht!";
-        $message = emailVeilingBlockedKoper($veiling);
+        $subject = "EenmaalAndermaal een veiling waarop u heeft gereageerd is geblokkeerd";
+      //  $message = emailVeilingBlockedKoper($veiling);
+
+
+        $message = 'Beste  '.$veiling[1]['gebruikersnaam'].',
+                 
+                  TEST
+         Helaas moeten wij u op de hoogte stellen dat uw veiling is geblokkeerd. Dit kan meerdere redenen hebben.
+         Om meer informatie te krijgen kunt u contact met ons opnemen door een mail te sturen naar: EenmaalAndermaal@gmail.com
+         Vermeld in deze mail over welke advertentie het gaat.
+         Wij hopen u zodoende genoeg informatie te hebben gegeven.
+                       
+         Met vriendelijke groeten,
+                        
+         EenmaalAndermaal  
+';
+
+
 
         $headers = 'MIME-Version: 1.0' . "\r\n";
         $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
