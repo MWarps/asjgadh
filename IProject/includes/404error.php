@@ -1,3 +1,8 @@
+<?php /*
+gevalideerd op 04/06/2019 door Merlijn
+validator: https://phpcodechecker.com/
+geen problemen gevonden
+*/?>
 <div class="container">
   <div class="row">
       <div class="offset-3 col-md-6 mt-4">
