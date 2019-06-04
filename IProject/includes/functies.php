@@ -1578,7 +1578,7 @@ function veilingblok($voorwerpnummer){
             veilingeindberekenen ($resultaat[0]['voorwerpnr']);
         }else if ($resultaat[0]['geblokkeerd'] == 0){
            // $records =  HaalBiederEnVerkoperOp($voorwerpnummer, $verkoper);
-            VerstuurVeilingBlockedMail($veiling, $ontvanger;
+           // VerstuurVeilingBlockedMail($veiling, $ontvanger;
             $blokeren -> execute(
                 array(
                     ':voorwerpnummer' => $resultaat[0]['voorwerpnr'],
