@@ -1,9 +1,9 @@
+<?php
 /*
 gevalideerd op 04/06/2019 door Merlijn
 validator: https://phpcodechecker.com/
 geen problemen gevonden
 */
-<?php
 function email($code)
 {
     $tekst = '

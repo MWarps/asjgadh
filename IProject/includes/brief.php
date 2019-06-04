@@ -1,3 +1,4 @@
+<?php
 /*
 gevalideerd op 04/06/2019 door Merlijn
 validator: https://phpcodechecker.com/
@@ -12,7 +13,6 @@ oplossingen:
 tweede validatie:
 geen problemen gevonden
 */
-<?php
 function Brief($records) {
     $naam = ($records['voornaam'].' '.$records['achternaam']);
     //$myfile = fopen("".$naam.".txt", "x") or die("Unable to open file!");

@@ -1,4 +1,3 @@
-
 <?php
 /*
 gevalideerd op 04/06/2019 door Merlijn

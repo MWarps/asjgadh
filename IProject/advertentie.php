@@ -1,4 +1,17 @@
 <?php
+/*
+gevalideerd op 04/06/2019 door Merlijn
+validator: https://phpcodechecker.com/
+eerste validatie:
+warinings:
+- er stond ergen ?>> in plaats van ?>
+
+oplossingen:
+- ?>> veranderd naar ?>
+
+tweede validatie:
+geen problemen gevonden
+*/
 include 'includes/header.php';
 if(isset($_GET['id'])){
     $gebruikersnaam = $_SESSION['gebruikersnaam'];
@@ -121,7 +134,7 @@ if(isset($_GET['id'])){
                         }
                         ?>
                         <label for="bod">Bieden: (vanaf: €<?php echo $hoogstebod1; ?>)</label>
-                        <input type="number" name="bod" class="form-control" id="bod" step="0.01" max="999999.99" min="<?php echo $hoogstebod; ?>"<?php if($bieden){echo 'required';} else{ echo 'readonly';} ?>>
+                        <input type="number" name="bod" class="form-control" id="bod" step="0.01" max="999999.99" min="<?php echo $hoogstebod; ?>"<?php if($bieden){echo 'required';} else{ echo 'readonly';} ?>
                         <div class="invalid-feedback">
                             Voer een bod vanaf €<?php echo $hoogstebod1; ?>.
                         </div>

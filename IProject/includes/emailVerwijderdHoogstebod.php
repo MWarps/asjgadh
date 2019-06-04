@@ -1,4 +1,9 @@
 <?php
+/*
+gevalideerd op 04/06/2019 door Merlijn
+validator: https://phpcodechecker.com/
+geen problemen gevonden
+*/
 function EmailVerwijderdHoogstebod($veiling)
 {
   // https://github.com/leemunroe/responsive-html-email-template
