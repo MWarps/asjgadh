@@ -1,5 +1,5 @@
 <?php
-function EmailVeilingBlockedVerkoper($veiling)
+function emailVeilingBlockedVerkoper($veiling)
 {
     // https://github.com/leemunroe/responsive-html-email-template
     $tekst = '
