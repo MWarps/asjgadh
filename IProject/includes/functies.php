@@ -969,29 +969,7 @@ function verificatiesVinden(){
         // echo "er ging iets mis error: {$e->getMessage()}";
     }
 }
-/*
-function getWannabeVerkopers() {
-    //echo 'verkopers gevonden';
-    try{
-        require('core/dbconnection.php');
-        $sqlSelect = $dbh->prepare("SELECT gebruikersnaam FROM Gebruiker INNER JOIN Verificatie ON Gebruiker.email = Verificatie.email WHERE type = 'brief' 
-        AND verzonden = 0");
 
-        $sqlSelect->execute();
-
-        $records = $sqlSelect->fetchall(PDO::FETCH_ASSOC);
-
-        echo 'var dump verkopers';
-        var_dump($records);
-
-        return $records;
-
-    }
-    catch (PDOexception $e) {
-        echo "er ging iets mis erroreqrre: {$e->getMessage()}";
-    }
-}
-*/
 function verificatieVerzonden($email) {
     $email = fixEmail($email);
     try{
@@ -1016,30 +994,7 @@ function fixEmail($email) {
     return $email;
 }
 
-/*
-function maakVerkoperBrief($gebruiker){
-    try{    
-        require('core/dbconnection.php');
-        $sqlSelect = $dbh->prepare("SELECT voornaam, achternaam, geslacht, adresregel1, adresregel2, postcode, plaatsnaam, land, verificatiecode, 
-        eindtijd FROM Gebruiker INNER JOIN Verificatie ON Gebruiker.email = Verificatie.email WHERE type = 'brief' 
-        AND Gebruiker.gebruikersnaam = :gebruiker");
 
-        $sqlSelect->execute(
-            array(
-                ':gebruiker' => $gebruiker
-            ));
-
-        $records = $sqlSelect->fetchall(PDO::FETCH_ASSOC);
-
-        $brief = Brief($records);
-
-        return $brief;
-    }
-    catch (PDOexception $e) {
-        echo "er ging iets mis erroreqrre: {$e->getMessage()}";
-    }
-}
-*/
 function geslacht()
 {
 
