@@ -3,7 +3,7 @@ go
 
 --kolom met gebruikersnaam als foreign key altijd genoemd gebruikersnaam
 
-DROP TABLE IF EXISTS  Aanbevolen, Laatstbekeken, Voorwerpinrubriek, Bod,  Rubrieken, Illustratie,  Voorwerp, Verificatie, Verificatietypen, Gebruikerstelefoon, Verkoper, Gebruiker, Landen, Vragen ;
+DROP TABLE IF EXISTS  Recenties, Aanbevolen, Laatstbekeken, Voorwerpinrubriek, Bod,  Rubrieken, Illustratie,  Voorwerp, Verificatie, Verificatietypen, Gebruikerstelefoon, Verkoper, Gebruiker, Landen, Vragen ;
 go
 ----------------------------------------------------------
 -------------------- CREATE TABLES -----------------------
@@ -168,6 +168,14 @@ datumtijd			DATETIME		NOT NULL DEFAULT CURRENT_TIMESTAMP,
 CONSTRAINT PK_Aanbevolen PRIMARY KEY (gebruikersnaam, rubrieknr, datumtijd)
 );
 
+CREATE TABLE Recenties
+(
+recentienr			BIGINT			NOT NULL,
+waardenr			INT				NOT NULL,
+verkoper			VARCHAR(50)		NOT NULL,
+CONSTRAINT PK_Recentienr PRIMARY KEY (recentienr),
+CONSTRAINT CK_Waardenr CHECK (waardenr BETWEEN 1 AND 10)
+);
 ----------------------------------------------------------
 -------------------- ALTER TABLES ------------------------
 ----------------------------------------------------------
