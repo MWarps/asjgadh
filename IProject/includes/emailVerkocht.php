@@ -1,10 +1,5 @@
 <?php
-/*
-gevalideerd op 04/06/2019 door Merlijn
-validator: https://phpcodechecker.com/
-geen problemen gevonden
-*/
-function EmailGekocht($veiling)
+function emailVerkocht($veiling)
 {
   // https://github.com/leemunroe/responsive-html-email-template
     $tekst = '
@@ -331,9 +326,9 @@ function EmailGekocht($veiling)
                   <table role="presentation" border="0" cellpadding="0" cellspacing="0">
                     <tr>
                       <td>
-                      <h2> Hallo '.$veiling[1]['voornaam'].',</h2>
+                      <h2> Hallo '.$veiling[0]['voornaam'].',</h2>
                       <br>
-                      <p>'.$veiling[0]['gebruikersnaam'].' heeft het voorwerp: <strong>'.$veiling[2]['voorwerpnr'].'</strong>, verkocht <br>
+                      <p>'.$veiling[1]['gebruikersnaam'].' heeft het voorwerp: <strong>'.$veiling[2]['voorwerpnr'].'</strong>, verkocht <br>
                          Voorwerptitel: <strong>'.$veiling[2]['titel'].'</strong><br>
                          </p>
                       <br>
@@ -346,8 +341,12 @@ function EmailGekocht($veiling)
                          De verzendkosten zijn: '.$veiling[2]['verzendkosten'].' <br>                                     
                       <br>
                       <br>
+                      Geef de verkoper een beoordeling!
+                      <a target="_blank" href="http://iproject34.icasites.nl/rating.php?id='.$veiling[2]['voorwerpnr'].'&verkoper='.$veiling[1]['gebruikersnaam'].'">Beoordeel Verkoper!</a>
+                      </p>
+                      <p>
                         U kunt een bericht sturen naar de verkoper:<br>
-                        Emailadres: <strong>'.$veiling[0]['email'].'</strong</p>
+                        Emailadres: <strong>'.$veiling[1]['email'].'</strong></p>
                       <br>
                       <p>Klik hier om naar de website te gaan: <a href="http://iproject34.icasites.nl">EenmaalAndermaal.nl</a>
                               

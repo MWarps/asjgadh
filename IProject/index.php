@@ -36,6 +36,9 @@ if(isset($_SESSION['status'])){
         case 'voorwerp':
             $status = 'Voorwerp is succesvol te koop gezet!';
             break;
+        case 'recentie':
+            $status = 'Uw recentie is succesvol geplaatst!';
+            break;
         default:
             // code...
             break;
@@ -45,11 +48,11 @@ if(isset($_SESSION['status'])){
 
     // laat melding zien aan gebruiker
     echo '<div class="container">
-            <div class="h-100 row align-items-center">
+            <div class="row align-items-center">
               <div class="col">
                         <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
                           <strong>'.$status.'</strong> U kunt op het kruisje klikken om deze melding te sluiten.
-                          <button type="button" class="close pt-0" data-dismiss="alert" aria-label="Close">
+                          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
