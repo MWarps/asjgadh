@@ -942,7 +942,7 @@ function verificatiesVinden(){
     try {
         require('core/dbconnection.php');
         $sqlSelect = $dbh->prepare("SELECT Gebruiker.voornaam, Gebruiker.achternaam, Gebruiker.email, Gebruiker.geslacht, Gebruiker.adresregel1, Gebruiker.adresregel2, Gebruiker.postcode, Gebruiker.plaatsnaam, Gebruiker.land, Verificatie.verificatiecode, 
-        Verificatie.eindtijd FROM Gebruiker INNER JOIN Verificatie ON Gebruiker.email = Verificatie.email WHERE type = 'brief'  
+        Verificatie.eindtijd FROM Gebruiker INNER JOIN Verificatie ON Gebruiker.email = Verificatie.email WHERE type = 'brief' AND verzonden = 0
         ");
 
         $sqlSelect->execute();
@@ -993,9 +993,12 @@ function getWannabeVerkopers() {
 }
 */
 function verificatieVerzonden($email) {
+    $email = fixEmail($email);
     try{
         require('core/dbconnection.php');
         $sqlSelect = $dbh->prepare("UPDATE Verificatie SET verzonden = 1 WHERE email = :email");
+
+        //echo 'verificatie verzonden '.$email;
 
         $sqlSelect->execute(
             array(
@@ -1006,6 +1009,13 @@ function verificatieVerzonden($email) {
         echo "er ging iets mis error: {$e->getMessage()}";
     }
 }
+
+function fixEmail($email) {
+    $email = str_replace(" ","+",$email);
+
+    return $email;
+}
+
 /*
 function maakVerkoperBrief($gebruiker){
     try{    
