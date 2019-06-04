@@ -1,5 +1,5 @@
 <?php
-function EmailGekocht($veiling)
+function emailVerkocht($veiling)
 {
   // https://github.com/leemunroe/responsive-html-email-template
     $tekst = '
@@ -328,21 +328,22 @@ function EmailGekocht($veiling)
                       <td>
                       <h2> Hallo '.$veiling[1]['voornaam'].',</h2>
                       <br>
-                      <p>'.$veiling[0]['gebruikersnaam'].' heeft het voorwerp: <strong>'.$veiling[2]['voorwerpnr'].'</strong>, verkocht <br>
-                         Voorwerptitel: <strong>'.$veiling[2]['titel'].'</strong><br>
+                      <p>U heeft uw advertentie op <strong>Verkocht</strong> gezet.<br>
+                         Voorwerpnummer: <strong>'.$veiling[2]['voorwerpnr'].'</strong><br>
+                         Titel: <strong>'.$veiling[2]['titel'].'</strong>
                          </p>
                       <br>
-                      <p>U heeft het voorwerp gekocht voor: <strong> &euro; '.number_format($veiling[2]['verkoopprijs'], 2, ',', '.').' </strong><br> 
-                      Deze wordt via <strong>'.$veiling[2]['betalingswijze'].'</strong> betaald.<br>
-                         De betalingsinstructie is als volgt: '.$veiling[2]['betalingsinstructie'].' <br>
-                         De locatie van het voorwerp is: <br>
-                         Land: <strong>'.$veiling[2]['land'].'</strong><br>
-                         Plaats: <strong>'.$veiling[2]['plaatsnaam'].'</strong> <br>
-                         De verzendkosten zijn: '.$veiling[2]['verzendkosten'].' <br>                                     
+                      <p>De hoogste bieder en dus de koper is: <strong>'.$veiling[0]['gebruikersnaam'].'</strong> <br>
+                         Het product wordt verkocht voor: <strong> &euro; '.number_format($veiling[2]['verkoopprijs'], 2, ',', '.').'</strong><br>
+                         Deze wordt via <strong>'.$veiling[2]['betalingswijze'].'</strong> betaald.<br>
+                         De betaalinstructies zijn: <strong>'.$veiling[2]['betalingsinstructie'].'</strong><br>
+                         De verzendinstructies zijn: <strong>'.$veiling[2]['verzendinstructies'].'</strong><br><br>
+                         Uw veiling wordt op gesloten gezet. Dit betekent dat de veiling niet meer gezien kan worden.                                      
                       <br>
-                      <br>
-                        U kunt een bericht sturen naar de verkoper:<br>
-                        Emailadres: <strong>'.$veiling[0]['email'].'</strong</p>
+                      <br>                      
+                        U kunt contact opnemen met de koper.<br>
+                        Emailadres: <strong>'.$veiling[0]['email'].'</strong> </p>
+                      <p>Heeft u de advertentie niet op <strong>Verkocht</strong> gezet neem dan contact op met onze klantenservice.</p>
                       <br>
                       <p>Klik hier om naar de website te gaan: <a href="http://iproject34.icasites.nl">EenmaalAndermaal.nl</a>
                               

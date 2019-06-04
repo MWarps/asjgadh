@@ -1,4 +1,9 @@
 <?php
+/*
+gevalideerd op 04/06/2019 door Merlijn
+validator: https://phpcodechecker.com/
+geen problemen gevonden
+*/
 function EmailVerwijderdVerkoper($veiling, $id)
 {
   // https://github.com/leemunroe/responsive-html-email-template
@@ -326,7 +331,7 @@ function EmailVerwijderdVerkoper($veiling, $id)
                   <table role="presentation" border="0" cellpadding="0" cellspacing="0">
                     <tr>
                       <td>
-                      <h2> Hallo '.$veiling[0]['voornaam'].',</h2>
+                      <h2> Hallo '.$veiling[$id-1]['voornaam'].',</h2>
                       <br>
                       <p>U heeft een veiling verwijderd van EenmaalAndermaal. </p>
                       <br>

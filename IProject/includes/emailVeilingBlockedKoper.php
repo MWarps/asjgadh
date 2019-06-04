@@ -1,5 +1,10 @@
 <?php
-function EmailVerwijderdVerkoper($veiling, $id)
+/*
+gevalideerd op 04/06/2019 door Merlijn
+validator: https://phpcodechecker.com/
+geen problemen gevonden
+*/
+function EmailVeilingBlockedKoper($veiling)
 {
     // https://github.com/leemunroe/responsive-html-email-template
     $tekst = '

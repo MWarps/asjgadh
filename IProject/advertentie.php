@@ -1,4 +1,17 @@
 <?php
+/*
+gevalideerd op 04/06/2019 door Merlijn
+validator: https://phpcodechecker.com/
+eerste validatie:
+warinings:
+- er stond ergen ?>> in plaats van ?>
+
+oplossingen:
+- ?>> veranderd naar ?>
+
+tweede validatie:
+geen problemen gevonden
+*/
 include 'includes/header.php';
 if(isset($_GET['id'])){
     $gebruikersnaam = $_SESSION['gebruikersnaam'];
@@ -69,7 +82,7 @@ if(isset($_GET['id'])){
                                     $locatie = 'upload/';
                                 }
                                 if(!empty($rij['illustratieFile'])){
-                                    echo '<li data-target="#carousel-example-generic" data-slide-to="'.$teller.'"><img src="'.$locatie.$rij['illustratieFile'].'" alt="..."></li>';
+                                    echo '<li data-target="#carousel-example-generic" data-slide-to="'.$rij.'"><img src="'.$locatie.$rij['illustratieFile'].'" alt="..."></li>';
                                     $teller++;
                                 }  }
                             ?>
@@ -85,33 +98,22 @@ if(isset($_GET['id'])){
                                     }  echo $locatie.$Illustratie1[0]['illustratieFile'] ?>" alt="...">
                                 </div>
                             </div>
-                            <?php
-                            $teller = 0;
-
-                            foreach ($Illustratie1 as $rij) {
+                            <?php                            
+                            for ($teller = 1; $teller < count($Illustratie1); $teller++) {
                                 $locatie = '../pics/';
                                 if(substr($rij['illustratieFile'] , 0 ,2 ) == 'ea'){
                                     $locatie = 'upload/';
-                                }
-                                if(!empty($rij['illustratieFile'])){
+                                }                                
                                     echo '<div class="carousel-item">
-                    <div class="img-big-wrap">
-                      <img src="'.$locatie.$Illustratie1[$teller]['illustratieFile'].'" alt="...">
-                    </div>           
-                 </div>';
-                                    $teller++;
-                                } }
+                                            <div class="img-big-wrap">
+                                              <img src="'.$locatie.$Illustratie1[$teller]['illustratieFile'].'" alt="...">
+                                            </div>           
+                                          </div>';                                    
+                                 }
                             ?>
                         </div>
                         <!-- Controls -->
-                        <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
-                            <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-                            <span class="sr-only">Previous</span>
-                        </a>
-                        <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
-                            <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-                            <span class="sr-only">Next</span>
-                        </a>
+                        
                     </div>
                 </div>
             </div>
@@ -132,7 +134,7 @@ if(isset($_GET['id'])){
                         }
                         ?>
                         <label for="bod">Bieden: (vanaf: €<?php echo $hoogstebod1; ?>)</label>
-                        <input type="number" name="bod" class="form-control" id="bod" step="0.01" max="999999.99" min="<?php echo $hoogstebod; ?>"<?php if($bieden){echo 'required';} else{ echo 'readonly';} ?>>
+                        <input type="number" name="bod" class="form-control" id="bod" step="0.01" max="999999.99" min="<?php echo $hoogstebod; ?>"<?php if($bieden){echo 'required';} else{ echo 'readonly';} ?> >
                         <div class="invalid-feedback">
                             Voer een bod vanaf €<?php echo $hoogstebod1; ?>.
                         </div>
@@ -150,92 +152,28 @@ if(isset($_GET['id'])){
                     ?>
                 </ul>
             </div>
-            <div class="col-md-5 text-center">
+            <div class="col-md-5">
                 <div class="card">
                     <div class="card-header">
                         Gebruiker Informatie
                     </div>
                     <div class="card-body">
-                        <a href="#"><?php echo $advertentie['verkoper']; ?></a><br>
-                        <a href="#">Reviews</a><br><br>
-                        <div class="col-xs-12 col-md-6 text-center">
-                            <h1 class="rating-num">
-                                4.0</h1>
-                            <div class="rating">
-                                <span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star">
-                            </span><span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star">
-                            </span><span class="glyphicon glyphicon-star-empty"></span>
-                            </div>
-                            <div>
-                                <span class="glyphicon glyphicon-user"></span>1,050,008 total
-                            </div>
-                        </div>
-                        <div class="col-xs-12 col-md-6">
-                            <div class="row rating-desc">
-                                <div class="col-xs-3 col-md-3 text-right">
-                                    <span class="glyphicon glyphicon-star"></span>5
-                                </div>
-                                <div class="col-xs-8 col-md-9">
-                                    <div class="progress progress-striped">
-                                        <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="20"
-                                             aria-valuemin="0" aria-valuemax="100" style="width: 80%">
-                                            <span class="sr-only">80%</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- end 5 -->
-                                <div class="col-xs-3 col-md-3 text-right">
-                                    <span class="glyphicon glyphicon-star"></span>4
-                                </div>
-                                <div class="col-xs-8 col-md-9">
-                                    <div class="progress">
-                                        <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="20"
-                                             aria-valuemin="0" aria-valuemax="100" style="width: 60%">
-                                            <span class="sr-only">60%</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- end 4 -->
-                                <div class="col-xs-3 col-md-3 text-right">
-                                    <span class="glyphicon glyphicon-star"></span>3
-                                </div>
-                                <div class="col-xs-8 col-md-9">
-                                    <div class="progress">
-                                        <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="20"
-                                             aria-valuemin="0" aria-valuemax="100" style="width: 40%">
-                                            <span class="sr-only">40%</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- end 3 -->
-                                <div class="col-xs-3 col-md-3 text-right">
-                                    <span class="glyphicon glyphicon-star"></span>2
-                                </div>
-                                <div class="col-xs-8 col-md-9">
-                                    <div class="progress">
-                                        <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="20"
-                                             aria-valuemin="0" aria-valuemax="100" style="width: 20%">
-                                            <span class="sr-only">20%</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- end 2 -->
-                                <div class="col-xs-3 col-md-3 text-right">
-                                    <span class="glyphicon glyphicon-star"></span>1
-                                </div>
-                                <div class="col-xs-8 col-md-9">
-                                    <div class="progress">
-                                        <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="80"
-                                             aria-valuemin="0" aria-valuemax="100" style="width: 15%">
-                                            <span class="sr-only">15%</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- end 1 -->
-                            </div>
-                            <!-- end row -->
-                        </div>
-                        <button type="button" class="btn btn-primary btn-lg"><a style="color: white;" href="stuurbericht.php?id=<?php echo $advertentie['verkoper']?>">Stuur bericht!</a></button>
+                      Naam: <strong><?php echo $advertentie['verkoper']; ?></strong><br>
+                      <?php $recenties = haalRecentieOp($advertentie['verkoper']); 
+                            if(!empty($recenties[0]['recentie'])){
+                              ?> 
+                        
+                        Reviews:<br><br>
+                        
+                            <h1><?php echo 'Gemiddelde: '.$recenties[1]['recentie'].'/10' ?> </h1>
+                            <p><?php echo 'Aantal recenties: '.$recenties[0]['recentie'].'' ?> </p>
+                          
+                          <?php }
+                                else{
+                                  echo '<h3> Deze verkoper heeft nog geen recenties </h3>';
+                                }                                              ?>
+                        
+                        <button type="button" class="btn btn-primary btn-lg mt-3"><a style="color: white;" href="stuurbericht.php?id=<?php echo $advertentie['verkoper']?>">Stuur bericht!</a></button>
                     </div>
                 </div>
                 <hr>

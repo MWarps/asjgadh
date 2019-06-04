@@ -8,6 +8,7 @@ include 'emailVerwijderdVerkoper.php';
 include 'emailVerwijderdHoogstebod.php';
 include 'brief.php';
 
+// deze functie geeft de minimumverhoging van het bod bij verschillende bedragen
 function BodVerhoging($Euro){
     $Verhoging;
     switch ($Euro) {
@@ -31,11 +32,7 @@ function BodVerhoging($Euro){
     return $Verhoging;
 }
 
-function HaalVoorwerpOp($gebruikersnaam){
-
-
-}
-
+//deze functie registreert welke voorwerpen als laatste bekeken zijn door de gebruiker
 function gebruikerBekeekVoorwerp($gebruikersnaam, $voorwerpnr) {
     try {
         require('core/dbconnection.php');
@@ -53,6 +50,7 @@ function gebruikerBekeekVoorwerp($gebruikersnaam, $voorwerpnr) {
     }
 }
 
+// deze functie registreert in de database uit welke rubriek het laatst bekeken voorwerp kwam zodat de website de gebruiker artikelen uit deze rubriek aanbeveelt
 function gebruikerAanbevolen($gebruikersnaam, $voorwerpnr) {
     try {
         require('core/dbconnection.php');
@@ -70,6 +68,7 @@ function gebruikerAanbevolen($gebruikersnaam, $voorwerpnr) {
     }
 }
 
+// deze functie voegt de link tussen afbeelding en artikel toe aan de database
 function VoegVoorwerpToeAanIllustratie($voorwerpnr, $illustratieFile){
     try {
         // SQL insert statement
@@ -91,6 +90,7 @@ function VoegVoorwerpToeAanIllustratie($voorwerpnr, $illustratieFile){
 
 }
 
+// deze functie voegt een artikel aan een rubriek toe
 function VoegVoorwerpAanRubriekToe($voorwerpnr, $rubriek){
 
     try {
@@ -112,6 +112,7 @@ function VoegVoorwerpAanRubriekToe($voorwerpnr, $rubriek){
     }
 }
 
+// deze functie voegt een artikel toe aan de database
 function VoegVoorwerpToe($input){
     try {
         // SQL insert statement
@@ -166,7 +167,7 @@ function VoegVoorwerpToe($input){
 
 }  
 
-
+// deze functie geeft de meest bekeken(en dus populairste) artikelen op de website
 function getPopulairsteArtikelen() {
     try {
         require('core/dbconnection.php');
@@ -213,9 +214,10 @@ function getPopulairsteArtikelen() {
             </div>
         </div>
         </div>';
-    }}
+    }
+}
 
-
+// deze functie haalt de producten die in de meegegeven rubriek zitten
 function getProductenUitRubriek2($rubriek, $aantal) {
 
     try {
@@ -251,6 +253,7 @@ function getProductenUitRubriek2($rubriek, $aantal) {
     }
 }
 
+// deze functie laad 21 artikelen uit de laagste niveau subrubrieken van de rubriek die aan de functie gegeven wordt
 function getProductenUitRubriek($rubriek, $aantal) {
 
     try {
@@ -286,12 +289,11 @@ function getProductenUitRubriek($rubriek, $aantal) {
     }
 }
 
-
-
+// deze functie laad de 3 artikelen die het laatst door de gebruiker bekeken zijn
 function getLaatstBekeken($gebruiker) {
     try {
         require('core/dbconnection.php');
-        $sqlSelect = $dbh->prepare("SELECT TOP 3 * FROM LaatstBekeken
+        $sqlSelect = $dbh->prepare("SELECT TOP 3 voorwerpnr FROM LaatstBekeken
       WHERE gebruikersnaam = :gebruikersnaam
 	  ORDER BY datumtijd DESC");
 
@@ -346,6 +348,7 @@ function getLaatstBekeken($gebruiker) {
         }}
 }
 
+// deze functie laadt de advertenties die aanbevolen worden aan de gebruiker
 function getAanbevolen($gebruiker) {
     try {
         require('core/dbconnection.php');
@@ -936,13 +939,14 @@ function StuurRegistreerEmail($Email, $Code){
 
 }
 
+//deze methode laad alle verificaties om verkoper te worden die nog niet verzonden zijn. ook wordt het adress en de brief volgens een template vast opgesteld
 function verificatiesVinden(){
     $teller = 0;
     //echo 'verificaties gevonden';
     try {
         require('core/dbconnection.php');
         $sqlSelect = $dbh->prepare("SELECT Gebruiker.voornaam, Gebruiker.achternaam, Gebruiker.email, Gebruiker.geslacht, Gebruiker.adresregel1, Gebruiker.adresregel2, Gebruiker.postcode, Gebruiker.plaatsnaam, Gebruiker.land, Verificatie.verificatiecode, 
-        Verificatie.eindtijd FROM Gebruiker INNER JOIN Verificatie ON Gebruiker.email = Verificatie.email WHERE type = 'brief'  
+        Verificatie.eindtijd FROM Gebruiker INNER JOIN Verificatie ON Gebruiker.email = Verificatie.email WHERE type = 'brief' AND verzonden = 0
         ");
 
         $sqlSelect->execute();
@@ -969,33 +973,15 @@ function verificatiesVinden(){
         // echo "er ging iets mis error: {$e->getMessage()}";
     }
 }
-/*
-function getWannabeVerkopers() {
-    //echo 'verkopers gevonden';
-    try{
-        require('core/dbconnection.php');
-        $sqlSelect = $dbh->prepare("SELECT gebruikersnaam FROM Gebruiker INNER JOIN Verificatie ON Gebruiker.email = Verificatie.email WHERE type = 'brief' 
-        AND verzonden = 0");
 
-        $sqlSelect->execute();
-
-        $records = $sqlSelect->fetchall(PDO::FETCH_ASSOC);
-
-        echo 'var dump verkopers';
-        var_dump($records);
-
-        return $records;
-
-    }
-    catch (PDOexception $e) {
-        echo "er ging iets mis erroreqrre: {$e->getMessage()}";
-    }
-}
-*/
+//deze functie registreerd dat de brief verzonden is in de database
 function verificatieVerzonden($email) {
+    $email = fixEmail($email);
     try{
         require('core/dbconnection.php');
         $sqlSelect = $dbh->prepare("UPDATE Verificatie SET verzonden = 1 WHERE email = :email");
+
+        //echo 'verificatie verzonden '.$email;
 
         $sqlSelect->execute(
             array(
@@ -1006,30 +992,15 @@ function verificatieVerzonden($email) {
         echo "er ging iets mis error: {$e->getMessage()}";
     }
 }
-/*
-function maakVerkoperBrief($gebruiker){
-    try{    
-        require('core/dbconnection.php');
-        $sqlSelect = $dbh->prepare("SELECT voornaam, achternaam, geslacht, adresregel1, adresregel2, postcode, plaatsnaam, land, verificatiecode, 
-        eindtijd FROM Gebruiker INNER JOIN Verificatie ON Gebruiker.email = Verificatie.email WHERE type = 'brief' 
-        AND Gebruiker.gebruikersnaam = :gebruiker");
 
-        $sqlSelect->execute(
-            array(
-                ':gebruiker' => $gebruiker
-            ));
+// de $_GET die gebruikt wordt om de email op te halen en naar verificatieVerzonden te sturen verandert de + tekens in de email adressen naar spaties
+function fixEmail($email) {
+    $email = str_replace(" ","+",$email);
 
-        $records = $sqlSelect->fetchall(PDO::FETCH_ASSOC);
-
-        $brief = Brief($records);
-
-        return $brief;
-    }
-    catch (PDOexception $e) {
-        echo "er ging iets mis erroreqrre: {$e->getMessage()}";
-    }
+    return $email;
 }
-*/
+
+
 function geslacht()
 {
 
@@ -1343,6 +1314,7 @@ function directorieVinden($pagina){
     }
 }
 
+//deze functie laadt de tabel met gebruikers in in de beheeromgeving overzichtGebruikers.php
 function gebruikersvinden($gebruikersnaam){
     $teller = 0;
     try {
@@ -1394,6 +1366,8 @@ function gebruikersvinden($gebruikersnaam){
         // echo "er ging iets mis error: {$e->getMessage()}";
     }
 }
+
+//deze functie regelt de blokkeer/deblokkeer knop die rechts naast de gebruiker staat in de beheeromgeving
 function blokeren($geblokeerd, $teller, $gebruiker){
     if ($geblokeerd == "Ja"){
         echo ' <td>   
@@ -1405,6 +1379,8 @@ function blokeren($geblokeerd, $teller, $gebruiker){
       </td>  ';
     }
 }
+
+//deze functie blokkeert of deblokkeert de gebruiker in de database als de beheerder dit via de beheerdersomgeving dit aanstuurt
 function gebruikerblok(){
     try {
         require('core/dbconnection.php');
@@ -1580,7 +1556,7 @@ function veilingblokeren($geblokkeerd, $voorwerpnummer, $titel){
 function veilingblok($voorwerpnummer){
     try {
         require('core/dbconnection.php');
-        $records =  HaalBiederEnVerkoperOp($voorwerpnr, $verkoper);
+
         $blokeren = $dbh ->prepare (" UPDATE Voorwerp
                                     SET geblokkeerd = 1, blokkeerdatum = CURRENT_TIMESTAMP
                                     WHERE voorwerpnr like :voorwerpnummer
@@ -1607,7 +1583,11 @@ function veilingblok($voorwerpnummer){
             );
             veilingeindberekenen ($resultaat[0]['voorwerpnr']);
         }else if ($resultaat[0]['geblokkeerd'] == 0){
-            VerstuurVeilingBlockedMail($veiling, $ontvanger);
+
+            //Ik denk dat het hier mis gaat en dat ie verkoper niet kent, maar geen idee wat ik erdan neer moet gooien want &SESSION[Gebruikersnaam] stuff werkt ook niet lijkt me.
+            $veiling = HaalBiederEnVerkoperOp($voorwerpnummer, $verkoper);
+            VerstuurVeilingBlockedMail($veiling, true);
+            VerstuurVeilingBlockedMail($veiling, false);
             $blokeren -> execute(
                 array(
                     ':voorwerpnummer' => $resultaat[0]['voorwerpnr'],
@@ -1772,11 +1752,10 @@ function VerkoopVeiling($voorwerpnr){
   }  
 }
 
-function VerwijderVeiling($voorwerpnr, $verkoper){
+function VerwijderVeiling($voorwerpnr){
   
   try {
       require('core/dbconnection.php');   
-      $records =  HaalBiederEnVerkoperOp($voorwerpnr, $verkoper);                             
       $sqlDelete1 = $dbh ->prepare ("DELETE FROM Voorwerpinrubriek where voorwerpnr = :voorwerpnr");
       $sqlDelete2 = $dbh ->prepare ("DELETE FROM laatstbekeken where voorwerpnr = :voorwerpnr"); 
       $sqlDelete3 = $dbh ->prepare ("DELETE FROM Voorwerp where voorwerpnr = :voorwerpnr");
@@ -1784,21 +1763,19 @@ function VerwijderVeiling($voorwerpnr, $verkoper){
      $sqlDelete1-> execute( array(':voorwerpnr' => $voorwerpnr ));
      $sqlDelete2-> execute( array(':voorwerpnr' => $voorwerpnr ));
      $sqlDelete3-> execute( array(':voorwerpnr' => $voorwerpnr ));         
-      
-      return $records;
-      
+            
   } catch (PDOexception $e) {
       "er ging iets mis error: {$e->getMessage()}";      
   }  
 }
 
-function VerstuurVerkoopMail($veiling, $ontvanger){
+function VerstuurVerkoopMail($veiling){
 
-    if($ontvanger){
+    
         ini_set( 'display_errors', 1 );
         error_reporting( E_ALL );
         $from = "no-reply@iconcepts.nl";
-        $to = $veiling[0]['email'];
+        $to = $veiling[1]['email'];
         $subject = "EenmaalAndermaal u heeft een voorwerp Verkocht!";
         $message = emailVerkocht($veiling);
         $headers = 'MIME-Version: 1.0' . "\r\n";
@@ -1806,22 +1783,20 @@ function VerstuurVerkoopMail($veiling, $ontvanger){
         $headers .= "From:" .$from;
 
         mail($to,$subject,$message, $headers);
-    }
-
-    if($ontvanger == false){
+    
         ini_set( 'display_errors', 1 );
         error_reporting( E_ALL );
         $from = "no-reply@iconcepts.nl";
-        $to = $veiling[1]['email'];
+        $to = $veiling[0]['email'];
         $subject = "EenmaalAndermaal u heeft een voorwerp Gekocht!";
-        $message = EmailGekocht($veiling);
+        $message = emailGekocht($veiling);
 
         $headers = 'MIME-Version: 1.0' . "\r\n";
         $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
         $headers .= "From:" .$from;
 
         mail($to,$subject,$message, $headers);
-    }  
+     
 }
 
 
@@ -1833,9 +1808,24 @@ function VerstuurVeilingBlockedMail($veiling, $ontvanger){
         ini_set( 'display_errors', 1 );
         error_reporting( E_ALL );
         $from = "no-reply@iconcepts.nl";
-        $to = $veiling[0]['email'];
-        $subject = "EenmaalAndermaal u heeft een voorwerp Verkocht!";
-        $message = emailVeilingBlockedVerkoper($veiling);
+        $to = $veiling[0]['email'];  //Deze herkent hij ook niet, weet niet wat er allemaal mis gaat 
+        $subject = "EenmaalAndermaal uw veiling is geblokkeerd";
+      //  $message = emailVeilingBlockedVerkoper($veiling);
+        $message = 'Beste  '.$veiling[0]['gebruikersnaam'].',
+                 
+                  
+         Helaas moeten wij u op de hoogte stellen dat uw veiling is geblokkeerd. Dit kan meerdere redenen hebben.
+         Om meer informatie te krijgen kunt u contact met ons opnemen door een mail te sturen naar: EenmaalAndermaal@gmail.com
+         Vermeld in deze mail over welke advertentie het gaat.
+         Wij hopen u zodoende genoeg informatie te hebben gegeven.
+                       
+         Met vriendelijke groeten,
+                        
+         EenmaalAndermaal  
+';
+
+
+
         $headers = 'MIME-Version: 1.0' . "\r\n";
         $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
         $headers .= "From:" .$from;
@@ -1849,8 +1839,24 @@ function VerstuurVeilingBlockedMail($veiling, $ontvanger){
         error_reporting( E_ALL );
         $from = "no-reply@iconcepts.nl";
         $to = $veiling[1]['email'];
-        $subject = "EenmaalAndermaal u heeft een voorwerp Gekocht!";
-        $message = emailVeilingBlockedKoper($veiling);
+        $subject = "EenmaalAndermaal een veiling waarop u heeft gereageerd is geblokkeerd";
+      //  $message = emailVeilingBlockedKoper($veiling);
+
+
+        $message = 'Beste  '.$veiling[1]['gebruikersnaam'].',
+                 
+                  TEST
+         Helaas moeten wij u op de hoogte stellen dat een veiling waarop u de hoogste bieder was is geblokkeerd. Dit kan meerdere redenen hebben.
+         Om meer informatie te krijgen kunt u contact met ons opnemen door een mail te sturen naar: EenmaalAndermaal@gmail.com
+         Vermeld in deze mail over welke advertentie het gaat.
+         Wij hopen u zodoende genoeg informatie te hebben gegeven.
+                       
+         Met vriendelijke groeten,
+                        
+         EenmaalAndermaal  
+';
+
+
 
         $headers = 'MIME-Version: 1.0' . "\r\n";
         $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
@@ -1863,13 +1869,17 @@ function VerstuurVeilingBlockedMail($veiling, $ontvanger){
 
 function VerstuurVerwijderMail($veiling, $ontvanger){
   $id = 2;
-  if(empty($veiling[2])){$id = 1;}
+  $verkoper = 1;
+  if(count($veiling) == 2){
+    $verkoper = 0;
+    $id = 1;    
+  }
   
-  if($ontvanger){
+  if($ontvanger == false){
     ini_set( 'display_errors', 1 );
     error_reporting( E_ALL );
     $from = "no-reply@iconcepts.nl";
-    $to = $veiling[1]['email'];
+    $to = $veiling[$verkoper]['email'];
     $subject = "EenmaalAndermaal uw voorwerp is verwijderd";
     $message = EmailVerwijderdVerkoper($veiling, $id);
   
@@ -1878,9 +1888,9 @@ function VerstuurVerwijderMail($veiling, $ontvanger){
     $headers .= "From:" .$from;
   
     mail($to,$subject,$message, $headers);
-  }
+  }  
   
-  if($ontvanger == false){
+  if($ontvanger){
     ini_set( 'display_errors', 1 );
     error_reporting( E_ALL );
     $from = "no-reply@iconcepts.nl";
@@ -1892,7 +1902,50 @@ function VerstuurVerwijderMail($veiling, $ontvanger){
     $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
     $headers .= "From:" .$from;
   
-    mail($to,$subject,$message, $headers);
-  }  
+    mail($to,$subject,$message, $headers);  
+  }
+  
 }
+
+function updateRecentie($waarde, $verkoper) {
+    try {
+        require('core/dbconnection.php');
+        $sqlSelect = $dbh->prepare(" INSERT INTO Recenties (waardenr, verkoper)
+                                     VALUES(:waarde, :verkoper)
+                                     ");
+
+        $sqlSelect->execute(
+            array(
+                ':waarde' => $waarde,
+                ':verkoper' => $verkoper
+            ));
+
+    } catch (PDOexception $e) {
+        echo "er ging iets mis error: {$e->getMessage()}";
+    }
+}
+
+function haalRecentieOp($verkoper) {
+    try {
+        require('core/dbconnection.php');
+        $sqlSelect = $dbh->prepare(" SELECT sum(waardenr) / count(waardenr) as recentie from Recenties where verkoper = :verkoper
+                                     UNION
+                                     SELECT count(waardenr) as recentie from Recenties
+                                     where verkoper = :verkoper2
+                                     ");
+
+        $sqlSelect->execute(
+            array(      
+              ':verkoper' => $verkoper,      
+              ':verkoper2' => $verkoper
+            ));
+
+            $records = $sqlSelect ->fetchAll(PDO::FETCH_ASSOC);
+            
+            return $records;
+    } catch (PDOexception $e) {
+        echo "er ging iets mis error2: {$e->getMessage()}";
+    }
+}
+
 ?>

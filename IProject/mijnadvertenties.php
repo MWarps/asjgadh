@@ -1,4 +1,9 @@
 <?php
+/*
+gevalideerd op 04/06/2019 door Merlijn
+validator: https://phpcodechecker.com/
+geen problemen gevonden
+*/
 include 'includes/header.php';
 
 if(isset($_SESSION['gebruikersnaam'])){
@@ -6,19 +11,19 @@ if(isset($_SESSION['gebruikersnaam'])){
 
 if(isset($_GET['id'])){
   if($_GET['status'] == 'verkopen'){
-    VerkoopVeiling($_GET['id']);
+    //VerkoopVeiling($_GET['id']);
     $Veiling = HaalBiederEnVerkoperOp($_GET['id'], $_SESSION['gebruikersnaam']);
-    VerstuurVerkoopMail($Veiling, true);
-    VerstuurVerkoopMail($Veiling, false);
+    VerstuurVerkoopMail($Veiling);
     
   }
   if($_GET['status'] == 'verwijderen'){
-    $Veiling = VerwijderVeiling($_GET['id'], $_SESSION['gebruikersnaam']);
+    $Veiling = HaalBiederEnVerkoperOp($_GET['id'], $_SESSION['gebruikersnaam']);
+    //VerwijderVeiling($_GET['id']); 
+    VerstuurVerwijderMail($Veiling, false);
     
-      VerstuurVerwijderMail($Veiling, true);
-      if(!empty($Veiling[1]['gebruikersnaam'])){
-      VerstuurVerwijderMail($Veiling, false);
-      }
+    if(count($Veiling) == 3){
+    VerstuurVerwijderMail($Veiling, true);
+    }
     $verwijderen = true;
   }
 }  
@@ -37,7 +42,7 @@ if(isset($_GET['id'])){
                     <div class="col">
                               <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
                                 <strong>Het voorwerp is verwijderd!</strong> U kunt op het kruisje klikken om deze melding te sluiten.
-                                <button type="button" class="close pt-0" data-dismiss="alert" aria-label="Close">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                   <span aria-hidden="true">&times;</span>
                                   </button>
                               </div>
@@ -70,31 +75,35 @@ if(isset($_GET['id'])){
                         $details['titel'] .= '...';
                     }
                     $Bieder = HaalBiederEnVerkoperOp($details['voorwerpnr'], $_SESSION['gebruikersnaam']);
-                    if(empty($Bieder[1]['gebruikersnaam']) || $Bieder[2]['veilinggesloten'] == 1){
+                    if(count($Bieder) < 3){                
                       $knop = 'disabled';
                     }
-                    $verkocht = '<a class="btn btn-block btn-success py-2 '.$knop.'" href="mijnadvertenties.php?id='.$details['voorwerpnr'].'&status=verkopen" >Verkopen</a>';
-                    if(!empty($details['koper'])){
+                    $artikelKnop = '<a href="advertentie.php?id='.$details['voorwerpnr'].'" class="btn btn-block btn-primary py-2">Ga naar artikel</a>';
+                    $verkocht = '<a class="btn btn-block btn-success py-2'.$knop.'" href="mijnadvertenties.php?id='.$details['voorwerpnr'].'&status=verkopen" >Verkopen</a>';
+                    if(count($Bieder) == 3){
+                    if(!empty($Bieder[2]['koper'])){
+                      $knop = 'disabled';
                       $verkocht = '<button type="button" class="btn btn-block btn-success py-2 '.$knop.'" >Advertentie is verkocht</button>';
-                    }
+                      $artikelKnop = '';
+                    }}
                     
                     echo '
                     <div class="col-md-3 p-2">
-                    <div class="card">
-                    <div class="card-img-boven">
-                      <img src="'.$locatie.$details['illustratieFile'].'" alt="Foto bestaat niet">
-                    </div> 
-                      <h5 class="card-header"><a href="advertentie.php?id='.$details['voorwerpnr'].'">'.$details['titel'].'</a></h5>
+                      <div class="card">
+                       <div class="card-img-boven">
+                        <img src="'.$locatie.$details['illustratieFile'].'" alt="Foto bestaat niet">
+                       </div> 
+                      <h5 class="card-header">'.$details['titel'].'</h5>
                         <div class="card-body">
                           <h4 class="card-text">€ '.number_format($details['startprijs'], 2, ',', '.').'</h4>
                           <p class="card-text"><a href="#">'.$details['verkoper'].'</a><br>
                           '.$details['land'].', '.$details['plaatsnaam'].'</p>
-                          <a href="advertentie.php?id='.$details['voorwerpnr'].'" class="btn btn-block btn-primary py-2">Ga naar artikel</a>                                                                         
+                          '.$artikelKnop.'                                                                         
                           '.$verkocht.'
                           <a class="btn btn-block btn-danger py-2" href="mijnadvertenties.php?id='.$details['voorwerpnr'].'&status=verwijderen">Verwijderen</a>
                           
                         </div>
-                    </div>
+                      </div>
                     </div>';
         
                 }

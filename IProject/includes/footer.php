@@ -1,3 +1,8 @@
+ <?php /*
+gevalideerd op 04/06/2019 door Merlijn
+validator: https://phpcodechecker.com/
+geen problemen gevonden
+*/?>
   <hr>
   <div class="footercolor">
     <footer class="footer">
@@ -20,7 +25,8 @@
     </footer>
   </div>
 </body>
-<script src="assets/js/bootstrap.bundle.js"></script>
+<script src="assets/js/bootstrap/bootstrap.bundle.js"></script>
+<script src="assets/js/script.js"></script>
 <script> (function() {
 'use strict';
 window.addEventListener('load', function() {

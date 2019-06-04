@@ -1,4 +1,9 @@
 <?php
+/*
+gevalideerd op 04/06/2019 door Merlijn
+validator: https://phpcodechecker.com/
+geen problemen gevonden
+*/
 include 'includes/header.php';
 require_once 'core/dbconnection.php';
 

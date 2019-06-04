@@ -1,4 +1,9 @@
 <?php
+/*
+gevalideerd op 04/06/2019 door Merlijn
+validator: https://phpcodechecker.com/
+bestand is te groot voor de validator bij valideren in delen mist er een haakje dat in een ander deel zat
+*/
 include 'includes/header.php';
 if(isset($_SESSION['gebruikersnaam'])){
   if(isset($_GET['id'])){

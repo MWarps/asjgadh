@@ -1,13 +1,27 @@
 <?php
+/*
+gevalideerd op 04/06/2019 door Merlijn
+validator: https://phpcodechecker.com/
+
+eerste validatie:
+warnings:
+- enkele = tekens in de if statements.
+
+oplossingen:
+- = in de if statements veranderd in ==
+
+tweede validatie:
+geen problemen gevonden
+*/
 function Brief($records) {
     $naam = ($records['voornaam'].' '.$records['achternaam']);
     //$myfile = fopen("".$naam.".txt", "x") or die("Unable to open file!");
 
     $aanhef = 'heer, mevrouw';
 
-    if($records['geslacht'] = 'M') {
+    if($records['geslacht'] == 'M') {
         $aanhef = 'heer';
-    } else if($records['geslacht'] = 'V'){
+    } else if($records['geslacht'] == 'V'){
         $aanhef = 'mevrouw';
     }
 
