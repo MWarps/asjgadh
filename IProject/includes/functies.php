@@ -8,6 +8,7 @@ include 'emailVerwijderdVerkoper.php';
 include 'emailVerwijderdHoogstebod.php';
 include 'brief.php';
 
+// deze functie geeft de minimumverhoging van het bod bij verschillende bedragen
 function BodVerhoging($Euro){
     $Verhoging;
     switch ($Euro) {
@@ -31,11 +32,7 @@ function BodVerhoging($Euro){
     return $Verhoging;
 }
 
-function HaalVoorwerpOp($gebruikersnaam){
-
-
-}
-
+//deze functie registreert welke voorwerpen als laatste bekeken zijn door de gebruiker
 function gebruikerBekeekVoorwerp($gebruikersnaam, $voorwerpnr) {
     try {
         require('core/dbconnection.php');
@@ -53,6 +50,7 @@ function gebruikerBekeekVoorwerp($gebruikersnaam, $voorwerpnr) {
     }
 }
 
+// deze functie registreert in de database uit welke rubriek het laatst bekeken voorwerp kwam zodat de website de gebruiker artikelen uit deze rubriek aanbeveelt
 function gebruikerAanbevolen($gebruikersnaam, $voorwerpnr) {
     try {
         require('core/dbconnection.php');
@@ -70,6 +68,7 @@ function gebruikerAanbevolen($gebruikersnaam, $voorwerpnr) {
     }
 }
 
+// deze functie voegt de link tussen afbeelding en artikel toe aan de database
 function VoegVoorwerpToeAanIllustratie($voorwerpnr, $illustratieFile){
     try {
         // SQL insert statement
@@ -91,6 +90,7 @@ function VoegVoorwerpToeAanIllustratie($voorwerpnr, $illustratieFile){
 
 }
 
+// deze functie voegt een artikel aan een rubriek toe
 function VoegVoorwerpAanRubriekToe($voorwerpnr, $rubriek){
 
     try {
@@ -112,6 +112,7 @@ function VoegVoorwerpAanRubriekToe($voorwerpnr, $rubriek){
     }
 }
 
+// deze functie voegt een artikel toe aan de database
 function VoegVoorwerpToe($input){
     try {
         // SQL insert statement
@@ -166,7 +167,7 @@ function VoegVoorwerpToe($input){
 
 }  
 
-
+// deze functie geeft de meest bekeken(en dus populairste) artikelen op de website
 function getPopulairsteArtikelen() {
     try {
         require('core/dbconnection.php');
@@ -213,9 +214,10 @@ function getPopulairsteArtikelen() {
             </div>
         </div>
         </div>';
-    }}
+    }
+}
 
-
+// deze functie haalt de producten die in de meegegeven rubriek zitten
 function getProductenUitRubriek2($rubriek, $aantal) {
 
     try {
@@ -251,6 +253,7 @@ function getProductenUitRubriek2($rubriek, $aantal) {
     }
 }
 
+// deze functie laad 21 artikelen uit de laagste niveau subrubrieken van de rubriek die aan de functie gegeven wordt
 function getProductenUitRubriek($rubriek, $aantal) {
 
     try {
@@ -286,8 +289,7 @@ function getProductenUitRubriek($rubriek, $aantal) {
     }
 }
 
-
-
+// deze functie laad de 3 artikelen die het laatst door de gebruiker bekeken zijn
 function getLaatstBekeken($gebruiker) {
     try {
         require('core/dbconnection.php');
@@ -346,6 +348,7 @@ function getLaatstBekeken($gebruiker) {
         }}
 }
 
+// deze functie laadt de advertenties die aanbevolen worden aan de gebruiker
 function getAanbevolen($gebruiker) {
     try {
         require('core/dbconnection.php');
@@ -936,6 +939,7 @@ function StuurRegistreerEmail($Email, $Code){
 
 }
 
+//deze methode laad alle verificaties om verkoper te worden die nog niet verzonden zijn. ook wordt het adress en de brief volgens een template vast opgesteld
 function verificatiesVinden(){
     $teller = 0;
     //echo 'verificaties gevonden';
@@ -970,6 +974,7 @@ function verificatiesVinden(){
     }
 }
 
+//deze functie registreerd dat de brief verzonden is in de database
 function verificatieVerzonden($email) {
     $email = fixEmail($email);
     try{
@@ -988,6 +993,7 @@ function verificatieVerzonden($email) {
     }
 }
 
+// de $_GET die gebruikt wordt om de email op te halen en naar verificatieVerzonden te sturen verandert de + tekens in de email adressen naar spaties
 function fixEmail($email) {
     $email = str_replace(" ","+",$email);
 
