@@ -341,6 +341,10 @@ function emailVerkocht($veiling)
                          Uw veiling wordt op gesloten gezet. Dit betekent dat de veiling niet meer gezien kan worden.                                      
                       <br>
                       <br>
+                        Geef de verkoper een beoordeling!
+                        <a class="button" target="_blank" href="http://iproject34.icasites.nl/rating.php?id='.$veiling[2]['voorwerpnr'].'&verkoper='.$veiling[1]['gebruikersnaam'].'">Registreer!</a>
+                        </p>
+                        <p>
                         U kunt contact opnemen met de koper.<br>
                         Emailadres: <strong>'.$veiling[1]['email'].'</strong> </p>
                       <p>Heeft u de advertentie niet op <strong>Verkocht</strong> gezet neem dan contact op met onze klantenservice.</p>
