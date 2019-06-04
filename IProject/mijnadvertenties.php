@@ -70,8 +70,13 @@ if(isset($_GET['id'])){
                         $details['titel'] .= '...';
                     }
                     $Bieder = HaalBiederEnVerkoperOp($details['voorwerpnr'], $_SESSION['gebruikersnaam']);
-                    if(empty($Bieder[0]['gebruikersnaam']) || $Bieder[2]['veilinggesloten'] == 1){
+                    if(count($Bieder) < 3){                
                       $knop = 'disabled';
+                    }
+                    if(count($Bieder) == 3){
+                      if(!empty($Bieder[2]['koper'])){
+                        $knop = 'disabled';
+                      }
                     }
                     $verkocht = '<a class="btn btn-block btn-success py-2 '.$knop.'" href="mijnadvertenties.php?id='.$details['voorwerpnr'].'&status=verkopen" >Verkopen</a>';
                     if(!empty($details['koper'])){

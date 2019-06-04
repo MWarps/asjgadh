@@ -1770,9 +1770,9 @@ function VerstuurVerkoopMail($veiling, $ontvanger){
         ini_set( 'display_errors', 1 );
         error_reporting( E_ALL );
         $from = "no-reply@iconcepts.nl";
-        $to = $veiling[0]['email'];
+        $to = $veiling[1]['email'];
         $subject = "EenmaalAndermaal u heeft een voorwerp Verkocht!";
-        $message = emailVerkocht($veiling);
+        $message = emailGekocht($veiling);
         $headers = 'MIME-Version: 1.0' . "\r\n";
         $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
         $headers .= "From:" .$from;
@@ -1784,9 +1784,9 @@ function VerstuurVerkoopMail($veiling, $ontvanger){
         ini_set( 'display_errors', 1 );
         error_reporting( E_ALL );
         $from = "no-reply@iconcepts.nl";
-        $to = $veiling[1]['email'];
+        $to = $veiling[0]['email'];
         $subject = "EenmaalAndermaal u heeft een voorwerp Gekocht!";
-        $message = EmailGekocht($veiling);
+        $message = emailVerkocht($veiling);
 
         $headers = 'MIME-Version: 1.0' . "\r\n";
         $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
@@ -1866,5 +1866,23 @@ function VerstuurVerwijderMail($veiling, $ontvanger){
   
     mail($to,$subject,$message, $headers);
   }  
+}
+
+function updateRecentie($waarde, $verkoper) {
+    try {
+        require('core/dbconnection.php');
+        $sqlSelect = $dbh->prepare(" INSERT INTO Recenties (waardenr, verkoper)
+                                     VALUES(:waarde, :verkoper)
+                                     ");
+
+        $sqlSelect->execute(
+            array(
+                ':waarde' => $waarde,
+                ':verkoper' => $verkoper
+            ));
+
+    } catch (PDOexception $e) {
+        echo "er ging iets mis error: {$e->getMessage()}";
+    }
 }
 ?>
