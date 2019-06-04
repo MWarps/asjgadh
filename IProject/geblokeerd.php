@@ -1,4 +1,9 @@
-<?php 
+/*
+gevalideerd op 04/06/2019 door Merlijn
+validator: https://phpcodechecker.com/
+geen problemen gevonden
+*/
+<?php
 die('Je bent geblokkeerd neem contact met ons op via de instructies in de e-mail.');
 
 //$_SESSION['gebruikersnaam'] = 'null';

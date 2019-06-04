@@ -1308,6 +1308,7 @@ function directorieVinden($pagina){
     }
 }
 
+//deze functie laadt de tabel met gebruikers in in de beheeromgeving overzichtGebruikers.php
 function gebruikersvinden($gebruikersnaam){
     $teller = 0;
     try {
@@ -1359,6 +1360,8 @@ function gebruikersvinden($gebruikersnaam){
         // echo "er ging iets mis error: {$e->getMessage()}";
     }
 }
+
+//deze functie regelt de blokkeer/deblokkeer knop die rechts naast de gebruiker staat in de beheeromgeving
 function blokeren($geblokeerd, $teller, $gebruiker){
     if ($geblokeerd == "Ja"){
         echo ' <td>   
@@ -1370,6 +1373,8 @@ function blokeren($geblokeerd, $teller, $gebruiker){
       </td>  ';
     }
 }
+
+//deze functie blokkeert of deblokkeert de gebruiker in de database als de beheerder dit via de beheerdersomgeving dit aanstuurt
 function gebruikerblok(){
     try {
         require('core/dbconnection.php');
@@ -1572,8 +1577,9 @@ function veilingblok($voorwerpnummer){
             );
             veilingeindberekenen ($resultaat[0]['voorwerpnr']);
         }else if ($resultaat[0]['geblokkeerd'] == 0){
-           // $records =  HaalBiederEnVerkoperOp($voorwerpnummer, $verkoper);
-           // VerstuurVeilingBlockedMail($veiling, $ontvanger;
+            $Veiling = HaalBiederEnVerkoperOp($_GET['id'], $_SESSION['gebruikersnaam']);
+            VerstuurVeilingBlockedMail($Veiling, true);
+            VerstuurVeilingBlockedMail($Veiling, false);
             $blokeren -> execute(
                 array(
                     ':voorwerpnummer' => $resultaat[0]['voorwerpnr'],

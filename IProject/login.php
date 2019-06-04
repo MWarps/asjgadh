@@ -1,3 +1,8 @@
+/*
+gevalideerd op 04/06/2019 door Merlijn
+validator: https://phpcodechecker.com/
+geen problemen gevonden
+*/
 <?php
 include 'includes/header.php';
 
