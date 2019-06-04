@@ -1,4 +1,11 @@
-<?php include 'includes/header.php' ?>
+<?php
+/*
+gevalideerd op 04/06/2019 door Merlijn
+validator: https://phpcodechecker.com/
+geen problemen gevonden
+*/
+include 'includes/header.php'
+?>
     <div class="container">
         <div class="row">
             <div class="col-md-12">

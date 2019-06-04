@@ -1,4 +1,17 @@
 <?php
+/*
+gevalideerd op 04/06/2019 door Merlijn
+validator: https://phpcodechecker.com/
+eerste validatie:
+warings:
+- een rij heeft dubbele ;
+
+oplossingen:
+- een van de ; weggehaald
+
+tweede validatie
+geen problemen gevonden
+*/
 include 'includes/header.php';
 $Gbestaat = False;
 
@@ -22,7 +35,7 @@ if (isset($_POST['rVolgende'])) {
     $rAdres1 = $_POST['rStraat'] . ' ' . $_POST['rHuisnr'];
     $rAdres2 = $_POST['rStraat1'] . ' ' . $_POST['rHuisnr1'];
     $rPlaats = $_POST['rPlaats'];
-    $rPostcode = $_POST['rPostcode'];;
+    $rPostcode = $_POST['rPostcode'];
     $rLand = $_POST['rLand'];
     $rGeslacht = $_POST['rGeslacht'];
         
