@@ -1,3 +1,8 @@
+    <?php /*
+gevalideerd op 04/06/2019 door Merlijn
+validator: https://phpcodechecker.com/
+geen problemen gevonden
+*/?>
     <div class="footercolor">
         <footer class="footer footer-login">
             <div class="container py-2">
