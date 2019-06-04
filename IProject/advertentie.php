@@ -69,7 +69,7 @@ if(isset($_GET['id'])){
                                     $locatie = 'upload/';
                                 }
                                 if(!empty($rij['illustratieFile'])){
-                                    echo '<li data-target="#carousel-example-generic" data-slide-to="'.$teller.'"><img src="'.$locatie.$rij['illustratieFile'].'" alt="..."></li>';
+                                    echo '<li data-target="#carousel-example-generic" data-slide-to="'.$rij.'"><img src="'.$locatie.$rij['illustratieFile'].'" alt="..."></li>';
                                     $teller++;
                                 }  }
                             ?>
@@ -85,33 +85,22 @@ if(isset($_GET['id'])){
                                     }  echo $locatie.$Illustratie1[0]['illustratieFile'] ?>" alt="...">
                                 </div>
                             </div>
-                            <?php
-                            $teller = 0;
-
-                            foreach ($Illustratie1 as $rij) {
+                            <?php                            
+                            for ($teller = 1; $teller < count($Illustratie1); $teller++) {
                                 $locatie = '../pics/';
                                 if(substr($rij['illustratieFile'] , 0 ,2 ) == 'ea'){
                                     $locatie = 'upload/';
-                                }
-                                if(!empty($rij['illustratieFile'])){
+                                }                                
                                     echo '<div class="carousel-item">
-                    <div class="img-big-wrap">
-                      <img src="'.$locatie.$Illustratie1[$teller]['illustratieFile'].'" alt="...">
-                    </div>           
-                 </div>';
-                                    $teller++;
-                                } }
+                                            <div class="img-big-wrap">
+                                              <img src="'.$locatie.$Illustratie1[$teller]['illustratieFile'].'" alt="...">
+                                            </div>           
+                                          </div>';                                    
+                                 }
                             ?>
                         </div>
                         <!-- Controls -->
-                        <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
-                            <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-                            <span class="sr-only">Previous</span>
-                        </a>
-                        <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
-                            <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-                            <span class="sr-only">Next</span>
-                        </a>
+                        
                     </div>
                 </div>
             </div>
@@ -132,7 +121,7 @@ if(isset($_GET['id'])){
                         }
                         ?>
                         <label for="bod">Bieden: (vanaf: €<?php echo $hoogstebod1; ?>)</label>
-                        <input type="number" name="bod" class="form-control" id="bod" step="0.01" min="<?php echo $hoogstebod; ?>"<?php if($bieden){echo 'required';} else{ echo 'readonly';} ?>>
+                        <input type="number" name="bod" class="form-control" id="bod" step="0.01" max="999999.99" min="<?php echo $hoogstebod; ?>"<?php if($bieden){echo 'required';} else{ echo 'readonly';} ?>>
                         <div class="invalid-feedback">
                             Voer een bod vanaf €<?php echo $hoogstebod1; ?>.
                         </div>
