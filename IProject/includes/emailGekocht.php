@@ -326,24 +326,27 @@ function emailGekocht($veiling)
                   <table role="presentation" border="0" cellpadding="0" cellspacing="0">
                     <tr>
                       <td>
-                      <h2> Hallo '.$veiling[1]['voornaam'].',</h2>
+                      <h2> Hallo '.$veiling[0]['voornaam'].',</h2>
                       <br>
-                      <p>U heeft uw advertentie op <strong>Verkocht</strong> gezet.<br>
-                         Voorwerpnummer: <strong>'.$veiling[2]['voorwerpnr'].'</strong><br>
-                         Titel: <strong>'.$veiling[2]['titel'].'</strong>
+                      <p>'.$veiling[1]['gebruikersnaam'].' heeft het voorwerp: <strong>'.$veiling[2]['voorwerpnr'].'</strong>, verkocht <br>
+                         Voorwerptitel: <strong>'.$veiling[2]['titel'].'</strong><br>
                          </p>
                       <br>
-                      <p>De hoogste bieder en dus de koper is: <strong>'.$veiling[0]['gebruikersnaam'].'</strong> <br>
-                         Het product wordt verkocht voor: <strong> &euro; '.number_format($veiling[2]['verkoopprijs'], 2, ',', '.').'</strong><br>
-                         Deze wordt via <strong>'.$veiling[2]['betalingswijze'].'</strong> betaald.<br>
-                         De betaalinstructies zijn: <strong>'.$veiling[2]['betalingsinstructie'].'</strong><br>
-                         De verzendinstructies zijn: <strong>'.$veiling[2]['verzendinstructies'].'</strong><br><br>
-                         Uw veiling wordt op gesloten gezet. Dit betekent dat de veiling niet meer gezien kan worden.                                      
+                      <p>U heeft het voorwerp gekocht voor: <strong> &euro; '.number_format($veiling[2]['verkoopprijs'], 2, ',', '.').' </strong><br> 
+                      Deze wordt via <strong>'.$veiling[2]['betalingswijze'].'</strong> betaald.<br>
+                         De betalingsinstructie is als volgt: '.$veiling[2]['betalingsinstructie'].' <br>
+                         De locatie van het voorwerp is: <br>
+                         Land: <strong>'.$veiling[2]['land'].'</strong><br>
+                         Plaats: <strong>'.$veiling[2]['plaatsnaam'].'</strong> <br>
+                         De verzendkosten zijn: '.$veiling[2]['verzendkosten'].' <br>                                     
                       <br>
-                      <br>                      
-                        U kunt contact opnemen met de koper.<br>
-                        Emailadres: <strong>'.$veiling[0]['email'].'</strong> </p>
-                      <p>Heeft u de advertentie niet op <strong>Verkocht</strong> gezet neem dan contact op met onze klantenservice.</p>
+                      <br>
+                      Geef de verkoper een beoordeling!
+                      <a target="_blank" href="http://iproject34.icasites.nl/rating.php?id='.$veiling[2]['voorwerpnr'].'&verkoper='.$veiling[1]['gebruikersnaam'].'">Beoordeel Verkoper!</a>
+                      </p>
+                      <p>
+                        U kunt een bericht sturen naar de verkoper:<br>
+                        Emailadres: <strong>'.$veiling[1]['email'].'</strong></p>
                       <br>
                       <p>Klik hier om naar de website te gaan: <a href="http://iproject34.icasites.nl">EenmaalAndermaal.nl</a>
                               

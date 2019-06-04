@@ -291,7 +291,7 @@ function getProductenUitRubriek($rubriek, $aantal) {
 function getLaatstBekeken($gebruiker) {
     try {
         require('core/dbconnection.php');
-        $sqlSelect = $dbh->prepare("SELECT TOP 3 * FROM LaatstBekeken
+        $sqlSelect = $dbh->prepare("SELECT DISTINCT TOP 3 * FROM LaatstBekeken
       WHERE gebruikersnaam = :gebruikersnaam
 	  ORDER BY datumtijd DESC");
 
@@ -1746,11 +1746,10 @@ function VerkoopVeiling($voorwerpnr){
   }  
 }
 
-function VerwijderVeiling($voorwerpnr, $verkoper){
+function VerwijderVeiling($voorwerpnr){
   
   try {
       require('core/dbconnection.php');   
-      $records =  HaalBiederEnVerkoperOp($voorwerpnr, $verkoper);                             
       $sqlDelete1 = $dbh ->prepare ("DELETE FROM Voorwerpinrubriek where voorwerpnr = :voorwerpnr");
       $sqlDelete2 = $dbh ->prepare ("DELETE FROM laatstbekeken where voorwerpnr = :voorwerpnr"); 
       $sqlDelete3 = $dbh ->prepare ("DELETE FROM Voorwerp where voorwerpnr = :voorwerpnr");
@@ -1758,44 +1757,40 @@ function VerwijderVeiling($voorwerpnr, $verkoper){
      $sqlDelete1-> execute( array(':voorwerpnr' => $voorwerpnr ));
      $sqlDelete2-> execute( array(':voorwerpnr' => $voorwerpnr ));
      $sqlDelete3-> execute( array(':voorwerpnr' => $voorwerpnr ));         
-      
-      return $records;
-      
+            
   } catch (PDOexception $e) {
       "er ging iets mis error: {$e->getMessage()}";      
   }  
 }
 
-function VerstuurVerkoopMail($veiling, $ontvanger){
+function VerstuurVerkoopMail($veiling){
 
-    if($ontvanger){
-        ini_set( 'display_errors', 1 );
-        error_reporting( E_ALL );
-        $from = "no-reply@iconcepts.nl";
-        $to = $veiling[1]['email'];
-        $subject = "EenmaalAndermaal u heeft een voorwerp Verkocht!";
-        $message = emailGekocht($veiling);
-        $headers = 'MIME-Version: 1.0' . "\r\n";
-        $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-        $headers .= "From:" .$from;
-
-        mail($to,$subject,$message, $headers);
-    }
-
-    if($ontvanger == false){
+    
         ini_set( 'display_errors', 1 );
         error_reporting( E_ALL );
         $from = "no-reply@iconcepts.nl";
         $to = $veiling[0]['email'];
-        $subject = "EenmaalAndermaal u heeft een voorwerp Gekocht!";
+        $subject = "EenmaalAndermaal u heeft een voorwerp Verkocht!";
         $message = emailVerkocht($veiling);
+        $headers = 'MIME-Version: 1.0' . "\r\n";
+        $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+        $headers .= "From:" .$from;
+
+        mail($to,$subject,$message, $headers);
+    
+        ini_set( 'display_errors', 1 );
+        error_reporting( E_ALL );
+        $from = "no-reply@iconcepts.nl";
+        $to = $veiling[1]['email'];
+        $subject = "EenmaalAndermaal u heeft een voorwerp Gekocht!";
+        $message = emailGekocht($veiling);
 
         $headers = 'MIME-Version: 1.0' . "\r\n";
         $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
         $headers .= "From:" .$from;
 
         mail($to,$subject,$message, $headers);
-    }  
+     
 }
 
 
@@ -1868,13 +1863,17 @@ function VerstuurVeilingBlockedMail($veiling, $ontvanger){
 
 function VerstuurVerwijderMail($veiling, $ontvanger){
   $id = 2;
-  if(empty($veiling[2])){$id = 1;}
+  $verkoper = 1;
+  if(count($veiling) == 2){
+    $verkoper = 0;
+    $id = 1;    
+  }
   
-  if($ontvanger){
+  if($ontvanger == false){
     ini_set( 'display_errors', 1 );
     error_reporting( E_ALL );
     $from = "no-reply@iconcepts.nl";
-    $to = $veiling[1]['email'];
+    $to = $veiling[$verkoper]['email'];
     $subject = "EenmaalAndermaal uw voorwerp is verwijderd";
     $message = EmailVerwijderdVerkoper($veiling, $id);
   
@@ -1883,9 +1882,9 @@ function VerstuurVerwijderMail($veiling, $ontvanger){
     $headers .= "From:" .$from;
   
     mail($to,$subject,$message, $headers);
-  }
+  }  
   
-  if($ontvanger == false){
+  if($ontvanger){
     ini_set( 'display_errors', 1 );
     error_reporting( E_ALL );
     $from = "no-reply@iconcepts.nl";
@@ -1897,8 +1896,9 @@ function VerstuurVerwijderMail($veiling, $ontvanger){
     $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
     $headers .= "From:" .$from;
   
-    mail($to,$subject,$message, $headers);
-  }  
+    mail($to,$subject,$message, $headers);  
+  }
+  
 }
 
 function updateRecentie($waarde, $verkoper) {
@@ -1918,4 +1918,28 @@ function updateRecentie($waarde, $verkoper) {
         echo "er ging iets mis error: {$e->getMessage()}";
     }
 }
+
+function haalRecentieOp($verkoper) {
+    try {
+        require('core/dbconnection.php');
+        $sqlSelect = $dbh->prepare(" SELECT sum(waardenr) / count(waardenr) as recentie from Recenties where verkoper = :verkoper
+                                     UNION
+                                     SELECT count(waardenr) as recentie from Recenties
+                                     where verkoper = :verkoper2
+                                     ");
+
+        $sqlSelect->execute(
+            array(      
+              ':verkoper' => $verkoper,      
+              ':verkoper2' => $verkoper
+            ));
+
+            $records = $sqlSelect ->fetchAll(PDO::FETCH_ASSOC);
+            
+            return $records;
+    } catch (PDOexception $e) {
+        echo "er ging iets mis error2: {$e->getMessage()}";
+    }
+}
+
 ?>
