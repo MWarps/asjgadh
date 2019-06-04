@@ -293,7 +293,7 @@ function getProductenUitRubriek($rubriek, $aantal) {
 function getLaatstBekeken($gebruiker) {
     try {
         require('core/dbconnection.php');
-        $sqlSelect = $dbh->prepare("SELECT DISTINCT TOP 3 * FROM LaatstBekeken
+        $sqlSelect = $dbh->prepare("SELECT TOP 3 voorwerpnr FROM LaatstBekeken
       WHERE gebruikersnaam = :gebruikersnaam
 	  ORDER BY datumtijd DESC");
 
@@ -1775,7 +1775,7 @@ function VerstuurVerkoopMail($veiling){
         ini_set( 'display_errors', 1 );
         error_reporting( E_ALL );
         $from = "no-reply@iconcepts.nl";
-        $to = $veiling[0]['email'];
+        $to = $veiling[1]['email'];
         $subject = "EenmaalAndermaal u heeft een voorwerp Verkocht!";
         $message = emailVerkocht($veiling);
         $headers = 'MIME-Version: 1.0' . "\r\n";
@@ -1787,7 +1787,7 @@ function VerstuurVerkoopMail($veiling){
         ini_set( 'display_errors', 1 );
         error_reporting( E_ALL );
         $from = "no-reply@iconcepts.nl";
-        $to = $veiling[1]['email'];
+        $to = $veiling[0]['email'];
         $subject = "EenmaalAndermaal u heeft een voorwerp Gekocht!";
         $message = emailGekocht($veiling);
 

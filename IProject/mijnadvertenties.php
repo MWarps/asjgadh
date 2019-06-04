@@ -11,14 +11,14 @@ if(isset($_SESSION['gebruikersnaam'])){
 
 if(isset($_GET['id'])){
   if($_GET['status'] == 'verkopen'){
-    VerkoopVeiling($_GET['id']);
+    //VerkoopVeiling($_GET['id']);
     $Veiling = HaalBiederEnVerkoperOp($_GET['id'], $_SESSION['gebruikersnaam']);
     VerstuurVerkoopMail($Veiling);
     
   }
   if($_GET['status'] == 'verwijderen'){
     $Veiling = HaalBiederEnVerkoperOp($_GET['id'], $_SESSION['gebruikersnaam']);
-    VerwijderVeiling($_GET['id']); 
+    //VerwijderVeiling($_GET['id']); 
     VerstuurVerwijderMail($Veiling, false);
     
     if(count($Veiling) == 3){
@@ -79,12 +79,13 @@ if(isset($_GET['id'])){
                       $knop = 'disabled';
                     }
                     $artikelKnop = '<a href="advertentie.php?id='.$details['voorwerpnr'].'" class="btn btn-block btn-primary py-2">Ga naar artikel</a>';
-                    $verkocht = '<a class="btn btn-block btn-success py-2 '.$knop.'" href="mijnadvertenties.php?id='.$details['voorwerpnr'].'&status=verkopen" >Verkopen</a>';
-                    if(!empty($details['koper'])){
+                    $verkocht = '<a class="btn btn-block btn-success py-2'.$knop.'" href="mijnadvertenties.php?id='.$details['voorwerpnr'].'&status=verkopen" >Verkopen</a>';
+                    if(count($Bieder) == 3){
+                    if(!empty($Bieder[2]['koper'])){
                       $knop = 'disabled';
                       $verkocht = '<button type="button" class="btn btn-block btn-success py-2 '.$knop.'" >Advertentie is verkocht</button>';
                       $artikelKnop = '';
-                    }
+                    }}
                     
                     echo '
                     <div class="col-md-3 p-2">

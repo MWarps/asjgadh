@@ -158,10 +158,11 @@ if(isset($_GET['id'])){
                         Gebruiker Informatie
                     </div>
                     <div class="card-body">
+                      Naam: <strong><?php echo $advertentie['verkoper']; ?></strong><br>
                       <?php $recenties = haalRecentieOp($advertentie['verkoper']); 
-                            if(!empty($recenties)){
+                            if(!empty($recenties[0]['recentie'])){
                               ?> 
-                        Naam: <strong><?php echo $advertentie['verkoper']; ?></strong><br>
+                        
                         Reviews:<br><br>
                         
                             <h1><?php echo 'Gemiddelde: '.$recenties[1]['recentie'].'/10' ?> </h1>
