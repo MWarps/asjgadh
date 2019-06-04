@@ -20,7 +20,9 @@ if (checkBEHEERDER ($_SESSION['gebruikersnaam']) == true){
                 </ul>
             </div>
         </div><!--/row-->
-        <?php /*
+        <?php
+
+        /*
         <form class="needs-validation" novalidate action='verkoperVerificatieBrief.php' method="post">
             <div class="row justify-content-center">
                 <div class="col-md-10">

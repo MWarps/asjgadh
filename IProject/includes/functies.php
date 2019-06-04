@@ -942,7 +942,7 @@ function verificatiesVinden(){
     try {
         require('core/dbconnection.php');
         $sqlSelect = $dbh->prepare("SELECT Gebruiker.voornaam, Gebruiker.achternaam, Gebruiker.email, Gebruiker.geslacht, Gebruiker.adresregel1, Gebruiker.adresregel2, Gebruiker.postcode, Gebruiker.plaatsnaam, Gebruiker.land, Verificatie.verificatiecode, 
-        Verificatie.eindtijd FROM Gebruiker INNER JOIN Verificatie ON Gebruiker.email = Verificatie.email WHERE type = 'brief'  
+        Verificatie.eindtijd FROM Gebruiker INNER JOIN Verificatie ON Gebruiker.email = Verificatie.email WHERE type = 'brief' AND verzonden = 0
         ");
 
         $sqlSelect->execute();
@@ -969,33 +969,14 @@ function verificatiesVinden(){
         // echo "er ging iets mis error: {$e->getMessage()}";
     }
 }
-/*
-function getWannabeVerkopers() {
-    //echo 'verkopers gevonden';
-    try{
-        require('core/dbconnection.php');
-        $sqlSelect = $dbh->prepare("SELECT gebruikersnaam FROM Gebruiker INNER JOIN Verificatie ON Gebruiker.email = Verificatie.email WHERE type = 'brief' 
-        AND verzonden = 0");
 
-        $sqlSelect->execute();
-
-        $records = $sqlSelect->fetchall(PDO::FETCH_ASSOC);
-
-        echo 'var dump verkopers';
-        var_dump($records);
-
-        return $records;
-
-    }
-    catch (PDOexception $e) {
-        echo "er ging iets mis erroreqrre: {$e->getMessage()}";
-    }
-}
-*/
 function verificatieVerzonden($email) {
+    $email = fixEmail($email);
     try{
         require('core/dbconnection.php');
         $sqlSelect = $dbh->prepare("UPDATE Verificatie SET verzonden = 1 WHERE email = :email");
+
+        //echo 'verificatie verzonden '.$email;
 
         $sqlSelect->execute(
             array(
@@ -1006,30 +987,14 @@ function verificatieVerzonden($email) {
         echo "er ging iets mis error: {$e->getMessage()}";
     }
 }
-/*
-function maakVerkoperBrief($gebruiker){
-    try{    
-        require('core/dbconnection.php');
-        $sqlSelect = $dbh->prepare("SELECT voornaam, achternaam, geslacht, adresregel1, adresregel2, postcode, plaatsnaam, land, verificatiecode, 
-        eindtijd FROM Gebruiker INNER JOIN Verificatie ON Gebruiker.email = Verificatie.email WHERE type = 'brief' 
-        AND Gebruiker.gebruikersnaam = :gebruiker");
 
-        $sqlSelect->execute(
-            array(
-                ':gebruiker' => $gebruiker
-            ));
+function fixEmail($email) {
+    $email = str_replace(" ","+",$email);
 
-        $records = $sqlSelect->fetchall(PDO::FETCH_ASSOC);
-
-        $brief = Brief($records);
-
-        return $brief;
-    }
-    catch (PDOexception $e) {
-        echo "er ging iets mis erroreqrre: {$e->getMessage()}";
-    }
+    return $email;
 }
-*/
+
+
 function geslacht()
 {
 
@@ -1580,7 +1545,7 @@ function veilingblokeren($geblokkeerd, $voorwerpnummer, $titel){
 function veilingblok($voorwerpnummer){
     try {
         require('core/dbconnection.php');
-        $records =  HaalBiederEnVerkoperOp($voorwerpnr, $verkoper);
+
         $blokeren = $dbh ->prepare (" UPDATE Voorwerp
                                     SET geblokkeerd = 1, blokkeerdatum = CURRENT_TIMESTAMP
                                     WHERE voorwerpnr like :voorwerpnummer
@@ -1607,7 +1572,8 @@ function veilingblok($voorwerpnummer){
             );
             veilingeindberekenen ($resultaat[0]['voorwerpnr']);
         }else if ($resultaat[0]['geblokkeerd'] == 0){
-            VerstuurVeilingBlockedMail($veiling, $ontvanger);
+           // $records =  HaalBiederEnVerkoperOp($voorwerpnummer, $verkoper);
+           // VerstuurVeilingBlockedMail($veiling, $ontvanger;
             $blokeren -> execute(
                 array(
                     ':voorwerpnummer' => $resultaat[0]['voorwerpnr'],
