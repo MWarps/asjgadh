@@ -1580,7 +1580,7 @@ function veilingblokeren($geblokkeerd, $voorwerpnummer, $titel){
 function veilingblok($voorwerpnummer){
     try {
         require('core/dbconnection.php');
-        $records =  HaalBiederEnVerkoperOp($voorwerpnr, $verkoper);
+
         $blokeren = $dbh ->prepare (" UPDATE Voorwerp
                                     SET geblokkeerd = 1, blokkeerdatum = CURRENT_TIMESTAMP
                                     WHERE voorwerpnr like :voorwerpnummer
@@ -1607,7 +1607,8 @@ function veilingblok($voorwerpnummer){
             );
             veilingeindberekenen ($resultaat[0]['voorwerpnr']);
         }else if ($resultaat[0]['geblokkeerd'] == 0){
-            VerstuurVeilingBlockedMail($veiling, $ontvanger);
+           // $records =  HaalBiederEnVerkoperOp($voorwerpnummer, $verkoper);
+            VerstuurVeilingBlockedMail($veiling, $ontvanger;
             $blokeren -> execute(
                 array(
                     ':voorwerpnummer' => $resultaat[0]['voorwerpnr'],
