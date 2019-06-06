@@ -7,6 +7,8 @@ include 'emailGekocht.php';
 include 'emailVerwijderdVerkoper.php';
 include 'emailVerwijderdHoogstebod.php';
 include 'brief.php';
+include 'emailVeilingBlockedKoper.php';
+include 'emailVeilingBlockedVerkoper.php';
 
 // deze functie geeft de minimumverhoging van het bod bij verschillende bedragen
 function BodVerhoging($Euro){
@@ -940,7 +942,6 @@ function StuurRegistreerEmail($Email, $Code){
 }
 
 //deze methode laad alle verificaties om verkoper te worden die nog niet verzonden zijn. ook wordt het adress en de brief volgens een template vast opgesteld
-//verplaatst naar beheerderFuncties.php
 function verificatiesVinden(){
     $teller = 0;
     //echo 'verificaties gevonden';
@@ -976,7 +977,6 @@ function verificatiesVinden(){
 }
 
 //deze functie registreerd dat de brief verzonden is in de database
-//verplaatst naar beheerderFuncties.php
 function verificatieVerzonden($email) {
     $email = fixEmail($email);
     try{
@@ -996,7 +996,6 @@ function verificatieVerzonden($email) {
 }
 
 // de $_GET die gebruikt wordt om de email op te halen en naar verificatieVerzonden te sturen verandert de + tekens in de email adressen naar spaties
-//verplaatst naar beheerderFuncties.php
 function fixEmail($email) {
     $email = str_replace(" ","+",$email);
 
@@ -1318,7 +1317,6 @@ function directorieVinden($pagina){
 }
 
 //deze functie laadt de tabel met gebruikers in in de beheeromgeving overzichtGebruikers.php
-// verplaatst naar beheerderFuncites.php
 function gebruikersvinden($gebruikersnaam){
     $teller = 0;
     try {
@@ -1362,7 +1360,7 @@ function gebruikersvinden($gebruikersnaam){
                     <td>'.$verkoper.'</td>       
                     <td>'.$geblokeerd.'</td> 
                       ';
-            blokkeren($geblokeerd, $teller, $resultaat['gebruikersnaam'] );
+            blokeren($geblokeerd, $teller, $resultaat['gebruikersnaam'] ); 
             echo ' </tr>';
 
         }
@@ -1372,7 +1370,6 @@ function gebruikersvinden($gebruikersnaam){
 }
 
 //deze functie regelt de blokkeer/deblokkeer knop die rechts naast de gebruiker staat in de beheeromgeving
-// verplaatst naar beheerderFuncties.php
 function blokeren($geblokeerd, $teller, $gebruiker){
     if ($geblokeerd == "Ja"){
         echo ' <td>   
@@ -1385,8 +1382,7 @@ function blokeren($geblokeerd, $teller, $gebruiker){
     }
 }
 
-// deze functie blokkeert of deblokkeert de gebruiker in de database als de beheerder dit via de beheerdersomgeving dit aanstuurt
-// verplaatst naar beheerderFuncties.php
+//deze functie blokkeert of deblokkeert de gebruiker in de database als de beheerder dit via de beheerdersomgeving dit aanstuurt
 function gebruikerblok(){
     try {
         require('core/dbconnection.php');
@@ -1427,8 +1423,7 @@ function gebruikerblok(){
 }
 
 
-// stuurt email naar gebruiker wanneer deze geblokkeerd is
-// verplaatst naar beheerderFuncties.php
+/* stuurt email naar gebruiker wanneer deze geblokkeerd is */
 function StuurGebruikerBlockedEmail($gebruikersnaam)
 {
     try{
@@ -1467,8 +1462,7 @@ function StuurGebruikerBlockedEmail($gebruikersnaam)
     }
 }
 
-// stuurt email naar gebruiker wanneer deze gedeblokkeerd is
-// verplaatst naar beheerderFuncties.php
+/* stuurt email naar gebruiker wanneer deze gedeblokkeerd is */
 function StuurGebruikerDeblockedEmail($gebruikersnaam)
 {
     try{
@@ -1504,8 +1498,7 @@ function StuurGebruikerDeblockedEmail($gebruikersnaam)
     }
 }
 
-// CommentaarNodig
-// verplaatst naar beheerderFuncties.php
+
 function veilingenVinden($veilingnaam){
     $teller =0;
     try {
@@ -1518,7 +1511,7 @@ function veilingenVinden($veilingnaam){
         );
         $veiling = $veilingen ->fetchAll(PDO::FETCH_ASSOC);
         foreach ( $veiling as $resultaat ){
-            $teller ++;
+          $teller++;
             $geblokkeerd = "error";
             if ($resultaat['geblokkeerd'] == 1){
                 $geblokkeerd = "Ja";
@@ -1534,14 +1527,14 @@ function veilingenVinden($veilingnaam){
                     <td>'.$resultaat['plaatsnaam'].'</td>
                     <td>'.$resultaat['land'].'</td>
                     <td>'.$resultaat['looptijd'].'</td>
-                    <td>'.$resultaat['looptijdbegindatum'].'</td> 
-                    <td>'.$resultaat['looptijdeinddatum'].'</td> 
+                    <td>'.$resultaat['looptijdbegindagtijdstip'].'</td> 
+                    <td>'.$resultaat['looptijdeindedagtijdstip'].'</td> 
                     <td>'.$resultaat['verkoper'].'</td> 
                     <td>'.$resultaat['veilinggesloten'].'</td> 
-                    <td>'.$geblokeerd.'</td> 
-                    <td>'.$resultaat['blokeerdatum'].'</td>
+                    <td>'.$geblokkeerd.'</td> 
+                    <td>'.$resultaat['blokkeerdatum'].'</td>
                       ';
-            veilingblokkeren($geblokkeerd, $resultaat['voorwerpnr'], $resultaat['titel'] );
+            veilingblokeren($geblokkeerd, $resultaat['voorwerpnr'], $resultaat['titel'] ); 
 
             echo '</tr>';
         }   
@@ -1550,8 +1543,6 @@ function veilingenVinden($veilingnaam){
     }
 }
 
-// CommentaarNodig
-// verplaatst naar beheerderFuncties.php
 function veilingblokeren($geblokkeerd, $voorwerpnummer, $titel){
     if ($geblokkeerd == "Ja"){
         echo ' <td>   
@@ -1564,8 +1555,6 @@ function veilingblokeren($geblokkeerd, $voorwerpnummer, $titel){
     }
 }
 
-// CommentaarNodig
-// verplaatst naar beheerderFuncties.php
 function veilingblok($voorwerpnummer){
     try {
         require('core/dbconnection.php');
@@ -1586,26 +1575,28 @@ function veilingblok($voorwerpnummer){
             )
         );
 
-
-        $resultaat = $veiling ->fetchAll(PDO::FETCH_ASSOC);
-        if ($resultaat[0]['geblokkeerd'] == 1){
+        $resultaat = $veiling ->fetch(PDO::FETCH_ASSOC);
+        
+        if ($resultaat['geblokkeerd'] == 1){
             $deblokeren -> execute(
                 array(
-                    ':voorwerpnummer' => $resultaat[0]['voorwerpnr'],
-                )
-            );
-            veilingeindBerekenen ($resultaat[0]['voorwerpnr']);
-        }else if ($resultaat[0]['geblokkeerd'] == 0){
+                    ':voorwerpnummer' => $resultaat['voorwerpnr'],
+                ));
+                
+            veilingeindberekenen ($resultaat['voorwerpnr']);
+        }
+        else if ($resultaat['geblokkeerd'] == 0){
 
-            //Ik denk dat het hier mis gaat en dat ie verkoper niet kent, maar geen idee wat ik erdan neer moet gooien want &SESSION[Gebruikersnaam] stuff werkt ook niet lijkt me.
-            $veiling = HaalBiederEnVerkoperOp($voorwerpnummer, $verkoper);
+            $veiling = HaalBiederEnVerkoperOp($voorwerpnummer, $resultaat['verkoper']);
             VerstuurVeilingBlockedMail($veiling, true);
+            
+            if(count($veiling) == 3){
             VerstuurVeilingBlockedMail($veiling, false);
+          }
             $blokeren -> execute(
                 array(
-                    ':voorwerpnummer' => $resultaat[0]['voorwerpnr'],
-                )
-            );
+                    ':voorwerpnummer' => $resultaat['voorwerpnr']
+                ));
         }
 
 
@@ -1640,7 +1631,6 @@ function checkGEBLOKEERD($gebruiker){
 
 }
 
-// deze functie checkt of een gebruiker beheerder is
 function checkBEHEERDER ($gebruiker){
     try {
         require('core/dbconnection.php');
@@ -1666,8 +1656,6 @@ function checkBEHEERDER ($gebruiker){
     }
 }
 
-// commentaarNodig
-//verplaatst naar beheerderFuncties.php
 function veilingeindberekenen ($voorwerpnummer){
        // de overgebleven dagen die de veiling nog open is.
     try {
@@ -1817,71 +1805,48 @@ $koper = $veiling[0]['email'];
      
 }
 
-// CommentaarNodig
-// verplaatst naar beheerderFuncties.php
-function VerstuurVeilingBlockedMail($veiling, $ontvanger){
-
-    if($ontvanger){
-      
-        ini_set( 'display_errors', 1 );
-        error_reporting( E_ALL );
-        $from = "no-reply@iconcepts.nl";
-        $to = $veiling[0]['email'];  //Deze herkent hij ook niet, weet niet wat er allemaal mis gaat 
-        $subject = "EenmaalAndermaal uw veiling is geblokkeerd";
-      //  $message = emailVeilingBlockedVerkoper($veiling);
-        $message = 'Beste  '.$veiling[0]['gebruikersnaam'].',
-                 
-                  
-         Helaas moeten wij u op de hoogte stellen dat uw veiling is geblokkeerd. Dit kan meerdere redenen hebben.
-         Om meer informatie te krijgen kunt u contact met ons opnemen door een mail te sturen naar: EenmaalAndermaal@gmail.com
-         Vermeld in deze mail over welke advertentie het gaat.
-         Wij hopen u zodoende genoeg informatie te hebben gegeven.
-                       
-         Met vriendelijke groeten,
-                        
-         EenmaalAndermaal  
-';
 
 
-
-        $headers = 'MIME-Version: 1.0' . "\r\n";
-        $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-        $headers .= "From:" .$from;
-
-        mail($to,$subject,$message, $headers);
-    }
-
-    if($ontvanger == false){
-      
-        ini_set( 'display_errors', 1 );
-        error_reporting( E_ALL );
-        $from = "no-reply@iconcepts.nl";
-        $to = $veiling[1]['email'];
-        $subject = "EenmaalAndermaal een veiling waarop u heeft gereageerd is geblokkeerd";
-      //  $message = emailVeilingBlockedKoper($veiling);
-
-
-        $message = 'Beste  '.$veiling[1]['gebruikersnaam'].',
-                 
-                  TEST
-         Helaas moeten wij u op de hoogte stellen dat een veiling waarop u de hoogste bieder was is geblokkeerd. Dit kan meerdere redenen hebben.
-         Om meer informatie te krijgen kunt u contact met ons opnemen door een mail te sturen naar: EenmaalAndermaal@gmail.com
-         Vermeld in deze mail over welke advertentie het gaat.
-         Wij hopen u zodoende genoeg informatie te hebben gegeven.
-                       
-         Met vriendelijke groeten,
-                        
-         EenmaalAndermaal  
-';
-
-
-
-        $headers = 'MIME-Version: 1.0' . "\r\n";
-        $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-        $headers .= "From:" .$from;
-
-        mail($to,$subject,$message, $headers);
-    }
+function VerstuurVeilingBlockedMail($veiling, $ontvanger){            
+  $voorwerp = 1;
+  $verkoper = 0;
+  if(count($veiling) == 3){
+    $verkoper = 1;
+    $voorwerp = 2;  
+  }
+  
+  $verkopermail = $veiling[$verkoper]['email'];
+  $kopermail = $veiling[0]['email'];
+  
+  if($ontvanger){
+    ini_set( 'display_errors', 1 );
+    error_reporting( E_ALL );
+    $from = "no-reply@iconcepts.nl";
+    $to = $verkopermail;
+    $subject = "EenmaalAndermaal uw veiling is geblokeerd";
+    $message = emailVeilingBlockedVerkoper($veiling, $voorwerp);
+  
+    $headers = 'MIME-Version: 1.0' . "\r\n";
+    $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+    $headers .= "From:" .$from;
+  
+    mail($to,$subject,$message, $headers);
+  }  
+  
+  if($ontvanger == false){
+    ini_set( 'display_errors', 1 );
+    error_reporting( E_ALL );
+    $from = "no-reply@iconcepts.nl";
+    $to = $kopermail;
+    $subject = "EenmaalAndermaal geboden voorwerp is geblokeerd";
+    $message = emailVeilingBlockedKoper($veiling);
+  
+    $headers = 'MIME-Version: 1.0' . "\r\n";
+    $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+    $headers .= "From:" .$from;
+  
+    mail($to,$subject,$message, $headers);  
+  }
 }
 
 
@@ -1916,7 +1881,7 @@ function VerstuurVerwijderMail($veiling, $ontvanger){
     $from = "no-reply@iconcepts.nl";
     $to = $kopermail;
     $subject = "EenmaalAndermaal geboden voorwerp is verwijderd";
-    $message = EmailVerwijderdHoogstebod($veiling);
+    $message = emailVeilingBlockedKoper($veiling) ;
   
     $headers = 'MIME-Version: 1.0' . "\r\n";
     $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
