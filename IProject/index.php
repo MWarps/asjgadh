@@ -71,7 +71,7 @@ if(isset($_SESSION['status'])){
                   categorie&euml;n 
                 </div>
                 <button class="dropdown-menu card-header bg-orange2 text-white text-uppercase">categorie</button>
-                <?php    directorieVinden($pagina) ?>
+                <?php    directorieVinden($pagina); ?>
             </div>
         </div>
     <!--/span-->

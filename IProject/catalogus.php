@@ -9,7 +9,7 @@ $pagina = 'catalogus.php';
 //$_SESSION['catalogus'] = true;
 
 if (!isset($_SESSION['catogorie'])){
-    setupCatogorien();
+  $_SESSION['catogorie'] = array("Home"=>"-1");
 }
 
 if(isset($_GET['id'])){
@@ -23,7 +23,7 @@ if(isset($_GET['id'])){
         <div class="col">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
-                    <?php catogorieSoort($pagina); ?>
+                    <?php echo '<li class="breadcrumb-item"><a href="'.$pagina.'?id=-1" >Hoofdmenu'; ?></a></li>'; ?>
                 </ol>
             </nav>
         </div>
