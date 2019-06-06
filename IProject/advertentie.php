@@ -163,14 +163,15 @@ if(isset($_GET['id'])){
                             if(!empty($recenties[0]['recentie'])){
                               ?> 
                         
-                        Reviews:<br><br>
+                        Reviews:<br>
+                        Kopers geven deze verkoper een<br>
                         
-                            <h1><?php echo 'Gemiddelde: '.$recenties[1]['recentie'].'/10' ?> </h1>
+                            <h3><?php echo 'Gemiddelde: '.$recenties[0]['recentie'].'/10' ?> </h3>
                             <p><?php echo 'Aantal recenties: '.$recenties[0]['recentie'].'' ?> </p>
                           
                           <?php }
                                 else{
-                                  echo '<h3> Deze verkoper heeft nog geen recenties </h3>';
+                                  echo '<h4> Deze verkoper heeft nog geen recenties </h4>';
                                 }                                              ?>
                         
                         <button type="button" class="btn btn-primary btn-lg mt-3"><a style="color: white;" href="stuurbericht.php?id=<?php echo $advertentie['verkoper']?>">Stuur bericht!</a></button>
@@ -178,13 +179,13 @@ if(isset($_GET['id'])){
                 </div>
                 <hr>
                 <div class="icon-product">
-                    <img src="assets/img/oog.jpg"></img> <?php echo $advertentie['gezien'] ?> x Bekeken <br>
-                    <img src="assets/img/clock.jpg"></img>  sinds <?php echo date("d.m.Y H:i", strtotime($advertentie['looptijdbegindagtijdstip'])); ?>  <br><br>
-                    <img src="assets/img/betalingswijze.png"></img>  betalingswijze: <strong><?php echo $advertentie['betalingswijze'] ?></strong> <br>
-                    <img src="assets/img/instructions.png"></img>  betalingsinstructies: <?php echo $advertentie['betalingsinstructie'] ?> <br><br>
-                    <img src="assets/img/verzending.png"></img>  Verzendkosten: <?php echo $advertentie['verzendkosten'] ?> <br>
-                    <img src="assets/img/instructions.png"></img>  Verzendinstructies: <?php echo $advertentie['verzendinstructies'] ?> <br><br>
-                    <img src="assets/img/voorwerp.png"></img>  Voorwerpnummer: <strong><?php echo $advertentie['voorwerpnr'] ?></strong>
+                    <img src="assets/img/oog.jpg"> <?php echo $advertentie['gezien'] ?> x Bekeken <br>
+                    <img src="assets/img/clock.jpg"> sinds <?php echo date("d.m.Y H:i", strtotime($advertentie['looptijdbegindagtijdstip'])); ?>  <br><br>
+                    <img src="assets/img/betalingswijze.png"> betalingswijze: <strong><?php echo $advertentie['betalingswijze'] ?></strong> <br>
+                    <img src="assets/img/instructions.png"> betalingsinstructies: <?php echo $advertentie['betalingsinstructie'] ?> <br><br>
+                    <img src="assets/img/verzending.png"> Verzendkosten: <?php echo $advertentie['verzendkosten'] ?> <br>
+                    <img src="assets/img/instructions.png"> Verzendinstructies: <?php echo $advertentie['verzendinstructies'] ?> <br><br>
+                    <img src="assets/img/voorwerp.png"> Voorwerpnummer: <strong><?php echo $advertentie['voorwerpnr'] ?></strong>
                 </div>
             </div>
         </div>

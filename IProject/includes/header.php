@@ -18,12 +18,12 @@ if(isset($_GET['id'])){
 
 if(isset($_SESSION['gebruikersnaam'])){
 
-    if(empty(gegevensIngevuld($_SESSION['gebruikersnaam']))){
+    if(empty(gegevensIngevuldVerkoper($_SESSION['gebruikersnaam']))){
         $VerkoperValidatie = true;    
     }
-    if(!empty(gegevensIngevuld($_SESSION['gebruikersnaam']))){
-        $verkoper = gegevensIngevuld($_SESSION['gebruikersnaam']);
-        if($verkoper[0]['gevalideerd'] == 0){
+    if(!empty(gegevensIngevuldVerkoper($_SESSION['gebruikersnaam']))){
+        $verkoper = gegevensIngevuldVerkoper($_SESSION['gebruikersnaam']);
+        if($verkoper['gevalideerd'] == 0){
             $VerkoperValidatie = true;    
         }
     }
@@ -85,8 +85,10 @@ if ( checkGEBLOKEERD($_SESSION['gebruikersnaam']) == true){
                             </button>     
 
                             <div class="dropdown-menu" aria-labelledby="accountbeheer">
-                                <a class="dropdown-item" href="beheerder.php">Beheer</a>
-                                <a class="dropdown-item" href="#">Meldingen</a>
+                              <?php if(checkBEHEERDER($_SESSION['gebruikersnaam'])){
+                                echo '<a class="dropdown-item" href="beheerder.php">Beheer</a>';
+                              }
+                              ?>                              
                                 <a class="dropdown-item" href="../informeren.php">FAQ</a>
                                 <a class="dropdown-item" href="wachtwoordReset.php">Wachtwoord Resetten</a>
                                 <?php if ($VerkoperValidatie){                                              
