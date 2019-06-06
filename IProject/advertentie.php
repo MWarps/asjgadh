@@ -152,7 +152,10 @@ if(isset($_GET['id'])){
             <div class="col-md-4">
                 <ul class="list-group list-group-flush mb-3">
                     <li class="list-group-item bg-orange2">Biedingen</li>
-                    <?php if(empty(zijnErBiedingen($advertentie['voorwerpnr']))){
+
+                    <?php
+                    // controleerd of er biedingen zijn gedaan op het product.
+                    if(empty(zijnErBiedingen($advertentie['voorwerpnr']))){
                         echo '<li class="list-group-item"> Er zijn nog geen biedingen gedaan</li>';}
                     if(!empty(zijnErBiedingen($advertentie['voorwerpnr']))){
                         Biedingen($advertentie['voorwerpnr']);}

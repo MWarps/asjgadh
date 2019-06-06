@@ -5,7 +5,7 @@ validator: https://phpcodechecker.com/
 geen problemen gevonden
 */
 include 'includes/header.php';
-
+// Controleerd of de gebruiker niet is ingelogd.
 if (!isset($_SESSION['gebruikersnaam'])){
 
     $error = false;
