@@ -30,8 +30,8 @@ if (isset($_POST['Volgende'])){
 ?>
 
 <div class="container">
-    <div class="row">
-        <div class="offset-3 col-md-6 mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6 mt-4">
             <form class="needs-validation" novalidate action='wachtwoordReset.php' method="post">
                 <h1 class="h3 mb-4 text-center "> Voer uw emailadres in! </h1>
                 <p> Er wordt een email verstuurd naar het ingevoerde emailadres. Klik de link in de mail op door te gaan met het resetten van uw wachtwoord.</p>
