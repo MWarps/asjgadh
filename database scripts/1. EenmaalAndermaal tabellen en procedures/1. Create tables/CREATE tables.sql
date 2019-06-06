@@ -1,5 +1,5 @@
---TODO LIST
--- - geblokeerd in Gebruiker hernoemen naar geblokkeerd
+
+
 
 --USE iproject
 go
@@ -50,7 +50,7 @@ vraag				TINYINT			NOT NULL,
 antwoordtekst		VARCHAR(50)		NOT NULL,
 verkoper			BIT				NOT NUll,
 beheerder			BIT				NOT NULL DEFAULT 0,
-geblokeerd			BIT				NOT NULL DEFAULT 0,
+geblokkeerd			BIT				NOT NULL DEFAULT 0,
 gezien				BIT				NOT NULL DEFAULT 0,
 CONSTRAINT PK_Gebruiker PRIMARY KEY (gebruikersnaam),
 CONSTRAINT CK_gebruiker_geslacht CHECK (geslacht IN ( 'M','F','X') ),
