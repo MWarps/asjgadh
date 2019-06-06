@@ -12,26 +12,30 @@ oplossingen:
 tweede validatie:
 geen problemen gevonden
 */
+// Include de header op de pagina "advertentie.php"
 include 'includes/header.php';
+// Controleerd of het ID van de advertentie bestaat.
 if(isset($_GET['id'])){
     $gebruikersnaam = $_SESSION['gebruikersnaam'];
     $advertentie = DetailAdvertentie($_GET['id']);
     $bieden = true;
+    // Controleerd dat de verkoper niet op zijn eigen product kan bieden.
     if($advertentie['verkoper'] == $_SESSION['gebruikersnaam']){
         $bieden = false;
     }
     $pagina = 'advertentie.php';
+    // Controleerd of de knop om te bieden is niet is gedrukt. Op het moment dat dit niet is gedaan gaat de functie VoorwerpGezien() het ID van het product opslaan
+    // en die op de homepage vertonen als recent bekeken.
     if(!isset($_POST['bieden'])){
         $voorwerpnr = $_GET['id'];
 
         VoorwerpGezien($voorwerpnr);
-
         if(isset($_SESSION['gebruikersnaam'])){
             gebruikerBekeekVoorwerp($gebruikersnaam, $voorwerpnr);
             gebruikerAanbevolen($gebruikersnaam, $voorwerpnr);
         }
     }
-
+    // Controleerd of de gebruiker is ingelogd om een bod te kunnen inbrengen.
     if(isset($_POST['bieden'])){
         if(isset($_SESSION['gebruikersnaam'])){
             $bod = $_POST['bod'];
@@ -64,7 +68,9 @@ if(isset($_GET['id'])){
         </div>
         <div class="row">
             <div class="col-md-7" >
-                <iframe width="100%" height="450px" srcdoc='<html><body><?php echo $advertentie['beschrijving']; ?></body></html>'></iframe>
+                <div class="embed-responsive embed-responsive-21by9">
+                    <iframe width="100%" height="450px" srcdoc='<html><body><?php echo $advertentie['beschrijving']; ?></body></html>'></iframe>
+                </div>
             </div>
             <div class="col-md-5">
                 <div class="gallery-wrap" >
@@ -73,6 +79,7 @@ if(isset($_GET['id'])){
                         <ol class="carousel-indicators">
 
                             <?php
+                            // Haalt illustratie's op van de voorwerpen
                             $Illustratie1 = HaalIllustratiesOp($advertentie['voorwerpnr']);
 
                             $teller = 0;
@@ -134,16 +141,16 @@ if(isset($_GET['id'])){
                         }
                         ?>
                         <label for="bod">Bieden: (vanaf: €<?php echo $hoogstebod1; ?>)</label>
-                        <input type="number" name="bod" class="form-control" id="bod" step="0.01" max="999999.99" min="<?php echo $hoogstebod; ?>"<?php if($bieden){echo 'required';} else{ echo 'readonly';} ?> >
+                        <input type="number" name="bod" class="form-control mt-3 mb-3" id="bod" step="0.01" max="999999.99" min="<?php echo $hoogstebod; ?>"<?php if($bieden){echo 'required';} else{ echo 'readonly';} ?> >
                         <div class="invalid-feedback">
                             Voer een bod vanaf €<?php echo $hoogstebod1; ?>.
                         </div>
-                        <?php if($bieden){echo '<button class="btn btn-lg btn-primary mt-3" type="submit" name="bieden" value="bieden"> Plaats bod </button>';} ?>
+                        <?php if($bieden){echo '<button class="btn btn-lg btn-primary mt-3 mb-3" type="submit" name="bieden" value="bieden"> Plaats bod </button>';} ?>
                     </div>
                 </form>
             </div>
             <div class="col-md-4">
-                <ul class="list-group list-group-flush">
+                <ul class="list-group list-group-flush mb-3">
                     <li class="list-group-item bg-orange2">Biedingen</li>
                     <?php if(empty(zijnErBiedingen($advertentie['voorwerpnr']))){
                         echo '<li class="list-group-item"> Er zijn nog geen biedingen gedaan</li>';}
