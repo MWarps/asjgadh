@@ -13,7 +13,7 @@ $type = 'reset';
 if (isset($_POST['Volgende'])){
   $email = $_POST['email'];
 
-  if (empty(bestaatEmailadres($email))) {
+  if (empty(bestaatEmailadres($email)) && !empty(bestaatValidatie($email,$type))) {
     $Ebestaat = true;
   }
 

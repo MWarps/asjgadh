@@ -57,6 +57,14 @@ function checkNormaleAdvertenties(){
 
             if ((date("d.m.Y H:i", strtotime($resultaat['looptijdeindedagtijdstip'])) ) <= date("d.m.Y H:i:s")){
                 if ($resultaat['veilinggesloten'] == 0){
+                  
+                  $veiling = HaalBiederEnVerkoperOp($resultaat['voorwerpnr'], $resultaat['verkoper']);
+                  VerstuurEindeLooptijdMail($veiling, true);
+                  
+                  if(count($veiling) == 3){
+                  VerstuurEindeLooptijdMail($veiling, false);
+                }
+                
                     $sluitVeiling -> execute( array(':voorwerpnr' => $resultaat['voorwerpnr'] ));
                     $klantteller++;
                 } else {

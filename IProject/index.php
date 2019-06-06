@@ -51,7 +51,7 @@ if(isset($_SESSION['status'])){
             <div class="row align-items-center">
               <div class="col">
                         <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
-                          <strong>'.$status.'</strong> U kunt op het kruisje klikken om deze melding te sluiten.
+                          <strong>'.$status.'</strong> U kunt op het kruisje klikken om deze melding te sluiten.</strong>
                           <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                             </button>

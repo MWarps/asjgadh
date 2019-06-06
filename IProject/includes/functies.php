@@ -380,9 +380,10 @@ function getAanbevolen($gebruiker) {
     $records = getProductenUitRubriek2($records['rubrieknr'], 3) ;
 
     if(empty($records)){
-        echo '<div class="alert alert-success" role="alert">
+        echo '    
+            <div class="alert alert-success" role="alert">
               U heeft nog geen aanbevolen voorwerpen!
-            </div>';
+        </div>';
     }
     else{
         for ($teller = 0; $teller < 3; $teller++) {
@@ -405,6 +406,7 @@ function getAanbevolen($gebruiker) {
                 $details['titel'] .= '...';
             }
             echo '
+            
         <div class="col-md-4 py-3">
         <div class="card">
         <div class="card-img-boven">
@@ -1068,7 +1070,7 @@ function veranderWachtwoord($email,$wachtwoord)
         $sqlSelect->execute(
             array(
                 ':wachtwoord' => $wachtwoord,
-                ':email' => $email,
+                ':email' => $email
             ));
     }
     catch (PDOexception $e) {
@@ -1110,6 +1112,23 @@ function statusOpValidatieZetten($gebruikersnaam){
         echo "er ging iets mis error: {$e->getMessage()}";
     }
 
+}
+
+function resetVragen()
+{
+    try {
+        require('core/dbconnection.php');
+        $sqlSelect = $dbh->query("select vraagnr, vraag from Vragen");
+        echo '<label for="inputGeheimeVraag">Geheime Vraag</label>';
+        echo '<select name="rGeheimV" class="form-control" id="inputGeheimeVraag">'; // Open your drop down box
+        // Loop through the query results, outputing the options one by one
+        while ($row = $sqlSelect->fetch(PDO::FETCH_ASSOC)) {
+            echo '<option value="'.$row['vraagnr'].'">'.$row['vraagnr'].'.&nbsp'.$row['vraag'].'</option>';
+        }
+        echo '</select>';// Close your drop down box
+    } catch (PDOexception $e) {
+        echo "er ging iets mis error: {$e->getMessage()}";
+    }
 }
 
 // deze functie haalt de informatie op van de verkoper
@@ -1866,6 +1885,48 @@ function VerstuurVerwijderMail($veiling, $ontvanger){
   
 }
 
+function VerstuurEindeLooptijdMail($veiling, $ontvanger){
+  $voorwerp = 1;
+  $verkoper = 0;
+  if(count($veiling) == 3){
+    $voorwerp = 2;  
+    $verkoper = 1;
+  }
+  $verkopermail = $veiling[$verkoper]['email'];
+  $kopermail = $veiling[0]['email'];
+  
+  if($ontvanger == false){
+    ini_set( 'display_errors', 1 );
+    error_reporting( E_ALL );
+    $from = "no-reply@iconcepts.nl";
+    $to = $verkopermail;
+    $subject = "EenmaalAndermaal uw voorwerp is verwijderd";
+    $message = emailEindeLooptijdVerkoper($veiling, $voorwerp);
+  
+    $headers = 'MIME-Version: 1.0' . "\r\n";
+    $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+    $headers .= "From:" .$from;
+  
+    mail($to,$subject,$message, $headers);
+  }  
+  
+  if($ontvanger){
+    ini_set( 'display_errors', 1 );
+    error_reporting( E_ALL );
+    $from = "no-reply@iconcepts.nl";
+    $to = $kopermail;
+    $subject = "EenmaalAndermaal geboden voorwerp is verwijderd";
+    $message = emailEindeLooptijdKoper($veiling);
+  
+    $headers = 'MIME-Version: 1.0' . "\r\n";
+    $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+    $headers .= "From:" .$from;
+  
+    mail($to,$subject,$message, $headers);  
+  }
+  
+}
+
 function updateRecentie($waarde, $verkoper) {
     try {
         require('core/dbconnection.php');
@@ -1906,5 +1967,7 @@ function haalRecentieOp($verkoper) {
         echo "er ging iets mis error2: {$e->getMessage()}";
     }
 }
+
+
 
 ?>

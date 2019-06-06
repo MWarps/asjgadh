@@ -23,8 +23,8 @@ if (isset($_GET['id']) || isset($_POST['veranderWachtwoord'])) {
       
       unset($_SESSION['validatie']);
       $url = 'index.php';
-      echo '<script language="javascript">window.location.href ="'.$url.'"</script>';
-      exit();
+      //echo '<script language="javascript">window.location.href ="'.$url.'"</script>';
+      //exit();
 }
 
 
