@@ -954,7 +954,7 @@ function verificatiesVinden(){
                     <td>'.$resultaat['adress'].'</td>
                     <td>'.$resultaat['brief'].'</td>
                     <td>'.$resultaat['email'].'</td>                    
-                    <td><a class="btn btn-primary" href="verkoperVerificatieBrief.php?email='.$resultaat['email'].'" role="button">verzonden</a></td>';
+                    <td><a class="btn btn-primary" href="verkoperVerificatieBrief.php?email='.$resultaat['email'].'" role="button">Brief is Verzonden</a></td>';
             echo ' </tr>';
         }
 
