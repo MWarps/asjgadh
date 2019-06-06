@@ -582,7 +582,7 @@ function haalAdvertentieOp($rubriek){
             }
             echo '
             <div class="col-md-4 pb-3">
-            <div class="card" style="width: 18rem;">
+            <div class="card">
             <div class="card-img-boven">
               <img src="'.$locatie.$details['illustratieFile'].'" alt="Foto bestaat niet">
             </div> 
