@@ -163,9 +163,10 @@ if(isset($_GET['id'])){
                             if(!empty($recenties[0]['recentie'])){
                               ?> 
                         
-                        Reviews:<br><br>
+                        Reviews:<br>
+                        Kopers geven deze verkoper een<br>
                         
-                            <h1><?php echo 'Gemiddelde: '.$recenties[1]['recentie'].'/10' ?> </h1>
+                            <h3><?php echo 'Gemiddelde: '.$recenties[0]['recentie'].'/10' ?> </h3>
                             <p><?php echo 'Aantal recenties: '.$recenties[0]['recentie'].'' ?> </p>
                           
                           <?php }
