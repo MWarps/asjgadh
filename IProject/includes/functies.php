@@ -208,7 +208,7 @@ function getPopulairsteArtikelen() {
           <h5 class="card-header"><a href="advertentie.php?id='.$details['voorwerpnr'].'">'.$details['titel'].'</a></h5>
             <div class="card-body">
               <h4 class="card-text">€ '.number_format($details['startprijs'], 2, ',', '.').'</h4>
-              <p class="card-text"><a href="#">'.$details['verkoper'].'</a><br>
+              <p class="card-text">'.$details['verkoper'].'<br>
               '.$details['land'].', '.$details['plaatsnaam'].'</p>
               <a href="advertentie.php?id='.$details['voorwerpnr'].'" class="btn btn-block btn-primary">Ga naar artikel</a>
             </div>
@@ -339,7 +339,7 @@ function getLaatstBekeken($gebruiker) {
           <h5 class="card-header"><a href="advertentie.php?id='.$details['voorwerpnr'].'">'.$details['titel'].'</a></h5>
             <div class="card-body">
               <h4 class="card-text">€ '.number_format($details['startprijs'], 2, ',', '.').'</h4>
-              <p class="card-text"><a href="#">'.$details['verkoper'].'</a><br>
+              <p class="card-text">'.$details['verkoper'].'<br>
               '.$details['land'].', '.$details['plaatsnaam'].'</p>
               <a href="advertentie.php?id='.$details['voorwerpnr'].'" class="btn btn-block btn-primary">Ga naar artikel</a>
             </div>
@@ -373,7 +373,7 @@ function getAanbevolen($gebruiker) {
     }
     else{
         for ($teller = 0; $teller < 3; $teller++) {
-          
+          if(!empty($records[$teller]['voorwerpnr'])){
             $details = DetailAdvertentie($records[$teller]['voorwerpnr']);
             $locatie = '../pics/';
             
@@ -400,13 +400,13 @@ function getAanbevolen($gebruiker) {
           <h5 class="card-header"><a href="advertentie.php?id='.$details['voorwerpnr'].'">'.$details['titel'].'</a></h5>
             <div class="card-body">
               <h4 class="card-text">€ '.number_format($details['startprijs'], 2, ',', '.').'</h4>
-              <p class="card-text"><a href="#">'.$details['verkoper'].'</a><br>
+              <p class="card-text">'.$details['verkoper'].'<br>
               '.$details['land'].', '.$details['plaatsnaam'].'</p>
               <a href="advertentie.php?id='.$details['voorwerpnr'].'" class="btn btn-block btn-primary">Ga naar artikel</a>
             </div>
         </div>
         </div>';
-        }}
+      }}}
 }
 
 function HaalIllustratiesOp($voorwerpnr){
@@ -589,7 +589,7 @@ function haalAdvertentieOp($rubriek){
               <h5 class="card-header"><a href="advertentie.php?id='.$details['voorwerpnr'].'">'.$details['titel'].'</a></h5>
                 <div class="card-body">
                   <h4 class="card-text">€ '.number_format($details['startprijs'], 2, ',', '.').'</h4>
-                  <p class="card-text"><a href="#">'.$details['verkoper'].'</a><br>
+                  <p class="card-text">'.$details['verkoper'].'<br>
                   '.$details['land'].', '.$details['plaatsnaam'].'</p>
                   <a href="advertentie.php?id='.$details['voorwerpnr'].'" class="btn btn-block btn-primary">Ga naar artikel</a>
                 </div>

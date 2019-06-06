@@ -72,8 +72,6 @@ if(isset($_GET['id'])){
               <button type="button" class="btn btn-secondary btn-sm btn-block">Mijn advertenties</button>
                 <?php 
                 $advertenties = HaalMijnAdvertentieOp($_SESSION['gebruikersnaam']);
-                $knop = '';
-                $verkocht = false;
                 if(!empty($advertenties)){ 
                 foreach ($advertenties as $rij) {
                     $details = DetailAdvertentieMijnAdvertenties($rij['voorwerpnr']);
@@ -81,6 +79,10 @@ if(isset($_GET['id'])){
                     
                     $hoogstebieder = zijnErBiedingen($details['voorwerpnr']);
                     $hoogstbieder = $hoogstebieder['euro'];
+                    $knop = '';
+                    $Bieder = HaalBiederEnVerkoperOp($details['voorwerpnr'], $_SESSION['gebruikersnaam']);
+                    $artikelKnop = '<a href="advertentie.php?id='.$details['voorwerpnr'].'" class="btn btn-block btn-primary py-2">Ga naar artikel</a>';
+                    $verkopen = '<a class="btn btn-block btn-success py-2 '.$knop.'" href="mijnadvertenties.php?id='.$details['voorwerpnr'].'&status=verkopen" >Verkopen</a>';
                     
                     if(!empty($hoogstbieder)){
                       $details['startprijs'] = $hoogstbieder;
@@ -93,19 +95,15 @@ if(isset($_GET['id'])){
                         $details['titel'] = substr($details['titel'],0,40);
                         $details['titel'] .= '...';
                     }
-                    $Bieder = HaalBiederEnVerkoperOp($details['voorwerpnr'], $_SESSION['gebruikersnaam']);
-                    $artikelKnop = '<a href="advertentie.php?id='.$details['voorwerpnr'].'" class="btn btn-block btn-primary py-2">Ga naar artikel</a>';
-                    $verkocht = '<a class="btn btn-block btn-success py-2 '.$knop.'" href="mijnadvertenties.php?id='.$details['voorwerpnr'].'&status=verkopen" >Verkopen</a>';
                     
                     if(count($Bieder) == 2){
-                      echo 'test';                
                       $knop = 'disabled';                  
                     }          
                     if(count($Bieder) == 3){
+                      $verkopen = '<a class="btn btn-block btn-success py-2 '.$knop.'" href="mijnadvertenties.php?id='.$details['voorwerpnr'].'&status=verkopen" >Verkopen</a>';
                     if(!empty($Bieder[2]['koper'])){
-                      echo 'test';
                       $knop = 'disabled';
-                      $verkocht = '<button type="button" class="btn btn-block btn-success py-2 '.$knop.'" >Advertentie is verkocht</button>';
+                      $verkopen = '<button type="button" class="btn btn-block btn-success py-2 '.$knop.'" >Advertentie is verkocht</button>';
                       $artikelKnop = '';
                     }}
                     
@@ -123,7 +121,7 @@ if(isset($_GET['id'])){
                           <p class="card-text"><a href="#">'.$details['verkoper'].'</a><br>
                           '.$details['land'].', '.$details['plaatsnaam'].'</p>
                           '.$artikelKnop.'                                                                         
-                          '.$verkocht.'
+                          '.$verkopen.'
                           <a class="btn btn-block btn-danger py-2" href="mijnadvertenties.php?id='.$details['voorwerpnr'].'&status=verwijderen">Verwijderen</a>
                           
                         </div>

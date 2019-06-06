@@ -170,7 +170,7 @@ if(isset($_GET['id'])){
                           
                           <?php }
                                 else{
-                                  echo '<h3> Deze verkoper heeft nog geen recenties </h3>';
+                                  echo '<h4> Deze verkoper heeft nog geen recenties </h4>';
                                 }                                              ?>
                         
                         <button type="button" class="btn btn-primary btn-lg mt-3"><a style="color: white;" href="stuurbericht.php?id=<?php echo $advertentie['verkoper']?>">Stuur bericht!</a></button>
