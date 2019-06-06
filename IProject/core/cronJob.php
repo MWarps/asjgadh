@@ -50,7 +50,7 @@ function checkNormaleAdvertenties(){
         // haalt alle veilingen op die nog openstaand en waarvan de email niet de bot code bevat.
         $haalVeilingenOp = $dbh -> prepare(' select * from Voorwerp V, Gebruiker G where  G.gebruikersnaam = V.verkoper and G.email not like %asjgadh% and veilinggesloten = 0 ');
 
-        $haalVeilingenOp -> execute(); echo('execute succesvol');
+        $haalVeilingenOp -> execute();
 
         while ($resultaat = $haalVeilingenOp = $sqlSelect->fetch(PDO::FETCH_ASSOC)){
             echo('Klant (advertentie/ iteratie) NR : ');echo ($klantteller);echo('<br>');

@@ -192,14 +192,14 @@ function getPopulairsteArtikelen() {
     foreach ($records as $rij) {
         $details = DetailAdvertentie($rij['voorwerpnr']);
         $locatie = '../pics/';
-        
+
         $hoogstebieder = zijnErBiedingen($details['voorwerpnr']);
         $hoogstbieder = $hoogstebieder['euro'];
-        
+
         if(!empty($hoogstbieder)){
-          $details['startprijs'] = $hoogstbieder;
+            $details['startprijs'] = $hoogstbieder;
         }  
-        
+
         if(substr($details['illustratieFile'] , 0 ,2 ) == 'ea'){
             $locatie = 'upload/';
         }        
@@ -330,9 +330,9 @@ function getLaatstBekeken($gebruiker) {
 
             $hoogstebieder = zijnErBiedingen($details['voorwerpnr']);
             $hoogstbieder = $hoogstebieder['euro'];
-            
+
             if(!empty($hoogstbieder)){
-              $details['startprijs'] = $hoogstbieder;
+                $details['startprijs'] = $hoogstbieder;
             }  
             if(substr($details['illustratieFile'] , 0 ,2 ) == 'ea'){
                 $locatie = 'upload/';
@@ -387,26 +387,25 @@ function getAanbevolen($gebruiker) {
     }
     else{
         for ($teller = 0; $teller < 3; $teller++) {
-          if(!empty($records[$teller]['voorwerpnr'])){
-            $details = DetailAdvertentie($records[$teller]['voorwerpnr']);
-            $locatie = '../pics/';
-            
-            $hoogstebieder = zijnErBiedingen($details['voorwerpnr']);
-            $hoogstbieder = $hoogstebieder['euro'];
-            
-            if(!empty($hoogstbieder)){
-              $details['startprijs'] = $hoogstbieder;
-            } 
-            
-            if(substr($details['illustratieFile'] , 0 ,2 ) == 'ea'){
-                $locatie = 'upload/';
-            } 
-            if(strlen($details['titel']) >= 40){
-                $details['titel'] = substr($details['titel'],0,40);
-                $details['titel'] .= '...';
-            }
-            echo '
-            
+            if(!empty($records[$teller]['voorwerpnr'])){
+                $details = DetailAdvertentie($records[$teller]['voorwerpnr']);
+                $locatie = '../pics/';
+
+                $hoogstebieder = zijnErBiedingen($details['voorwerpnr']);
+                $hoogstbieder = $hoogstebieder['euro'];
+
+                if(!empty($hoogstbieder)){
+                    $details['startprijs'] = $hoogstbieder;
+                } 
+
+                if(substr($details['illustratieFile'] , 0 ,2 ) == 'ea'){
+                    $locatie = 'upload/';
+                } 
+                if(strlen($details['titel']) >= 40){
+                    $details['titel'] = substr($details['titel'],0,40);
+                    $details['titel'] .= '...';
+                }
+                echo '
         <div class="col-md-4 py-3">
         <div class="card">
         <div class="card-img-boven">
@@ -421,7 +420,7 @@ function getAanbevolen($gebruiker) {
             </div>
         </div>
         </div>';
-      }}}
+            }}}
 }
 
 // deze functie laat de illustratie bestanden zien
@@ -595,14 +594,14 @@ function haalAdvertentieOp($rubriek){
         foreach ($producten as $rij) {
             $details = DetailAdvertentie($rij['voorwerpnr']);
             $locatie = '../pics/';
-            
+
             $hoogstebieder = zijnErBiedingen($details['voorwerpnr']);
             $hoogstbieder = $hoogstebieder['euro'];
-            
+
             if(!empty($hoogstbieder)){
-              $details['startprijs'] = $hoogstbieder;
+                $details['startprijs'] = $hoogstbieder;
             }
-            
+
             if(substr($details['illustratieFile'] , 0 ,2 ) == 'ea'){
                 $locatie = 'upload/';
             } 
@@ -1345,7 +1344,7 @@ function gebruikersvinden($gebruikersnaam){
                     <td>'.$resultaat['gebruikersnaam'].'</td>
                     <td>'.$resultaat['voornaam'].'</td>
                     <td>'.$resultaat['achternaam'].'</td>
-                  
+
                     <td>'.$resultaat['postcode'].'</td>
                     <td>'.$resultaat['plaatsnaam'].'</td>
                     <td>'.$resultaat['land'].'</td>
@@ -1368,7 +1367,7 @@ function blokeren($geblokkeerd, $teller, $gebruiker){
         echo ' <td>   
     <a class="btn btn-primary" href="overzichtGebruikers.php?id='.$teller.'&naam='.$gebruiker.'" role="button">Deblokkeer</a> 
    </td> ';
- } else if ($geblokkeerd == "Nee"){
+    } else if ($geblokkeerd == "Nee"){
         echo ' <td>
     <a class="btn btn-primary" href="overzichtGebruikers.php?id='.$teller.'&naam='.$gebruiker.'" role="button">Blokkeer</a>
       </td>  ';
@@ -1435,15 +1434,15 @@ function StuurGebruikerBlockedEmail($gebruikersnaam)
         $to = $records['email'];
         $subject = "Account geblokkeerd";
         $message = 'Beste  '.$records['voornaam'].',
-                 
-                  
+
+
          Helaas moeten wij u op de hoogte stellen dat uw account is geblokkeerd. Dit kan meerdere redenen hebben.
          Om meer informatie te krijgen kunt u contact met ons opnemen door een mail te sturen naar: EenmaalAndermaal@gmail.com
          Vermeld in deze mail uw gebruikersnaam.
          Wij hopen u zodoende genoeg informatie te hebben gegeven.
-                       
+
          Met vriendelijke groeten,
-                        
+
          EenmaalAndermaal  
 ';
         $headers = "From:" .$from;
@@ -1474,12 +1473,12 @@ function StuurGebruikerDeblockedEmail($gebruikersnaam)
         $to = $records['email'];
         $subject = "Account gedeblokkeerd";
         $message = ' Beste '.$records['voornaam'].',
-                 
+
         Uw account is gedeblokkeerd. U kunt nu weer inloggen.
         Wij hopen u zodoende genoeg informatie te hebben gegeven.
-                       
+
         Met vriendelijke groeten,
-                        
+
         EenmaalAndermaal     
 ';
         $headers = "From:" .$from;
@@ -1504,7 +1503,7 @@ function veilingenVinden($veilingnaam){
         );
         $veiling = $veilingen ->fetchAll(PDO::FETCH_ASSOC);
         foreach ( $veiling as $resultaat ){
-          $teller++;
+            $teller++;
             $geblokkeerd = "error";
             if ($resultaat['geblokkeerd'] == 1){
                 $geblokkeerd = "Ja";
@@ -1569,23 +1568,23 @@ function veilingblok($voorwerpnummer){
         );
 
         $resultaat = $veiling ->fetch(PDO::FETCH_ASSOC);
-        
+
         if ($resultaat['geblokkeerd'] == 1){
             $deblokeren -> execute(
                 array(
                     ':voorwerpnummer' => $resultaat['voorwerpnr'],
                 ));
-                
+
             veilingeindberekenen ($resultaat['voorwerpnr']);
         }
         else if ($resultaat['geblokkeerd'] == 0){
 
             $veiling = HaalBiederEnVerkoperOp($voorwerpnummer, $resultaat['verkoper']);
             VerstuurVeilingBlockedMail($veiling, true);
-            
+
             if(count($veiling) == 3){
-            VerstuurVeilingBlockedMail($veiling, false);
-          }
+                VerstuurVeilingBlockedMail($veiling, false);
+            }
             $blokeren -> execute(
                 array(
                     ':voorwerpnummer' => $resultaat['voorwerpnr']
@@ -1650,7 +1649,7 @@ function checkBEHEERDER ($gebruiker){
 }
 
 function veilingeindberekenen ($voorwerpnummer){
-       // de overgebleven dagen die de veiling nog open is.
+    // de overgebleven dagen die de veiling nog open is.
     try {
         require('core/dbconnection.php');
         $informatie = $dbh -> prepare("SELECT * from Voorwerp where voorwerpnr = :voorwerpnr");
@@ -1664,16 +1663,16 @@ function veilingeindberekenen ($voorwerpnummer){
         $informatie -> execute(
             array(
                 ':voorwerpnr' => $voorwerpnummer
-              
+
             )
         );
-      
+
         $einddatum -> execute (
             array (
                 ':voorwerpnr' => $voorwerpnummer,
                 ':voorwerpnr1' => $voorwerpnummer,
                 ':voorwerpnr2' => $voorwerpnummer
-              
+
             )
         );
     } catch (PDOexception $e) {
@@ -1682,207 +1681,207 @@ function veilingeindberekenen ($voorwerpnummer){
 }
 
 function HaalMijnAdvertentieOp($gebruikersnaam){
-  
-  try {
-      require('core/dbconnection.php');
-      $sqlSelect = $dbh ->prepare ("SELECT voorwerpnr from Voorwerp where verkoper = :gebruiker ");
-      $sqlSelect-> execute(
-          array(
-              ':gebruiker' => $gebruikersnaam
-          )
-      );
-      $resultaat = $sqlSelect ->fetchAll(PDO::FETCH_ASSOC);
-      return $resultaat;
 
-  } catch (PDOexception $e) {
-      "er ging iets mis error: {$e->getMessage()}";
-      
-  }
+    try {
+        require('core/dbconnection.php');
+        $sqlSelect = $dbh ->prepare ("SELECT voorwerpnr from Voorwerp where verkoper = :gebruiker ");
+        $sqlSelect-> execute(
+            array(
+                ':gebruiker' => $gebruikersnaam
+            )
+        );
+        $resultaat = $sqlSelect ->fetchAll(PDO::FETCH_ASSOC);
+        return $resultaat;
+
+    } catch (PDOexception $e) {
+        "er ging iets mis error: {$e->getMessage()}";
+
+    }
 }
 
 function HaalBiederEnVerkoperOp($voorwerpnr, $verkoper){
-  
-  try {
-      require('core/dbconnection.php');
-      $sqlSelect = $dbh ->prepare ("SELECT * from Gebruiker where gebruikersnaam = (select top 1 gebruikersnaam from bod where voorwerpnr = :voorwerpnr order by convert(decimal(9,2), euro) desc )
+
+    try {
+        require('core/dbconnection.php');
+        $sqlSelect = $dbh ->prepare ("SELECT * from Gebruiker where gebruikersnaam = (select top 1 gebruikersnaam from bod where voorwerpnr = :voorwerpnr order by convert(decimal(9,2), euro) desc )
                                     ");
-      $sqlSelect2 = $dbh ->prepare ("SELECT * from Gebruiker where gebruikersnaam = :verkoper
+        $sqlSelect2 = $dbh ->prepare ("SELECT * from Gebruiker where gebruikersnaam = :verkoper
                                     ");
-      $sqlSelect3 = $dbh ->prepare ("SELECT * from Voorwerp where voorwerpnr = :voorwerpnr");
-        
-          $sqlSelect ->execute( 
-                     array(':voorwerpnr' => $voorwerpnr));
-          $sqlSelect2 ->execute( 
-                     array(':verkoper' => $verkoper));                         
-          $sqlSelect3 ->execute( 
-                     array(':voorwerpnr' => $voorwerpnr));
-                        
-           $records = $sqlSelect ->fetchAll(PDO::FETCH_ASSOC);
-           array_push($records, $sqlSelect2 ->fetch(PDO::FETCH_ASSOC));
-           array_push($records, $sqlSelect3 ->fetch(PDO::FETCH_ASSOC));
-           
-           return $records;
-              
-  } catch (PDOexception $e) {
-      "er ging iets mis error: {$e->getMessage()}";      
-  }  
-  
+        $sqlSelect3 = $dbh ->prepare ("SELECT * from Voorwerp where voorwerpnr = :voorwerpnr");
+
+        $sqlSelect ->execute( 
+            array(':voorwerpnr' => $voorwerpnr));
+        $sqlSelect2 ->execute( 
+            array(':verkoper' => $verkoper));                         
+        $sqlSelect3 ->execute( 
+            array(':voorwerpnr' => $voorwerpnr));
+
+        $records = $sqlSelect ->fetchAll(PDO::FETCH_ASSOC);
+        array_push($records, $sqlSelect2 ->fetch(PDO::FETCH_ASSOC));
+        array_push($records, $sqlSelect3 ->fetch(PDO::FETCH_ASSOC));
+
+        return $records;
+
+    } catch (PDOexception $e) {
+        "er ging iets mis error: {$e->getMessage()}";      
+    }  
+
 }
 
 function VerkoopVeiling($voorwerpnr){
-  
-  try {
-      require('core/dbconnection.php');      
-      $sqlUpdate = $dbh ->prepare ("UPDATE Voorwerp
+
+    try {
+        require('core/dbconnection.php');      
+        $sqlUpdate = $dbh ->prepare ("UPDATE Voorwerp
                                     SET koper = (select top 1 gebruikersnaam from bod where voorwerpnr = :voorwerpnr order by convert(decimal(9,2), euro) desc),
                                         verkoopprijs = (select top 1 euro from bod where voorwerpnr = :voorwerpnr1 order by convert(decimal(9,2), euro) desc),
                                         veilinggesloten = 1
                                     WHERE voorwerpnr = :voorwerpnr2");      
-      $sqlUpdate-> execute(
-          array(
-              ':voorwerpnr' => $voorwerpnr,
-              ':voorwerpnr1' => $voorwerpnr,
-              ':voorwerpnr2' => $voorwerpnr
-          ));
-              
-  } catch (PDOexception $e) {
-      "er ging iets mis error: {$e->getMessage()}";      
-  }  
+        $sqlUpdate-> execute(
+            array(
+                ':voorwerpnr' => $voorwerpnr,
+                ':voorwerpnr1' => $voorwerpnr,
+                ':voorwerpnr2' => $voorwerpnr
+            ));
+
+    } catch (PDOexception $e) {
+        "er ging iets mis error: {$e->getMessage()}";      
+    }  
 }
 
 function VerwijderVeiling($voorwerpnr){
-  
-  try {
-      require('core/dbconnection.php');   
-      $sqlDelete1 = $dbh ->prepare ("DELETE FROM Voorwerpinrubriek where voorwerpnr = :voorwerpnr");
-      $sqlDelete2 = $dbh ->prepare ("DELETE FROM laatstbekeken where voorwerpnr = :voorwerpnr"); 
-      $sqlDelete3 = $dbh ->prepare ("DELETE FROM Voorwerp where voorwerpnr = :voorwerpnr");
-      
-     $sqlDelete1-> execute( array(':voorwerpnr' => $voorwerpnr ));
-     $sqlDelete2-> execute( array(':voorwerpnr' => $voorwerpnr ));
-     $sqlDelete3-> execute( array(':voorwerpnr' => $voorwerpnr ));         
-            
-  } catch (PDOexception $e) {
-      "er ging iets mis error: {$e->getMessage()}";      
-  }  
+
+    try {
+        require('core/dbconnection.php');   
+        $sqlDelete1 = $dbh ->prepare ("DELETE FROM Voorwerpinrubriek where voorwerpnr = :voorwerpnr");
+        $sqlDelete2 = $dbh ->prepare ("DELETE FROM laatstbekeken where voorwerpnr = :voorwerpnr"); 
+        $sqlDelete3 = $dbh ->prepare ("DELETE FROM Voorwerp where voorwerpnr = :voorwerpnr");
+
+        $sqlDelete1-> execute( array(':voorwerpnr' => $voorwerpnr ));
+        $sqlDelete2-> execute( array(':voorwerpnr' => $voorwerpnr ));
+        $sqlDelete3-> execute( array(':voorwerpnr' => $voorwerpnr ));         
+
+    } catch (PDOexception $e) {
+        "er ging iets mis error: {$e->getMessage()}";      
+    }  
 }
 
 function VerstuurVerkoopMail($veiling){
-$verkoper = $veiling[1]['email'];
-$koper = $veiling[0]['email'];
-    
-        ini_set( 'display_errors', 1 );
-        error_reporting( E_ALL );
-        $from = "no-reply@iconcepts.nl";
-        $to = $verkoper;
-        $subject = "EenmaalAndermaal u heeft een voorwerp Verkocht!";
-        $message = emailVerkocht($veiling);
-        $headers = 'MIME-Version: 1.0' . "\r\n";
-        $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-        $headers .= "From:" .$from;
+    $verkoper = $veiling[1]['email'];
+    $koper = $veiling[0]['email'];
 
-        mail($to,$subject,$message, $headers);
-    
-        ini_set( 'display_errors', 1 );
-        error_reporting( E_ALL );
-        $from = "no-reply@iconcepts.nl";
-        $to = $koper;
-        $subject = "EenmaalAndermaal u heeft een voorwerp Gekocht!";
-        $message = emailGekocht($veiling);
+    ini_set( 'display_errors', 1 );
+    error_reporting( E_ALL );
+    $from = "no-reply@iconcepts.nl";
+    $to = $verkoper;
+    $subject = "EenmaalAndermaal u heeft een voorwerp Verkocht!";
+    $message = emailVerkocht($veiling);
+    $headers = 'MIME-Version: 1.0' . "\r\n";
+    $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+    $headers .= "From:" .$from;
 
-        $headers = 'MIME-Version: 1.0' . "\r\n";
-        $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-        $headers .= "From:" .$from;
+    mail($to,$subject,$message, $headers);
 
-        mail($to,$subject,$message, $headers);
-     
+    ini_set( 'display_errors', 1 );
+    error_reporting( E_ALL );
+    $from = "no-reply@iconcepts.nl";
+    $to = $koper;
+    $subject = "EenmaalAndermaal u heeft een voorwerp Gekocht!";
+    $message = emailGekocht($veiling);
+
+    $headers = 'MIME-Version: 1.0' . "\r\n";
+    $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+    $headers .= "From:" .$from;
+
+    mail($to,$subject,$message, $headers);
+
 }
 
 
 
 function VerstuurVeilingBlockedMail($veiling, $ontvanger){            
-  $voorwerp = 1;
-  $verkoper = 0;
-  if(count($veiling) == 3){
-    $verkoper = 1;
-    $voorwerp = 2;  
-  }
-  
-  $verkopermail = $veiling[$verkoper]['email'];
-  $kopermail = $veiling[0]['email'];
-  
-  if($ontvanger){
-    ini_set( 'display_errors', 1 );
-    error_reporting( E_ALL );
-    $from = "no-reply@iconcepts.nl";
-    $to = $verkopermail;
-    $subject = "EenmaalAndermaal uw veiling is geblokkeerd";
-    $message = emailVeilingBlockedVerkoper($veiling, $voorwerp);
-  
-    $headers = 'MIME-Version: 1.0' . "\r\n";
-    $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-    $headers .= "From:" .$from;
-  
-    mail($to,$subject,$message, $headers);
-  }  
-  
-  if($ontvanger == false){
-    ini_set( 'display_errors', 1 );
-    error_reporting( E_ALL );
-    $from = "no-reply@iconcepts.nl";
-    $to = $kopermail;
-    $subject = "EenmaalAndermaal geboden voorwerp is geblokkeerd";
-    $message = emailVeilingBlockedKoper($veiling);
-  
-    $headers = 'MIME-Version: 1.0' . "\r\n";
-    $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-    $headers .= "From:" .$from;
-  
-    mail($to,$subject,$message, $headers);  
-  }
+    $voorwerp = 1;
+    $verkoper = 0;
+    if(count($veiling) == 3){
+        $verkoper = 1;
+        $voorwerp = 2;  
+    }
+
+    $verkopermail = $veiling[$verkoper]['email'];
+    $kopermail = $veiling[0]['email'];
+
+    if($ontvanger){
+        ini_set( 'display_errors', 1 );
+        error_reporting( E_ALL );
+        $from = "no-reply@iconcepts.nl";
+        $to = $verkopermail;
+        $subject = "EenmaalAndermaal uw veiling is geblokkeerd";
+        $message = emailVeilingBlockedVerkoper($veiling, $voorwerp);
+
+        $headers = 'MIME-Version: 1.0' . "\r\n";
+        $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+        $headers .= "From:" .$from;
+
+        mail($to,$subject,$message, $headers);
+    }  
+
+    if($ontvanger == false){
+        ini_set( 'display_errors', 1 );
+        error_reporting( E_ALL );
+        $from = "no-reply@iconcepts.nl";
+        $to = $kopermail;
+        $subject = "EenmaalAndermaal geboden voorwerp is geblokkeerd";
+        $message = emailVeilingBlockedKoper($veiling);
+
+        $headers = 'MIME-Version: 1.0' . "\r\n";
+        $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+        $headers .= "From:" .$from;
+
+        mail($to,$subject,$message, $headers);  
+    }
 }
 
 
 function VerstuurVerwijderMail($veiling, $ontvanger){
-  $voorwerp = 1;
-  $verkoper = 0;
-  if(count($veiling) == 3){
-    $voorwerp = 2;  
-    $verkoper = 1;
-  }
-  $verkopermail = $veiling[$verkoper]['email'];
-  $kopermail = $veiling[0]['email'];
-  
-  if($ontvanger == false){
-    ini_set( 'display_errors', 1 );
-    error_reporting( E_ALL );
-    $from = "no-reply@iconcepts.nl";
-    $to = $verkopermail;
-    $subject = "EenmaalAndermaal uw voorwerp is verwijderd";
-    $message = EmailVerwijderdVerkoper($veiling, $voorwerp);
-  
-    $headers = 'MIME-Version: 1.0' . "\r\n";
-    $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-    $headers .= "From:" .$from;
-  
-    mail($to,$subject,$message, $headers);
-  }  
-  
-  if($ontvanger){
-    ini_set( 'display_errors', 1 );
-    error_reporting( E_ALL );
-    $from = "no-reply@iconcepts.nl";
-    $to = $kopermail;
-    $subject = "EenmaalAndermaal geboden voorwerp is verwijderd";
-    $message = emailVeilingBlockedKoper($veiling) ;
-  
-    $headers = 'MIME-Version: 1.0' . "\r\n";
-    $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-    $headers .= "From:" .$from;
-  
-    mail($to,$subject,$message, $headers);  
-  }
-  
+    $voorwerp = 1;
+    $verkoper = 0;
+    if(count($veiling) == 3){
+        $voorwerp = 2;  
+        $verkoper = 1;
+    }
+    $verkopermail = $veiling[$verkoper]['email'];
+    $kopermail = $veiling[0]['email'];
+
+    if($ontvanger == false){
+        ini_set( 'display_errors', 1 );
+        error_reporting( E_ALL );
+        $from = "no-reply@iconcepts.nl";
+        $to = $verkopermail;
+        $subject = "EenmaalAndermaal uw voorwerp is verwijderd";
+        $message = EmailVerwijderdVerkoper($veiling, $voorwerp);
+
+        $headers = 'MIME-Version: 1.0' . "\r\n";
+        $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+        $headers .= "From:" .$from;
+
+        mail($to,$subject,$message, $headers);
+    }  
+
+    if($ontvanger){
+        ini_set( 'display_errors', 1 );
+        error_reporting( E_ALL );
+        $from = "no-reply@iconcepts.nl";
+        $to = $kopermail;
+        $subject = "EenmaalAndermaal geboden voorwerp is verwijderd";
+        $message = emailVeilingBlockedKoper($veiling) ;
+
+        $headers = 'MIME-Version: 1.0' . "\r\n";
+        $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+        $headers .= "From:" .$from;
+
+        mail($to,$subject,$message, $headers);  
+    }
+
 }
 
 function VerstuurEindeLooptijdMail($veiling, $ontvanger){
@@ -1956,13 +1955,13 @@ function haalRecentieOp($verkoper) {
 
         $sqlSelect->execute(
             array(      
-              ':verkoper' => $verkoper,      
-              ':verkoper2' => $verkoper
+                ':verkoper' => $verkoper,      
+                ':verkoper2' => $verkoper
             ));
 
-            $records = $sqlSelect ->fetchAll(PDO::FETCH_ASSOC);
-            
-            return $records;
+        $records = $sqlSelect ->fetchAll(PDO::FETCH_ASSOC);
+
+        return $records;
     } catch (PDOexception $e) {
         echo "er ging iets mis error2: {$e->getMessage()}";
     }
