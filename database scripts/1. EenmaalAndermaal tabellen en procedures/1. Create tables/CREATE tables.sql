@@ -1,3 +1,6 @@
+--TODO LIST
+-- - geblokeerd in Gebruiker hernoemen naar geblokkeerd
+
 --USE iproject
 go
 

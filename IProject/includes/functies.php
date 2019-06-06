@@ -942,6 +942,7 @@ function StuurRegistreerEmail($Email, $Code){
 }
 
 //deze methode laad alle verificaties om verkoper te worden die nog niet verzonden zijn. ook wordt het adress en de brief volgens een template vast opgesteld
+//verplaatst naar beheerderFuncties.php
 function verificatiesVinden(){
     $teller = 0;
     //echo 'verificaties gevonden';
@@ -977,6 +978,7 @@ function verificatiesVinden(){
 }
 
 //deze functie registreerd dat de brief verzonden is in de database
+//verplaatst naar beheerderFuncties.php
 function verificatieVerzonden($email) {
     $email = fixEmail($email);
     try{
@@ -996,6 +998,7 @@ function verificatieVerzonden($email) {
 }
 
 // de $_GET die gebruikt wordt om de email op te halen en naar verificatieVerzonden te sturen verandert de + tekens in de email adressen naar spaties
+//verplaatst naar beheerderFuncties.php
 function fixEmail($email) {
     $email = str_replace(" ","+",$email);
 
@@ -1317,6 +1320,7 @@ function directorieVinden($pagina){
 }
 
 //deze functie laadt de tabel met gebruikers in in de beheeromgeving overzichtGebruikers.php
+// verplaatst naar beheerderFuncites.php
 function gebruikersvinden($gebruikersnaam){
     $teller = 0;
     try {
@@ -1360,7 +1364,7 @@ function gebruikersvinden($gebruikersnaam){
                     <td>'.$verkoper.'</td>       
                     <td>'.$geblokeerd.'</td> 
                       ';
-            blokeren($geblokeerd, $teller, $resultaat['gebruikersnaam'] ); 
+            blokkeren($geblokeerd, $teller, $resultaat['gebruikersnaam'] );
             echo ' </tr>';
 
         }
@@ -1370,6 +1374,7 @@ function gebruikersvinden($gebruikersnaam){
 }
 
 //deze functie regelt de blokkeer/deblokkeer knop die rechts naast de gebruiker staat in de beheeromgeving
+// verplaatst naar beheerderFuncties.php
 function blokeren($geblokeerd, $teller, $gebruiker){
     if ($geblokeerd == "Ja"){
         echo ' <td>   
@@ -1382,7 +1387,8 @@ function blokeren($geblokeerd, $teller, $gebruiker){
     }
 }
 
-//deze functie blokkeert of deblokkeert de gebruiker in de database als de beheerder dit via de beheerdersomgeving dit aanstuurt
+// deze functie blokkeert of deblokkeert de gebruiker in de database als de beheerder dit via de beheerdersomgeving dit aanstuurt
+// verplaatst naar beheerderFuncties.php
 function gebruikerblok(){
     try {
         require('core/dbconnection.php');
@@ -1423,7 +1429,8 @@ function gebruikerblok(){
 }
 
 
-/* stuurt email naar gebruiker wanneer deze geblokkeerd is */
+// stuurt email naar gebruiker wanneer deze geblokkeerd is
+// verplaatst naar beheerderFuncties.php
 function StuurGebruikerBlockedEmail($gebruikersnaam)
 {
     try{
@@ -1462,7 +1469,8 @@ function StuurGebruikerBlockedEmail($gebruikersnaam)
     }
 }
 
-/* stuurt email naar gebruiker wanneer deze gedeblokkeerd is */
+// stuurt email naar gebruiker wanneer deze gedeblokkeerd is
+// verplaatst naar beheerderFuncties.php
 function StuurGebruikerDeblockedEmail($gebruikersnaam)
 {
     try{
@@ -1498,7 +1506,8 @@ function StuurGebruikerDeblockedEmail($gebruikersnaam)
     }
 }
 
-
+// CommentaarNodig
+// verplaatst naar beheerderFuncties.php
 function veilingenVinden($veilingnaam){
     $teller =0;
     try {
@@ -1534,7 +1543,7 @@ function veilingenVinden($veilingnaam){
                     <td>'.$geblokkeerd.'</td> 
                     <td>'.$resultaat['blokkeerdatum'].'</td>
                       ';
-            veilingblokeren($geblokkeerd, $resultaat['voorwerpnr'], $resultaat['titel'] ); 
+            veilingblokkeren($geblokkeerd, $resultaat['voorwerpnr'], $resultaat['titel'] );
 
             echo '</tr>';
         }   
@@ -1543,6 +1552,8 @@ function veilingenVinden($veilingnaam){
     }
 }
 
+// CommentaarNodig
+// verplaatst naar beheerderFuncties.php
 function veilingblokeren($geblokkeerd, $voorwerpnummer, $titel){
     if ($geblokkeerd == "Ja"){
         echo ' <td>   
@@ -1555,6 +1566,8 @@ function veilingblokeren($geblokkeerd, $voorwerpnummer, $titel){
     }
 }
 
+// CommentaarNodig
+// verplaatst naar beheerderFuncties.php
 function veilingblok($voorwerpnummer){
     try {
         require('core/dbconnection.php');
@@ -1631,6 +1644,7 @@ function checkGEBLOKEERD($gebruiker){
 
 }
 
+// deze functie checkt of een gebruiker beheerder is
 function checkBEHEERDER ($gebruiker){
     try {
         require('core/dbconnection.php');
@@ -1656,6 +1670,8 @@ function checkBEHEERDER ($gebruiker){
     }
 }
 
+// commentaarNodig
+//verplaatst naar beheerderFuncties.php
 function veilingeindberekenen ($voorwerpnummer){
        // de overgebleven dagen die de veiling nog open is.
     try {
@@ -1805,6 +1821,8 @@ $koper = $veiling[0]['email'];
      
 }
 
+// CommentaarNodig
+// verplaatst naar beheerderFuncties.php
 
 
 function VerstuurVeilingBlockedMail($veiling, $ontvanger){            
