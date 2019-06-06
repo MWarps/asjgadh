@@ -170,14 +170,15 @@ if(isset($_GET['id'])){
                             if(!empty($recenties[0]['recentie'])){
                               ?> 
                         
-                        Reviews:<br><br>
+                        Reviews:<br>
+                        Kopers geven deze verkoper een<br>
                         
-                            <h1><?php echo 'Gemiddelde: '.$recenties[1]['recentie'].'/10' ?> </h1>
+                            <h3><?php echo 'Gemiddelde: '.$recenties[0]['recentie'].'/10' ?> </h3>
                             <p><?php echo 'Aantal recenties: '.$recenties[0]['recentie'].'' ?> </p>
                           
                           <?php }
                                 else{
-                                  echo '<h3> Deze verkoper heeft nog geen recenties </h3>';
+                                  echo '<h4> Deze verkoper heeft nog geen recenties </h4>';
                                 }                                              ?>
                         
                         <button type="button" class="btn btn-primary btn-lg mt-3"><a style="color: white;" href="stuurbericht.php?id=<?php echo $advertentie['verkoper']?>">Stuur bericht!</a></button>

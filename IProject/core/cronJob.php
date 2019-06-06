@@ -1,58 +1,71 @@
 <?php
-echo ('begin php bestand'); // test tekst voor debugging 
-echo ('<br>');
 require '../includes/functies.php';
 require_once 'dbconnection.php';
 
-
-checkBotAdvertentie ('asjgadh'); echo('checkBotadvertentie heeft gelopen');echo('<br>');
+if( ( isset($_SERVER['PHP_AUTH_USER'] ) && ( $_SERVER['PHP_AUTH_USER'] == "CronJob" ) ) AND
+      ( isset($_SERVER['PHP_AUTH_PW'] ) && ( $_SERVER['PHP_AUTH_PW'] == "CronJob" )) ) {
+checkBotAdvertentie ('asjgadh'); 
+checkNormaleAdvertenties();
+}
 
 function checkBotAdvertentie ($botEMail){
-    echo('functie voor bots aangeroepen');echo ('<br>');
-    echo ('meegegeven bot naam = '); echo($botEMail); echo ('<br>');
     $botteller = 0;
     try {
         require ('dbconnection.php');
-        echo('database connectie.php ');echo('<br>');
 
         $sluitVeiling = $dbh -> prepare(' update Voorwerp set veilinggesloten = 1  where voorwerpnr = :voorwerpnr ');
 
-        $botVeiling = $dbh -> prepare(' select voorwerpnr, looptijdeindedagtijdstip, verkoper, veilinggesloten from Voorwerp V, Gebruiker G where  G.gebruikersnaam = V.verkoper and G.email like :botnaam ');
-        echo('querys perpared ');echo('<br>');
+        $botVeiling = $dbh -> prepare(' select voorwerpnr, looptijdeindedagtijdstip, V.verkoper, veilinggesloten from Voorwerp V, Gebruiker G where  G.gebruikersnaam = V.verkoper and G.email like :botnaam and veilinggesloten = 0 ');
 
         $botVeiling -> execute(array (':botnaam' => '%'.$botEMail.'%' ) );
-        echo ('query wordt geexecute');echo ('<br>');
 
-        $bots = $botVeiling ->fetch(PDO::FETCH_ASSOC);
-        echo ('veilingen waarin de bots als verkoper staan zijn ingeladen');echo ('<br>');
+        while ($bot = $botVeiling ->fetch(PDO::FETCH_ASSOC)){
+            echo('Bot (advertentie/ iteratie) NR : ');echo ($botteller); echo('<br>');
 
-        echo ('hieronder staat de array $bots');echo ('<br>');
-        print_r($bots);echo ('<br>');
-
-        foreach ($bots as $bot){
-            echo ('hieronder staat de array $bot');echo ('<br>');
-            print_r($bot);echo ('<br>');
-            if ((date("d.m.Y H:i", strtotime($bot[$botteller]['looptijdeindedagtijdstip'])) ) <= date("d.m.Y H:i:s")){
-                if ($bot[$botteller]['veilinggesloten']){
-                    $sluitVeiling -> execute( array(':voorwerpnr' => $bot[$botteller]['voorwerpnr'] ));
+            if ((date("d.m.Y H:i", strtotime($bot['looptijdeindedagtijdstip'])) ) <= date("d.m.Y H:i:s")){
+                if ($bot[$botteller]['veilinggesloten'] == 0){
+                    $sluitVeiling -> execute( array(':voorwerpnr' => $bot['voorwerpnr'] ));
+                    $botteller ++; // moet laatste regel zijn.
+                } else {
+                    $botteller ++; // moet laatste regel zijn.
                 }
-                $botteller ++; // moet laatste regel zijn.
             }else{
                 $botteller ++; // moet laatste regel zijn.
             }// einde if date-check. en else statement. 
-        }// einde foreach
+        }// einde while
     } catch (PDOexception $e) { // openenen catch en sluiten try.
         "er ging iets mis error: {$e->getMessage()}"; 
     }// haakje voor einde try/catch.
 }// einde functie voor de EenmaalAndermaal Bots.
 
 
+function checkNormaleAdvertenties(){
+    $klantteller = 0;
+    try {
+        require ('dbconnection.php');
 
-//$klantteller = 0;
-// $haalVeilingenOp = $dbh -> prepare(' select * from Voorwerp V, Gebruiker G where  G.gebruikersnaam = V.verkoper and G.email not like %asjgadh% ');
-//
-// $haalVeilingenOp -> execute();
-//
-//$klanten =  $haalVeilingenOp = $sqlSelect->fetch(PDO::FETCH_ASSOC);
-echo ('einde php bestand');
+        $sluitVeiling = $dbh -> prepare(' update Voorwerp set veilinggesloten = 1  where voorwerpnr = :voorwerpnr ');
+
+        $haalVeilingenOp = $dbh -> prepare(' select * from Voorwerp V, Gebruiker G where  G.gebruikersnaam = V.verkoper and G.email not like %asjgadh% and veilinggesloten = 0 ');
+
+        $haalVeilingenOp -> execute(); echo('execute succesvol');
+
+        while ($resultaat = $haalVeilingenOp = $sqlSelect->fetch(PDO::FETCH_ASSOC)){
+            echo('Klant (advertentie/ iteratie) NR : ');echo ($klantteller);echo('<br>');
+
+            if ((date("d.m.Y H:i", strtotime($resultaat['looptijdeindedagtijdstip'])) ) <= date("d.m.Y H:i:s")){
+                if ($resultaat['veilinggesloten'] == 0){
+                    $sluitVeiling -> execute( array(':voorwerpnr' => $resultaat['voorwerpnr'] ));
+                    $klantteller++; // moet laatste regel zijn.
+                } else {
+                    $klantteller ++; // moet laatste regel zijn.
+                }
+            }else{
+                $klantteller ++; // moet laatste regel zijn.
+            }// einde if date-check. en else statement. 
+        } 
+    } catch (PDOexception $e) { // openenen catch en sluiten try.
+        "er ging iets mis error: {$e->getMessage()}"; 
+    }// haakje voor einde try/catch.
+}
 ?>
