@@ -6,15 +6,15 @@ geen problemen gevonden
 */
 include 'includes/header.php';
 
-$verkoper = gegevensIngevuld($_SESSION['gebruikersnaam']);
+$verkoper = gegevensIngevuldVerkoper($_SESSION['gebruikersnaam']);
 
-if(!empty(gegevensIngevuld($_SESSION['gebruikersnaam']))) {
-  if($verkoper[0]['gevalideerd'] == 1) {
+if(!empty(gegevensIngevuldVerkoper($_SESSION['gebruikersnaam']))) {
+  if($verkoper['gevalideerd'] == 1) {
     echo '<script language="javascript">window.location.href ="index.php"</script>';
   }  
   }
   
-  if(empty(gegevensIngevuld($_SESSION['gebruikersnaam']))) {
+  if(empty(gegevensIngevuldVerkoper($_SESSION['gebruikersnaam']))) {
     echo '<script language="javascript">window.location.href ="verkoper.php"</script>';
   }
   
@@ -47,7 +47,7 @@ if (isset($_POST['valideren'])){
         <div class="col-md-6 mt-4">
             <form class="needs-validation " novalidate action='verkoperValidatie.php' method="post">
                 <h1 class="h3 mb-4 mt-2 text-center "> Validatie </h1>
-                <p> <br> Voer hier de validatiecode in om uw registratie te voltooien: </p>
+                <p> <br> Voer hier de validatiecode in om uw registratie te voltooien, deze staat in de brief: </p>
                 <?php
                 
 

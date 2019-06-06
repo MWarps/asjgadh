@@ -8,17 +8,19 @@ include 'includes/header.php';
 
 if(isset($_SESSION['gebruikersnaam'])){
   $verwijderen = false;
+  $verkocht = false;
+
 
 if(isset($_GET['id'])){
   if($_GET['status'] == 'verkopen'){
-    //VerkoopVeiling($_GET['id']);
+    VerkoopVeiling($_GET['id']);
     $Veiling = HaalBiederEnVerkoperOp($_GET['id'], $_SESSION['gebruikersnaam']);
     VerstuurVerkoopMail($Veiling);
-    
+    $verkocht = true;
   }
   if($_GET['status'] == 'verwijderen'){
     $Veiling = HaalBiederEnVerkoperOp($_GET['id'], $_SESSION['gebruikersnaam']);
-    //VerwijderVeiling($_GET['id']); 
+    VerwijderVeiling($_GET['id']); 
     VerstuurVerwijderMail($Veiling, false);
     
     if(count($Veiling) == 3){
@@ -49,7 +51,24 @@ if(isset($_GET['id'])){
                       </div>
                     </div>
                   </div>';
-        }?>  
+        }
+        if($verkocht){
+          $verkocht = false;      
+          // laat melding zien aan gebruiker
+          echo '<div class="container">
+                  <div class="h-100 row align-items-center">
+                    <div class="col">
+                              <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
+                                <strong>Het voorwerp is Verkocht!</strong> U kunt op het kruisje klikken om deze melding te sluiten.
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                  <span aria-hidden="true">&times;</span>
+                                  </button>
+                              </div>
+                      </div>
+                    </div>
+                  </div>';
+        }
+        ?>  
               <button type="button" class="btn btn-secondary btn-sm btn-block">Mijn advertenties</button>
                 <?php 
                 $advertenties = HaalMijnAdvertentieOp($_SESSION['gebruikersnaam']);
@@ -75,17 +94,22 @@ if(isset($_GET['id'])){
                         $details['titel'] .= '...';
                     }
                     $Bieder = HaalBiederEnVerkoperOp($details['voorwerpnr'], $_SESSION['gebruikersnaam']);
-                    if(count($Bieder) < 3){                
-                      $knop = 'disabled';
-                    }
                     $artikelKnop = '<a href="advertentie.php?id='.$details['voorwerpnr'].'" class="btn btn-block btn-primary py-2">Ga naar artikel</a>';
-                    $verkocht = '<a class="btn btn-block btn-success py-2'.$knop.'" href="mijnadvertenties.php?id='.$details['voorwerpnr'].'&status=verkopen" >Verkopen</a>';
+                    $verkocht = '<a class="btn btn-block btn-success py-2 '.$knop.'" href="mijnadvertenties.php?id='.$details['voorwerpnr'].'&status=verkopen" >Verkopen</a>';
+                    
+                    if(count($Bieder) == 2){
+                      echo 'test';                
+                      $knop = 'disabled';                  
+                    }          
                     if(count($Bieder) == 3){
                     if(!empty($Bieder[2]['koper'])){
+                      echo 'test';
                       $knop = 'disabled';
                       $verkocht = '<button type="button" class="btn btn-block btn-success py-2 '.$knop.'" >Advertentie is verkocht</button>';
                       $artikelKnop = '';
                     }}
+                    
+                    
                     
                     echo '
                     <div class="col-md-3 p-2">

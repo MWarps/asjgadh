@@ -18,12 +18,12 @@ if(isset($_GET['id'])){
 
 if(isset($_SESSION['gebruikersnaam'])){
 
-    if(empty(gegevensIngevuld($_SESSION['gebruikersnaam']))){
+    if(empty(gegevensIngevuldVerkoper($_SESSION['gebruikersnaam']))){
         $VerkoperValidatie = true;    
     }
-    if(!empty(gegevensIngevuld($_SESSION['gebruikersnaam']))){
-        $verkoper = gegevensIngevuld($_SESSION['gebruikersnaam']);
-        if($verkoper[0]['gevalideerd'] == 0){
+    if(!empty(gegevensIngevuldVerkoper($_SESSION['gebruikersnaam']))){
+        $verkoper = gegevensIngevuldVerkoper($_SESSION['gebruikersnaam']);
+        if($verkoper['gevalideerd'] == 0){
             $VerkoperValidatie = true;    
         }
     }
