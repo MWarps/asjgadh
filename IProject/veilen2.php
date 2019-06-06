@@ -228,7 +228,7 @@ if(isset($_POST['Volgende'])){
                     </div>
                 
                 
-                    <div class="form-group">
+                    <div class="form-group col-md-6">
                         <div class="form-check">
                             <div class="custom-control custom-checkbox">
                                 <input class="custom-control-input" type="checkbox" value="" id="defaultUnchecked" required>
@@ -240,10 +240,12 @@ if(isset($_POST['Volgende'])){
                                 </div>
                             </div>
                         </div>
-                    </div>            
-                <button type="submit" name="Volgende" id="Volgende" class="btn bg-flame">
-                    Volgende
-                </button>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <button type="submit" name="Volgende" id="Volgende" class="btn bg-flame">
+                            Volgende
+                        </button>
+                    </div>
             </form>
         </div>
     </div>

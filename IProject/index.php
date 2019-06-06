@@ -71,14 +71,17 @@ if(isset($_SESSION['status'])){
                   categorie&euml;n 
                 </div>
                 <button class="dropdown-menu card-header bg-orange2 text-white text-uppercase">categorie</button>
-                <?php    directorieVinden($pagina); ?>
+                <?php    directorieVinden($pagina);
+                // Functie voor het vinden van directorie ?>
+
             </div>
         </div>
     <!--/span-->
 
     <div class="col-md-9">
     <div class="row">
-        <?php if (isset($_SESSION['gebruikersnaam'])) {
+        <?php // Controleerd of de gebruiker is ingelogd om de volgende kopjes op te halen.
+        if (isset($_SESSION['gebruikersnaam'])) {
         echo '<button type="button" class="btn btn-secondary btn-sm btn-block">Laatst Bekeken</button>';
          getLaatstBekeken($_SESSION['gebruikersnaam']);
         echo '<button type="button" class="btn btn-secondary btn-sm btn-block">Aanbevolen</button>';
@@ -87,7 +90,7 @@ if(isset($_SESSION['status'])){
         echo '<button type="button" class="btn btn-secondary btn-sm btn-block">Populairste Artikelen</button>';  
           
         getPopulairsteArtikelen();
-         ?>
+        ?>
       </div>
     </div>
 </div><!--/row-->
