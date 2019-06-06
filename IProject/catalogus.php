@@ -23,7 +23,7 @@ if(isset($_GET['id'])){
         <div class="col">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
-                    <?php echo '<li class="breadcrumb-item"><a href="'.$pagina.'?id=-1" >Hoofdmenu'; ?></a></li>'; ?>
+                    <?php echo '<li class="breadcrumb-item"><a href="'.$pagina.'?id=-1" >Hoofdmenu</a></li>'; ?>
                 </ol>
             </nav>
         </div>

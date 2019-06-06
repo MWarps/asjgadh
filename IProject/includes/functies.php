@@ -280,7 +280,7 @@ function getProductenUitRubriek($rubriek, $aantal) {
         	FROM dbo.Rubrieken a
         	INNER JOIN cte s ON a.superrubriek = s.rubrieknummer
         )
-        SELECT distinct top 21 * 
+        SELECT distinct top 30 * 
         	FROM dbo.Voorwerpinrubriek
         	JOIN dbo.Voorwerp on dbo.Voorwerpinrubriek.voorwerpnr = dbo.Voorwerp.voorwerpnr
         	JOIN cte on dbo.Voorwerpinrubriek.rubrieknr = cte.rubrieknummer;");
