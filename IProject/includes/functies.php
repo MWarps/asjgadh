@@ -1362,7 +1362,7 @@ function gebruikersvinden($gebruikersnaam){
                     <td>'.$verkoper.'</td>       
                     <td>'.$geblokeerd.'</td> 
                       ';
-            blokeren($geblokeerd, $teller, $resultaat['gebruikersnaam'] ); 
+            blokkeren($geblokeerd, $teller, $resultaat['gebruikersnaam'] );
             echo ' </tr>';
 
         }
@@ -1541,7 +1541,7 @@ function veilingenVinden($veilingnaam){
                     <td>'.$geblokeerd.'</td> 
                     <td>'.$resultaat['blokeerdatum'].'</td>
                       ';
-            veilingblokeren($geblokkeerd, $resultaat['voorwerpnr'], $resultaat['titel'] ); 
+            veilingblokkeren($geblokkeerd, $resultaat['voorwerpnr'], $resultaat['titel'] );
 
             echo '</tr>';
         }   
@@ -1594,7 +1594,7 @@ function veilingblok($voorwerpnummer){
                     ':voorwerpnummer' => $resultaat[0]['voorwerpnr'],
                 )
             );
-            veilingeindberekenen ($resultaat[0]['voorwerpnr']);
+            veilingeindBerekenen ($resultaat[0]['voorwerpnr']);
         }else if ($resultaat[0]['geblokkeerd'] == 0){
 
             //Ik denk dat het hier mis gaat en dat ie verkoper niet kent, maar geen idee wat ik erdan neer moet gooien want &SESSION[Gebruikersnaam] stuff werkt ook niet lijkt me.
@@ -1666,6 +1666,8 @@ function checkBEHEERDER ($gebruiker){
     }
 }
 
+// commentaarNodig
+//verplaatst naar beheerderFuncties.php
 function veilingeindberekenen ($voorwerpnummer){
        // de overgebleven dagen die de veiling nog open is.
     try {

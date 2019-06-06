@@ -23,6 +23,7 @@ function veilingenVinden($veilingnaam){
             }else{
                 $geblokkeerd = "Nee";
             }
+
             echo '<tr>
                     <th scope="row">'.$teller.'</th>
                     <td>'.$resultaat['voorwerpnr'].'</td>
@@ -39,7 +40,7 @@ function veilingenVinden($veilingnaam){
                     <td>'.$geblokeerd.'</td> 
                     <td>'.$resultaat['blokeerdatum'].'</td>
                       ';
-            veilingblokeren($geblokkeerd, $resultaat['voorwerpnr'], $resultaat['titel'] );
+            veilingblokkeren($geblokkeerd, $resultaat['voorwerpnr'], $resultaat['titel'] );
 
             echo '</tr>';
         }
@@ -50,14 +51,14 @@ function veilingenVinden($veilingnaam){
 
 // CommentaarNodig
 // verplaatst naar beheerderFuncties.php
-function veilingblokeren($geblokkeerd, $voorwerpnummer, $titel){
+function veilingblokkeren($geblokkeerd, $voorwerpnummer, $titel){
     if ($geblokkeerd == "Ja"){
         echo ' <td>   
-    <a class="btn btn-primary" href="overzichtVeilingen.php?voorwerpnummer='.$voorwerpnummer.'&naam='.$titel.'" role="button">Deblokeer</a> 
+    <a class="btn btn-primary" href="overzichtVeilingen.php?voorwerpnummer='.$voorwerpnummer.'&naam='.$titel.'" role="button">Deblokkeer</a> 
    </td> ';
     } else if ($geblokkeerd == "Nee"){
         echo ' <td>
-    <a class="btn btn-primary" href="overzichtVeilingen.php?voorwerpnummer='.$voorwerpnummer.'&naam='.$titel.'" role="button">Blokeer</a>
+    <a class="btn btn-primary" href="overzichtVeilingen.php?voorwerpnummer='.$voorwerpnummer.'&naam='.$titel.'" role="button">Blokkeer</a>
       </td>  ';
     }
 }
@@ -92,7 +93,7 @@ function veilingblok($voorwerpnummer){
                     ':voorwerpnummer' => $resultaat[0]['voorwerpnr'],
                 )
             );
-            veilingeindberekenen ($resultaat[0]['voorwerpnr']);
+            veilingeindBerekenen ($resultaat[0]['voorwerpnr']);
         }else if ($resultaat[0]['geblokkeerd'] == 0){
 
             //Ik denk dat het hier mis gaat en dat ie verkoper niet kent, maar geen idee wat ik erdan neer moet gooien want &SESSION[Gebruikersnaam] stuff werkt ook niet lijkt me.
@@ -109,6 +110,39 @@ function veilingblok($voorwerpnummer){
 
     } catch (PDOexception $e) {
         echo "er ging iets mis error: {$e->getMessage()}";
+    }
+}
+
+// berekent de overgebleven dagen die de veiling nog open is. wanneer de veiling gedeblokkeerd wordt
+//verplaatst naar beheerderFuncties.php
+function veilingeindBerekenen ($voorwerpnummer){
+
+    try {
+        require('core/dbconnection.php');
+        $informatie = $dbh -> prepare("SELECT * from Voorwerp where voorwerpnr = :voorwerpnr");
+        // haalt de algemene informatie op die nodig is voor de berekening
+        $einddatum = $dbh -> prepare ("UPDATE Voorwerp set looptijdeindedagtijdstip = (select  
+          DATEADD(DAY, (SELECT DATEDIFF(DAY, CURRENT_TIMESTAMP, blokkeerdatum) from Voorwerp where blokkeerdatum > '2000-01-01' and voorwerpnr = :voorwerpnr),
+          (select looptijdeindedagtijdstip from Voorwerp where voorwerpnr = :voorwerpnr1)))
+		        where voorwerpnr = :voorwerpnr2"); // insert de       nieuwe einddatum gebaseerd op de ( looptijd - het aantal dagen tussen begin- en blokeer- datum )
+        //====================================================================================================//
+
+        // informatie query runnen en afhandelen.
+        $informatie -> execute(
+            array(
+                ':voorwerpnr' => $voorwerpnummer
+            )
+        );
+
+        $einddatum -> execute (
+            array (
+                ':voorwerpnr' => $voorwerpnummer,
+                ':voorwerpnr1' => $voorwerpnummer,
+                ':voorwerpnr2' => $voorwerpnummer
+            )
+        );
+    } catch (PDOexception $e) {
+        echo "er ging iets mis error123: {$e->getMessage()}";
     }
 }
 
@@ -157,7 +191,7 @@ function gebruikersvinden($gebruikersnaam){
                     <td>'.$verkoper.'</td>       
                     <td>'.$geblokeerd.'</td> 
                       ';
-            blokeren($geblokeerd, $teller, $resultaat['gebruikersnaam'] );
+            blokkeren($geblokeerd, $teller, $resultaat['gebruikersnaam'] );
             echo ' </tr>';
 
         }
@@ -167,7 +201,7 @@ function gebruikersvinden($gebruikersnaam){
 }
 
 // deze functie regelt de blokkeer/deblokkeer knop die rechts naast de gebruiker staat in de beheeromgeving
-function blokeren($geblokeerd, $teller, $gebruiker){
+function blokkeren($geblokeerd, $teller, $gebruiker){
     if ($geblokeerd == "Ja"){
         echo ' <td>   
     <a class="btn btn-primary" href="overzichtGebruikers.php?id='.$teller.'&naam='.$gebruiker.'" role="button">Deblokeer</a> 
