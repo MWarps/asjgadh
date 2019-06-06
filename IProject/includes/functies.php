@@ -208,7 +208,7 @@ function getPopulairsteArtikelen() {
           <h5 class="card-header"><a href="advertentie.php?id='.$details['voorwerpnr'].'">'.$details['titel'].'</a></h5>
             <div class="card-body">
               <h4 class="card-text">€ '.number_format($details['startprijs'], 2, ',', '.').'</h4>
-              <p class="card-text"><a href="#">'.$details['verkoper'].'</a><br>
+              <p class="card-text">'.$details['verkoper'].'<br>
               '.$details['land'].', '.$details['plaatsnaam'].'</p>
               <a href="advertentie.php?id='.$details['voorwerpnr'].'" class="btn btn-block btn-primary">Ga naar artikel</a>
             </div>
@@ -339,7 +339,7 @@ function getLaatstBekeken($gebruiker) {
           <h5 class="card-header"><a href="advertentie.php?id='.$details['voorwerpnr'].'">'.$details['titel'].'</a></h5>
             <div class="card-body">
               <h4 class="card-text">€ '.number_format($details['startprijs'], 2, ',', '.').'</h4>
-              <p class="card-text"><a href="#">'.$details['verkoper'].'</a><br>
+              <p class="card-text">'.$details['verkoper'].'<br>
               '.$details['land'].', '.$details['plaatsnaam'].'</p>
               <a href="advertentie.php?id='.$details['voorwerpnr'].'" class="btn btn-block btn-primary">Ga naar artikel</a>
             </div>
@@ -373,7 +373,7 @@ function getAanbevolen($gebruiker) {
     }
     else{
         for ($teller = 0; $teller < 3; $teller++) {
-          
+          if(!empty($records[$teller]['voorwerpnr'])){
             $details = DetailAdvertentie($records[$teller]['voorwerpnr']);
             $locatie = '../pics/';
             
@@ -400,13 +400,13 @@ function getAanbevolen($gebruiker) {
           <h5 class="card-header"><a href="advertentie.php?id='.$details['voorwerpnr'].'">'.$details['titel'].'</a></h5>
             <div class="card-body">
               <h4 class="card-text">€ '.number_format($details['startprijs'], 2, ',', '.').'</h4>
-              <p class="card-text"><a href="#">'.$details['verkoper'].'</a><br>
+              <p class="card-text">'.$details['verkoper'].'<br>
               '.$details['land'].', '.$details['plaatsnaam'].'</p>
               <a href="advertentie.php?id='.$details['voorwerpnr'].'" class="btn btn-block btn-primary">Ga naar artikel</a>
             </div>
         </div>
         </div>';
-        }}
+      }}}
 }
 
 function HaalIllustratiesOp($voorwerpnr){
@@ -582,14 +582,14 @@ function haalAdvertentieOp($rubriek){
             }
             echo '
             <div class="col-md-4 pb-3">
-            <div class="card" style="width: 18rem;">
+            <div class="card">
             <div class="card-img-boven">
               <img src="'.$locatie.$details['illustratieFile'].'" alt="Foto bestaat niet">
             </div> 
               <h5 class="card-header"><a href="advertentie.php?id='.$details['voorwerpnr'].'">'.$details['titel'].'</a></h5>
                 <div class="card-body">
                   <h4 class="card-text">€ '.number_format($details['startprijs'], 2, ',', '.').'</h4>
-                  <p class="card-text"><a href="#">'.$details['verkoper'].'</a><br>
+                  <p class="card-text">'.$details['verkoper'].'<br>
                   '.$details['land'].', '.$details['plaatsnaam'].'</p>
                   <a href="advertentie.php?id='.$details['voorwerpnr'].'" class="btn btn-block btn-primary">Ga naar artikel</a>
                 </div>
@@ -1136,17 +1136,17 @@ function statusOpValidatieZetten($gebruikersnaam){
 
 }
 
-function gegevensIngevuld($gebruikersnaam){
+function gegevensIngevuldVerkoper($gebruikersnaam){
     try {
         require('core/dbconnection.php');
         $sqlSelect = $dbh->prepare("SELECT * FROM Verkoper where gebruikersnaam = :gebruikersnaam");
 
         $sqlSelect->execute(
             array (
-                ':gebruikersnaam' => $gebruikersnaam,
+                ':gebruikersnaam' => $gebruikersnaam
             ));
 
-        $verkoperVerificatie = $sqlSelect->fetchAll(PDO::FETCH_ASSOC);
+        $verkoperVerificatie = $sqlSelect->fetch(PDO::FETCH_ASSOC);
         return $verkoperVerificatie;
 
     } catch (PDOexception $e) {
@@ -1722,20 +1722,21 @@ function HaalBiederEnVerkoperOp($voorwerpnr, $verkoper){
   try {
       require('core/dbconnection.php');
       $sqlSelect = $dbh ->prepare ("SELECT * from Gebruiker where gebruikersnaam = (select top 1 gebruikersnaam from bod where voorwerpnr = :voorwerpnr order by convert(decimal(9,2), euro) desc )
-                                    UNION
-                                    SELECT * from Gebruiker where gebruikersnaam = :verkoper
                                     ");
-      $sqlSelect2 = $dbh ->prepare ("SELECT * from Voorwerp where voorwerpnr = :voorwerpnr");
+      $sqlSelect2 = $dbh ->prepare ("SELECT * from Gebruiker where gebruikersnaam = :verkoper
+                                    ");
+      $sqlSelect3 = $dbh ->prepare ("SELECT * from Voorwerp where voorwerpnr = :voorwerpnr");
         
           $sqlSelect ->execute( 
-                     array(':voorwerpnr' => $voorwerpnr,
-                           ':verkoper' => $verkoper));
-                           
-           $sqlSelect2 ->execute( array(':voorwerpnr' => $voorwerpnr));
+                     array(':voorwerpnr' => $voorwerpnr));
+          $sqlSelect2 ->execute( 
+                     array(':verkoper' => $verkoper));                         
+          $sqlSelect3 ->execute( 
+                     array(':voorwerpnr' => $voorwerpnr));
                         
            $records = $sqlSelect ->fetchAll(PDO::FETCH_ASSOC);
-           
            array_push($records, $sqlSelect2 ->fetch(PDO::FETCH_ASSOC));
+           array_push($records, $sqlSelect3 ->fetch(PDO::FETCH_ASSOC));
            
            return $records;
               
@@ -1784,12 +1785,13 @@ function VerwijderVeiling($voorwerpnr){
 }
 
 function VerstuurVerkoopMail($veiling){
-
+$verkoper = $veiling[1]['email'];
+$koper = $veiling[0]['email'];
     
         ini_set( 'display_errors', 1 );
         error_reporting( E_ALL );
         $from = "no-reply@iconcepts.nl";
-        $to = $veiling[1]['email'];
+        $to = $verkoper;
         $subject = "EenmaalAndermaal u heeft een voorwerp Verkocht!";
         $message = emailVerkocht($veiling);
         $headers = 'MIME-Version: 1.0' . "\r\n";
@@ -1801,7 +1803,7 @@ function VerstuurVerkoopMail($veiling){
         ini_set( 'display_errors', 1 );
         error_reporting( E_ALL );
         $from = "no-reply@iconcepts.nl";
-        $to = $veiling[0]['email'];
+        $to = $koper;
         $subject = "EenmaalAndermaal u heeft een voorwerp Gekocht!";
         $message = emailGekocht($veiling);
 
@@ -1882,20 +1884,22 @@ function VerstuurVeilingBlockedMail($veiling, $ontvanger){
 
 
 function VerstuurVerwijderMail($veiling, $ontvanger){
-  $id = 2;
-  $verkoper = 1;
-  if(count($veiling) == 2){
-    $verkoper = 0;
-    $id = 1;    
+  $voorwerp = 1;
+  $verkoper = 0;
+  if(count($veiling) == 3){
+    $voorwerp = 2;  
+    $verkoper = 1;
   }
+  $verkopermail = $veiling[$verkoper]['email'];
+  $kopermail = $veiling[0]['email'];
   
   if($ontvanger == false){
     ini_set( 'display_errors', 1 );
     error_reporting( E_ALL );
     $from = "no-reply@iconcepts.nl";
-    $to = $veiling[$verkoper]['email'];
+    $to = $verkopermail;
     $subject = "EenmaalAndermaal uw voorwerp is verwijderd";
-    $message = EmailVerwijderdVerkoper($veiling, $id);
+    $message = EmailVerwijderdVerkoper($veiling, $voorwerp);
   
     $headers = 'MIME-Version: 1.0' . "\r\n";
     $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
@@ -1908,7 +1912,7 @@ function VerstuurVerwijderMail($veiling, $ontvanger){
     ini_set( 'display_errors', 1 );
     error_reporting( E_ALL );
     $from = "no-reply@iconcepts.nl";
-    $to = $veiling[0]['email'];
+    $to = $kopermail;
     $subject = "EenmaalAndermaal geboden voorwerp is verwijderd";
     $message = EmailVerwijderdHoogstebod($veiling);
   
