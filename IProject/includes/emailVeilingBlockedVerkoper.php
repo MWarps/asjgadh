@@ -4,7 +4,7 @@ gevalideerd op 04/06/2019 door Merlijn
 validator: https://phpcodechecker.com/
 geen problemen gevonden
 */
-function EmailVeilingBlockedVerkoper($veiling)
+function emailVeilingBlockedVerkoper($veiling, $id)
 {
     // https://github.com/leemunroe/responsive-html-email-template
     $tekst = '
@@ -331,9 +331,12 @@ function EmailVeilingBlockedVerkoper($veiling)
                   <table role="presentation" border="0" cellpadding="0" cellspacing="0">
                     <tr>
                       <td>
-                      <h2> Beste '.$veiling[0]['voornaam'].',</h2>
+                      <h2> Beste '.$veiling[$id-1]['voornaam'].',</h2>
                       <br>
-                      <p> Uw veiling is geblokkeerd, dit kan meerdere redenen hebben. Het betreft het onderstaande artikel. </p>
+                      <p> Helaas moeten wij u op de hoogte stellen dat uw veiling is geblokkeerd.<br>
+                      Om meer informatie te krijgen kunt u contact met ons opnemen door een mail te sturen naar: <strong>EenmaalAndermaal@gmail.com</strong><br>
+                      Vermeld in deze mail het betreffende voorwerpnr.
+                      Wij hopen u zodoende genoeg informatie te hebben gegeven. Het betreft het onderstaande artikel.  </p>
                       <br>
                       <p> Voorwerpnr: '.$veiling[$id]['voorwerpnr'].'<br>
                           Titel: '.$veiling[$id]['titel'].'<br>

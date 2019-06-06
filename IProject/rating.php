@@ -7,16 +7,16 @@ geen problemen gevonden
 include 'includes/header.php';
 require_once 'core/dbconnection.php';
 
-if(isset($_GET['id'])){
-  $verkoper = HaalBiederEnVerkoperOp($_GET['id'], $_GET['verkoper']);}
+if(isset($_GET['verkoper'])){
+  $_SESSION['vekoper'] = $_GET['verkoper'];
+}
+
 if(isset($_POST['volgende'])){
   $waarde = $_POST['waarde'];
-  $verkoper = $verkoper[0]['gebruikersnaam'];
   $_SESSION['status'] = 'recentie';
-  
-  updateRecentie($waarde,$verkoper);
+  updateRecentie($waarde, $_SESSION['vekoper']);
+  unset($_SESSION['vekoper']);
   echo '<script language="javascript">window.location.href ="index.php"</script>';
-  
   
 }
 ?>
