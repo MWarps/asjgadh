@@ -38,10 +38,10 @@ function checkBotAdvertentie ($botEMail){
     } catch (PDOexception $e) {
         "er ging iets mis error: {$e->getMessage()}"; 
     }
-}.
+}
 
-    // controleerd alle veilingen die niet van de bots zijn die nog openstaan.
-    function checkNormaleAdvertenties(){
+// controleerd alle veilingen die niet van de bots zijn die nog openstaan.
+function checkNormaleAdvertenties(){
     $klantteller = 0;// houdt bij hoeveel veilingen de functie heeft gechecked
     try {
         require ('dbconnection.php');
@@ -66,8 +66,8 @@ function checkBotAdvertentie ($botEMail){
                 $klantteller ++;
             }
         } 
-    } catch (PDOexception $e) { .
+    } catch (PDOexception $e) {
         "er ging iets mis error: {$e->getMessage()}"; 
-                              }
+    }
 }
 ?>
