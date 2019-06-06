@@ -1,4 +1,9 @@
 <?php
+/*
+ * TODO LIST
+ * - veilingblok updaten uit functies.php
+ * - geblokeerd in query's over de gebruiker hernoemen naar geblokkeerd
+ */
 
 include 'brief.php';
 
@@ -8,7 +13,10 @@ function veilingenVinden($veilingnaam){
     $teller =0;
     try {
         require('core/dbconnection.php');
-        $veilingen = $dbh ->prepare (" select * from Voorwerp Where titel like :titel");
+        $veilingen = $dbh ->prepare ("
+          SELECT * FROM Voorwerp WHERE titel LIKE :titel
+        ");
+
         $veilingen -> execute(
             array(
                 ':titel' => '%'.$veilingnaam.'%',
@@ -18,6 +26,7 @@ function veilingenVinden($veilingnaam){
         foreach ( $veiling as $resultaat ){
             $teller ++;
             $geblokkeerd = "error";
+
             if ($resultaat['geblokkeerd'] == 1){
                 $geblokkeerd = "Ja";
             }else{
@@ -37,9 +46,10 @@ function veilingenVinden($veilingnaam){
                     <td>'.$resultaat['looptijdeinddatum'].'</td> 
                     <td>'.$resultaat['verkoper'].'</td> 
                     <td>'.$resultaat['veilinggesloten'].'</td> 
-                    <td>'.$geblokeerd.'</td> 
+                    <td>'.$geblokkeerd.'</td> 
                     <td>'.$resultaat['blokeerdatum'].'</td>
                       ';
+
             veilingblokkeren($geblokkeerd, $resultaat['voorwerpnr'], $resultaat['titel'] );
 
             echo '</tr>';
@@ -65,30 +75,36 @@ function veilingblokkeren($geblokkeerd, $voorwerpnummer, $titel){
 
 // CommentaarNodig
 // verplaatst naar beheerderFuncties.php
+// nog een keer updaten met de versie uit functies.php
 function veilingblok($voorwerpnummer){
     try {
         require('core/dbconnection.php');
 
-        $blokeren = $dbh ->prepare (" UPDATE Voorwerp
-                                    SET geblokkeerd = 1, blokkeerdatum = CURRENT_TIMESTAMP
-                                    WHERE voorwerpnr like :voorwerpnummer
-                                    ");
-        $deblokeren = $dbh ->prepare (" UPDATE Voorwerp
-                                    SET geblokkeerd = 0
-                                    WHERE voorwerpnr like :voorwerpnummer
-                                    ");
-        $veiling = $dbh ->prepare (" SELECT * FROM Voorwerp where voorwerpnr like :voorwerpnummer
-                                    ");
+        $blokkeren = $dbh ->prepare ("
+          UPDATE Voorwerp
+          SET geblokkeerd = 1, blokkeerdatum = CURRENT_TIMESTAMP
+          WHERE voorwerpnr LIKE :voorwerpnummer
+        ");
+
+        $deblokkeren = $dbh ->prepare ("
+          UPDATE Voorwerp
+          SET geblokkeerd = 0
+          WHERE voorwerpnr LIKE :voorwerpnummer
+        ");
+
+        $veiling = $dbh ->prepare ("
+          SELECT * FROM Voorwerp WHERE voorwerpnr LIKE :voorwerpnummer
+        ");
+
         $veiling -> execute(
             array(
                 ':voorwerpnummer' => $voorwerpnummer,
             )
         );
 
-
         $resultaat = $veiling ->fetchAll(PDO::FETCH_ASSOC);
         if ($resultaat[0]['geblokkeerd'] == 1){
-            $deblokeren -> execute(
+            $deblokkeren -> execute(
                 array(
                     ':voorwerpnummer' => $resultaat[0]['voorwerpnr'],
                 )
@@ -100,13 +116,12 @@ function veilingblok($voorwerpnummer){
             $veiling = HaalBiederEnVerkoperOp($voorwerpnummer, $verkoper);
             VerstuurVeilingBlockedMail($veiling, true);
             VerstuurVeilingBlockedMail($veiling, false);
-            $blokeren -> execute(
+            $blokkeren -> execute(
                 array(
                     ':voorwerpnummer' => $resultaat[0]['voorwerpnr'],
                 )
             );
         }
-
 
     } catch (PDOexception $e) {
         echo "er ging iets mis error: {$e->getMessage()}";
@@ -116,15 +131,19 @@ function veilingblok($voorwerpnummer){
 // berekent de overgebleven dagen die de veiling nog open is. wanneer de veiling gedeblokkeerd wordt
 //verplaatst naar beheerderFuncties.php
 function veilingeindBerekenen ($voorwerpnummer){
-
     try {
         require('core/dbconnection.php');
-        $informatie = $dbh -> prepare("SELECT * from Voorwerp where voorwerpnr = :voorwerpnr");
+        $informatie = $dbh -> prepare("
+          SELECT * FROM Voorwerp WHERE voorwerpnr = :voorwerpnr
+        ");
         // haalt de algemene informatie op die nodig is voor de berekening
-        $einddatum = $dbh -> prepare ("UPDATE Voorwerp set looptijdeindedagtijdstip = (select  
-          DATEADD(DAY, (SELECT DATEDIFF(DAY, CURRENT_TIMESTAMP, blokkeerdatum) from Voorwerp where blokkeerdatum > '2000-01-01' and voorwerpnr = :voorwerpnr),
-          (select looptijdeindedagtijdstip from Voorwerp where voorwerpnr = :voorwerpnr1)))
-		        where voorwerpnr = :voorwerpnr2"); // insert de       nieuwe einddatum gebaseerd op de ( looptijd - het aantal dagen tussen begin- en blokeer- datum )
+        $einddatum = $dbh -> prepare ("
+          UPDATE Voorwerp 
+          SET looptijdeindedagtijdstip = (
+                                          SELECT DATEADD(DAY, (SELECT DATEDIFF(DAY, CURRENT_TIMESTAMP, blokkeerdatum) FROM Voorwerp WHERE blokkeerdatum > '2000-01-01' AND voorwerpnr = :voorwerpnr),
+                                          (SELECT looptijdeindedagtijdstip from Voorwerp where voorwerpnr = :voorwerpnr1)))
+		  WHERE voorwerpnr = :voorwerpnr2
+		"); // insert de       nieuwe einddatum gebaseerd op de ( looptijd - het aantal dagen tussen begin- en blokeer- datum )
         //====================================================================================================//
 
         // informatie query runnen en afhandelen.
@@ -153,31 +172,34 @@ function gebruikersvinden($gebruikersnaam){
     try {
         require('core/dbconnection.php');
         $gebruikers = $dbh->prepare("
-                    select gebruikersnaam, voornaam, achternaam, geslacht, postcode, plaatsnaam, land,  email, verkoper, geblokeerd 
-                    from Gebruiker 
-                    where gebruikersnaam like :gebruikersnaam 
-                    ");
+          SELECT gebruikersnaam, voornaam, achternaam, geslacht, postcode, plaatsnaam, land,  email, verkoper, geblokeerd
+          FROM Gebruiker
+          WHERE gebruikersnaam LIKE :gebruikersnaam
+        ");
+
         // kan geen like '% $gebruiker%' door prepared statement
         $gebruikers -> execute(
             array(
                 ':gebruikersnaam' => '%'.$gebruikersnaam.'%',
             )
         );
+
         $resultaten =  $gebruikers ->fetchAll(PDO::FETCH_ASSOC);
         foreach ( $resultaten as $resultaat ){
             $teller ++;
             $verkoper = "error";
-            $geblokeerd = "error";
+            $geblokkeerd = "error";
             if ($resultaat['verkoper'] == 1){
                 $verkoper = "Ja";
             }else{
                 $verkoper = "nee";
             }
             if ($resultaat['geblokeerd'] == 1){
-                $geblokeerd = "Ja";
+                $geblokkeerd = "Ja";
             }else{
-                $geblokeerd = "Nee";
+                $geblokkeerd = "Nee";
             }
+
             echo '<tr>
                     <th scope="row">'.$teller.'</th>
                     <td>'.$resultaat['gebruikersnaam'].'</td>
@@ -189,9 +211,9 @@ function gebruikersvinden($gebruikersnaam){
                     <td>'.$resultaat['land'].'</td>
                     <td>'.$resultaat['email'].'</td> 
                     <td>'.$verkoper.'</td>       
-                    <td>'.$geblokeerd.'</td> 
+                    <td>'.$geblokkeerd.'</td> 
                       ';
-            blokkeren($geblokeerd, $teller, $resultaat['gebruikersnaam'] );
+            blokkeren($geblokkeerd, $teller, $resultaat['gebruikersnaam'] );
             echo ' </tr>';
 
         }
@@ -201,14 +223,14 @@ function gebruikersvinden($gebruikersnaam){
 }
 
 // deze functie regelt de blokkeer/deblokkeer knop die rechts naast de gebruiker staat in de beheeromgeving
-function blokkeren($geblokeerd, $teller, $gebruiker){
-    if ($geblokeerd == "Ja"){
+function blokkeren($geblokkeerd, $teller, $gebruiker){
+    if ($geblokkeerd == "Ja"){
         echo ' <td>   
-    <a class="btn btn-primary" href="overzichtGebruikers.php?id='.$teller.'&naam='.$gebruiker.'" role="button">Deblokeer</a> 
+    <a class="btn btn-primary" href="overzichtGebruikers.php?id='.$teller.'&naam='.$gebruiker.'" role="button">Deblokkeer</a> 
    </td> ';
-    } else if ($geblokeerd == "Nee"){
+    } else if ($geblokkeerd == "Nee"){
         echo ' <td>
-    <a class="btn btn-primary" href="overzichtGebruikers.php?id='.$teller.'&naam='.$gebruiker.'" role="button">Blokeer</a>
+    <a class="btn btn-primary" href="overzichtGebruikers.php?id='.$teller.'&naam='.$gebruiker.'" role="button">Blokkeer</a>
       </td>  ';
     }
 }
@@ -217,16 +239,22 @@ function blokkeren($geblokeerd, $teller, $gebruiker){
 function gebruikerblok(){
     try {
         require('core/dbconnection.php');
-        $blokeren = $dbh ->prepare (" UPDATE Gebruiker
-                                    SET geblokeerd = 1
-                                    WHERE gebruikersnaam like :gebruiker
-                                    ");
-        $deblokeren = $dbh ->prepare (" UPDATE Gebruiker
-                                    SET geblokeerd = 0
-                                    WHERE gebruikersnaam like :gebruiker
-                                    ");
-        $gebruiker = $dbh ->prepare (" SELECT * FROM Gebruiker where gebruikersnaam like :gebruiker
-                                    ");
+        $blokkeren = $dbh ->prepare ("
+          UPDATE Gebruiker
+          SET geblokeerd = 1
+          WHERE gebruikersnaam LIKE :gebruiker
+        ");
+
+        $deblokkeren = $dbh ->prepare ("
+            UPDATE Gebruiker
+            SET geblokeerd = 0
+            WHERE gebruikersnaam LIKE :gebruiker
+          ");
+
+        $gebruiker = $dbh ->prepare ("
+          SELECT * FROM Gebruiker WHERE gebruikersnaam LIKE :gebruiker
+        ");
+
         $gebruiker -> execute(
             array(
                 ':gebruiker' => $_GET['naam'],
@@ -235,14 +263,14 @@ function gebruikerblok(){
         $resultaat =  $gebruiker ->fetchAll(PDO::FETCH_ASSOC);
         if ($resultaat[0]['geblokeerd'] == 1){
             StuurGebruikerDeblockedEmail($resultaat[0]['gebruikersnaam']);
-            $deblokeren -> execute(
+            $deblokkeren -> execute(
                 array(
                     ':gebruiker' => $resultaat[0]['gebruikersnaam'],
                 )
             );
         }else if ($resultaat[0]['geblokeerd'] == 0){
             StuurGebruikerBlockedEmail($resultaat[0]['gebruikersnaam']);
-            $blokeren -> execute(
+            $blokkeren -> execute(
                 array(
                     ':gebruiker' => $resultaat[0]['gebruikersnaam'],
                 )
@@ -259,7 +287,9 @@ function StuurGebruikerBlockedEmail($gebruikersnaam)
 {
     try{
         require('core/dbconnection.php');
-        $sqlSelect = $dbh->prepare("select email, voornaam from Gebruiker where gebruikersnaam = :gebruikersnaam");
+        $sqlSelect = $dbh->prepare("
+          SELECT email, voornaam FROM Gebruiker WHERE gebruikersnaam = :gebruikersnaam 
+        ");
 
         $sqlSelect->execute(
             array(
@@ -298,7 +328,9 @@ function StuurGebruikerDeblockedEmail($gebruikersnaam)
 {
     try{
         require('core/dbconnection.php');
-        $sqlSelect = $dbh->prepare("select email, voornaam from Gebruiker where gebruikersnaam = :gebruikersnaam");
+        $sqlSelect = $dbh->prepare("
+          SELECT email, voornaam FROM Gebruiker WHERE gebruikersnaam = :gebruikersnaam
+        ");
 
         $sqlSelect->execute(
             array(
@@ -319,7 +351,7 @@ function StuurGebruikerDeblockedEmail($gebruikersnaam)
         Met vriendelijke groeten,
                         
         EenmaalAndermaal     
-';
+        ';
         $headers = "From:" .$from;
         mail($to,$subject,$message, $headers);
 
@@ -332,17 +364,16 @@ function StuurGebruikerDeblockedEmail($gebruikersnaam)
 // deze methode laad alle verificaties om verkoper te worden die nog niet verzonden zijn. ook wordt het adress en de brief volgens een template vast opgesteld
 function verificatiesVinden(){
     $teller = 0;
-    //echo 'verificaties gevonden';
     try {
         require('core/dbconnection.php');
-        $sqlSelect = $dbh->prepare("SELECT Gebruiker.voornaam, Gebruiker.achternaam, Gebruiker.email, Gebruiker.geslacht, Gebruiker.adresregel1, Gebruiker.adresregel2, Gebruiker.postcode, Gebruiker.plaatsnaam, Gebruiker.land, Verificatie.verificatiecode, 
-        Verificatie.eindtijd FROM Gebruiker INNER JOIN Verificatie ON Gebruiker.email = Verificatie.email WHERE type = 'brief' AND verzonden = 0
+        $sqlSelect = $dbh->prepare("
+          SELECT Gebruiker.voornaam, Gebruiker.achternaam, Gebruiker.email, Gebruiker.geslacht, Gebruiker.adresregel1, Gebruiker.adresregel2, Gebruiker.postcode, Gebruiker.plaatsnaam, Gebruiker.land, Verificatie.verificatiecode, 
+          Verificatie.eindtijd FROM Gebruiker INNER JOIN Verificatie ON Gebruiker.email = Verificatie.email WHERE type = 'brief' AND verzonden = 0
         ");
 
         $sqlSelect->execute();
 
         $verkopers = $sqlSelect->fetchAll(PDO::FETCH_ASSOC);
-        //var_dump($verkopers);
 
         foreach ( $verkopers as $verkoper ){
             $teller ++;
@@ -369,9 +400,9 @@ function verificatieVerzonden($email) {
     $email = fixEmail($email);
     try{
         require('core/dbconnection.php');
-        $sqlSelect = $dbh->prepare("UPDATE Verificatie SET verzonden = 1 WHERE email = :email");
-
-        //echo 'verificatie verzonden '.$email;
+        $sqlSelect = $dbh->prepare("
+          UPDATE Verificatie SET verzonden = 1 WHERE email = :email
+        ");
 
         $sqlSelect->execute(
             array(
@@ -386,6 +417,5 @@ function verificatieVerzonden($email) {
 // de $_GET die gebruikt wordt om de email op te halen en naar verificatieVerzonden te sturen verandert de + tekens in de email adressen naar spaties
 function fixEmail($email) {
     $email = str_replace(" ","+",$email);
-
     return $email;
 }
