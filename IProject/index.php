@@ -6,7 +6,7 @@ geen problemen gevonden
 */
 include 'includes/header.php';
 $pagina = 'catalogus.php';
-setupCatogorien();
+$_SESSION['catogorie'] = array("Home"=>"-1");
 // Kijkt er geklikt is op de knop uitloggen
 if (isset($_GET['uitlog'])){
     $_SESSION['status'] = $_GET['uitlog'];
