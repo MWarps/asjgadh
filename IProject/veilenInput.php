@@ -5,6 +5,18 @@ validator: https://phpcodechecker.com/
 bestand is te groot voor de validator bij valideren in delen mist er een haakje dat in een ander deel zat
 */
 include 'includes/header.php';
+$VerkoperValidatie = false;
+
+if(empty(gegevensIngevuldVerkoper($_SESSION['gebruikersnaam']))){
+    $VerkoperValidatie = true;    
+}
+if(!empty(gegevensIngevuldVerkoper($_SESSION['gebruikersnaam']))){
+    $verkoper = gegevensIngevuldVerkoper($_SESSION['gebruikersnaam']);
+    if($verkoper['gevalideerd'] == 0){
+        $VerkoperValidatie = true;    
+    }
+}
+
 if(isset($_SESSION['gebruikersnaam'])){
   if(isset($_GET['id'])){
     $_SESSION['rubrieknr'] =  $_GET['id'];
