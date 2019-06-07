@@ -1675,16 +1675,22 @@ function veilingblok($voorwerpnummer){
     try {
         require('core/dbconnection.php');
 
-        $blokeren = $dbh ->prepare (" UPDATE Voorwerp
-                                    SET geblokkeerd = 1, blokkeerdatum = CURRENT_TIMESTAMP
-                                    WHERE voorwerpnr like :voorwerpnummer
-                                    ");
-        $deblokeren = $dbh ->prepare (" UPDATE Voorwerp
-                                    SET geblokkeerd = 0
-                                    WHERE voorwerpnr like :voorwerpnummer
-                                    ");
-        $veiling = $dbh ->prepare (" SELECT * FROM Voorwerp where voorwerpnr like :voorwerpnummer
-                                    ");
+        $blokeren = $dbh ->prepare (" 
+          UPDATE Voorwerp
+          SET geblokkeerd = 1, blokkeerdatum = CURRENT_TIMESTAMP
+          WHERE voorwerpnr LIKE :voorwerpnummer
+        ");
+
+        $deblokeren = $dbh ->prepare ("
+          UPDATE Voorwerp
+          SET geblokkeerd = 0
+          WHERE voorwerpnr LIKE :voorwerpnummer
+        ");
+
+        $veiling = $dbh ->prepare ("
+          SELECT * FROM Voorwerp WHERE voorwerpnr LIKE :voorwerpnummer
+        ");
+
         $veiling -> execute(
             array(
                 ':voorwerpnummer' => $voorwerpnummer,
@@ -1725,7 +1731,10 @@ function veilingblok($voorwerpnummer){
 function checkGEBLOKEERD($gebruiker){
     try {
         require('core/dbconnection.php');
-        $geblokeerd = $dbh ->prepare ("select gebruikersnaam, geblokeerd from Gebruiker where gebruikersnaam like :gebruiker  ");
+        $geblokeerd = $dbh ->prepare ("
+          SELECT gebruikersnaam, geblokeerd FROM Gebruiker WHERE gebruikersnaam LIKE :gebruiker  
+        ");
+
         $geblokeerd-> execute(
             array(
                 ':gebruiker' => $gebruiker,
@@ -1742,7 +1751,8 @@ function checkGEBLOKEERD($gebruiker){
                 //header("Location: includes/404error.php");
             }
         }
-    } catch (PDOexception $e) {
+    }
+    catch (PDOexception $e) {
         //    echo "er ging iets mis error: {$e->getMessage()}";
     }
 
@@ -1751,7 +1761,10 @@ function checkGEBLOKEERD($gebruiker){
 function checkBEHEERDER ($gebruiker){
     try {
         require('core/dbconnection.php');
-        $geblokeerd = $dbh ->prepare (" select gebruikersnaam, beheerder from Gebruiker where gebruikersnaam like :gebruiker ");
+        $geblokeerd = $dbh ->prepare (" 
+          SELECT gebruikersnaam, beheerder FROM Gebruiker WHERE gebruikersnaam LIKE :gebruiker 
+        ");
+
         $geblokeerd-> execute(
             array(
                 ':gebruiker' => $gebruiker,
@@ -1767,7 +1780,8 @@ function checkBEHEERDER ($gebruiker){
                 //header("Location: includes/404error.php");
             }
         }
-    } catch (PDOexception $e) {
+    }
+    catch (PDOexception $e) {
         //echo "er ging iets mis error: {$e->getMessage()}";
         // blijft error geven vanwegen het niet meer opkunnen halen van meet data. 
     }
@@ -1777,12 +1791,20 @@ function veilingeindberekenen ($voorwerpnummer){
        // de overgebleven dagen die de veiling nog open is.
     try {
         require('core/dbconnection.php');
-        $informatie = $dbh -> prepare("SELECT * from Voorwerp where voorwerpnr = :voorwerpnr");
+        $informatie = $dbh -> prepare("
+          SELECT * FROM Voorwerp WHERE voorwerpnr = :voorwerpnr
+        ");
         // haalt de algemene informatie op die nodig is voor de berekening
-        $einddatum = $dbh -> prepare ("UPDATE Voorwerp set looptijdeindedagtijdstip = (select  
-          DATEADD(DAY, (SELECT DATEDIFF(DAY, CURRENT_TIMESTAMP, blokkeerdatum) from Voorwerp where blokkeerdatum > '2000-01-01' and voorwerpnr = :voorwerpnr),
-          (select looptijdeindedagtijdstip from Voorwerp where voorwerpnr = :voorwerpnr1)))
-		        where voorwerpnr = :voorwerpnr2"); // insert de       nieuwe einddatum gebaseerd op de ( looptijd - het aantal dagen tussen begin- en blokeer- datum )
+        $einddatum = $dbh -> prepare ("
+            UPDATE Voorwerp 
+            SET looptijdeindedagtijdstip = (SELECT DATEADD(DAY, (SELECT DATEDIFF(DAY, CURRENT_TIMESTAMP, blokkeerdatum) 
+                                            FROM Voorwerp 
+                                            WHERE blokkeerdatum > '2000-01-01' AND voorwerpnr = :voorwerpnr),
+                                           (SELECT looptijdeindedagtijdstip 
+                                            FROM Voorwerp 
+                                            WHERE voorwerpnr = :voorwerpnr1)))
+		    WHERE voorwerpnr = :voorwerpnr2
+		    "); // insert de       nieuwe einddatum gebaseerd op de ( looptijd - het aantal dagen tussen begin- en blokeer- datum )
         //====================================================================================================//
         // informatie query runnen en afhandelen.
         $informatie -> execute(
@@ -1800,16 +1822,19 @@ function veilingeindberekenen ($voorwerpnummer){
               
             )
         );
-    } catch (PDOexception $e) {
+    }
+    catch (PDOexception $e) {
         echo "er ging iets mis error123: {$e->getMessage()}";
     }
 }
 
 function HaalMijnAdvertentieOp($gebruikersnaam){
-  
   try {
       require('core/dbconnection.php');
-      $sqlSelect = $dbh ->prepare ("SELECT voorwerpnr from Voorwerp where verkoper = :gebruiker ");
+      $sqlSelect = $dbh ->prepare ("
+        SELECT voorwerpnr FROM Voorwerp WHERE verkoper = :gebruiker 
+      ");
+
       $sqlSelect-> execute(
           array(
               ':gebruiker' => $gebruikersnaam
@@ -1817,22 +1842,26 @@ function HaalMijnAdvertentieOp($gebruikersnaam){
       );
       $resultaat = $sqlSelect ->fetchAll(PDO::FETCH_ASSOC);
       return $resultaat;
-
-  } catch (PDOexception $e) {
+  }
+  catch (PDOexception $e) {
       "er ging iets mis error: {$e->getMessage()}";
-      
   }
 }
 
 function HaalBiederEnVerkoperOp($voorwerpnr, $verkoper){
-  
   try {
       require('core/dbconnection.php');
-      $sqlSelect = $dbh ->prepare ("SELECT * from Gebruiker where gebruikersnaam = (select top 1 gebruikersnaam from bod where voorwerpnr = :voorwerpnr order by convert(decimal(9,2), euro) desc )
-                                    ");
-      $sqlSelect2 = $dbh ->prepare ("SELECT * from Gebruiker where gebruikersnaam = :verkoper
-                                    ");
-      $sqlSelect3 = $dbh ->prepare ("SELECT * from Voorwerp where voorwerpnr = :voorwerpnr");
+      $sqlSelect = $dbh ->prepare ("
+        SELECT * FROM Gebruiker WHERE gebruikersnaam = (SELECT top 1 gebruikersnaam FROM bod WHERE voorwerpnr = :voorwerpnr ORDER BY CONVERT(DECIMAL(9,2), euro) DESC)
+      ");
+
+      $sqlSelect2 = $dbh ->prepare ("
+        SELECT * FROM Gebruiker WHERE gebruikersnaam = :verkoper
+      ");
+
+      $sqlSelect3 = $dbh ->prepare ("
+        SELECT * FROM Voorwerp WHERE voorwerpnr = :voorwerpnr
+      ");
         
           $sqlSelect ->execute( 
                      array(':voorwerpnr' => $voorwerpnr));
@@ -1846,8 +1875,8 @@ function HaalBiederEnVerkoperOp($voorwerpnr, $verkoper){
            array_push($records, $sqlSelect3 ->fetch(PDO::FETCH_ASSOC));
            
            return $records;
-              
-  } catch (PDOexception $e) {
+  }
+  catch (PDOexception $e) {
       "er ging iets mis error: {$e->getMessage()}";      
   }  
   
@@ -1857,19 +1886,24 @@ function VerkoopVeiling($voorwerpnr){
   
   try {
       require('core/dbconnection.php');      
-      $sqlUpdate = $dbh ->prepare ("UPDATE Voorwerp
-                                    SET koper = (select top 1 gebruikersnaam from bod where voorwerpnr = :voorwerpnr order by convert(decimal(9,2), euro) desc),
-                                        verkoopprijs = (select top 1 euro from bod where voorwerpnr = :voorwerpnr1 order by convert(decimal(9,2), euro) desc),
-                                        veilinggesloten = 1
-                                    WHERE voorwerpnr = :voorwerpnr2");      
+      $sqlUpdate = $dbh ->prepare ("
+        UPDATE Voorwerp
+        SET koper = (SELECT top 1 gebruikersnaam FROM bod WHERE voorwerpnr = :voorwerpnr ORDER BY CONVERT(DECIMAL(9,2), euro) DESC),
+                    verkoopprijs = (SELECT top 1 euro FROM bod WHERE voorwerpnr = :voorwerpnr1 ORDER BY CONVERT(DECIMAL(9,2), euro) DESC),
+                    veilinggesloten = 1
+        WHERE voorwerpnr = :voorwerpnr2
+      ");
+
       $sqlUpdate-> execute(
           array(
               ':voorwerpnr' => $voorwerpnr,
               ':voorwerpnr1' => $voorwerpnr,
               ':voorwerpnr2' => $voorwerpnr
-          ));
+          )
+      );
               
-  } catch (PDOexception $e) {
+  }
+  catch (PDOexception $e) {
       "er ging iets mis error: {$e->getMessage()}";      
   }  
 }
@@ -1878,15 +1912,24 @@ function VerwijderVeiling($voorwerpnr){
   
   try {
       require('core/dbconnection.php');   
-      $sqlDelete1 = $dbh ->prepare ("DELETE FROM Voorwerpinrubriek where voorwerpnr = :voorwerpnr");
-      $sqlDelete2 = $dbh ->prepare ("DELETE FROM laatstbekeken where voorwerpnr = :voorwerpnr"); 
-      $sqlDelete3 = $dbh ->prepare ("DELETE FROM Voorwerp where voorwerpnr = :voorwerpnr");
+      $sqlDelete1 = $dbh ->prepare ("
+        DELETE FROM Voorwerpinrubriek WHERE voorwerpnr = :voorwerpnr
+      ");
+
+      $sqlDelete2 = $dbh ->prepare ("
+        DELETE FROM laatstbekeken WHERE voorwerpnr = :voorwerpnr
+      ");
+
+      $sqlDelete3 = $dbh ->prepare ("
+        DELETE FROM Voorwerp WHERE voorwerpnr = :voorwerpnr
+      ");
       
      $sqlDelete1-> execute( array(':voorwerpnr' => $voorwerpnr ));
      $sqlDelete2-> execute( array(':voorwerpnr' => $voorwerpnr ));
      $sqlDelete3-> execute( array(':voorwerpnr' => $voorwerpnr ));         
             
-  } catch (PDOexception $e) {
+  }
+  catch (PDOexception $e) {
       "er ging iets mis error: {$e->getMessage()}";      
   }  
 }
@@ -1921,8 +1964,6 @@ $koper = $veiling[0]['email'];
         mail($to,$subject,$message, $headers);
      
 }
-
-
 
 function VerstuurVeilingBlockedMail($veiling, $ontvanger){            
   $voorwerp = 1;
@@ -2012,17 +2053,19 @@ function VerstuurVerwijderMail($veiling, $ontvanger){
 function updateRecentie($waarde, $verkoper) {
     try {
         require('core/dbconnection.php');
-        $sqlSelect = $dbh->prepare(" INSERT INTO Recenties (waardenr, verkoper)
-                                     VALUES(:waarde, :verkoper)
-                                     ");
+        $sqlSelect = $dbh->prepare("
+          INSERT INTO Recenties (waardenr, verkoper)
+          VALUES(:waarde, :verkoper)
+        ");
 
         $sqlSelect->execute(
             array(
                 ':waarde' => $waarde,
                 ':verkoper' => $verkoper
-            ));
-
-    } catch (PDOexception $e) {
+            )
+        );
+    }
+    catch (PDOexception $e) {
         echo "er ging iets mis error: {$e->getMessage()}";
     }
 }
@@ -2030,7 +2073,7 @@ function updateRecentie($waarde, $verkoper) {
 function haalRecentieOp($verkoper) {
     try {
         require('core/dbconnection.php');
-        $sqlSelect = $dbh->prepare(" SELECT sum(waardenr) / count(waardenr) as recentie from Recenties where verkoper = :verkoper
+        $sqlSelect = $dbh->prepare(" SELECT sum(waardenr) / count(waardenr) AS recentie FROM Recenties WHERE verkoper = :verkoper
                                      UNION
                                      SELECT count(waardenr) as recentie from Recenties
                                      where verkoper = :verkoper2
