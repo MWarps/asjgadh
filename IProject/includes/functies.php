@@ -1347,7 +1347,6 @@ function DirectorieVindenVeilen(){
             );
 
             $resultaat = $terug->fetchAll(PDO::FETCH_ASSOC);
-            //$_SESSION['rubriek'] = true;     
             echo  '<p class="btn" >Uw gekozen rubriek is: <strong>'.$resultaat[0]['rubrieknaam'].'<br></strong>
                    <a class="btn btn-lg bg-flame btn-block mt-1" href="veilen.php?id='.$resultaat[0]['superrubriek'].'&naam='.$resultaat[0]['rubrieknaam'].'">Vorige</a>
                    <a class="btn btn-lg bg-flame btn-block mt-1" id="volgende" href=veilenInput.php?id='.$resultaat[0]['rubrieknummer'].'&naam='.$resultaat[0]['rubrieknaam'].' name="volgende">Volgende</a>';

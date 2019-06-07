@@ -16,7 +16,7 @@ include 'includes/header.php';
 $Gbestaat = False;
 
 if (isset($_GET['id']) || isset($_POST['rVolgende'])) {
-// empty(haalCodeOp($_GET['id']))
+
 if (isset($_GET['id'])) {
   $_SESSION['validatie'] = haalCodeOp($_GET['id']);
 }    
@@ -116,7 +116,7 @@ if (isset($_POST['rVolgende'])) {
                         </div>
                             <div class="form-group col-md-4">
                                 <label for="rEmail">Email</label>
-                                <input type="text" name="rEmail" class="form-control" id="rEmail" value="<?php echo $_SESSION['validatie']['email']; ?>" placeholder="<?php echo $email['email']; ?>"
+                                <input type="text" name="rEmail" class="form-control" id="rEmail" value="<?php echo $_SESSION['validatie']['email']; ?>" placeholder="<?php echo $_SESSION['validatie']['email']; ?>"
                                  readonly>
                             </div>
                     </div>
