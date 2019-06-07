@@ -5,24 +5,29 @@ validator: https://phpcodechecker.com/
 geen problemen gevonden
 */
 include 'includes/header.php';
-
+$type = 'reset';
 $mailVerstuurd = false;
 $Ebestaat = false;
-$type = 'reset';
+
 
 if (isset($_POST['Volgende'])) {
-    $email = $_POST['email'];
-
-    if (empty(bestaatEmailadres($email)) && !empty(bestaatValidatie($email, $type))) {
-        $Ebestaat = true;
-    } else {
-        $mailVerstuurd = true;
-
-        VerificatieCodeProcedure($email, $type);
-        $code = HaalVerficatiecodeOp($email, $type);
-        StuurWachtwoordResetMailEmail($email, $code['verificatiecode']);
-
-    }
+  
+  $email = $_POST['email'];
+  $gebruiker = bestaatEmailadres($email);
+  $validatie = bestaatValidatie($email, $type);
+  
+  if(empty($gebruiker['email']) || isset($validatie['email'])) {
+    $Ebestaat = true; 
+  }
+ 
+  // controleert of emailadres bestaat
+  if(isset($gebruiker['email']) && empty($validatie['email'])) {  
+      $mailVerstuurd = true;        
+      VerificatieCodeProcedure($email, $type);
+      $code = HaalVerficatiecodeOp($email, $type);
+                  
+      StuurRegistreerEmail($email, $code['verificatiecode']);                    
+  }
 }
 
 ?>
@@ -38,7 +43,7 @@ if (isset($_POST['Volgende'])) {
                 if ($Ebestaat) {
                     echo '<div class="form-row">
                                       <div class="alert alert-warning" role="alert">
-                                        <strong>Het ingevoerde emailadres bestaat niet!</strong> Voer het correcte adres in.
+                                        <strong>Het ingevoerde emailadres bestaat niet of er is al een reset mail verstuurd!</strong> Voer het correcte adres in.
                                       </div>
                                      </div>';
                 }
