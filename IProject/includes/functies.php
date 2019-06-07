@@ -1651,8 +1651,8 @@ function veilingblokeren($geblokkeerd, $voorwerpnummer, $titel)
     }
 }
 
-function veilingblok($voorwerpnummer)
-{
+// verplaatst naar beheerderFuncties.php
+function veilingblok($voorwerpnummer){
     try {
         require('core/dbconnection.php');
 
