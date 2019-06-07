@@ -9,13 +9,13 @@ include 'includes/header.php';
 if (!isset($_SESSION['gebruikersnaam'])){
 
     $error = false;
-
+    // Kijk of de gebruikersnaam en wachtwoord zijn ingevoerd en of er op de login knop is gedrukt.
     if (isset($_POST['loginKnop'])) {
         $gebruikersnaam = $_POST['gebruikersnaam'];
         $wachtwoord = $_POST['wachtwoord'];
 
         $gebruiker = haalGebruikerOp($gebruikersnaam);
-
+        // Verificatie van de ingevoerde velden van de gebruiker
         if($gebruikersnaam == $gebruiker['gebruikersnaam'] && $wachtwoord == password_verify($wachtwoord,$gebruiker['wachtwoord'])){
             $_SESSION['gebruikersnaam'] = $gebruikersnaam;
             $_SESSION['status'] = 'login';

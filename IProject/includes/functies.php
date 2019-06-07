@@ -210,7 +210,7 @@ function getPopulairsteArtikelen() {
         }
         echo '
         <div class="col-md-4 py-3">
-          <div class="card">
+          <div class="card h-100">
             <div class="card-img-boven">
               <img src="'.$locatie.$details['illustratieFile'].'" alt="Foto bestaat niet">
             </div>  
@@ -344,7 +344,7 @@ function getLaatstBekeken($gebruiker) {
             }
             echo '
         <div class="col-md-4 py-3">
-        <div class="card">
+        <div class="card h-100">
         <div class="card-img-boven">
           <img src="'.$locatie.$details['illustratieFile'].'" alt="Foto bestaat niet">
         </div> 
@@ -407,7 +407,7 @@ function getAanbevolen($gebruiker) {
                 }
                 echo '
         <div class="col-md-4 py-3">
-        <div class="card">
+        <div class="card h-100">
         <div class="card-img-boven">
           <img src="'.$locatie.$details['illustratieFile'].'" alt="Foto bestaat niet">
         </div> 
