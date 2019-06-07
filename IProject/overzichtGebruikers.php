@@ -5,7 +5,7 @@ validator: https://phpcodechecker.com/
 geen problemen gevonden
 */
 include 'includes/header.php';
-require 'includes/beheerderFuncties.php';
+
 $gebruikersnaam = "";
 if (checkBEHEERDER($_SESSION['gebruikersnaam']) == true) {     // veranderen naar admin variabel.
     if (isset($_POST['zoeken'])) {
