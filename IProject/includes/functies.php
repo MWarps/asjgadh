@@ -1189,7 +1189,10 @@ function resetVragen()
 {
     try {
         require('core/dbconnection.php');
-        $sqlSelect = $dbh->query("select vraagnr, vraag from Vragen");
+        $sqlSelect = $dbh->query("
+          SELECT vraagnr, vraag FROM Vragen
+        ");
+
         echo '<label for="inputGeheimeVraag">Geheime Vraag</label>';
         echo '<select name="rGeheimV" class="form-control" id="inputGeheimeVraag">'; // Open your drop down box
         // Loop through the query results, outputing the options one by one
@@ -1715,7 +1718,6 @@ function checkGEBLOKKEERD($gebruiker){
         $geblokeerd-> execute(
             array(
                 ':gebruiker' => $gebruiker,
-
             )
         );
 
@@ -1732,7 +1734,6 @@ function checkGEBLOKKEERD($gebruiker){
     catch (PDOexception $e) {
         //    echo "er ging iets mis error: {$e->getMessage()}";
     }
-
 }
 
 function checkBEHEERDER ($gebruiker){
@@ -1742,7 +1743,7 @@ function checkBEHEERDER ($gebruiker){
           SELECT gebruikersnaam, beheerder FROM Gebruiker WHERE gebruikersnaam LIKE :gebruiker 
         ");
 
-        $geblokeerd-> execute(
+        $geblokkeerd-> execute(
             array(
                 ':gebruiker' => $gebruiker,
             )
@@ -1759,7 +1760,7 @@ function checkBEHEERDER ($gebruiker){
         }
     }
     catch (PDOexception $e) {
-        //echo "er ging iets mis error: {$e->getMessage()}";
+        echo "er ging iets mis error: {$e->getMessage()}";
         // blijft error geven vanwegen het niet meer opkunnen halen van meet data. 
     }
 }
@@ -1787,7 +1788,6 @@ function veilingeindberekenen ($voorwerpnummer){
         $informatie -> execute(
             array(
                 ':voorwerpnr' => $voorwerpnummer
-
             )
         );
 
@@ -1796,7 +1796,6 @@ function veilingeindberekenen ($voorwerpnummer){
                 ':voorwerpnr' => $voorwerpnummer,
                 ':voorwerpnr1' => $voorwerpnummer,
                 ':voorwerpnr2' => $voorwerpnummer
-
             )
         );
     }
