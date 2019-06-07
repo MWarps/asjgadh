@@ -13,19 +13,20 @@ if(!isset($_SESSION['gebruikersnaam'])){
 
     if (isset($_POST['registreren'])){
         $email = $_POST['email'];
-      
+        $gebruiker = bestaatEmailadres($email);
+        $validatie = bestaatValidatie($email, $type);
+        
+      if(isset($gebruiker['email']) || isset($validatie['email'])) {
+      $Ebestaat = true; 
+     }
+       
         // controleert of emailadres bestaat
-        if(empty(bestaatEmailadres($email)) || empty(bestaatValidatie($email, $type))) {
-            $Ebestaat = true;
-          
-        }
-        else{
-          $mailVerstuurd = true;
-                 
-          VerificatieCodeProcedure($email, $type);
-          $code = HaalVerficatiecodeOp($email, $type);
-                      
-          StuurRegistreerEmail($email, $code['verificatiecode']);
+        if(empty($gebruiker) && empty($validatie)) {  
+          $mailVerstuurd = true;        
+            VerificatieCodeProcedure($email, $type);
+            $code = HaalVerficatiecodeOp($email, $type);
+                        
+            StuurRegistreerEmail($email, $code['verificatiecode']);                    
         }
       
     }
