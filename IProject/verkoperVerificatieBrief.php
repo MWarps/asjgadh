@@ -5,6 +5,7 @@ validator: https://phpcodechecker.com/
 geen problemen gevonden
 */
 include 'includes/header.php';
+require 'includes/beheerderFuncties.php';
 $gebruikersnaam = "";
 if (checkBEHEERDER($_SESSION['gebruikersnaam']) == true) {
 
@@ -42,14 +43,15 @@ if (checkBEHEERDER($_SESSION['gebruikersnaam']) == true) {
                     </thead>
                     <tbody>
                     <?php
-                    verificatiesVinden();
+                    // worden gegevens over de verkoper aanvragen opgevraagd.
+                        verificatiesVinden();
                     ?>
                     </tbody>
                 </table>
             </div>
         </div>
-
-    </div> <!--/.container-->
+        
+    </div>
     <?php
 } else {
     include 'includes/404error.php';

@@ -48,28 +48,35 @@ if (isset($_SESSION['gebruikersnaam']) && $VerkoperValidatie == false) {
                                     <strong>Kies een subrubriek!</strong>
                                 </div>
                           </div>';
-                    }
-                    ?>
-                    <div class="form-row">
-                        <nav aria-label="breadcrumb">
-                            <ol class="breadcrumb">
-                                <?php catogorieSoort($pagina); ?>
-                            </ol>
-                        </nav>
-                        <div class="card bg-light card-breedte">
-                            <div class="card-header bg-flame text-white text-uppercase"><i class="fa fa-list"></i>
-                                categorie&euml;n
-                            </div>
-                            <?php DirectorieVindenVeilen(); ?>
-                        </div>
+    }
+                ?>     
+                <div class="form-row">                             
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+
+                            <?php
+    // laad de breadcrum in zodat je gebruiker terug uit in de rubrieken boom kan
+    catogorieSoort($pagina); 
+                            ?>
+                        </ol>
+                    </nav>                      
+                    <div class="card bg-light card-breedte">
+                        <div class="card-header bg-flame text-white text-uppercase"><i class="fa fa-list"></i> categorie&euml;n </div>
+                        <?php 
+    // rubrieken laden waaruit de gebruiker kan kiezen
+    DirectorieVindenVeilen(); 
+                        ?>
                     </div>
-                </form>
-            </div>
+                </div>
+            </form>
         </div>
     </div>
 
     <?php
 } else {
+    include 'includes/404error.php';
+}
+else{
     include 'includes/404error.php';
 }
 include 'includes/footer.php';

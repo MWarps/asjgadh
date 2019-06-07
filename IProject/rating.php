@@ -7,11 +7,11 @@ geen problemen gevonden
 include 'includes/header.php';
 require_once 'core/dbconnection.php';
 
-if (isset($_GET['verkoper'])) {
+if(isset($_GET['verkoper'])){
     $_SESSION['vekoper'] = $_GET['verkoper'];
 }
 
-if (isset($_POST['volgende'])) {
+if(isset($_POST['volgende'])){
     $waarde = $_POST['waarde'];
     $_SESSION['status'] = 'recentie';
     updateRecentie($waarde, $_SESSION['vekoper']);
@@ -45,7 +45,15 @@ if (isset($_POST['volgende'])) {
 
                 </div>
             </div>
+            <form action="rating.php" method="POST">
+                <div class="slidecontainer">
+                    <input type="range" min="1" max="10" value="5" name="waarde" class="slider" id="myRange">
+                    <p>Beoordeling: <span id="demo"></span></p>
+                </div>
+                <button type="submit" name="volgende" class="btn bg-flame btn-lg">Volgende</button>
+            </form>
         </div>
+
     </div>
 </div>
 

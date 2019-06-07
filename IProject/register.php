@@ -28,7 +28,6 @@ if(!isset($_SESSION['gebruikersnaam'])){
                         
             StuurRegistreerEmail($email, $code['verificatiecode']);                    
         }
-      
     }
     ?>
 

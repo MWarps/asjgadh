@@ -27,14 +27,12 @@ if(isset($_SESSION['gebruikersnaam'])){
             $VerkoperValidatie = true;    
         }
     }
-    
+    // controleerd of de gebruiker die momenteel is ingelogd geblokeerd is.
+    // runt elke keer als de gebruiker refreshed of naar een andere pagina gaat.
     if (checkGEBLOKKEERD($_SESSION['gebruikersnaam']) == true){
-       // die('je bent geblokeerd die functie');
         session_unset;
         session_destroy;
        header("Location:geblokeerd.php");
-     //  $url = 'geblokeerd.php';
-     //   echo '<script language="javascript">window.location.href ="'.$url.'"</script>';   
     }
 }
     

@@ -5,6 +5,7 @@ validator: https://phpcodechecker.com/
 geen problemen gevonden
 */
 include 'includes/header.php';
+require 'includes/beheerderFuncties.php';
 $gebruikersnaam = "";
 if (checkBEHEERDER($_SESSION['gebruikersnaam']) == true) {     // veranderen naar admin variabel.
     if (isset($_POST['zoeken'])) {
@@ -57,7 +58,6 @@ if (checkBEHEERDER($_SESSION['gebruikersnaam']) == true) {     // veranderen naa
                         <th scope="col">Gebruikersnaam</th>
                         <th scope="col">Voornaam</th>
                         <th scope="col">Achternaam</th>
-                        <!---     <th scope="col">Geslacht</th>-->
                         <th scope="col">Postcode</th>
                         <th scope="col">Plaatsnaam</th>
                         <th scope="col">Land</th>
@@ -69,18 +69,20 @@ if (checkBEHEERDER($_SESSION['gebruikersnaam']) == true) {     // veranderen naa
                     </thead>
                     <tbody>
                     <?php
-                    if (isset($_POST['zoeken'])) {
-                        gebruikersvinden($gebruikersnaam);
-                    }
+    if (isset($_POST['zoeken'])){
+        // hier worden alle gebruikers afgedrukt in een tabel die overeenkomst hadden met de gegeven zoek waarde
+        gebruikersvinden($gebruikersnaam); 
+    }
                     ?>
                     </tbody>
                 </table>
             </div>
         </div>
-    </div> <!--/.container-->
-    <?php
-} else {
+    </div>
+</div> 
+<?php
+}else{
     include 'includes/404error.php';
 }
-//include 'includes/footer-fixed.php'
+
 ?>
