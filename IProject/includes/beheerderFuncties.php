@@ -5,7 +5,8 @@
  */
 
 include 'brief.php';
-
+include 'emailVeilingBlockedKoper.php';
+include 'emailVeilingBlockedVerkoper.php';
 // CommentaarNodig
 // verplaatst naar beheerderFuncties.php
 function veilingenVinden($veilingnaam)
