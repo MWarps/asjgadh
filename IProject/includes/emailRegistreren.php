@@ -4,7 +4,7 @@ gevalideerd op 04/06/2019 door Merlijn
 validator: https://phpcodechecker.com/
 geen problemen gevonden
 */
-function email($code)
+function emailRegistreren($code)
 {
     $tekst = '
  <html>
@@ -332,7 +332,7 @@ function email($code)
                       <td>
                         <p>Hallo,</p>
                         <p>Bedankt voor het registreren. Hieronder staat de een link die u naar de registratie pagina brengt:</p>
-                        <a class="button" target="_blank" href="http://iproject34.icasites.nl/register2.php?id='.$code.'">Registreer!</a>
+                        <a class="button" target="_blank" href="http://iproject34.icasites.nl/registerInput.php?id='.$code.'">Registreer!</a>
                         <p>Als u deze e-mail per ongeluk ontvangt, kunt u deze verwijderen en zijn er geen conseqenties.</p>
                         <p>Met vriendelijke groet, <br>
                            EenmaalAndermaal</p>
