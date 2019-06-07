@@ -44,9 +44,10 @@ if (isset($_POST['rVolgende'])) {
     $rGeboorte,  $rEmail, $rGeheimV, $rGeheimA);
 
     array_push($input, 0);
-
+    
+    $gebruikersnaam = bestaatGebruikersnaam($rGebruikersnaam);
    // controleert of gebruikersnaam bestaat
-  if(!empty(bestaatGebruikersnaam($rGebruikersnaam))) {
+  if(isset($gebruikersnaam)) {
       $Gbestaat = True;
       }
 

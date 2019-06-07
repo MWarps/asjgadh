@@ -889,7 +889,7 @@ function bestaatValidatie($email, $type)
     try{
         require('core/dbconnection.php');
         $sqlSelect = $dbh->prepare("
-          SELECT email FROM Verificatie WHERE email =:email AND type = :type
+          SELECT * FROM Verificatie WHERE email =:email AND type = :type
         ");
 
         $sqlSelect->execute(
@@ -912,8 +912,7 @@ function bestaatEmailadres($email)
 {
     try{
         require('core/dbconnection.php');
-        $sqlSelect = $dbh->prepare("
-          SELECT email FROM Gebruiker WHERE email=:email
+        $sqlSelect = $dbh->prepare(" SELECT * FROM Gebruiker WHERE email=:email
         ");
 
         $sqlSelect->execute(
@@ -921,6 +920,7 @@ function bestaatEmailadres($email)
                 ':email' => $email,
             )
         );
+        
         $records = $sqlSelect->fetch(PDO::FETCH_ASSOC);
         return $records;
     }
