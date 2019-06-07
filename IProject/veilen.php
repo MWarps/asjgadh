@@ -76,9 +76,7 @@ if (isset($_SESSION['gebruikersnaam']) && $VerkoperValidatie == false) {
 } else {
     include 'includes/404error.php';
 }
-else{
-    include 'includes/404error.php';
-}
+
 include 'includes/footer.php';
 ?>
 
