@@ -7,8 +7,8 @@ geen problemen gevonden
 
 // controleerd of de persoon is ingelogd beheerders rechten heeft 
 include 'includes/header.php';
-require 'includes/beheerderFuncties.php';
-if (checkBEHEERDER ($_SESSION['gebruikersnaam']) == true){     // veranderen naar admin variabel. 
+if (checkBEHEERDER ($_SESSION['gebruikersnaam']) == true){     // veranderen naar admin variabel.
+
 ?>
 
     <div class="container">

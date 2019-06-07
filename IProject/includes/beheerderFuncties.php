@@ -1,8 +1,4 @@
 <?php
-/*
- * TODO LIST
- * - veilingblok updaten uit functies.php
- */
 
 include 'brief.php';
 include 'emailVeilingBlockedKoper.php';

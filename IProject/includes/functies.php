@@ -1362,7 +1362,7 @@ function directorieVinden($pagina)
         // echo "er ging iets mis error: {$e->getMessage()}";
     }
 }
-/*
+
 //deze functie laadt de tabel met gebruikers in in de beheeromgeving overzichtGebruikers.php
 function gebruikersvinden($gebruikersnaam)
 {
@@ -1416,8 +1416,7 @@ function gebruikersvinden($gebruikersnaam)
         // echo "er ging iets mis error: {$e->getMessage()}";
     }
 }
-*/
-/*
+
 //deze functie regelt de blokkeer/deblokkeer knop die rechts naast de gebruiker staat in de beheeromgeving
 function blokeren($geblokkeerd, $teller, $gebruiker)
 {
@@ -1431,8 +1430,7 @@ function blokeren($geblokkeerd, $teller, $gebruiker)
       </td>  ';
     }
 }
-*/
-/*
+
 //deze functie blokkeert of deblokkeert de gebruiker in de database als de beheerder dit via de beheerdersomgeving dit aanstuurt
 function gebruikerblok()
 {
@@ -1473,8 +1471,7 @@ function gebruikerblok()
         //        echo "er ging iets mis error: {$e->getMessage()}";
     }
 }
-*/
-/*
+
 // stuurt email naar gebruiker wanneer deze geblokkeerd is
 function StuurGebruikerBlockedEmail($gebruikersnaam)
 {
@@ -1514,8 +1511,7 @@ function StuurGebruikerBlockedEmail($gebruikersnaam)
         echo "er ging iets mis error: {$e->getMessage()}";
     }
 }
-*/
-/*
+
 //stuurt email naar gebruiker wanneer deze gedeblokkeerd is
 function StuurGebruikerDeblockedEmail($gebruikersnaam)
 {
@@ -1552,8 +1548,7 @@ function StuurGebruikerDeblockedEmail($gebruikersnaam)
         echo "er ging iets mis error: {$e->getMessage()}";
     }
 }
-*/
-/*
+
 function veilingenVinden($veilingnaam){
     $teller = 0 ;
     try {
@@ -1599,8 +1594,7 @@ function veilingenVinden($veilingnaam){
         echo "er ging iets mis error: {$e->getMessage()}";
     }
 }
-*/
-/*
+
 function veilingblokeren($geblokkeerd, $voorwerpnummer, $titel){
     if ($geblokkeerd == "Ja"){
         echo ' <td>   
@@ -1612,8 +1606,7 @@ function veilingblokeren($geblokkeerd, $voorwerpnummer, $titel){
       </td>  ';
     }
 }
-*/
-/*
+
 // verplaatst naar beheerderFuncties.php
 function veilingblok($voorwerpnummer){
     try {
@@ -1669,7 +1662,7 @@ function veilingblok($voorwerpnummer){
         echo "er ging iets mis error: {$e->getMessage()}";
     }
 }
-*/
+
 function checkGEBLOKKEERD($gebruiker){
     try {
         require('core/dbconnection.php');
@@ -1725,7 +1718,7 @@ function checkBEHEERDER($gebruiker)
         // blijft error geven vanwegen het niet meer opkunnen halen van meet data. 
     }
 }
-/*
+
 function veilingeindberekenen ($voorwerpnummer){
     // de overgebleven dagen die de veiling nog open is.
     try {
@@ -1763,7 +1756,7 @@ function veilingeindberekenen ($voorwerpnummer){
         echo "er ging iets mis error123: {$e->getMessage()}";
     }
 }
-*/
+
 function HaalMijnAdvertentieOp($gebruikersnaam){
   try {
       require('core/dbconnection.php');
