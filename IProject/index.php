@@ -6,19 +6,19 @@ geen problemen gevonden
 */
 include 'includes/header.php';
 $pagina = 'catalogus.php';
-$_SESSION['catogorie'] = array("Home"=>"-1");
+$_SESSION['catogorie'] = array("Home" => "-1");
 // Kijkt er geklikt is op de knop uitloggen
-if (isset($_GET['uitlog'])){
+if (isset($_GET['uitlog'])) {
     $_SESSION['status'] = $_GET['uitlog'];
     session_unset();
     session_destroy();
     $url = 'index.php';
-    echo '<script language="javascript">window.location.href ="'.$url.'"</script>';
+    echo '<script language="javascript">window.location.href ="' . $url . '"</script>';
     die();
 }
 
 // Geeft een melding a.d.h.v de status
-if(isset($_SESSION['status'])){
+if (isset($_SESSION['status'])) {
 
     switch ($_SESSION['status']) {
         case 'login':
@@ -51,7 +51,7 @@ if(isset($_SESSION['status'])){
             <div class="row align-items-center">
               <div class="col">
                         <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
-                          <strong>'.$status.'</strong> U kunt op het kruisje klikken om deze melding te sluiten.</strong>
+                          <strong>' . $status . '</strong> U kunt op het kruisje klikken om deze melding te sluiten.</strong>
                           <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                             </button>
@@ -65,35 +65,35 @@ if(isset($_SESSION['status'])){
 
 <div class="container-fluid">
     <div class="row mt-2">
-     <div class="col-md-3">
+        <div class="col-md-3">
             <div class="card bg-light mb-3">
-                <div class="card-header bg-orange2 text-white text-uppercase"><i class="fa fa-list"></i> 
-                  categorie&euml;n 
+                <div class="card-header bg-orange2 text-white text-uppercase"><i class="fa fa-list"></i>
+                    categorie&euml;n
                 </div>
                 <button class="dropdown-menu card-header bg-orange2 text-white text-uppercase">categorie</button>
-                <?php    directorieVinden($pagina);
+                <?php directorieVinden($pagina);
                 // Functie voor het vinden van directorie ?>
 
             </div>
         </div>
-    <!--/span-->
+        <!--/span-->
 
-    <div class="col-md-9">
-    <div class="row">
-        <?php // Controleerd of de gebruiker is ingelogd om de volgende kopjes op te halen.
-        if (isset($_SESSION['gebruikersnaam'])) {
-        echo '<button type="button" class="btn btn-secondary btn-sm btn-block">Laatst Bekeken</button>';
-         getLaatstBekeken($_SESSION['gebruikersnaam']);
-        echo '<button type="button" class="btn btn-secondary btn-sm btn-block">Aanbevolen</button>';
-         getAanbevolen($_SESSION['gebruikersnaam']);         
-          } 
-        echo '<button type="button" class="btn btn-secondary btn-sm btn-block">Populairste Artikelen</button>';  
-          
-        getPopulairsteArtikelen();
-        ?>
-      </div>
-    </div>
-</div><!--/row-->
+        <div class="col-md-9">
+            <div class="row">
+                <?php // Controleerd of de gebruiker is ingelogd om de volgende kopjes op te halen.
+                if (isset($_SESSION['gebruikersnaam'])) {
+                    echo '<button type="button" class="btn btn-secondary btn-sm btn-block">Laatst Bekeken</button>';
+                    getLaatstBekeken($_SESSION['gebruikersnaam']);
+                    echo '<button type="button" class="btn btn-secondary btn-sm btn-block">Aanbevolen</button>';
+                    getAanbevolen($_SESSION['gebruikersnaam']);
+                }
+                echo '<button type="button" class="btn btn-secondary btn-sm btn-block">Populairste Artikelen</button>';
+
+                getPopulairsteArtikelen();
+                ?>
+            </div>
+        </div>
+    </div><!--/row-->
 </div><!--/.container-->
 
 <?php include 'includes/footer.php'; ?>
