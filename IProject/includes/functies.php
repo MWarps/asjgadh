@@ -1728,6 +1728,7 @@ function HaalBiederEnVerkoperOp($voorwerpnr, $verkoper){
 
 }
 
+
 function VerkoopVeiling($voorwerpnr){
 
     try {
@@ -1766,6 +1767,8 @@ function VerwijderVeiling($voorwerpnr){
     }  
 }
 
+// deze functie verstuurd een mail naar de verkoper en hoogstebieder dat het voorwerp is verkocht
+// wordt gebruikt in: mijnadvertenties.php
 function VerstuurVerkoopMail($veiling){
     $verkoper = $veiling[1]['email'];
     $koper = $veiling[0]['email'];
@@ -1797,8 +1800,8 @@ function VerstuurVerkoopMail($veiling){
 
 }
 
-
-
+// deze functie verstuurd een mail naar de verkoper en hoogstebieder dat de advertentie is geblokkeerd
+// wordt gebruikt in: overzichtveilingen.php
 function VerstuurVeilingBlockedMail($veiling, $ontvanger){            
     $voorwerp = 1;
     $verkoper = 0;
@@ -1841,7 +1844,8 @@ function VerstuurVeilingBlockedMail($veiling, $ontvanger){
     }
 }
 
-
+// deze functie verstuurd een mail naar de verkoper en hoogstebieder dat het voorwerp handmatig is verwijderd door de verkoper
+// wordt gebruikt in: mijnadvertenties.php
 function VerstuurVerwijderMail($veiling, $ontvanger){
     $voorwerp = 1;
     $verkoper = 0;
@@ -1866,6 +1870,7 @@ function VerstuurVerwijderMail($veiling, $ontvanger){
 
         mail($to,$subject,$message, $headers);
     }  
+  
 
     if($ontvanger){
         ini_set( 'display_errors', 1 );
@@ -1884,6 +1889,8 @@ function VerstuurVerwijderMail($veiling, $ontvanger){
 
 }
 
+// deze functie verstuurd een mail naar de verkoper waar de advertentie over datum is
+// wordt gebruikt in:
 function VerstuurEindeLooptijdMail($veiling, $ontvanger){
   $voorwerp = 1;
   $verkoper = 0;
@@ -1922,10 +1929,11 @@ function VerstuurEindeLooptijdMail($veiling, $ontvanger){
     $headers .= "From:" .$from;
   
     mail($to,$subject,$message, $headers);  
-  }
-  
+  }  
 }
 
+// deze functie voegt de waardes toe van een beoordeling
+// wordt gebruikt in: rating.php
 function updateRecentie($waarde, $verkoper) {
     try {
         require('core/dbconnection.php');
@@ -1944,6 +1952,8 @@ function updateRecentie($waarde, $verkoper) {
     }
 }
 
+// deze functie haalt het aantal recenties op en het gemiddelde
+// wordt gebruikt in: advertentie.php
 function haalRecentieOp($verkoper) {
     try {
         require('core/dbconnection.php');
