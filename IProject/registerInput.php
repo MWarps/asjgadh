@@ -13,14 +13,13 @@ tweede validatie
 geen problemen gevonden
 */
 include 'includes/header.php';
-$Gbestaat = False;
+
 
 if (isset($_GET['id']) || isset($_POST['rVolgende'])) {
-
+$Gbestaat = False;
 if (isset($_GET['id'])) {
   $_SESSION['validatie'] = haalCodeOp($_GET['id']);
 }    
-
 
     if (isset($_POST['rVolgende'])) {
         $rGebruikersnaam = $_POST['rGebruikersnaam'];
@@ -38,22 +37,21 @@ if (isset($_GET['id'])) {
         $rPostcode = $_POST['rPostcode'];
         $rLand = $_POST['rLand'];
         $rGeslacht = $_POST['rGeslacht'];
-
+        
+    $input = array($rGebruikersnaam, $rVoornaam, $rAchternaam, $rGeslacht, $rWachtwoord,
+                   $rAdres1, $rAdres2, $rPostcode, $rPlaats, $rLand, $rGeboorte, $rEmail,
+                   $rGeheimV, $rGeheimA);
+                       
     array_push($input, 0);
     
     $gebruikersnaam = bestaatGebruikersnaam($rGebruikersnaam);
    // controleert of gebruikersnaam bestaat
-  if(isset($gebruikersnaam)) {
+  if(isset($gebruikersnaam['gebruikersnaam'])) {
       $Gbestaat = True;
       }
 
-        // controleert of gebruikersnaam bestaat
-        if (!empty(bestaatGebruikersnaam($rGebruikersnaam))) {
-            $Gbestaat = True;
-        }
-
         // controleert of er geen error's zijn
-        if ($Ebestaat == false) {
+        if ($Gbestaat == false) {
             $_SESSION['gebruikersnaam'] = $rGebruikersnaam;
             $_SESSION['status'] = 'registreren';
             InsertGebruiker($input);
@@ -70,7 +68,7 @@ if (isset($_GET['id'])) {
     <div class="container-fluid h-100">
         <div class="row h-100 justify-content-center">
             <div class="col-md-8">
-                <form class="needs-validation" novalidate action="register2.php" method="POST"
+                <form class="needs-validation" novalidate action="registerInput.php" method="POST"
                       oninput='rHerhaalWachtwoord.setCustomValidity(rHerhaalWachtwoord.value != rWachtwoord.value ? "Passwords do not match." : "")'>
                     <h1 class="h3 mb-3 text-center">Registreer je hier!</h1>
                     <?php
