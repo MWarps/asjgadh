@@ -699,7 +699,7 @@ function haalCodeOp($id){
     }
 }
 
-}
+
 
 // deze functie verwijderd de verificatie code
 // wordt gebruikt in: verkoperValidatie.php en register.php
@@ -1738,11 +1738,11 @@ function checkGEBLOKKEERD($gebruiker){
 function checkBEHEERDER ($gebruiker){
     try {
         require('core/dbconnection.php');
-        $geblokeerd = $dbh ->prepare (" 
+        $geblokkeerd = $dbh ->prepare (" 
           SELECT gebruikersnaam, beheerder FROM Gebruiker WHERE gebruikersnaam LIKE :gebruiker 
         ");
 
-        $geblokeerd-> execute(
+        $geblokkeerd-> execute(
             array(
                 ':gebruiker' => $gebruiker,
             )

@@ -82,7 +82,6 @@ if(isset($_SESSION['gebruikersnaam'])){
                         <div class="nav-item dropdown">
 
                             <button class="btn btn-flame dropdown-toggle" type="button" id="accountbeheer" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-
                                 <?php echo $_SESSION['gebruikersnaam']; ?>
                             </button>     
 
