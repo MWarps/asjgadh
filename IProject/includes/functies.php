@@ -1,6 +1,6 @@
 <?php
-include 'email.php';
-include 'email2.php';
+include 'emailRegistreren.php';
+include 'emailWachtwoordWijzigen.php';
 include 'emailBericht.php';
 include 'emailVerkocht.php';
 include 'emailGekocht.php';
@@ -79,7 +79,7 @@ function gebruikerAanbevolen($gebruikersnaam, $voorwerpnr) {
 }
 
 // deze functie voegt de link tussen afbeelding en artikel toe aan de database
-// wordt gebruikt in: veilen2.php
+// wordt gebruikt in: veilenInput.php
 function VoegVoorwerpToeAanIllustratie($voorwerpnr, $illustratieFile){
     try {
         // SQL insert statement
@@ -103,7 +103,7 @@ function VoegVoorwerpToeAanIllustratie($voorwerpnr, $illustratieFile){
 }
 
 // deze functie voegt een artikel aan een rubriek toe
-//wordt gebruikt in: veilen2.php
+//wordt gebruikt in: veilenInput.php
 function VoegVoorwerpAanRubriekToe($voorwerpnr, $rubriek){
     try {
         // SQL insert statement
@@ -127,7 +127,7 @@ function VoegVoorwerpAanRubriekToe($voorwerpnr, $rubriek){
 }
 
 // deze functie voegt een artikel toe aan de database
-//wordt gebruikt in: veilen2.php
+//wordt gebruikt in: veilenInput.php
 function VoegVoorwerpToe($input){
     try {
         // SQL insert statement
@@ -225,7 +225,7 @@ function getPopulairsteArtikelen() {
         }
         echo '
         <div class="col-md-4 py-3">
-          <div class="card">
+          <div class="card h-100">
             <div class="card-img-boven">
               <img src="'.$locatie.$details['illustratieFile'].'" alt="Foto bestaat niet">
             </div>  
@@ -365,23 +365,21 @@ function getLaatstBekeken($gebruiker) {
                 $details['titel'] .= '...';
             }
             echo '
-                    <div class="col-md-4 py-3">
-                    <div class="card" style="width: 18rem;">
-                    <div class="card-img-boven">
-                      <img src="'.$locatie.$details['illustratieFile'].'" alt="Foto bestaat niet">
-                    </div> 
-                      <h5 class="card-header"><a href="advertentie.php?id='.$details['voorwerpnr'].'">'.$details['titel'].'</a></h5>
-                        <div class="card-body">
-                          <h4 class="card-text">€ '.number_format($details['startprijs'], 2, ',', '.').'</h4>
-                          <p class="card-text">'.$details['verkoper'].'<br>
-                          '.$details['land'].', '.$details['plaatsnaam'].'</p>
-                          <a href="advertentie.php?id='.$details['voorwerpnr'].'" class="btn btn-block btn-primary">Ga naar artikel</a>
-                        </div>
-                    </div>
-                    </div>
-                  ';
-        }
-    }
+        <div class="col-md-4 py-3">
+        <div class="card h-100">
+        <div class="card-img-boven">
+          <img src="'.$locatie.$details['illustratieFile'].'" alt="Foto bestaat niet">
+        </div> 
+          <h5 class="card-header"><a href="advertentie.php?id='.$details['voorwerpnr'].'">'.$details['titel'].'</a></h5>
+            <div class="card-body">
+              <h4 class="card-text">€ '.number_format($details['startprijs'], 2, ',', '.').'</h4>
+              <p class="card-text">'.$details['verkoper'].'<br>
+              '.$details['land'].', '.$details['plaatsnaam'].'</p>
+              <a href="advertentie.php?id='.$details['voorwerpnr'].'" class="btn btn-block btn-primary">Ga naar artikel</a>
+            </div>
+        </div>
+        </div>';
+        }}
 }
 
 // deze functie laadt de advertenties die aanbevolen worden aan de gebruiker
@@ -415,44 +413,40 @@ function getAanbevolen($gebruiker) {
     }
     else{
         for ($teller = 0; $teller < 3; $teller++) {
-          if(!empty($records[$teller]['voorwerpnr'])){
-            $details = DetailAdvertentie($records[$teller]['voorwerpnr']);
-            $locatie = '../pics/';
-            
-            $hoogstebieder = zijnErBiedingen($details['voorwerpnr']);
-            $hoogstbieder = $hoogstebieder['euro'];
-            
-            if(!empty($hoogstbieder)){
-              $details['startprijs'] = $hoogstbieder;
-            } 
-            
-            if(substr($details['illustratieFile'] , 0 ,2 ) == 'ea'){
-                $locatie = 'upload/';
-            } 
-            if(strlen($details['titel']) >= 40){
-                $details['titel'] = substr($details['titel'],0,40);
-                $details['titel'] .= '...';
-            }
-            echo '
-                    <div class="col-md-4 py-3">
-                    <div class="card" style="width: 18rem;">
-                    <div class="card-img-boven">
-                        <img src="'.$locatie.$details['illustratieFile'].'" alt="Foto bestaat niet">
-                    </div> 
-                        <h5 class="card-header"><a href="advertentie.php?id='.$details['voorwerpnr'].'">'.$details['titel'].'</a></h5>
-                            <div class="card-body">
-                                 <h4 class="card-text">€ '.number_format($details['startprijs'], 2, ',', '.').'</h4>
-                                    <p class="card-text">'.$details['verkoper'].'<br>
-                                        '.$details['land'].', '.$details['plaatsnaam'].'
-                                    </p>
-                                <a href="advertentie.php?id='.$details['voorwerpnr'].'" class="btn btn-block btn-primary">Ga naar artikel</a>
-                            </div>
-                        </div>
-                    </div>
-                ';
-            }
-        }
-    }
+            if(!empty($records[$teller]['voorwerpnr'])){
+                $details = DetailAdvertentie($records[$teller]['voorwerpnr']);
+                $locatie = '../pics/';
+
+                $hoogstebieder = zijnErBiedingen($details['voorwerpnr']);
+                $hoogstbieder = $hoogstebieder['euro'];
+
+                if(!empty($hoogstbieder)){
+                    $details['startprijs'] = $hoogstbieder;
+                } 
+
+                if(substr($details['illustratieFile'] , 0 ,2 ) == 'ea'){
+                    $locatie = 'upload/';
+                } 
+                if(strlen($details['titel']) >= 40){
+                    $details['titel'] = substr($details['titel'],0,40);
+                    $details['titel'] .= '...';
+                }
+                echo '
+        <div class="col-md-4 py-3">
+        <div class="card">
+        <div class="card-img-boven">
+          <img src="'.$locatie.$details['illustratieFile'].'" alt="Foto bestaat niet">
+        </div> 
+          <h5 class="card-header"><a href="advertentie.php?id='.$details['voorwerpnr'].'">'.$details['titel'].'</a></h5>
+            <div class="card-body">
+              <h4 class="card-text">€ '.number_format($details['startprijs'], 2, ',', '.').'</h4>
+              <p class="card-text">'.$details['verkoper'].'<br>
+              '.$details['land'].', '.$details['plaatsnaam'].'</p>
+              <a href="advertentie.php?id='.$details['voorwerpnr'].'" class="btn btn-block btn-primary">Ga naar artikel</a>
+            </div>
+        </div>
+        </div>';
+            }}}
 }
 
 // deze functie laat de illustratie bestanden zien
@@ -823,7 +817,7 @@ function insertVerkoper($input){
 }
 
 // deze functie voegt de gebruiker toe aan de database
-// wordt gebruikt in: register2.php
+// wordt gebruikt in: 
 function InsertGebruiker($input){
     $hashedWachtwoord = password_hash($input['4'], PASSWORD_DEFAULT);
     try {
@@ -866,7 +860,7 @@ function InsertGebruiker($input){
 }
 
 // deze functie controleerd of de gebruikersnaam al bestaat
-// wordt gebruikt in: register2.php
+// wordt gebruikt in: registerInput.php
 function bestaatGebruikersnaam($gebruikersnaam)
 {
     try {
@@ -889,7 +883,7 @@ function bestaatGebruikersnaam($gebruikersnaam)
 }
 
 // deze functie controleerd of er al een verificatie mail is verstuurd
-// wordt gebruikt in: register2.php, verkoper2.php
+// wordt gebruikt in: registerInput.php, verkoper2.php
 function bestaatValidatie($email, $type)
 {
     try{
@@ -936,7 +930,7 @@ function bestaatEmailadres($email)
 }
 
 // deze functie laat alle landen zien in een dropdownlist
-// wordt gebruikt in: register2.php en veilen2.php
+// wordt gebruikt in: registerInput.php en veilenInput.php
 function landen() {
     try {
         require('core/dbconnection.php');
@@ -962,15 +956,15 @@ function landen() {
 
 // deze functie stuurt een email naar de gebruiker met een link om het wachtwoord te resetten
 // wordt gebruikt in: wachtwoordreset.php
-function StuurWachtwoordResetMailEmail($Email, $Code){
+function StuurWachtwoordResetMailEmail($email, $code){
 
     ini_set( 'display_errors', 1 );
     error_reporting( E_ALL );
     $from = "no-reply@iconcepts.nl";
-    $to = $Email;
+    $to = $email;
     $subject = "Wachtwoord reset EenmaalAndermaal";
-    $message = email2($Code);
-
+    $message = emailWachtwoordWijzigen($code);
+    
     $headers = 'MIME-Version: 1.0' . "\r\n";
     $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
     $headers .= "From:" .$from;
@@ -980,14 +974,14 @@ function StuurWachtwoordResetMailEmail($Email, $Code){
 
 // deze functie stuut een email naar de gebruiker met een link om te registeren
 // wordt gebruikt in: register.php
-function StuurRegistreerEmail($Email, $Code){
+function StuurRegistreerEmail($email, $code){
 
     ini_set( 'display_errors', 1 );
     error_reporting( E_ALL );
     $from = "no-reply@iconcepts.nl";
-    $to = $Email;
+    $to = $email;
     $subject = "Validatie link account registreren";
-    $message = email($Code);
+    $message = emailRegistreren($code);
 
     $headers = 'MIME-Version: 1.0' . "\r\n";
     $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
@@ -1356,7 +1350,7 @@ function DirectorieVindenVeilen(){
             //$_SESSION['rubriek'] = true;     
             echo  '<p class="btn" >Uw gekozen rubriek is: <strong>'.$resultaat[0]['rubrieknaam'].'<br></strong>
                    <a class="btn btn-lg bg-flame btn-block mt-1" href="veilen.php?id='.$resultaat[0]['superrubriek'].'&naam='.$resultaat[0]['rubrieknaam'].'">Vorige</a>
-                   <a class="btn btn-lg bg-flame btn-block mt-1" id="volgende" href=veilen2.php?id='.$resultaat[0]['rubrieknummer'].'&naam='.$resultaat[0]['rubrieknaam'].' name="volgende">Volgende</a>';
+                   <a class="btn btn-lg bg-flame btn-block mt-1" id="volgende" href=veilenInput.php?id='.$resultaat[0]['rubrieknummer'].'&naam='.$resultaat[0]['rubrieknaam'].' name="volgende">Volgende</a>';
         }
     }
     catch (PDOexception $e) {

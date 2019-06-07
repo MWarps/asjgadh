@@ -4,7 +4,7 @@ gevalideerd op 04/06/2019 door Merlijn
 validator: https://phpcodechecker.com/
 geen problemen gevonden
 */
-function email2($code)
+function emailWachtwoordWijzigen($code)
 {
     $tekst = '
  <html>
@@ -332,7 +332,7 @@ function email2($code)
                       <td>
                         <p>Hallo,</p>
                         <p>Hieronder staat de een link die u naar de pagina brengt waar u uw wachtwoord kan wijzigen:</p>
-                        <a class="button" target="_blank" href="http://iproject34.icasites.nl/wachtwoordreset2.php?id='.$code.'">Reset wachtwoord!</a>
+                        <a class="button" target="_blank" href="http://iproject34.icasites.nl/wachtwoordresetInput.php?id='.$code.'">Reset wachtwoord!</a>
                         <p>Als u deze e-mail per ongeluk ontvangt, kunt u deze verwijderen en zijn er geen conseqenties.</p>
                         <p>Met vriendelijke groet, <br>
                            EenmaalAndermaal</p>

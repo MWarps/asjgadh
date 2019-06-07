@@ -7,7 +7,20 @@ geen problemen gevonden
 include 'includes/header.php';
 $pagina = 'veilen.php';
 $melding = false;
+$VerkoperValidatie = false;
 
+if(empty(gegevensIngevuldVerkoper($_SESSION['gebruikersnaam']))){
+    $VerkoperValidatie = true;    
+}
+if(!empty(gegevensIngevuldVerkoper($_SESSION['gebruikersnaam']))){
+    $verkoper = gegevensIngevuldVerkoper($_SESSION['gebruikersnaam']);
+    if($verkoper['gevalideerd'] == 0){
+        $VerkoperValidatie = true;    
+    }
+}
+
+if (isset($_SESSION['gebruikersnaam']) && $VerkoperValidatie == false){
+  
  if (!isset($_SESSION['catogorieVeilen'])){
    $_SESSION['catogorieVeilen'] = array("Home"=>"-1");
  }
@@ -54,6 +67,10 @@ $melding = false;
 </div>
 
 <?php
+}
+else{
+  include 'includes/404error.php';
+}
 include 'includes/footer.php';
 ?>
 
