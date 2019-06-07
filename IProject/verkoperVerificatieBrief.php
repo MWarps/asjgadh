@@ -6,9 +6,9 @@ geen problemen gevonden
 */
 include 'includes/header.php';
 $gebruikersnaam = "";
-if (checkBEHEERDER ($_SESSION['gebruikersnaam']) == true){     
+if (checkBEHEERDER($_SESSION['gebruikersnaam']) == true) {
 
-    if (isset( $_GET['email'])){
+    if (isset($_GET['email'])) {
         verificatieVerzonden($_GET['email']);
     }
     ?>
@@ -20,8 +20,10 @@ if (checkBEHEERDER ($_SESSION['gebruikersnaam']) == true){
                 <h2 class="h3 mb-3 font-weight-normal text-center">Toegestane acties:</h2>
                 <ul class="list-group">
                     <a class="list-group-item list-group-item-action" href="beheerder.php">Terug naar overzicht</a>
-                    <a class="list-group-item list-group-item-action" href="overzichtVeilingen.php">Overzicht actieve veilingen</a>
-                    <a class="list-group-item list-group-item-action" href="verkoperVerificatieBrief.php">verkoper verificatie brieven</a>
+                    <a class="list-group-item list-group-item-action" href="overzichtVeilingen.php">Overzicht actieve
+                        veilingen</a>
+                    <a class="list-group-item list-group-item-action" href="verkoperVerificatieBrief.php">verkoper
+                        verificatie brieven</a>
                 </ul>
             </div>
         </div><!--/row-->
@@ -40,19 +42,18 @@ if (checkBEHEERDER ($_SESSION['gebruikersnaam']) == true){
                     </thead>
                     <tbody>
                     <?php
-                        verificatiesVinden();
+                    verificatiesVinden();
                     ?>
                     </tbody>
                 </table>
             </div>
         </div>
-        
+
     </div> <!--/.container-->
     <?php
-}
-else{
+} else {
     include 'includes/404error.php';
 }
 
-    include 'includes/footer.php'
+include 'includes/footer.php'
 ?>
