@@ -16,10 +16,10 @@ include 'includes/header.php';
 $Gbestaat = False;
 
 if (isset($_GET['id']) || isset($_POST['rVolgende'])) {
-// empty(haalCodeOp($_GET['id']))
-    if (isset($_GET['id'])) {
-        $_SESSION['validatie'] = haalCodeOp($_GET['id']);
-    }
+
+if (isset($_GET['id'])) {
+  $_SESSION['validatie'] = haalCodeOp($_GET['id']);
+}    
 
 
     if (isset($_POST['rVolgende'])) {
