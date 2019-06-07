@@ -8,14 +8,13 @@ include 'includes/header.php';
 $pagina = 'catalogus.php';
 //$_SESSION['catalogus'] = true;
 
-
-if (!isset($_SESSION['catogorie'])){
-  $_SESSION['catogorie'] = array("Home"=>"-1");
+if (!isset($_SESSION['catogorie'])) {
+    $_SESSION['catogorie'] = array("Home" => "-1");
 }
 
-if(isset($_GET['id'])){
+if (isset($_GET['id'])) {
     $_SESSION['catogorie']['id'] = $_GET['id'];
-    }
+}
 
 ?>
 
@@ -24,7 +23,7 @@ if(isset($_GET['id'])){
         <div class="col">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
-                    <?php echo '<li class="breadcrumb-item"><a href="'.$pagina.'?id=-1" >Hoofdmenu</a></li>'; ?>
+                    <?php echo '<li class="breadcrumb-item"><a href="' . $pagina . '?id=-1" >Hoofdmenu</a></li>'; ?>
                 </ol>
             </nav>
         </div>
@@ -52,6 +51,6 @@ if(isset($_GET['id'])){
     </div>
 </div>
 
-<?php 
-include 'includes/footer.php' 
+<?php
+include 'includes/footer.php'
 ?>

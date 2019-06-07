@@ -25,11 +25,25 @@ if(isset($_POST['volgende'])){
         <div class="col-md-6 mt-4">
             <div class="card">
                 <div class="card-header">
-                    <h1>Beoordelinging van <?php echo $verkoper[0]['gebruikersnaam'];?></h1>
+                    <h1>Beoordelinging van <?php echo $verkoper[0]['gebruikersnaam']; ?></h1>
                     <div class="card-body">
-                        <p>Beoordeel de algemene ervaring met <?php echo $verkoper[0]['gebruikersnaam']?> tijdens en na afloop van de veiling van: <strong> <?php echo $verkoper[1]['titel']?></strong></p>
+                        <p>Beoordeel de algemene ervaring met <?php echo $verkoper[0]['gebruikersnaam'] ?> tijdens en na
+                            afloop van de veiling van: <strong> <?php echo $verkoper[1]['titel'] ?></strong></p>
                         <div class="icon-beoordeling">
-                            <p><img src="assets/img/Boos.png"></img> <img src="assets/img/Blij.png" class="img-responsive pull-right"></img></p>
+                            <p><img src="assets/img/Boos.png"></img> <img src="assets/img/Blij.png"
+                                                                          class="img-responsive pull-right"></img></p>
+                        </div>
+                        <form action="rating.php" method="POST">
+                            <div class="slidecontainer">
+                                <input type="range" min="1" max="10" value="5" name="waarde" class="slider"
+                                       id="myRange">
+                                <p>Beoordeling: <span id="demo"></span></p>
+                            </div>
+                            <button type="submit" name="volgende" class="btn bg-flame btn-lg">Volgende</button>
+                        </form>
+                    </div>
+
+                </div>
             </div>
             <form action="rating.php" method="POST">
                 <div class="slidecontainer">
@@ -45,4 +59,6 @@ if(isset($_POST['volgende'])){
 
 
 <?php
-    include 'includes/footer.php'; ?>
+
+
+include 'includes/footer.php'; ?>
