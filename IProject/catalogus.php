@@ -32,7 +32,7 @@ if(isset($_GET['id'])){
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-3">
-            <div class="card bg-light mb-3">
+            <div class="card bg-light mb-3 h-100">
                 <div class="card-header bg-flame text-white text-uppercase"><i class="fa fa-list"></i> categorie&euml;n </div>
                 <?php directorieVinden($pagina); ?>
             </div>        
