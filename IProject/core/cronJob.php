@@ -12,6 +12,7 @@ if( ( isset($_SERVER['PHP_AUTH_USER'] ) && ( $_SERVER['PHP_AUTH_USER'] == "CronJ
 // controleerd alle bot veilingen die nog openstaan.
 function checkBotAdvertentie ($botEMail){
     $botteller = 0; // houdt bij hoevaak de functie heeft gerunt
+    $blokker = 0;
     try {
         require ('dbconnection.php');
         // algemene query voor het wijzigen van de veilingstatus naar 1 ('gesloten')
@@ -22,12 +23,13 @@ function checkBotAdvertentie ($botEMail){
         $botVeiling -> execute(array (':botnaam' => '%'.$botEMail.'%' ) );
 
         while ($bot = $botVeiling ->fetch(PDO::FETCH_ASSOC)){
-            echo('Bot (advertentie/ iteratie) NR : ');echo ($botteller); echo('<br>');
+           
 
             if ((date("d.m.Y H:i", strtotime($bot['looptijdeindedagtijdstip'])) ) <= date("d.m.Y H:i:s")){
                 if ($bot[$botteller]['veilinggesloten'] == 0){
                     $sluitVeiling -> execute( array(':voorwerpnr' => $bot['voorwerpnr'] ));
                     $botteller ++;
+                     $blokker ++;
                 } else {
                     $botteller ++;
                 }
@@ -38,11 +40,14 @@ function checkBotAdvertentie ($botEMail){
     } catch (PDOexception $e) {
         "er ging iets mis error: {$e->getMessage()}"; 
     }
+     echo('Aantal Bot advertentie: ');echo ($botteller); echo('<br>');
+     echo('Aantal Bot advertentie geblokeerd: ');echo ($blokker); echo('<br>');
 }
 
 // controleerd alle veilingen die niet van de bots zijn die nog openstaan.
 function checkNormaleAdvertenties(){
     $klantteller = 0;// houdt bij hoeveel veilingen de functie heeft gechecked
+    $blokker = 0;
     try {
         require ('dbconnection.php');
         // algemene query voor het sluiten van veilingen
@@ -53,7 +58,7 @@ function checkNormaleAdvertenties(){
         $haalVeilingenOp -> execute();
 
         while ($resultaat = $haalVeilingenOp = $sqlSelect->fetch(PDO::FETCH_ASSOC)){
-            echo('Klant (advertentie/ iteratie) NR : ');echo ($klantteller);echo('<br>');
+            
 
             if ((date("d.m.Y H:i", strtotime($resultaat['looptijdeindedagtijdstip'])) ) <= date("d.m.Y H:i:s")){
                 if ($resultaat['veilinggesloten'] == 0){
@@ -67,6 +72,7 @@ function checkNormaleAdvertenties(){
                 
                     $sluitVeiling -> execute( array(':voorwerpnr' => $resultaat['voorwerpnr'] ));
                     $klantteller++;
+                    $blokker ++;
                 } else {
                     $klantteller ++;
                 }
@@ -77,5 +83,7 @@ function checkNormaleAdvertenties(){
     } catch (PDOexception $e) {
         "er ging iets mis error: {$e->getMessage()}"; 
     }
+    echo('Aantal Klant advertentie NR : ');echo ($klantteller);echo('<br>');
+    echo('Geblokeerde Klant advertentie NR : ');echo ($blokker);echo('<br>');
 }
 ?>
