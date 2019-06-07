@@ -121,7 +121,7 @@ if (isset($_SESSION['gebruikersnaam'])) {
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-10 mt-2">
-                <form class="needs-validation" novalidate action="veilen2.php" method="POST"
+                <form class="needs-validation" novalidate action="veilenInput.php" method="POST"
                       enctype="multipart/form-data">
                     <h1 class="h3 mb-2 text-center "> Veiling starten </h1>
                     <p class=" mb-2 text-center "> Hier kunt u een voorwerp te koop aan bieden, vul alle onderstaande

@@ -26,7 +26,7 @@ if (isset($_POST['Volgende'])) {
       VerificatieCodeProcedure($email, $type);
       $code = HaalVerficatiecodeOp($email, $type);
                   
-      StuurRegistreerEmail($email, $code['verificatiecode']);                    
+      StuurWachtwoordResetMailEmail($gebruiker['email'], $code['verificatiecode']);                    
   }
 }
 

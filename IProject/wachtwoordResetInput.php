@@ -22,8 +22,8 @@ if (isset($_GET['id']) || isset($_POST['veranderWachtwoord'])) {
 
         unset($_SESSION['validatie']);
         $url = 'index.php';
-        //echo '<script language="javascript">window.location.href ="'.$url.'"</script>';
-        //exit();
+        echo '<script language="javascript">window.location.href ="'.$url.'"</script>';
+        exit();
     }
 
 
@@ -32,7 +32,7 @@ if (isset($_GET['id']) || isset($_POST['veranderWachtwoord'])) {
         <div class="row justify-content-center">
             <div class="col-md-6 mt-4">
                 <div class="jumbotron bg-dark text-white">
-                    <form class="needs-validation" novalidate action='wachtwoordReset2.php' method="post"
+                    <form class="needs-validation" novalidate action='wachtwoordResetInput.php' method="post"
                           oninput='nWachtwoord1.setCustomValidity(nWachtwoord1.value != nWachtwoord2.value ? "Passwords do not match." : "")'>
                         <?php if ($Validatie) {
                             echo ' <div class="alert alert-success" role="alert">

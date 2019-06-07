@@ -952,7 +952,7 @@ function landen()
     }
 }
 
-// deze functie stuurt een email naar de gebruiker met een link om het wachtwoord te resetten
+// deze functie stuurt een email naar de gebruiker met een link om het wachtwoord te ften
 // wordt gebruikt in: wachtwoordreset.php
 function StuurWachtwoordResetMailEmail($email, $code)
 {
@@ -1076,46 +1076,6 @@ function geslacht()
             echo '<option value="' . $row['geslacht'] . '">' . $row['geslacht'] . '</option>';
         }
         echo '</select>';// Close your drop down box
-    } catch (PDOexception $e) {
-        echo "er ging iets mis error: {$e->getMessage()}";
-    }
-}
-
-// deze functie stuurt een reset mail naar de gebruiker toe
-// wordt gebruikt in: wachtwoordreset.php
-function emailResetWachtwoord($gebruikersnaam)
-{
-    try {
-        require('core/dbconnection.php');
-        $sqlSelect = $dbh->prepare("
-          SELECT email, voornaam FROM Gebruiker WHERE gebruikersnaam = :gebruikersnaam
-        ");
-
-        $sqlSelect->execute(
-            array(
-                ':gebruikersnaam' => $gebruikersnaam,
-            )
-        );
-        $records = $sqlSelect->fetch(PDO::FETCH_ASSOC);
-
-        ini_set('display_errors', 1);
-        error_reporting(E_ALL);
-        $from = "no-reply@iconcepts.nl";
-        $to = $records['email'];
-        $subject = "Validatie code account registreren";
-        $message = '<h1> Hallo ' . $records['voornaam'] . '</h1>,
-                  <br>
-                  <br>
-                  Bedankt voor het registreren. Hieronder staat de code die ingevoerd
-                  moet worden om het registeren te voltooien:
-                  <br>
-                  <h1>' . rand(1000, 9999) . '
-                  <br>
-                  Als u dit niet bent, wijzig dan uw wachtwoord
-                  en overweeg ook om uw e-mailwachtwoord te wijzigen om uw
-                  accountbeveiliging te garanderen.';
-        $headers = "From:" . $from;
-        mail($to, $subject, $message, $headers);
     } catch (PDOexception $e) {
         echo "er ging iets mis error: {$e->getMessage()}";
     }
