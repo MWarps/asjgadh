@@ -9,7 +9,7 @@ $pagina = 'veilen.php';
 $melding = false;
 
  if (!isset($_SESSION['catogorieVeilen'])){
-    setupCatogorienVeilen();
+   $_SESSION['catogorieVeilen'] = array("Home"=>"-1");
  }
 
  if(isset($_GET['id'])){

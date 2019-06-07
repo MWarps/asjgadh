@@ -11,6 +11,7 @@ include 'emailVeilingBlockedKoper.php';
 include 'emailVeilingBlockedVerkoper.php';
 
 // deze functie geeft de minimumverhoging van het bod bij verschillende bedragen
+// wordt gebruikt in: advertentie.php
 function BodVerhoging($Euro){
     $Verhoging;
     switch ($Euro) {
@@ -35,6 +36,7 @@ function BodVerhoging($Euro){
 }
 
 //deze functie registreert welke voorwerpen als laatste bekeken zijn door de gebruiker
+//wordt gebruikt in: advertentie.php
 function gebruikerBekeekVoorwerp($gebruikersnaam, $voorwerpnr) {
     try {
         require('core/dbconnection.php');
@@ -55,6 +57,7 @@ function gebruikerBekeekVoorwerp($gebruikersnaam, $voorwerpnr) {
 }
 
 // deze functie registreert in de database uit welke rubriek het laatst bekeken voorwerp kwam zodat de website de gebruiker artikelen uit deze rubriek aanbeveelt
+// wordt gebruikt in: advertentie.php
 function gebruikerAanbevolen($gebruikersnaam, $voorwerpnr) {
     try {
         require('core/dbconnection.php');
@@ -76,6 +79,7 @@ function gebruikerAanbevolen($gebruikersnaam, $voorwerpnr) {
 }
 
 // deze functie voegt de link tussen afbeelding en artikel toe aan de database
+// wordt gebruikt in: veilen2.php
 function VoegVoorwerpToeAanIllustratie($voorwerpnr, $illustratieFile){
     try {
         // SQL insert statement
@@ -99,6 +103,7 @@ function VoegVoorwerpToeAanIllustratie($voorwerpnr, $illustratieFile){
 }
 
 // deze functie voegt een artikel aan een rubriek toe
+//wordt gebruikt in: veilen2.php
 function VoegVoorwerpAanRubriekToe($voorwerpnr, $rubriek){
     try {
         // SQL insert statement
@@ -122,6 +127,7 @@ function VoegVoorwerpAanRubriekToe($voorwerpnr, $rubriek){
 }
 
 // deze functie voegt een artikel toe aan de database
+//wordt gebruikt in: veilen2.php
 function VoegVoorwerpToe($input){
     try {
         // SQL insert statement
@@ -182,6 +188,7 @@ function VoegVoorwerpToe($input){
 }  
 
 // deze functie geeft de meest bekeken(en dus populairste) artikelen op de website
+//wordt gebruikt in: index.php
 function getPopulairsteArtikelen() {
     try {
         require('core/dbconnection.php');
@@ -200,14 +207,14 @@ function getPopulairsteArtikelen() {
     foreach ($records as $rij) {
         $details = DetailAdvertentie($rij['voorwerpnr']);
         $locatie = '../pics/';
-        
+
         $hoogstebieder = zijnErBiedingen($details['voorwerpnr']);
         $hoogstebod = $hoogstebieder['euro'];
         
         if(!empty($hoogstbieder)){
           $details['startprijs'] = $hoogstebod;
         }  
-        
+
         if(substr($details['illustratieFile'] , 0 ,2 ) == 'ea'){
             $locatie = 'upload/';
         }        
@@ -218,7 +225,7 @@ function getPopulairsteArtikelen() {
         }
         echo '
         <div class="col-md-4 py-3">
-          <div class="card" style="width: 18rem;">
+          <div class="card">
             <div class="card-img-boven">
               <img src="'.$locatie.$details['illustratieFile'].'" alt="Foto bestaat niet">
             </div>  
@@ -235,6 +242,7 @@ function getPopulairsteArtikelen() {
 }
 
 // deze functie haalt de producten die in de meegegeven rubriek zitten
+// wordt gebruikt in: catalogus.php en veilen.php
 function getProductenUitRubriek2($rubriek, $aantal) {
     try {
         require('core/dbconnection.php');
@@ -273,6 +281,7 @@ function getProductenUitRubriek2($rubriek, $aantal) {
 }
 
 // deze functie laad 21 artikelen uit de laagste niveau subrubrieken van de rubriek die aan de functie gegeven wordt
+// wordt gebruikt in: catalogus.php en veilen.php
 function getProductenUitRubriek($rubriek, $aantal) {
     try {
         require('core/dbconnection.php');
@@ -311,6 +320,7 @@ function getProductenUitRubriek($rubriek, $aantal) {
 }
 
 // deze functie laad de 3 artikelen die het laatst door de gebruiker bekeken zijn
+// wordt gebruikt in: index.php
 function getLaatstBekeken($gebruiker) {
     try {
         require('core/dbconnection.php');
@@ -342,9 +352,9 @@ function getLaatstBekeken($gebruiker) {
 
             $hoogstebieder = zijnErBiedingen($details['voorwerpnr']);
             $hoogstbieder = $hoogstebieder['euro'];
-            
+
             if(!empty($hoogstbieder)){
-              $details['startprijs'] = $hoogstbieder;
+                $details['startprijs'] = $hoogstbieder;
             }  
             if(substr($details['illustratieFile'] , 0 ,2 ) == 'ea'){
                 $locatie = 'upload/';
@@ -375,6 +385,7 @@ function getLaatstBekeken($gebruiker) {
 }
 
 // deze functie laadt de advertenties die aanbevolen worden aan de gebruiker
+// wordt gebruikt in: index.php
 function getAanbevolen($gebruiker) {
     try {
         require('core/dbconnection.php');
@@ -397,9 +408,10 @@ function getAanbevolen($gebruiker) {
     $records = getProductenUitRubriek2($records['rubrieknr'], 3) ;
 
     if(empty($records)){
-        echo '<div class="alert alert-success" role="alert">
+        echo '    
+            <div class="alert alert-success" role="alert">
               U heeft nog geen aanbevolen voorwerpen!
-            </div>';
+        </div>';
     }
     else{
         for ($teller = 0; $teller < 3; $teller++) {
@@ -443,6 +455,8 @@ function getAanbevolen($gebruiker) {
     }
 }
 
+// deze functie laat de illustratie bestanden zien
+// wordt gebruikt in: advertentie.php
 function HaalIllustratiesOp($voorwerpnr){
 
     try {
@@ -467,6 +481,8 @@ function HaalIllustratiesOp($voorwerpnr){
     } 
 }
 
+// deze functie laat het hoogstebod zien
+// wordt gebruikt in: advertentie.php
 function zijnErBiedingen($voorwerpnr){
     try {
         require('core/dbconnection.php');
@@ -488,6 +504,8 @@ function zijnErBiedingen($voorwerpnr){
     }  
 }
 
+// deze functie update de tabel voorwerpen-> kolom-> gezien met +1 als de gebruiker op de advertentie geklikt
+// wordt gebruikt in: advertentie.php
 function VoorwerpGezien($voorwerpnr) {
     try {
         require('core/dbconnection.php');
@@ -508,6 +526,8 @@ function VoorwerpGezien($voorwerpnr) {
     }
 }
 
+// deze functie voegt het bod van de gebruiker toe aan de databse 
+// wordt gebruikt in: advertentie.php
 function updateBieden($bod, $gebruikersnaam, $voorwerpnr){
     try {
         require('core/dbconnection.php');
@@ -530,6 +550,8 @@ function updateBieden($bod, $gebruikersnaam, $voorwerpnr){
 
 }
 
+// deze functie laat de biedingen zien van hoog naar laagst
+// wordt gebruikt in: advertentie.php
 function Biedingen($voorwerpnr){
     try {
         require('core/dbconnection.php');
@@ -555,6 +577,8 @@ function Biedingen($voorwerpnr){
     }
 }
 
+// deze functie geeft alle detail van het voorwerp weer
+// wordt gebruikt in: index.php, catalogus.php
 function DetailAdvertentie($id)
 {
     try {
@@ -580,6 +604,8 @@ function DetailAdvertentie($id)
     }
 }
 
+// deze functie geeft alle advertenties van mijnadvertenties weer 
+// wordt gebruikt in: mijnadvertenties.php
 function DetailAdvertentieMijnAdvertenties($id)
 {
     try {
@@ -604,7 +630,8 @@ function DetailAdvertentieMijnAdvertenties($id)
     }
 }
 
-/* advertentie ophalen */
+// deze functie laat alle advertenties zien op de catalogus pagina 
+// wordt gebruikt in: catalogus.php
 function haalAdvertentieOp($rubriek){
     try {
         $producten = getProductenUitRubriek($rubriek, 20); 
@@ -616,14 +643,14 @@ function haalAdvertentieOp($rubriek){
         foreach ($producten as $rij) {
             $details = DetailAdvertentie($rij['voorwerpnr']);
             $locatie = '../pics/';
-            
+
             $hoogstebieder = zijnErBiedingen($details['voorwerpnr']);
             $hoogstbieder = $hoogstebieder['euro'];
-            
+
             if(!empty($hoogstbieder)){
-              $details['startprijs'] = $hoogstbieder;
+                $details['startprijs'] = $hoogstbieder;
             }
-            
+
             if(substr($details['illustratieFile'] , 0 ,2 ) == 'ea'){
                 $locatie = 'upload/';
             } 
@@ -654,7 +681,9 @@ function haalAdvertentieOp($rubriek){
     }
 }
 
-/* deleting verificatie code*/
+
+// deze functie haalt de email en type verificatie op
+// wordt gebruikt in: register.php
 function haalCodeOp($id){
     try {
         require('core/dbconnection.php');
@@ -676,28 +705,10 @@ function haalCodeOp($id){
     }
 }
 
-/* update gebruiker naar geverifieerd */
-function updateGebruikerVerificatie($input){
-    try {
-        require('core/dbconnection.php');
-        $sqlSelect = $dbh->prepare("
-          UPDATE Gebruiker 
-          SET verifieerd = 1
-          WHERE gebruikersnaam = :gebruikersnaam
-        ");
-
-        $sqlSelect->execute(
-            array(
-                ':gebruikersnaam' => $input['0']
-            )
-        );
-    }
-    catch (PDOexception $e) {
-        echo "er ging iets mis error: {$e->getMessage()}";
-    }
 }
 
-/* deleting verificatie code*/
+// deze functie verwijderd de verificatie code
+// wordt gebruikt in: verkoperValidatie.php en register.php
 function deleteVerificatieRij($email, $type){
     try {
         require('core/dbconnection.php');
@@ -717,7 +728,8 @@ function deleteVerificatieRij($email, $type){
     }
 }
 
-/* Ophalen van verficatie code */
+// deze functie haalt alle informatie van de gebruiker op 
+// wordt gebruikt in: advertentie.php, beheerder.php, header.php, mijnadvertenties.php, overzichtGebruikers.php, stuurbericht.php
 function HaalGebruikerOp($gebruikersnaam){
     try {
         require('core/dbconnection.php');
@@ -741,7 +753,8 @@ function HaalGebruikerOp($gebruikersnaam){
     }
 }
 
-/* Ophalen van verficatie code */
+// deze functie haalt de verificatie code op
+// wordt gebruikt in:
 function HaalVerficatiecodeOp($email, $type){
 
     try {
@@ -766,7 +779,8 @@ function HaalVerficatiecodeOp($email, $type){
     }
 }
 
-/* Verificate code en eindtijd aanmaken*/
+// deze functie maakt de verificatie code aan door een procedure uit te voeren in op de database 
+// wordt gebruikt in: Verkoper.php, Register.php
 function VerificatieCodeProcedure($email, $type){
     try {
         require('core/dbconnection.php');
@@ -785,6 +799,8 @@ function VerificatieCodeProcedure($email, $type){
     }
 }
 
+// deze functie voegt de verkoper informatie toe aan de database
+// wordt gebruikt in: verkoper2.php
 function insertVerkoper($input){
     try {
         require('core/dbconnection.php');
@@ -806,7 +822,8 @@ function insertVerkoper($input){
     }
 }
 
-/* Voeg gebruiker toe aan database */
+// deze functie voegt de gebruiker toe aan de database
+// wordt gebruikt in: register2.php
 function InsertGebruiker($input){
     $hashedWachtwoord = password_hash($input['4'], PASSWORD_DEFAULT);
     try {
@@ -848,7 +865,8 @@ function InsertGebruiker($input){
     }
 }
 
-/* Is er al een gebruiker aangemeld met hetzelfde gebruikersnaam */
+// deze functie controleerd of de gebruikersnaam al bestaat
+// wordt gebruikt in: register2.php
 function bestaatGebruikersnaam($gebruikersnaam)
 {
     try {
@@ -870,7 +888,8 @@ function bestaatGebruikersnaam($gebruikersnaam)
     }
 }
 
-/* Is er al een gebruiker aangemeld met hetzelfde emailadres */
+// deze functie controleerd of er al een verificatie mail is verstuurd
+// wordt gebruikt in: register2.php, verkoper2.php
 function bestaatValidatie($email, $type)
 {
     try{
@@ -893,7 +912,8 @@ function bestaatValidatie($email, $type)
     }
 }
 
-/* Is er al een gebruiker aangemeld met hetzelfde emailadres */
+// deze functie controleerd of het emailadres al wordt gebruikt
+// wordt gebruikt in: register.php
 function bestaatEmailadres($email)
 {
     try{
@@ -915,57 +935,12 @@ function bestaatEmailadres($email)
     }
 }
 
-/*registeren vragen ophalen */
-function resetVragen()
-{
+// deze functie laat alle landen zien in een dropdownlist
+// wordt gebruikt in: register2.php en veilen2.php
+function landen() {
     try {
         require('core/dbconnection.php');
-        $sqlSelect = $dbh->query("
-          SELECT vraagnr, vraag FROM Vragen
-        ");
-
-        echo '<label for="inputGeheimeVraag">Geheime Vraag</label>';
-        echo '<select name="rGeheimV" class="form-control" id="inputGeheimeVraag">'; // Open your drop down box
-
-        // Loop through the query results, outputing the options one by one
-        while ($row = $sqlSelect->fetch(PDO::FETCH_ASSOC)) {
-            echo '<option value="'.$row['vraagnr'].'">'.$row['vraagnr'].'.&nbsp'.$row['vraag'].'</option>';
-        }
-        echo '</select>';// Close your drop down box
-    }
-    catch (PDOexception $e) {
-        echo "er ging iets mis error: {$e->getMessage()}";
-    }
-}
-
-function vragenOphalen() { // haalt alleen de veiligheidsvragen op
-    try {
-        require('core/dbconnection.php');
-        $sqlvragenOphalen = $dbh -> prepare ("
-          SELECT vraagnr, vraag FROM vragen
-        ");
-
-        $sqlvragenOphalen -> execute();
-
-        while ($info = $sqlvragenOphalen-> fetch(PDO::FETCH_ASSOC)){
-            //var_dump($info);
-            echo '<option value="'.$info['vraagnr'].'">'.$info['vraagnr'].'.&nbsp'.$info['vraag'].'</option>';
-        }
-    }
-    catch (PDOexception $e) {
-        echo 'error: vragen niet opgehaald';
-    }// einde catch exeption $e
-}// einde functie vragenOphalen
-
-/* haal landen op */
-function landen()
-{
-    try {
-        require('core/dbconnection.php');
-        $sqlSelect = $dbh-> prepare ("
-          SELECT NAAM_LAND FROM Landen
-        ");
-
+        $sqlSelect = $dbh-> prepare ("select NAAM_LAND from Landen");
         $sqlSelect  -> execute();
 
         echo '<label for="inputLanden">Land</label>';
@@ -985,8 +960,9 @@ function landen()
     }
 }
 
+// deze functie stuurt een email naar de gebruiker met een link om het wachtwoord te resetten
+// wordt gebruikt in: wachtwoordreset.php
 function StuurWachtwoordResetMailEmail($Email, $Code){
-
 
     ini_set( 'display_errors', 1 );
     error_reporting( E_ALL );
@@ -1002,6 +978,8 @@ function StuurWachtwoordResetMailEmail($Email, $Code){
     mail($to,$subject,$message, $headers);
 }
 
+// deze functie stuut een email naar de gebruiker met een link om te registeren
+// wordt gebruikt in: register.php
 function StuurRegistreerEmail($Email, $Code){
 
     ini_set( 'display_errors', 1 );
@@ -1018,7 +996,8 @@ function StuurRegistreerEmail($Email, $Code){
     mail($to,$subject,$message, $headers);
 }
 
-//deze methode laad alle verificaties om verkoper te worden die nog niet verzonden zijn. ook wordt het adress en de brief volgens een template vast opgesteld
+// deze functie laad alle verificaties om verkoper te worden die nog niet verzonden zijn. ook wordt het adress en de brief volgens een template vast opgesteld
+// wordt gebruikt in: verkoperVerificatieBrief.php
 function verificatiesVinden(){
     $teller = 0;
     try {
@@ -1041,7 +1020,7 @@ function verificatiesVinden(){
                     <td>'.$resultaat['adress'].'</td>
                     <td>'.$resultaat['brief'].'</td>
                     <td>'.$resultaat['email'].'</td>                    
-                    <td><a class="btn btn-primary" href="verkoperVerificatieBrief.php?email='.$resultaat['email'].'" role="button">verzonden</a></td>';
+                    <td><a class="btn btn-primary" href="verkoperVerificatieBrief.php?email='.$resultaat['email'].'" role="button">Brief is Verzonden</a></td>';
             echo ' </tr>';
         }
     }
@@ -1051,6 +1030,7 @@ function verificatiesVinden(){
 }
 
 //deze functie registreerd dat de brief verzonden is in de database
+// wordt gebruikt in: verkoperVerificatieBrief.php
 function verificatieVerzonden($email) {
     $email = fixEmail($email);
     try{
@@ -1070,14 +1050,17 @@ function verificatieVerzonden($email) {
     }
 }
 
+// Deze functie veranderd de spatie naar een + teken
 // de $_GET die gebruikt wordt om de email op te halen en naar verificatieVerzonden te sturen verandert de + tekens in de email adressen naar spaties
+// wordt gebruikt in: verkoperVerificatieBrief.php
 function fixEmail($email) {
     $email = str_replace(" ","+",$email);
 
     return $email;
 }
 
-
+// deze functie laat de geslachten zien in een dropdownlist
+// wordt gebruikt in: registreren2.php
 function geslacht()
 {
     try {
@@ -1103,7 +1086,8 @@ function geslacht()
     }
 }
 
-/* stuur reset email naar gebruiker */
+// deze functie stuurt een reset mail naar de gebruiker toe
+// wordt gebruikt in: wachtwoordreset.php
 function emailResetWachtwoord($gebruikersnaam)
 {
     try{
@@ -1143,7 +1127,8 @@ function emailResetWachtwoord($gebruikersnaam)
     }
 }
 
-/* Reseten van wachtwoord */
+// deze functie update het wachtwoord van de gebruiker
+// wordt gebruikt in: wachtwoordReset2.php
 function veranderWachtwoord($email,$wachtwoord)
 {
     try{
@@ -1166,27 +1151,8 @@ function veranderWachtwoord($email,$wachtwoord)
     }
 }
 
-function controleVraag($vraag){
-    try{
-        require('core/dbconnection.php');
-        $sqlSelect = $dbh->prepare("
-          SELECT gebruiker.vraag FROM Gebruiker JOIN vragen
-          ON gebruiker.vraag = vragen.vraagnr WHERE gebruiker.email=:email
-        ");
-
-        $sqlSelect->execute(
-            array(
-                ':email' => $email,
-            )
-        );
-        $records = $sqlSelect->fetch(PDO::FETCH_ASSOC);
-        return $records;
-    }
-    catch (PDOexception $e) {
-        echo "er ging iets mis error: {$e->getMessage()}";
-    }
-}
-
+// deze functie stuurt de koper een bericht naar de verkoper toe
+// wordt gebruikt in: stuurBericht.php
 function stuurbericht($titel, $bericht, $Verzender, $Ontvanger){
 
     ini_set( 'display_errors', 1 );
@@ -1203,6 +1169,8 @@ function stuurbericht($titel, $bericht, $Verzender, $Ontvanger){
 
 }
 
+// deze functie update de verkoper naar gevalideerd als de ingevoerde code goed is
+// wordt gebruikt in: verkoperValidatie.php
 function statusOpValidatieZetten($gebruikersnaam){
     try {
         require('core/dbconnection.php');
@@ -1223,6 +1191,25 @@ function statusOpValidatieZetten($gebruikersnaam){
     }
 }
 
+function resetVragen()
+{
+    try {
+        require('core/dbconnection.php');
+        $sqlSelect = $dbh->query("select vraagnr, vraag from Vragen");
+        echo '<label for="inputGeheimeVraag">Geheime Vraag</label>';
+        echo '<select name="rGeheimV" class="form-control" id="inputGeheimeVraag">'; // Open your drop down box
+        // Loop through the query results, outputing the options one by one
+        while ($row = $sqlSelect->fetch(PDO::FETCH_ASSOC)) {
+            echo '<option value="'.$row['vraagnr'].'">'.$row['vraagnr'].'.&nbsp'.$row['vraag'].'</option>';
+        }
+        echo '</select>';// Close your drop down box
+    } catch (PDOexception $e) {
+        echo "er ging iets mis error: {$e->getMessage()}";
+    }
+}
+
+// deze functie haalt de informatie op van de verkoper
+// wordt gebruikt in: header.php, veilen.php, mijnadvertenties.php
 function gegevensIngevuldVerkoper($gebruikersnaam){
     try {
         require('core/dbconnection.php');
@@ -1241,20 +1228,9 @@ function gegevensIngevuldVerkoper($gebruikersnaam){
     catch (PDOexception $e) {
         echo "er ging iets mis error: {$e->getMessage()}";
     }
-
 }
 
-function setupCatogorienVeilen(){
-    $_SESSION['catogorieVeilen'] = array("Home"=>"-1");
-    // print_r ( $_SESSION['catogorie']); test om de array de var_dumpen
-}
-
-function setupCatogorien(){
-    $_SESSION['catogorie'] = array("Home"=>"-1");
-    // print_r ( $_SESSION['catogorie']); test om de array de var_dumpen
-}
-
-function catogorieToevoeging (){
+/*function catogorieToevoeging (){
     //    $lengte =  sizeof($_SESSION['catogorie']);
     //    echo $lengte ; echo '<br>';
     //    $lengte ++;
@@ -1269,8 +1245,10 @@ function catogorieToevoeging (){
     //        print_r($array2); 
     //       echo '<br>';   
     $_SESSION['catogorie'] = $_SESSION['catogorie']  + $array2; 
-}// einde functie
+}// einde functie*/
 
+// deze functie laat alle categorien zien 
+// wordt gebruikt in: header.php, veilen.php, mijnadvertenties.php
 function catogorieSoort($pagina) {
     $teller =0;
     $titel;
@@ -1287,6 +1265,8 @@ function catogorieSoort($pagina) {
     }       
 }
 
+// deze functie haalt de rubrieksnaam op van de desbetreffende rubrieknummer
+// wordt gebruikt in: catalogus.php, veilen.php
 function HaalRubriekNaamOp($id)
 {
     try {
@@ -1309,6 +1289,8 @@ function HaalRubriekNaamOp($id)
     }
 } 
 
+// deze functie haalt de rubrieken op die in de superrubriek vallen
+// wordt gebruikt in: catalogus.php, veilen.php
 function HaalRubriekop($id)
 {
     try {
@@ -1331,6 +1313,7 @@ function HaalRubriekop($id)
         echo "er ging iets mis error: {$e->getMessage()}";
     }
 } 
+
 
 function DirectorieVindenVeilen(){
 
@@ -1445,31 +1428,31 @@ function gebruikersvinden($gebruikersnaam){
         foreach ( $resultaten as $resultaat ){
             $teller ++;
             $verkoper = "error";
-            $geblokeerd = "error";
+            $geblokkeerd = "error";
             if ($resultaat['verkoper'] == 1){
                 $verkoper = "Ja";
             }else{
                 $verkoper = "nee";
             }
-            if ($resultaat['geblokeerd'] == 1){
-                $geblokeerd = "Ja";
+            if ($resultaat['geblokkeerd'] == 1){
+                $geblokkeerd = "Ja";
             }else{
-                $geblokeerd = "Nee";
+                $geblokkeerd = "Nee";
             }
             echo '<tr>
                     <th scope="row">'.$teller.'</th>
                     <td>'.$resultaat['gebruikersnaam'].'</td>
                     <td>'.$resultaat['voornaam'].'</td>
                     <td>'.$resultaat['achternaam'].'</td>
-                  
+
                     <td>'.$resultaat['postcode'].'</td>
                     <td>'.$resultaat['plaatsnaam'].'</td>
                     <td>'.$resultaat['land'].'</td>
                     <td>'.$resultaat['email'].'</td> 
                     <td>'.$verkoper.'</td>       
-                    <td>'.$geblokeerd.'</td> 
+                    <td>'.$geblokkeerd.'</td> 
                       ';
-            blokeren($geblokeerd, $teller, $resultaat['gebruikersnaam'] ); 
+            blokeren($geblokkeerd, $teller, $resultaat['gebruikersnaam'] ); 
             echo ' </tr>';
         }
     }
@@ -1479,14 +1462,14 @@ function gebruikersvinden($gebruikersnaam){
 }
 
 //deze functie regelt de blokkeer/deblokkeer knop die rechts naast de gebruiker staat in de beheeromgeving
-function blokeren($geblokeerd, $teller, $gebruiker){
-    if ($geblokeerd == "Ja"){
+function blokeren($geblokkeerd, $teller, $gebruiker){
+    if ($geblokkeerd == "Ja"){
         echo ' <td>   
-    <a class="btn btn-primary" href="overzichtGebruikers.php?id='.$teller.'&naam='.$gebruiker.'" role="button">Deblokeer</a> 
+    <a class="btn btn-primary" href="overzichtGebruikers.php?id='.$teller.'&naam='.$gebruiker.'" role="button">Deblokkeer</a> 
    </td> ';
-    } else if ($geblokeerd == "Nee"){
+    } else if ($geblokkeerd == "Nee"){
         echo ' <td>
-    <a class="btn btn-primary" href="overzichtGebruikers.php?id='.$teller.'&naam='.$gebruiker.'" role="button">Blokeer</a>
+    <a class="btn btn-primary" href="overzichtGebruikers.php?id='.$teller.'&naam='.$gebruiker.'" role="button">Blokkeer</a>
       </td>  ';
     }
 }
@@ -1496,11 +1479,11 @@ function gebruikerblok(){
     try {
         require('core/dbconnection.php');
         $blokeren = $dbh ->prepare (" UPDATE Gebruiker
-                                    SET geblokeerd = 1
+                                    SET geblokkeerd = 1
                                     WHERE gebruikersnaam like :gebruiker
                                     ");
         $deblokeren = $dbh ->prepare (" UPDATE Gebruiker
-                                    SET geblokeerd = 0
+                                    SET geblokkeerd = 0
                                     WHERE gebruikersnaam like :gebruiker
                                     ");
         $gebruiker = $dbh ->prepare (" SELECT * FROM Gebruiker where gebruikersnaam like :gebruiker
@@ -1511,14 +1494,14 @@ function gebruikerblok(){
             )
         );
         $resultaat =  $gebruiker ->fetchAll(PDO::FETCH_ASSOC);
-        if ($resultaat[0]['geblokeerd'] == 1){
+        if ($resultaat[0]['geblokkeerd'] == 1){
             StuurGebruikerDeblockedEmail($resultaat[0]['gebruikersnaam']);
             $deblokeren -> execute(
                 array(
                     ':gebruiker' => $resultaat[0]['gebruikersnaam'],
                 )
             );
-        }else if ($resultaat[0]['geblokeerd'] == 0){
+        }else if ($resultaat[0]['geblokkeerd'] == 0){
             StuurGebruikerBlockedEmail($resultaat[0]['gebruikersnaam']);
             $blokeren -> execute(
                 array(
@@ -1554,15 +1537,15 @@ function StuurGebruikerBlockedEmail($gebruikersnaam)
         $to = $records['email'];
         $subject = "Account geblokkeerd";
         $message = 'Beste  '.$records['voornaam'].',
-                 
-                  
+
+
          Helaas moeten wij u op de hoogte stellen dat uw account is geblokkeerd. Dit kan meerdere redenen hebben.
          Om meer informatie te krijgen kunt u contact met ons opnemen door een mail te sturen naar: EenmaalAndermaal@gmail.com
          Vermeld in deze mail uw gebruikersnaam.
          Wij hopen u zodoende genoeg informatie te hebben gegeven.
-                       
+
          Met vriendelijke groeten,
-                        
+
          EenmaalAndermaal  
          ';
         $headers = "From:" .$from;
@@ -1595,12 +1578,12 @@ function StuurGebruikerDeblockedEmail($gebruikersnaam)
         $to = $records['email'];
         $subject = "Account gedeblokkeerd";
         $message = ' Beste '.$records['voornaam'].',
-                 
+
         Uw account is gedeblokkeerd. U kunt nu weer inloggen.
         Wij hopen u zodoende genoeg informatie te hebben gegeven.
-                       
+
         Met vriendelijke groeten,
-                        
+
         EenmaalAndermaal     
         ';
         $headers = "From:" .$from;
@@ -1613,7 +1596,7 @@ function StuurGebruikerDeblockedEmail($gebruikersnaam)
 
 
 function veilingenVinden($veilingnaam){
-    $teller =0;
+    $teller = 0 ;
     try {
         require('core/dbconnection.php');
         $veilingen = $dbh ->prepare ("
@@ -1626,7 +1609,7 @@ function veilingenVinden($veilingnaam){
         );
         $veiling = $veilingen ->fetchAll(PDO::FETCH_ASSOC);
         foreach ( $veiling as $resultaat ){
-          $teller++;
+            $teller++;
             $geblokkeerd = "error";
             if ($resultaat['geblokkeerd'] == 1){
                 $geblokkeerd = "Ja";
@@ -1662,11 +1645,11 @@ function veilingenVinden($veilingnaam){
 function veilingblokeren($geblokkeerd, $voorwerpnummer, $titel){
     if ($geblokkeerd == "Ja"){
         echo ' <td>   
-    <a class="btn btn-primary" href="overzichtVeilingen.php?voorwerpnummer='.$voorwerpnummer.'&naam='.$titel.'" role="button">Deblokeer</a> 
+    <a class="btn btn-primary" href="overzichtVeilingen.php?voorwerpnummer='.$voorwerpnummer.'&naam='.$titel.'" role="button">Deblokkeer</a> 
    </td> ';
     } else if ($geblokkeerd == "Nee"){
         echo ' <td>
-    <a class="btn btn-primary" href="overzichtVeilingen.php?voorwerpnummer='.$voorwerpnummer.'&naam='.$titel.'" role="button">Blokeer</a>
+    <a class="btn btn-primary" href="overzichtVeilingen.php?voorwerpnummer='.$voorwerpnummer.'&naam='.$titel.'" role="button">Blokkeer</a>
       </td>  ';
     }
 }
@@ -1698,7 +1681,7 @@ function veilingblok($voorwerpnummer){
         );
 
         $resultaat = $veiling ->fetch(PDO::FETCH_ASSOC);
-        
+
         if ($resultaat['geblokkeerd'] == 1){
             $deblokeren -> execute(
                 array(
@@ -1712,7 +1695,7 @@ function veilingblok($voorwerpnummer){
 
             $veiling = HaalBiederEnVerkoperOp($voorwerpnummer, $resultaat['verkoper']);
             VerstuurVeilingBlockedMail($veiling, true);
-            
+
             if(count($veiling) == 3){
                 VerstuurVeilingBlockedMail($veiling, false);
             }
@@ -1728,7 +1711,7 @@ function veilingblok($voorwerpnummer){
     }
 }
 
-function checkGEBLOKEERD($gebruiker){
+function checkGEBLOKKEERD($gebruiker){
     try {
         require('core/dbconnection.php');
         $geblokeerd = $dbh ->prepare ("
@@ -1742,12 +1725,12 @@ function checkGEBLOKEERD($gebruiker){
             )
         );
 
-        while ($resultaat = $geblokeerd ->fetchAll(PDO::FETCH_ASSOC)){
-            if ($resultaat[0]['geblokeerd'] == 1){
+        while ($resultaat = $geblokkeerd ->fetchAll(PDO::FETCH_ASSOC)){
+            if ($resultaat[0]['geblokkeerd'] == 1){
                 return true;
-            }else if ($resultaat[0]['geblokeerd'] == 0){
+            }else if ($resultaat[0]['geblokkeerd'] == 0){
                 return false;
-            } else if (empty($resultaat[0]['geblokeerd'])){
+            } else if (empty($resultaat[0]['geblokkeerd'])){
                 //header("Location: includes/404error.php");
             }
         }
@@ -1771,7 +1754,7 @@ function checkBEHEERDER ($gebruiker){
             )
         );
 
-        while ($resultaat = $geblokeerd ->fetchAll(PDO::FETCH_ASSOC)){
+        while ($resultaat = $geblokkeerd ->fetchAll(PDO::FETCH_ASSOC)){
             if ($resultaat[0]['beheerder'] == 1){
                 return true;
             }else if ($resultaat[0]['beheerder'] == 0){  
@@ -1788,7 +1771,7 @@ function checkBEHEERDER ($gebruiker){
 }
 
 function veilingeindberekenen ($voorwerpnummer){
-       // de overgebleven dagen die de veiling nog open is.
+    // de overgebleven dagen die de veiling nog open is.
     try {
         require('core/dbconnection.php');
         $informatie = $dbh -> prepare("
@@ -1810,16 +1793,16 @@ function veilingeindberekenen ($voorwerpnummer){
         $informatie -> execute(
             array(
                 ':voorwerpnr' => $voorwerpnummer
-              
+
             )
         );
-      
+
         $einddatum -> execute (
             array (
                 ':voorwerpnr' => $voorwerpnummer,
                 ':voorwerpnr1' => $voorwerpnummer,
                 ':voorwerpnr2' => $voorwerpnummer
-              
+
             )
         );
     }
@@ -1882,28 +1865,24 @@ function HaalBiederEnVerkoperOp($voorwerpnr, $verkoper){
   
 }
 
+
 function VerkoopVeiling($voorwerpnr){
   
   try {
       require('core/dbconnection.php');      
-      $sqlUpdate = $dbh ->prepare ("
-        UPDATE Voorwerp
-        SET koper = (SELECT top 1 gebruikersnaam FROM bod WHERE voorwerpnr = :voorwerpnr ORDER BY CONVERT(DECIMAL(9,2), euro) DESC),
-                    verkoopprijs = (SELECT top 1 euro FROM bod WHERE voorwerpnr = :voorwerpnr1 ORDER BY CONVERT(DECIMAL(9,2), euro) DESC),
-                    veilinggesloten = 1
-        WHERE voorwerpnr = :voorwerpnr2
-      ");
-
+      $sqlUpdate = $dbh ->prepare ("UPDATE Voorwerp
+                                    SET koper = (select top 1 gebruikersnaam from bod where voorwerpnr = :voorwerpnr order by convert(decimal(9,2), euro) desc),
+                                        verkoopprijs = (select top 1 euro from bod where voorwerpnr = :voorwerpnr1 order by convert(decimal(9,2), euro) desc),
+                                        veilinggesloten = 1
+                                    WHERE voorwerpnr = :voorwerpnr2");      
       $sqlUpdate-> execute(
           array(
               ':voorwerpnr' => $voorwerpnr,
               ':voorwerpnr1' => $voorwerpnr,
               ':voorwerpnr2' => $voorwerpnr
-          )
-      );
+          ));
               
-  }
-  catch (PDOexception $e) {
+  } catch (PDOexception $e) {
       "er ging iets mis error: {$e->getMessage()}";      
   }  
 }
@@ -1934,81 +1913,131 @@ function VerwijderVeiling($voorwerpnr){
   }  
 }
 
+// deze functie verstuurd een mail naar de verkoper en hoogstebieder dat het voorwerp is verkocht
+// wordt gebruikt in: mijnadvertenties.php
 function VerstuurVerkoopMail($veiling){
-$verkoper = $veiling[1]['email'];
-$koper = $veiling[0]['email'];
-    
-        ini_set( 'display_errors', 1 );
-        error_reporting( E_ALL );
-        $from = "no-reply@iconcepts.nl";
-        $to = $verkoper;
-        $subject = "EenmaalAndermaal u heeft een voorwerp Verkocht!";
-        $message = emailVerkocht($veiling);
-        $headers = 'MIME-Version: 1.0' . "\r\n";
-        $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-        $headers .= "From:" .$from;
+    $verkoper = $veiling[1]['email'];
+    $koper = $veiling[0]['email'];
 
-        mail($to,$subject,$message, $headers);
-    
-        ini_set( 'display_errors', 1 );
-        error_reporting( E_ALL );
-        $from = "no-reply@iconcepts.nl";
-        $to = $koper;
-        $subject = "EenmaalAndermaal u heeft een voorwerp Gekocht!";
-        $message = emailGekocht($veiling);
-
-        $headers = 'MIME-Version: 1.0' . "\r\n";
-        $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-        $headers .= "From:" .$from;
-
-        mail($to,$subject,$message, $headers);
-     
-}
-
-function VerstuurVeilingBlockedMail($veiling, $ontvanger){            
-  $voorwerp = 1;
-  $verkoper = 0;
-  if(count($veiling) == 3){
-    $verkoper = 1;
-    $voorwerp = 2;  
-  }
-  
-  $verkopermail = $veiling[$verkoper]['email'];
-  $kopermail = $veiling[0]['email'];
-  
-  if($ontvanger){
     ini_set( 'display_errors', 1 );
     error_reporting( E_ALL );
     $from = "no-reply@iconcepts.nl";
-    $to = $verkopermail;
-    $subject = "EenmaalAndermaal uw veiling is geblokeerd";
-    $message = emailVeilingBlockedVerkoper($veiling, $voorwerp);
-  
+    $to = $verkoper;
+    $subject = "EenmaalAndermaal u heeft een voorwerp Verkocht!";
+    $message = emailVerkocht($veiling);
     $headers = 'MIME-Version: 1.0' . "\r\n";
     $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
     $headers .= "From:" .$from;
-  
+
     mail($to,$subject,$message, $headers);
-  }  
-  
-  if($ontvanger == false){
+
     ini_set( 'display_errors', 1 );
     error_reporting( E_ALL );
     $from = "no-reply@iconcepts.nl";
-    $to = $kopermail;
-    $subject = "EenmaalAndermaal geboden voorwerp is geblokeerd";
-    $message = emailVeilingBlockedKoper($veiling);
-  
+    $to = $koper;
+    $subject = "EenmaalAndermaal u heeft een voorwerp Gekocht!";
+    $message = emailGekocht($veiling);
+
     $headers = 'MIME-Version: 1.0' . "\r\n";
     $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
     $headers .= "From:" .$from;
-  
-    mail($to,$subject,$message, $headers);  
-  }
+
+    mail($to,$subject,$message, $headers);
+
 }
 
+// deze functie verstuurd een mail naar de verkoper en hoogstebieder dat de advertentie is geblokkeerd
+// wordt gebruikt in: overzichtveilingen.php
+function VerstuurVeilingBlockedMail($veiling, $ontvanger){            
+    $voorwerp = 1;
+    $verkoper = 0;
+    if(count($veiling) == 3){
+        $verkoper = 1;
+        $voorwerp = 2;  
+    }
 
+    $verkopermail = $veiling[$verkoper]['email'];
+    $kopermail = $veiling[0]['email'];
+
+    if($ontvanger){
+        ini_set( 'display_errors', 1 );
+        error_reporting( E_ALL );
+        $from = "no-reply@iconcepts.nl";
+        $to = $verkopermail;
+        $subject = "EenmaalAndermaal uw veiling is geblokkeerd";
+        $message = emailVeilingBlockedVerkoper($veiling, $voorwerp);
+
+        $headers = 'MIME-Version: 1.0' . "\r\n";
+        $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+        $headers .= "From:" .$from;
+
+        mail($to,$subject,$message, $headers);
+    }  
+
+    if($ontvanger == false){
+        ini_set( 'display_errors', 1 );
+        error_reporting( E_ALL );
+        $from = "no-reply@iconcepts.nl";
+        $to = $kopermail;
+        $subject = "EenmaalAndermaal geboden voorwerp is geblokkeerd";
+        $message = emailVeilingBlockedKoper($veiling);
+
+        $headers = 'MIME-Version: 1.0' . "\r\n";
+        $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+        $headers .= "From:" .$from;
+
+        mail($to,$subject,$message, $headers);  
+    }
+}
+
+// deze functie verstuurd een mail naar de verkoper en hoogstebieder dat het voorwerp handmatig is verwijderd door de verkoper
+// wordt gebruikt in: mijnadvertenties.php
 function VerstuurVerwijderMail($veiling, $ontvanger){
+    $voorwerp = 1;
+    $verkoper = 0;
+    if(count($veiling) == 3){
+        $voorwerp = 2;  
+        $verkoper = 1;
+    }
+    $verkopermail = $veiling[$verkoper]['email'];
+    $kopermail = $veiling[0]['email'];
+
+    if($ontvanger == false){
+        ini_set( 'display_errors', 1 );
+        error_reporting( E_ALL );
+        $from = "no-reply@iconcepts.nl";
+        $to = $verkopermail;
+        $subject = "EenmaalAndermaal uw voorwerp is verwijderd";
+        $message = EmailVerwijderdVerkoper($veiling, $voorwerp);
+
+        $headers = 'MIME-Version: 1.0' . "\r\n";
+        $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+        $headers .= "From:" .$from;
+
+        mail($to,$subject,$message, $headers);
+    }  
+  
+
+    if($ontvanger){
+        ini_set( 'display_errors', 1 );
+        error_reporting( E_ALL );
+        $from = "no-reply@iconcepts.nl";
+        $to = $kopermail;
+        $subject = "EenmaalAndermaal geboden voorwerp is verwijderd";
+        $message = emailVeilingBlockedKoper($veiling) ;
+
+        $headers = 'MIME-Version: 1.0' . "\r\n";
+        $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+        $headers .= "From:" .$from;
+
+        mail($to,$subject,$message, $headers);  
+    }
+
+}
+
+// deze functie verstuurd een mail naar de verkoper waar de advertentie over datum is
+// wordt gebruikt in:
+function VerstuurEindeLooptijdMail($veiling, $ontvanger){
   $voorwerp = 1;
   $verkoper = 0;
   if(count($veiling) == 3){
@@ -2024,7 +2053,7 @@ function VerstuurVerwijderMail($veiling, $ontvanger){
     $from = "no-reply@iconcepts.nl";
     $to = $verkopermail;
     $subject = "EenmaalAndermaal uw voorwerp is verwijderd";
-    $message = EmailVerwijderdVerkoper($veiling, $voorwerp);
+    $message = emailEindeLooptijdVerkoper($veiling, $voorwerp);
   
     $headers = 'MIME-Version: 1.0' . "\r\n";
     $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
@@ -2039,17 +2068,18 @@ function VerstuurVerwijderMail($veiling, $ontvanger){
     $from = "no-reply@iconcepts.nl";
     $to = $kopermail;
     $subject = "EenmaalAndermaal geboden voorwerp is verwijderd";
-    $message = emailVeilingBlockedKoper($veiling) ;
+    $message = emailEindeLooptijdKoper($veiling);
   
     $headers = 'MIME-Version: 1.0' . "\r\n";
     $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
     $headers .= "From:" .$from;
   
     mail($to,$subject,$message, $headers);  
-  }
-  
+  }  
 }
 
+// deze functie voegt de waardes toe van een beoordeling
+// wordt gebruikt in: rating.php
 function updateRecentie($waarde, $verkoper) {
     try {
         require('core/dbconnection.php');
@@ -2070,6 +2100,8 @@ function updateRecentie($waarde, $verkoper) {
     }
 }
 
+// deze functie haalt het aantal recenties op en het gemiddelde
+// wordt gebruikt in: advertentie.php
 function haalRecentieOp($verkoper) {
     try {
         require('core/dbconnection.php');
@@ -2081,16 +2113,18 @@ function haalRecentieOp($verkoper) {
 
         $sqlSelect->execute(
             array(      
-              ':verkoper' => $verkoper,      
-              ':verkoper2' => $verkoper
+                ':verkoper' => $verkoper,      
+                ':verkoper2' => $verkoper
             ));
 
-            $records = $sqlSelect ->fetchAll(PDO::FETCH_ASSOC);
-            
-            return $records;
+        $records = $sqlSelect ->fetchAll(PDO::FETCH_ASSOC);
+
+        return $records;
     } catch (PDOexception $e) {
         echo "er ging iets mis error2: {$e->getMessage()}";
     }
 }
+
+
 
 ?>

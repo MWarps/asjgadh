@@ -75,53 +75,51 @@ function veilingblokkeren($geblokkeerd, $voorwerpnummer, $titel){
 
 // CommentaarNodig
 // verplaatst naar beheerderFuncties.php
-// nog een keer updaten met de versie uit functies.php
+// nog een keer updaten met de versie uit functies.php - Gedaan
 function veilingblok($voorwerpnummer){
     try {
         require('core/dbconnection.php');
 
-        $blokkeren = $dbh ->prepare ("
-          UPDATE Voorwerp
-          SET geblokkeerd = 1, blokkeerdatum = CURRENT_TIMESTAMP
-          WHERE voorwerpnr LIKE :voorwerpnummer
-        ");
-
-        $deblokkeren = $dbh ->prepare ("
-          UPDATE Voorwerp
-          SET geblokkeerd = 0
-          WHERE voorwerpnr LIKE :voorwerpnummer
-        ");
-
-        $veiling = $dbh ->prepare ("
-          SELECT * FROM Voorwerp WHERE voorwerpnr LIKE :voorwerpnummer
-        ");
-
+        $blokeren = $dbh ->prepare (" UPDATE Voorwerp
+                                    SET geblokkeerd = 1, blokkeerdatum = CURRENT_TIMESTAMP
+                                    WHERE voorwerpnr like :voorwerpnummer
+                                    ");
+        $deblokeren = $dbh ->prepare (" UPDATE Voorwerp
+                                    SET geblokkeerd = 0
+                                    WHERE voorwerpnr like :voorwerpnummer
+                                    ");
+        $veiling = $dbh ->prepare (" SELECT * FROM Voorwerp where voorwerpnr like :voorwerpnummer
+                                    ");
         $veiling -> execute(
             array(
                 ':voorwerpnummer' => $voorwerpnummer,
             )
         );
 
-        $resultaat = $veiling ->fetchAll(PDO::FETCH_ASSOC);
-        if ($resultaat[0]['geblokkeerd'] == 1){
-            $deblokkeren -> execute(
+        $resultaat = $veiling ->fetch(PDO::FETCH_ASSOC);
+        
+        if ($resultaat['geblokkeerd'] == 1){
+            $deblokeren -> execute(
                 array(
-                    ':voorwerpnummer' => $resultaat[0]['voorwerpnr'],
-                )
-            );
-            veilingeindBerekenen ($resultaat[0]['voorwerpnr']);
-        }else if ($resultaat[0]['geblokkeerd'] == 0){
-
-            //Ik denk dat het hier mis gaat en dat ie verkoper niet kent, maar geen idee wat ik erdan neer moet gooien want &SESSION[Gebruikersnaam] stuff werkt ook niet lijkt me.
-            $veiling = HaalBiederEnVerkoperOp($voorwerpnummer, $verkoper);
-            VerstuurVeilingBlockedMail($veiling, true);
-            VerstuurVeilingBlockedMail($veiling, false);
-            $blokkeren -> execute(
-                array(
-                    ':voorwerpnummer' => $resultaat[0]['voorwerpnr'],
-                )
-            );
+                    ':voorwerpnummer' => $resultaat['voorwerpnr'],
+                ));
+                
+            veilingeindberekenen ($resultaat['voorwerpnr']);
         }
+        else if ($resultaat['geblokkeerd'] == 0){
+
+            $veiling = HaalBiederEnVerkoperOp($voorwerpnummer, $resultaat['verkoper']);
+            VerstuurVeilingBlockedMail($veiling, true);
+            
+            if(count($veiling) == 3){
+            VerstuurVeilingBlockedMail($veiling, false);
+          }
+            $blokeren -> execute(
+                array(
+                    ':voorwerpnummer' => $resultaat['voorwerpnr']
+                ));
+        }
+
 
     } catch (PDOexception $e) {
         echo "er ging iets mis error: {$e->getMessage()}";
