@@ -53,7 +53,6 @@ if (checkBEHEERDER ($_SESSION['gebruikersnaam']) == true){     // veranderen naa
                         <th scope="col">Gebruikersnaam</th>
                         <th scope="col">Voornaam</th>
                         <th scope="col">Achternaam</th>
-                   <!---     <th scope="col">Geslacht</th>-->
                         <th scope="col">Postcode</th>
                         <th scope="col">Plaatsnaam</th>
                         <th scope="col">Land</th>
@@ -66,6 +65,7 @@ if (checkBEHEERDER ($_SESSION['gebruikersnaam']) == true){     // veranderen naa
                 <tbody>
                     <?php
     if (isset($_POST['zoeken'])){
+        // hier worden alle gebruikers afgedrukt in een tabel die overeenkomst hadden met de gegeven zoek waarde
         gebruikersvinden($gebruikersnaam); 
     }
                     ?>
@@ -73,10 +73,10 @@ if (checkBEHEERDER ($_SESSION['gebruikersnaam']) == true){     // veranderen naa
             </table>
         </div>
     </div>
-</div> <!--/.container-->
+</div> 
 <?php
 }else{
     include 'includes/404error.php';
 }
-//include 'includes/footer-fixed.php'
+
 ?>

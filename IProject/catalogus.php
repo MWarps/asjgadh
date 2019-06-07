@@ -8,6 +8,7 @@ include 'includes/header.php';
 $pagina = 'catalogus.php';
 //$_SESSION['catalogus'] = true;
 
+
 if (!isset($_SESSION['catogorie'])){
   $_SESSION['catogorie'] = array("Home"=>"-1");
 }
@@ -34,12 +35,18 @@ if(isset($_GET['id'])){
         <div class="col-md-3">
             <div class="card bg-light mb-3 h-100">
                 <div class="card-header bg-flame text-white text-uppercase"><i class="fa fa-list"></i> categorie&euml;n </div>
-                <?php directorieVinden($pagina); ?>
+                <?php 
+                // hier worden de catogorieen opgehaald om weer te geven in de rubrieken boom
+                directorieVinden($pagina); 
+                ?> 
             </div>        
         </div>
         <div class="col-md-9">
             <div class="row">
-                <?php haalAdvertentieOp($_SESSION['catogorie']['id']) ?>
+                <?php 
+                // haal de bijbohrende advertenties op
+                haalAdvertentieOp($_SESSION['catogorie']['id']);
+                ?>
             </div> 
         </div>  
     </div>

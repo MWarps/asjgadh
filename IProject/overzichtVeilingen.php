@@ -70,6 +70,8 @@ if (isset( $_GET['voorwerpnummer'] ) ){
                 <tbody>
                     <?php
     if (isset($_POST['veilingzoeken'])){
+        // hier worden de veilingen afgedrukt in tabel voorm 
+        // waarbij de titel overeenkomst heeft met de zoekopdracht.
         veilingenVinden($veilingnaam);
     }
                     ?>

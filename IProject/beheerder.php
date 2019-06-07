@@ -4,8 +4,10 @@ gevalideerd op 04/06/2019 door Merlijn
 validator: https://phpcodechecker.com/
 geen problemen gevonden
 */
+
+// controleerd of de persoon is ingelogd beheerders rechten heeft 
 include 'includes/header.php';
-if (checkBEHEERDER ($_SESSION['gebruikersnaam']) == true){     // veranderen naar admin variabel. 
+if (checkBEHEERDER ($_SESSION['gebruikersnaam']) == true){  
 ?>
 
 <div class="container">

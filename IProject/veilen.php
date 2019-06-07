@@ -20,18 +20,18 @@ if(!empty(gegevensIngevuldVerkoper($_SESSION['gebruikersnaam']))){
 }
 
 if (isset($_SESSION['gebruikersnaam']) && $VerkoperValidatie == false){
-  
- if (!isset($_SESSION['catogorieVeilen'])){
-   $_SESSION['catogorieVeilen'] = array("Home"=>"-1");
- }
 
- if(isset($_GET['id'])){
-    $_SESSION['catogorie']['id'] = $_GET['id'];
- }
+    if (!isset($_SESSION['catogorieVeilen'])){
+        $_SESSION['catogorieVeilen'] = array("Home"=>"-1");
+    }
 
- if(isset($_POST['volgende'])){
-    $melding = true;  
- }
+    if(isset($_GET['id'])){
+        $_SESSION['catogorie']['id'] = $_GET['id'];
+    }
+
+    if(isset($_POST['volgende'])){
+        $melding = true;  
+    }
 
 ?>
 
@@ -42,24 +42,31 @@ if (isset($_SESSION['gebruikersnaam']) && $VerkoperValidatie == false){
                 <h1 class="h3 my-4 text-center "> Kies een rubriek! </h1>
                 <p>Kies een rubriek om verder te gaan met het veilen van uw product.</p>
                 <?php 
-                if($melding){
-                    echo  '<div class="form-row">
+    if($melding){
+        echo  '<div class="form-row">
                                 <div class="alert alert-warning" role="alert">
                                     <strong>Kies een subrubriek!</strong>
                                 </div>
                           </div>';
-                        }
+    }
                 ?>     
                 <div class="form-row">                             
-                          <nav aria-label="breadcrumb">
-                              <ol class="breadcrumb">
-                                  <?php catogorieSoort($pagina); ?>
-                              </ol>
-                          </nav>                      
-                  <div class="card bg-light card-breedte">
-                      <div class="card-header bg-flame text-white text-uppercase"><i class="fa fa-list"></i> categorie&euml;n </div>
-                      <?php DirectorieVindenVeilen(); ?>
-                  </div>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+
+                            <?php
+    // laad de breadcrum in zodat je gebruiker terug uit in de rubrieken boom kan
+    catogorieSoort($pagina); 
+                            ?>
+                        </ol>
+                    </nav>                      
+                    <div class="card bg-light card-breedte">
+                        <div class="card-header bg-flame text-white text-uppercase"><i class="fa fa-list"></i> categorie&euml;n </div>
+                        <?php 
+    // rubrieken laden waaruit de gebruiker kan kiezen
+    DirectorieVindenVeilen(); 
+                        ?>
+                    </div>
                 </div>
             </form>
         </div>
@@ -69,7 +76,7 @@ if (isset($_SESSION['gebruikersnaam']) && $VerkoperValidatie == false){
 <?php
 }
 else{
-  include 'includes/404error.php';
+    include 'includes/404error.php';
 }
 include 'includes/footer.php';
 ?>

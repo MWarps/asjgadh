@@ -40,6 +40,7 @@ if (checkBEHEERDER ($_SESSION['gebruikersnaam']) == true){
                     </thead>
                     <tbody>
                     <?php
+                    // worden gegevens over de verkoper aanvragen opgevraagd.
                         verificatiesVinden();
                     ?>
                     </tbody>
@@ -47,7 +48,7 @@ if (checkBEHEERDER ($_SESSION['gebruikersnaam']) == true){
             </div>
         </div>
         
-    </div> <!--/.container-->
+    </div>
     <?php
 }
 else{

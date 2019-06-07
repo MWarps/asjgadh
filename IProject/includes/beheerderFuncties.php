@@ -7,7 +7,7 @@
 
 include 'brief.php';
 
-// CommentaarNodig
+// Wordt gebruikt om alle gebruikers optehalen waarvan de gebruikersnaam overeenkomt met de invoer.
 // verplaatst naar beheerderFuncties.php
 function veilingenVinden($veilingnaam){
     $teller =0;
@@ -59,7 +59,8 @@ function veilingenVinden($veilingnaam){
     }
 }
 
-// CommentaarNodig
+// hier wordt de knop gemaakt voor blokeren en de-blokeren 
+// welke knop wordt getoont ligt aan de status van die Gebruiker.
 // verplaatst naar beheerderFuncties.php
 function veilingblokkeren($geblokkeerd, $voorwerpnummer, $titel){
     if ($geblokkeerd == "Ja"){
@@ -73,7 +74,7 @@ function veilingblokkeren($geblokkeerd, $voorwerpnummer, $titel){
     }
 }
 
-// CommentaarNodig
+// hier worden veilingen geblokkeerd en gedeblokeerd.
 // verplaatst naar beheerderFuncties.php
 // nog een keer updaten met de versie uit functies.php - Gedaan
 function veilingblok($voorwerpnummer){
