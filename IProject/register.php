@@ -6,25 +6,29 @@ geen problemen gevonden
 */
 include 'includes/header.php';
 
-if (!isset($_SESSION['gebruikersnaam'])) {
+if(!isset($_SESSION['gebruikersnaam'])){    
+    $type = 'email'; 
     $Ebestaat = false;
     $mailVerstuurd = false;
-    $type = 'email';
 
-    if (isset($_POST['registreren'])) {
+    if (isset($_POST['registreren'])){
         $email = $_POST['email'];
-
+        $gebruiker = bestaatEmailadres($email);
+        $validatie = bestaatValidatie($email, $type);
+        
+      if(isset($gebruiker['email']) || isset($validatie['email'])) {
+      $Ebestaat = true; 
+     }
+       
         // controleert of emailadres bestaat
-        if (!empty(bestaatEmailadres($email)) && empty(bestaatValidatie($email, $type))) {
-            $Ebestaat = True;
-        } else {
-            $mailVerstuurd = true;
-
+        if(empty($gebruiker) && empty($validatie)) {  
+          $mailVerstuurd = true;        
             VerificatieCodeProcedure($email, $type);
             $code = HaalVerficatiecodeOp($email, $type);
-
-            StuurRegistreerEmail($email, $code['verificatiecode']);
+                        
+            StuurRegistreerEmail($email, $code['verificatiecode']);                    
         }
+      
     }
     ?>
 

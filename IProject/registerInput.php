@@ -39,11 +39,13 @@ if (isset($_GET['id']) || isset($_POST['rVolgende'])) {
         $rLand = $_POST['rLand'];
         $rGeslacht = $_POST['rGeslacht'];
 
-        $input = array($rGebruikersnaam, $rVoornaam, $rAchternaam, $rGeslacht,
-            $rWachtwoord, $rAdres1, $rAdres2, $rPostcode, $rPlaats, $rLand,
-            $rGeboorte, $rEmail, $rGeheimV, $rGeheimA);
-
-        array_push($input, 0);
+    array_push($input, 0);
+    
+    $gebruikersnaam = bestaatGebruikersnaam($rGebruikersnaam);
+   // controleert of gebruikersnaam bestaat
+  if(isset($gebruikersnaam)) {
+      $Gbestaat = True;
+      }
 
         // controleert of gebruikersnaam bestaat
         if (!empty(bestaatGebruikersnaam($rGebruikersnaam))) {

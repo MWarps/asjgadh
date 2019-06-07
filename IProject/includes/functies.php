@@ -698,7 +698,7 @@ function haalCodeOp($id)
     }
 }
 
-}
+
 
 // deze functie verwijderd de verificatie code
 // wordt gebruikt in: verkoperValidatie.php en register.php
@@ -889,7 +889,7 @@ function bestaatValidatie($email, $type)
     try {
         require('core/dbconnection.php');
         $sqlSelect = $dbh->prepare("
-          SELECT email FROM Verificatie WHERE email =:email AND type = :type
+          SELECT * FROM Verificatie WHERE email =:email AND type = :type
         ");
 
         $sqlSelect->execute(
@@ -911,8 +911,7 @@ function bestaatEmailadres($email)
 {
     try {
         require('core/dbconnection.php');
-        $sqlSelect = $dbh->prepare("
-          SELECT email FROM Gebruiker WHERE email=:email
+        $sqlSelect = $dbh->prepare(" SELECT * FROM Gebruiker WHERE email=:email
         ");
 
         $sqlSelect->execute(
@@ -920,6 +919,7 @@ function bestaatEmailadres($email)
                 ':email' => $email,
             )
         );
+        
         $records = $sqlSelect->fetch(PDO::FETCH_ASSOC);
         return $records;
     } catch (PDOexception $e) {
@@ -1739,7 +1739,7 @@ function checkBEHEERDER($gebruiker)
 {
     try {
         require('core/dbconnection.php');
-        $geblokeerd = $dbh->prepare(" 
+        $geblokkeerd = $dbh ->prepare (" 
           SELECT gebruikersnaam, beheerder FROM Gebruiker WHERE gebruikersnaam LIKE :gebruiker 
         ");
 
