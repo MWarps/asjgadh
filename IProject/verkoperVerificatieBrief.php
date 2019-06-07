@@ -49,8 +49,10 @@ if (checkBEHEERDER ($_SESSION['gebruikersnaam']) == true){
         
     </div> <!--/.container-->
     <?php
-}else{
+}
+else{
     include 'includes/404error.php';
 }
-//include 'includes/footer-fixed.php'
+
+    include 'includes/footer.php'
 ?>

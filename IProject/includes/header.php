@@ -27,16 +27,18 @@ if(isset($_SESSION['gebruikersnaam'])){
             $VerkoperValidatie = true;    
         }
     }
+    
+    if (checkGEBLOKKEERD($_SESSION['gebruikersnaam']) == true){
+       // die('je bent geblokeerd die functie');
+        session_unset;
+        session_destroy;
+       header("Location:geblokeerd.php");
+     //  $url = 'geblokeerd.php';
+     //   echo '<script language="javascript">window.location.href ="'.$url.'"</script>';   
+    }
 }
     
-if ( checkGEBLOKEERD($_SESSION['gebruikersnaam']) == true){
-   // die('je bent geblokeerd die functie');
-    session_unset;
-    session_destroy;
-   header("Location:geblokeerd.php");
- //  $url = 'geblokeerd.php';
- //   echo '<script language="javascript">window.location.href ="'.$url.'"</script>';   
-}
+
 ?>
 <!DOCTYPE HTML>
 <html lang="nl">
@@ -61,7 +63,7 @@ if ( checkGEBLOKEERD($_SESSION['gebruikersnaam']) == true){
     <body>          
         <nav class="navbar navbar-expand-lg navbar-light bg-flame">
             <div class="container">
-                <a class="navbar-brand" href="#"><img src="assets/img/EenmaalAndermaal.png" width="40" height="40" title="EenmaalAndermaal" alt="EenmaalAndermaal"></a>
+                <a class="navbar-brand" href="../index.php"><img src="assets/img/EenmaalAndermaal.png" width="40" height="40" title="EenmaalAndermaal" alt="EenmaalAndermaal"></img></a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>

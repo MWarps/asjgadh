@@ -6,7 +6,7 @@ geen problemen gevonden
 */
 include 'includes/header.php';
 $pagina = 'catalogus.php';
-setupCatogorien();
+$_SESSION['catogorie'] = array("Home"=>"-1");
 // Kijkt er geklikt is op de knop uitloggen
 if (isset($_GET['uitlog'])){
     $_SESSION['status'] = $_GET['uitlog'];
@@ -51,7 +51,7 @@ if(isset($_SESSION['status'])){
             <div class="row align-items-center">
               <div class="col">
                         <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
-                          <strong>'.$status.'</strong> U kunt op het kruisje klikken om deze melding te sluiten.
+                          <strong>'.$status.'</strong> U kunt op het kruisje klikken om deze melding te sluiten.</strong>
                           <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                             </button>
@@ -71,14 +71,17 @@ if(isset($_SESSION['status'])){
                   categorie&euml;n 
                 </div>
                 <button class="dropdown-menu card-header bg-orange2 text-white text-uppercase">categorie</button>
-                <?php    directorieVinden($pagina) ?>
+                <?php    directorieVinden($pagina);
+                // Functie voor het vinden van directorie ?>
+
             </div>
         </div>
     <!--/span-->
 
     <div class="col-md-9">
     <div class="row">
-        <?php if (isset($_SESSION['gebruikersnaam'])) {
+        <?php // Controleerd of de gebruiker is ingelogd om de volgende kopjes op te halen.
+        if (isset($_SESSION['gebruikersnaam'])) {
         echo '<button type="button" class="btn btn-secondary btn-sm btn-block">Laatst Bekeken</button>';
          getLaatstBekeken($_SESSION['gebruikersnaam']);
         echo '<button type="button" class="btn btn-secondary btn-sm btn-block">Aanbevolen</button>';
@@ -87,7 +90,7 @@ if(isset($_SESSION['status'])){
         echo '<button type="button" class="btn btn-secondary btn-sm btn-block">Populairste Artikelen</button>';  
           
         getPopulairsteArtikelen();
-         ?>
+        ?>
       </div>
     </div>
 </div><!--/row-->
