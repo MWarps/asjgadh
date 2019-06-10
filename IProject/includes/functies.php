@@ -989,7 +989,7 @@ function StuurRegistreerEmail($email, $code)
 
     mail($to, $subject, $message, $headers);
 }
-/*
+
 // deze functie laad alle verificaties om verkoper te worden die nog niet verzonden zijn. ook wordt het adress en de brief volgens een template vast opgesteld
 // wordt gebruikt in: verkoperVerificatieBrief.php
 function verificatiesVinden()
@@ -1022,8 +1022,8 @@ function verificatiesVinden()
         echo "er ging iets mis error: {$e->getMessage()}";
     }
 }
-*/
-/*
+
+
 //deze functie registreerd dat de brief verzonden is in de database
 // wordt gebruikt in: verkoperVerificatieBrief.php
 function verificatieVerzonden($email)
@@ -1054,7 +1054,7 @@ function fixEmail($email)
 
     return $email;
 }
-*/
+
 // deze functie laat de geslachten zien in een dropdownlist
 // wordt gebruikt in: registreren2.php
 function geslacht()
