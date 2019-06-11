@@ -952,7 +952,7 @@ function landen()
     }
 }
 
-// deze functie stuurt een email naar de gebruiker met een link om het wachtwoord te resetten
+// deze functie stuurt een email naar de gebruiker met een link om het wachtwoord te ften
 // wordt gebruikt in: wachtwoordreset.php
 function StuurWachtwoordResetMailEmail($email, $code)
 {
@@ -1023,6 +1023,7 @@ function verificatiesVinden()
     }
 }
 
+
 //deze functie registreerd dat de brief verzonden is in de database
 // wordt gebruikt in: verkoperVerificatieBrief.php
 function verificatieVerzonden($email)
@@ -1075,46 +1076,6 @@ function geslacht()
             echo '<option value="' . $row['geslacht'] . '">' . $row['geslacht'] . '</option>';
         }
         echo '</select>';// Close your drop down box
-    } catch (PDOexception $e) {
-        echo "er ging iets mis error: {$e->getMessage()}";
-    }
-}
-
-// deze functie stuurt een reset mail naar de gebruiker toe
-// wordt gebruikt in: wachtwoordreset.php
-function emailResetWachtwoord($gebruikersnaam)
-{
-    try {
-        require('core/dbconnection.php');
-        $sqlSelect = $dbh->prepare("
-          SELECT email, voornaam FROM Gebruiker WHERE gebruikersnaam = :gebruikersnaam
-        ");
-
-        $sqlSelect->execute(
-            array(
-                ':gebruikersnaam' => $gebruikersnaam,
-            )
-        );
-        $records = $sqlSelect->fetch(PDO::FETCH_ASSOC);
-
-        ini_set('display_errors', 1);
-        error_reporting(E_ALL);
-        $from = "no-reply@iconcepts.nl";
-        $to = $records['email'];
-        $subject = "Validatie code account registreren";
-        $message = '<h1> Hallo ' . $records['voornaam'] . '</h1>,
-                  <br>
-                  <br>
-                  Bedankt voor het registreren. Hieronder staat de code die ingevoerd
-                  moet worden om het registeren te voltooien:
-                  <br>
-                  <h1>' . rand(1000, 9999) . '
-                  <br>
-                  Als u dit niet bent, wijzig dan uw wachtwoord
-                  en overweeg ook om uw e-mailwachtwoord te wijzigen om uw
-                  accountbeveiliging te garanderen.';
-        $headers = "From:" . $from;
-        mail($to, $subject, $message, $headers);
     } catch (PDOexception $e) {
         echo "er ging iets mis error: {$e->getMessage()}";
     }
@@ -1346,10 +1307,9 @@ function DirectorieVindenVeilen()
             );
 
             $resultaat = $terug->fetchAll(PDO::FETCH_ASSOC);
-            //$_SESSION['rubriek'] = true;     
-            echo '<p class="btn" >Uw gekozen rubriek is: <strong>' . $resultaat[0]['rubrieknaam'] . '<br></strong>
-                   <a class="btn btn-lg bg-flame btn-block mt-1" href="veilen.php?id=' . $resultaat[0]['superrubriek'] . '&naam=' . $resultaat[0]['rubrieknaam'] . '">Vorige</a>
-                   <a class="btn btn-lg bg-flame btn-block mt-1" id="volgende" href=veilenInput.php?id=' . $resultaat[0]['rubrieknummer'] . '&naam=' . $resultaat[0]['rubrieknaam'] . ' name="volgende">Volgende</a>';
+            echo  '<p class="btn" >Uw gekozen rubriek is: <strong>'.$resultaat[0]['rubrieknaam'].'<br></strong>
+                   <a class="btn btn-lg bg-flame btn-block mt-1" href="veilen.php?id='.$resultaat[0]['superrubriek'].'&naam='.$resultaat[0]['rubrieknaam'].'">Vorige</a>
+                   <a class="btn btn-lg bg-flame btn-block mt-1" id="volgende" href=veilenInput.php?id='.$resultaat[0]['rubrieknummer'].'&naam='.$resultaat[0]['rubrieknaam'].' name="volgende">Volgende</a>';
         }
     } catch (PDOexception $e) {
         // echo "er ging iets mis error: {$e->getMessage()}";
@@ -1410,7 +1370,7 @@ function gebruikersvinden($gebruikersnaam)
     try {
         require('core/dbconnection.php');
         $gebruikers = $dbh->prepare("
-          SELECT gebruikersnaam, voornaam, achternaam, geslacht, postcode, plaatsnaam, land,  email, verkoper, geblokeerd 
+          SELECT gebruikersnaam, voornaam, achternaam, geslacht, postcode, plaatsnaam, land,  email, verkoper, geblokkeerd 
           FROM Gebruiker 
           WHERE gebruikersnaam LIKE :gebruikersnaam 
         ");
@@ -1441,7 +1401,6 @@ function gebruikersvinden($gebruikersnaam)
                     <td>' . $resultaat['gebruikersnaam'] . '</td>
                     <td>' . $resultaat['voornaam'] . '</td>
                     <td>' . $resultaat['achternaam'] . '</td>
-
                     <td>' . $resultaat['postcode'] . '</td>
                     <td>' . $resultaat['plaatsnaam'] . '</td>
                     <td>' . $resultaat['land'] . '</td>
@@ -1472,7 +1431,7 @@ function blokeren($geblokkeerd, $teller, $gebruiker)
 }
 
 //deze functie blokkeert of deblokkeert de gebruiker in de database als de beheerder dit via de beheerdersomgeving dit aanstuurt
-function gebruikerblok()
+function gebruikerblok($gebruikersnaam)
 {
     try {
         require('core/dbconnection.php');
@@ -1488,7 +1447,7 @@ function gebruikerblok()
                                     ");
         $gebruiker->execute(
             array(
-                ':gebruiker' => $_GET['naam'],
+                ':gebruiker' => $gebruikersnaam,
             )
         );
         $resultaat = $gebruiker->fetchAll(PDO::FETCH_ASSOC);
@@ -1512,8 +1471,7 @@ function gebruikerblok()
     }
 }
 
-
-/* stuurt email naar gebruiker wanneer deze geblokkeerd is */
+// stuurt email naar gebruiker wanneer deze geblokkeerd is
 function StuurGebruikerBlockedEmail($gebruikersnaam)
 {
     try {
@@ -1553,7 +1511,7 @@ function StuurGebruikerBlockedEmail($gebruikersnaam)
     }
 }
 
-/* stuurt email naar gebruiker wanneer deze gedeblokkeerd is */
+//stuurt email naar gebruiker wanneer deze gedeblokkeerd is
 function StuurGebruikerDeblockedEmail($gebruikersnaam)
 {
     try {
@@ -1590,10 +1548,8 @@ function StuurGebruikerDeblockedEmail($gebruikersnaam)
     }
 }
 
-
-function veilingenVinden($veilingnaam)
-{
-    $teller = 0;
+function veilingenVinden($veilingnaam){
+    $teller = 0 ;
     try {
         require('core/dbconnection.php');
         $veilingen = $dbh->prepare("
@@ -1638,9 +1594,8 @@ function veilingenVinden($veilingnaam)
     }
 }
 
-function veilingblokeren($geblokkeerd, $voorwerpnummer, $titel)
-{
-    if ($geblokkeerd == "Ja") {
+function veilingblokeren($geblokkeerd, $voorwerpnummer, $titel){
+    if ($geblokkeerd == "Ja"){
         echo ' <td>   
     <a class="btn btn-primary" href="overzichtVeilingen.php?voorwerpnummer=' . $voorwerpnummer . '&naam=' . $titel . '" role="button">Deblokkeer</a> 
    </td> ';
@@ -1707,15 +1662,14 @@ function veilingblok($voorwerpnummer){
     }
 }
 
-function checkGEBLOKKEERD($gebruiker)
-{
+function checkGEBLOKKEERD($gebruiker){
     try {
         require('core/dbconnection.php');
-        $geblokeerd = $dbh->prepare("
-          SELECT gebruikersnaam, geblokeerd FROM Gebruiker WHERE gebruikersnaam LIKE :gebruiker  
+        $geblokkeerd = $dbh->prepare("
+          SELECT gebruikersnaam, geblokkeerd FROM Gebruiker WHERE gebruikersnaam LIKE :gebruiker  
         ");
 
-        $geblokeerd->execute(
+        $geblokkeerd->execute(
             array(
                 ':gebruiker' => $gebruiker,
             )
@@ -1764,8 +1718,7 @@ function checkBEHEERDER($gebruiker)
     }
 }
 
-function veilingeindberekenen($voorwerpnummer)
-{
+function veilingeindberekenen ($voorwerpnummer){
     // de overgebleven dagen die de veiling nog open is.
     try {
         require('core/dbconnection.php');
@@ -1803,11 +1756,10 @@ function veilingeindberekenen($voorwerpnummer)
     }
 }
 
-function HaalMijnAdvertentieOp($gebruikersnaam)
-{
-    try {
-        require('core/dbconnection.php');
-        $sqlSelect = $dbh->prepare("
+function HaalMijnAdvertentieOp($gebruikersnaam){
+  try {
+      require('core/dbconnection.php');
+      $sqlSelect = $dbh ->prepare ("
         SELECT voorwerpnr FROM Voorwerp WHERE verkoper = :gebruiker 
       ");
 

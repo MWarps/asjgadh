@@ -121,7 +121,7 @@ if (isset($_SESSION['gebruikersnaam'])) {
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-10 mt-2">
-                <form class="needs-validation" novalidate action="veilen2.php" method="POST"
+                <form class="needs-validation" novalidate action="veilenInput.php" method="POST"
                       enctype="multipart/form-data">
                     <h1 class="h3 mb-2 text-center "> Veiling starten </h1>
                     <p class=" mb-2 text-center "> Hier kunt u een voorwerp te koop aan bieden, vul alle onderstaande
@@ -147,20 +147,20 @@ if (isset($_SESSION['gebruikersnaam'])) {
                         <label for="inputTitel">Titel (Vul een titel in. Denk aan belangrijke eigenschappen zoals kleur,
                             merk of maat):</label>
                         <input type="text" name="titel" class="form-control" id="inputTitel"
-                               pattern="[A-Za-z0-9 ]{5,40}" maxlength="100" placeholder="Titel"
+                               pattern="[A-Za-z0-9]{1,40}" maxlength="100" placeholder="Titel"
                                value="<?php if ($_POST) {
                                    echo $_POST['titel'];
                                } ?>" required>
                         <div class="invalid-feedback">
-                            Voer een titel in.
+                            Voer een geldige titel in, deze mag geen tekens bevatten.
                         </div>
                     </div>
-                    <div class="form-group col-md-8">
-                        <label for="Textarea">Beschrijving:</label>
-                        <textarea name="beschrijving" class="form-control" placeholder="Voer hier uw bericht in."
-                                  id="Textarea" rows="10" required></textarea>
+                    <div class="form-group col-md-10">
+                        <label for="beschrijving">Beschrijving:</label>
+                        <input type="text" name="beschrijving" class="form-control" placeholder="Voer hier een beschrijving in in."
+                                  pattern="[A-Za-z0-9 ]{1,50}" id="beschrijving" required>
                         <div class="invalid-feedback">
-                            Voer een bericht in.
+                            Voer een beschrijving in, deze mag geen tekens bevatten.
                         </div>
                     </div>
 
@@ -185,14 +185,15 @@ if (isset($_SESSION['gebruikersnaam'])) {
 
                     <div class="form-group col-md-4">
                         <label for="inputStartbedrag">Startbedrag in euro's</label>
+                        
                         <input type="number" min="0" name="startbedrag" class="form-control" id="inputStartbedrag"
-                               placeholder="€..."
-                               step="0.01" maxlength="5" value="<?php if ($_POST) {
+                               placeholder="€..." step="0.01" maxlength="5" value="<?php if ($_POST) {
                             echo $_POST['startbedrag'];
                         } ?>" required>
                         <div class="invalid-feedback">
                             Voer een geldig startbedrag in, dit getal moet hoger zijn dan 0.
                         </div>
+                        
                     </div>
                     <div class="form-group col-md-8">
                         <label for="Textarea">Betalingsinstructies(optioneel):</label>
@@ -201,9 +202,10 @@ if (isset($_SESSION['gebruikersnaam'])) {
                     </div>
 
                     <div class="form-group col-md-4">
-                        <label for="inputStartbedrag">Verzendkosten</label>
-                        <input type="number" min="0" name="verzendkosten" class="form-control" id="inputStartbedrag"
-                               placeholder="€..."
+                        <label for="inputVerzendBedrag">Verzendkosten</label>
+                        
+                        <input type="number" min="0" name="verzendkosten" class="form-control" id="inputVerzendBedrag"
+                               placeholder="€..." step="0.01" maxlength="5"
                                pattern="^[a-zA-Z][a-zA-Z0-9-_\.]{1,49}$" maxlength="5" value="<?php if ($_POST) {
                             echo $_POST['startbedrag'];
                         } ?>">

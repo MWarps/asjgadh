@@ -5,7 +5,8 @@ validator: https://phpcodechecker.com/
 geen problemen gevonden
 */
 include 'includes/header.php';
-if (checkBEHEERDER($_SESSION['gebruikersnaam']) == true) {  // veranderen naar admin variabel.
+
+if (checkBEHEERDER ($_SESSION['gebruikersnaam']) == true){  // veranderen naar admin variabel. 
 
     if (isset($_POST['veilingzoeken'])) {
         $veilingnaam = "";
@@ -74,9 +75,11 @@ if (checkBEHEERDER($_SESSION['gebruikersnaam']) == true) {  // veranderen naar a
                     </thead>
                     <tbody>
                     <?php
-                    if (isset($_POST['veilingzoeken'])) {
-                        veilingenVinden($veilingnaam);
-                    }
+    if (isset($_POST['veilingzoeken'])){
+        // hier worden de veilingen afgedrukt in tabel voorm 
+        // waarbij de titel overeenkomst heeft met de zoekopdracht.
+        veilingenVinden($veilingnaam);
+    }
                     ?>
                     </tbody>
                 </table>

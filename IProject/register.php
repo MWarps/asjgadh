@@ -22,13 +22,12 @@ if(!isset($_SESSION['gebruikersnaam'])){
        
         // controleert of emailadres bestaat
         if(empty($gebruiker) && empty($validatie)) {  
-          $mailVerstuurd = true;        
+            $mailVerstuurd = true;        
             VerificatieCodeProcedure($email, $type);
             $code = HaalVerficatiecodeOp($email, $type);
                         
             StuurRegistreerEmail($email, $code['verificatiecode']);                    
         }
-      
     }
     ?>
 
@@ -74,7 +73,6 @@ if(!isset($_SESSION['gebruikersnaam'])){
 
     <?php
 } else {
-    unset($_SESSION['gebruikersnaam']);
     include 'includes/404error.php';
 }
 include 'includes/footer.php';
