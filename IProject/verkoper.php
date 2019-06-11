@@ -41,16 +41,16 @@ if (!empty(gegevensIngevuldVerkoper($_SESSION['gebruikersnaam']))) {
                 <form class="needs-validation" novalidate action='verkoper.php' method="post">
                     <h1 class="h3 mb-3 text-center">Registreer je hier als verkoper!</h1>
                     <div class="form-row">
-                        <label for="inputVoornaam">Bank (Verplicht)</label>
+                        <label for="inputVoornaam">Bankcode (Verplicht)</label>
                         <input type="text" name="bank" class="form-control" id="inputBank"
-                               pattern="[a-zA-Z]{1,4}" maxlength="4" minlength="4" placeholder="Bank"
+                               pattern="[a-zA-Z]{1,4}" maxlength="4" minlength="4" placeholder="RABO"
                                value="<?php if ($_POST) {
                                    echo $_POST['bank'];
                                } ?>" required>
 
                         <label for="inputTussennaam">Bankrekeningnummer (Verplicht)</label>
                         <input type="text" name="bankrekeningnr" class="form-control" id="inputBankrekeningnr"
-                               placeholder="Bankrekeningnr"
+                               placeholder="NL19RABO12341234"
                                pattern="[A-Za-z0-9]*" maxlength="18" value="<?php if ($_POST) {
                             echo $_POST['bankrekeningnr'];
                         } ?>" required>
