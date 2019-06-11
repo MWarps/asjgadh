@@ -456,7 +456,7 @@ function bestaatRecentie($voorwerpnr)
 
     try {
         require('core/dbconnection.php');
-        $sqlSelect = $dbh->prepare(" SELECT voorwerpnr from recentie where voorwerpnr = :voorwerpnr
+        $sqlSelect = $dbh->prepare(" SELECT voorwerpnr from recenties where voorwerpnr = :voorwerpnr
         ");
 
         $sqlSelect->execute(
@@ -2050,18 +2050,19 @@ function VerstuurEindeLooptijdMail($veiling, $ontvanger)
 
 // deze functie voegt de waardes toe van een beoordeling
 // wordt gebruikt in: rating.php
-function updateRecentie($waarde, $verkoper)
+function updateRecentie($voorwerpnr, $waarde, $verkoper)
 {
     try {
         require('core/dbconnection.php');
         $sqlSelect = $dbh->prepare("
-          INSERT INTO Recenties (waardenr, verkoper)
-          VALUES(:waarde, :verkoper)
+          INSERT INTO Recenties (voorwerpnr, waardenr, verkoper)
+          VALUES(:voorwerpnr, :waardenr, :verkoper)
         ");
 
         $sqlSelect->execute(
             array(
-                ':waarde' => $waarde,
+                ':waardenr' => $waarde,
+                ':voorwerpnr' => $voorwerpnr,
                 ':verkoper' => $verkoper
             )
         );

@@ -172,10 +172,10 @@ CONSTRAINT PK_Aanbevolen PRIMARY KEY (gebruikersnaam, rubrieknr, datumtijd)
 
 CREATE TABLE Recenties
 (
-voowerpnr			BIGINT			NOT NULL,
+voorwerpnr			BIGINT			NOT NULL,
 waardenr			INT				NOT NULL,
 verkoper			VARCHAR(50)		NOT NULL,
-CONSTRAINT PK_RecentieVoorwerp PRIMARY KEY (voowerpnr),
+CONSTRAINT PK_RecentieVoorwerp PRIMARY KEY (voorwerpnr),
 CONSTRAINT CK_Waardenr CHECK (waardenr BETWEEN 1 AND 10)
 );
 ----------------------------------------------------------
