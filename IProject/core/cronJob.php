@@ -41,7 +41,7 @@ function checkBotAdvertentie ($botEMail){
         "er ging iets mis error: {$e->getMessage()}"; 
     }
      echo('Aantal Bot advertentie: ');echo ($botteller); echo('<br>');
-     echo('Aantal Bot advertentie geblokeerd: ');echo ($blokker); echo('<br>');
+     echo('Aantal Bot advertentie gesloten: ');echo ($blokker); echo('<br>');
 }
 
 // controleerd alle veilingen die niet van de bots zijn die nog openstaan.
