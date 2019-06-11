@@ -1370,7 +1370,7 @@ function gebruikersvinden($gebruikersnaam)
     try {
         require('core/dbconnection.php');
         $gebruikers = $dbh->prepare("
-          SELECT gebruikersnaam, voornaam, achternaam, geslacht, postcode, plaatsnaam, land,  email, verkoper, geblokeerd 
+          SELECT gebruikersnaam, voornaam, achternaam, geslacht, postcode, plaatsnaam, land,  email, verkoper, geblokkeerd 
           FROM Gebruiker 
           WHERE gebruikersnaam LIKE :gebruikersnaam 
         ");
@@ -1665,11 +1665,11 @@ function veilingblok($voorwerpnummer){
 function checkGEBLOKKEERD($gebruiker){
     try {
         require('core/dbconnection.php');
-        $geblokeerd = $dbh->prepare("
-          SELECT gebruikersnaam, geblokeerd FROM Gebruiker WHERE gebruikersnaam LIKE :gebruiker  
+        $geblokkeerd = $dbh->prepare("
+          SELECT gebruikersnaam, geblokkeerd FROM Gebruiker WHERE gebruikersnaam LIKE :gebruiker  
         ");
 
-        $geblokeerd->execute(
+        $geblokkeerd->execute(
             array(
                 ':gebruiker' => $gebruiker,
             )
