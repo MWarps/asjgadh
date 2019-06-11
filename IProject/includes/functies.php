@@ -1432,7 +1432,7 @@ function blokeren($geblokkeerd, $teller, $gebruiker)
 }
 
 //deze functie blokkeert of deblokkeert de gebruiker in de database als de beheerder dit via de beheerdersomgeving dit aanstuurt
-function gebruikerblok()
+function gebruikerblok($gebruikersnaam)
 {
     try {
         require('core/dbconnection.php');
@@ -1448,7 +1448,7 @@ function gebruikerblok()
                                     ");
         $gebruiker->execute(
             array(
-                ':gebruiker' => $_GET['naam'],
+                ':gebruiker' => $gebruikersnaam,
             )
         );
         $resultaat = $gebruiker->fetchAll(PDO::FETCH_ASSOC);
