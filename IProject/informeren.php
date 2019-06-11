@@ -28,13 +28,13 @@ include 'includes/header.php'
                     heeft u een account.</p>
             </div>
             <div class="col-md-5">
-                <a href="register.php"><img class="img-responsive" src="http://placehold.it/350x200"
+                <a href="register.php"><img class="img-responsive" src="assets/img/registreren.png"
                                             alt="Foto Registreren"></a>
             </div>
         </div>
         <div class="row mt-3 mb-3">
             <div class="col-md-5">
-                <a href="inloggen"><img class="img-responsive" src="http://placehold.it/350x200"
+                <a href="inloggen"><img class="img-responsive" src="assets/img/inloggen.png"
                                         alt="Foto Inloggen"></a>
             </div>
             <div class="col-md-7">
@@ -46,6 +46,7 @@ include 'includes/header.php'
                     In dit formulier moet u uw gebruikersnaam en wachtwoord invullen om te kunnen inloggen.</p>
             </div>
         </div>
+        <!--
         <div class="row mt-3 mb-3">
             <div class="col-md-7">
                 <h2>Ik zoek een specifiek product, hoe kan ik dit vinden?</h2>
@@ -58,12 +59,13 @@ include 'includes/header.php'
                 </p>
             </div>
             <div class="col-md-5">
-                <a href="#"><img class="img-responsive" src="http://placehold.it/350x200" alt="Specifiek product"></a>
+                <a href="#"><img class="img-responsive" src="assets/img/bieden.png" alt="Specifiek product"></a>
             </div>
         </div>
+        -->
         <div class="row mt-3 mb-3">
             <div class="col-md-5">
-                <a href="#"><img class="img-responsive" src="http://placehold.it/350x200" alt="Bod doen"></a>
+                <a href="#"><img class="img-responsive" src="assets/img/bieden.png" alt="Bod doen"></a>
             </div>
             <div class="col-md-7">
                 <h2>Ik wil graag een bod doen op een product, hoe doe ik dat?</h2>
@@ -94,7 +96,7 @@ include 'includes/header.php'
                 </p>
             </div>
             <div class="col-md-5">
-                <a href="#"><img class="img-responsive" src="http://placehold.it/350x200" alt="Verkoper worden"></a>
+                <a href="#"><img class="img-responsive" src="assets/img/veilen.png" alt="Verkoper worden"></a>
             </div>
         </div>
     </div>
