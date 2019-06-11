@@ -73,7 +73,6 @@ if(!isset($_SESSION['gebruikersnaam'])){
 
     <?php
 } else {
-    unset($_SESSION['gebruikersnaam']);
     include 'includes/404error.php';
 }
 include 'includes/footer.php';
