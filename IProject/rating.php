@@ -7,6 +7,12 @@ geen problemen gevonden
 include 'includes/header.php';
 require_once 'core/dbconnection.php';
 
+if(isset($_GET['id'])){
+  if(isset(bestaatRecentie($_GET['id']))){
+      echo '<script language="javascript">window.location.href ="index.php"</script>';
+  }
+}
+
 if(isset($_GET['verkoper'])){
     $_SESSION['vekoper'] = $_GET['verkoper'];
 }

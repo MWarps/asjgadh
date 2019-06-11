@@ -451,6 +451,27 @@ function getAanbevolen($gebruiker)
     }
 }
 
+function bestaatRecentie($voorwerpnr)
+{
+
+    try {
+        require('core/dbconnection.php');
+        $sqlSelect = $dbh->prepare(" SELECT voorwerpnr from recentie where voorwerpnr = :voorwerpnr
+        ");
+
+        $sqlSelect->execute(
+            array(
+                ':voorwerpnr' => $voorwerpnr
+            )
+        );
+
+        $records = $sqlSelect->fetch(PDO::FETCH_ASSOC);
+        return $records;
+    } catch (PDOexception $e) {
+        echo "er ging iets mis error: {$e->getMessage()}";
+    }
+}
+
 // deze functie laat de illustratie bestanden zien
 // wordt gebruikt in: advertentie.php
 function HaalIllustratiesOp($voorwerpnr)
