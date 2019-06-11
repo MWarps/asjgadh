@@ -989,7 +989,7 @@ function StuurRegistreerEmail($email, $code)
 
     mail($to, $subject, $message, $headers);
 }
-/*
+
 // deze functie laad alle verificaties om verkoper te worden die nog niet verzonden zijn. ook wordt het adress en de brief volgens een template vast opgesteld
 // wordt gebruikt in: verkoperVerificatieBrief.php
 function verificatiesVinden()
@@ -1022,8 +1022,8 @@ function verificatiesVinden()
         echo "er ging iets mis error: {$e->getMessage()}";
     }
 }
-*/
-/*
+
+
 //deze functie registreerd dat de brief verzonden is in de database
 // wordt gebruikt in: verkoperVerificatieBrief.php
 function verificatieVerzonden($email)
@@ -1054,7 +1054,7 @@ function fixEmail($email)
 
     return $email;
 }
-*/
+
 // deze functie laat de geslachten zien in een dropdownlist
 // wordt gebruikt in: registreren2.php
 function geslacht()
@@ -1370,7 +1370,7 @@ function gebruikersvinden($gebruikersnaam)
     try {
         require('core/dbconnection.php');
         $gebruikers = $dbh->prepare("
-          SELECT gebruikersnaam, voornaam, achternaam, geslacht, postcode, plaatsnaam, land,  email, verkoper, geblokeerd 
+          SELECT gebruikersnaam, voornaam, achternaam, geslacht, postcode, plaatsnaam, land,  email, verkoper, geblokkeerd 
           FROM Gebruiker 
           WHERE gebruikersnaam LIKE :gebruikersnaam 
         ");
@@ -1401,7 +1401,6 @@ function gebruikersvinden($gebruikersnaam)
                     <td>' . $resultaat['gebruikersnaam'] . '</td>
                     <td>' . $resultaat['voornaam'] . '</td>
                     <td>' . $resultaat['achternaam'] . '</td>
-
                     <td>' . $resultaat['postcode'] . '</td>
                     <td>' . $resultaat['plaatsnaam'] . '</td>
                     <td>' . $resultaat['land'] . '</td>
@@ -1432,7 +1431,7 @@ function blokeren($geblokkeerd, $teller, $gebruiker)
 }
 
 //deze functie blokkeert of deblokkeert de gebruiker in de database als de beheerder dit via de beheerdersomgeving dit aanstuurt
-function gebruikerblok()
+function gebruikerblok($gebruikersnaam)
 {
     try {
         require('core/dbconnection.php');
@@ -1448,7 +1447,7 @@ function gebruikerblok()
                                     ");
         $gebruiker->execute(
             array(
-                ':gebruiker' => $_GET['naam'],
+                ':gebruiker' => $gebruikersnaam,
             )
         );
         $resultaat = $gebruiker->fetchAll(PDO::FETCH_ASSOC);
@@ -1666,11 +1665,11 @@ function veilingblok($voorwerpnummer){
 function checkGEBLOKKEERD($gebruiker){
     try {
         require('core/dbconnection.php');
-        $geblokeerd = $dbh->prepare("
-          SELECT gebruikersnaam, geblokeerd FROM Gebruiker WHERE gebruikersnaam LIKE :gebruiker  
+        $geblokkeerd = $dbh->prepare("
+          SELECT gebruikersnaam, geblokkeerd FROM Gebruiker WHERE gebruikersnaam LIKE :gebruiker  
         ");
 
-        $geblokeerd->execute(
+        $geblokkeerd->execute(
             array(
                 ':gebruiker' => $gebruiker,
             )
