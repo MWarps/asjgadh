@@ -15,7 +15,6 @@ if (checkBEHEERDER($_SESSION['gebruikersnaam']) == true) {     // veranderen naa
 
     if (isset($_GET['id'])) {
         gebruikerblok($_GET['naam']);
-        echo ($_GET['naam']);
     }
 ?>
 
