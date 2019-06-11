@@ -1370,7 +1370,7 @@ function gebruikersvinden($gebruikersnaam)
     try {
         require('core/dbconnection.php');
         $gebruikers = $dbh->prepare("
-          SELECT gebruikersnaam, voornaam, achternaam, geslacht, postcode, plaatsnaam, land,  email, verkoper, geblokeerd 
+          SELECT gebruikersnaam, voornaam, achternaam, geslacht, postcode, plaatsnaam, land,  email, verkoper, geblokkeerd 
           FROM Gebruiker 
           WHERE gebruikersnaam LIKE :gebruikersnaam 
         ");
