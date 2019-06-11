@@ -83,7 +83,7 @@ if (isset($_SESSION['gebruikersnaam'])) {
                         $Bieder = HaalBiederEnVerkoperOp($details['voorwerpnr'], $_SESSION['gebruikersnaam']);
                         $artikelKnop = '<a href="advertentie.php?id=' . $details['voorwerpnr'] . '" class="btn btn-block btn-primary py-2">Ga naar artikel</a>';
                         $verkopen = '<a class="btn btn-block btn-success py-2 ' . $knop . '" href="mijnadvertenties.php?id=' . $details['voorwerpnr'] . '&status=verkopen" >Verkopen</a>';
-
+                        
                         if (!empty($hoogstbieder)) {
                             $details['startprijs'] = $hoogstbieder;
                         }
@@ -97,10 +97,10 @@ if (isset($_SESSION['gebruikersnaam'])) {
                         }
 
                         if (count($Bieder) == 2) {
-                            $knop = 'disabled';
+                          $verkopen = '<a class="btn btn-block btn-success py-2 disabled" href="mijnadvertenties.php?id=' . $details['voorwerpnr'] . '&status=verkopen" >Verkopen</a>';
                         }
                         if (count($Bieder) == 3) {
-                            $verkopen = '<a class="btn btn-block btn-success py-2 ' . $knop . '" href="mijnadvertenties.php?id=' . $details['voorwerpnr'] . '&status=verkopen" >Verkopen</a>';
+                  
                             if (!empty($Bieder[2]['koper'])) {
                                 $knop = 'disabled';
                                 $verkopen = '<button type="button" class="btn btn-block btn-success py-2 ' . $knop . '" >Advertentie is verkocht</button>';
