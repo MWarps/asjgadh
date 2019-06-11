@@ -53,7 +53,6 @@ if(isset($_POST['volgende'])){
                 <button type="submit" name="volgende" class="btn bg-flame btn-lg">Volgende</button>
             </form>
         </div>
-
     </div>
 </div>
 
