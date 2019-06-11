@@ -4,7 +4,7 @@ $dbname = 'iproject';
 $username = 'testgebruiker';
 $password = 'test123';
 // dit zijn nep gegevens!
-
+// niet de nieuwe erin zetten
 
 try {
     global $dbh;
