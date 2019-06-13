@@ -147,7 +147,7 @@ if (isset($_SESSION['gebruikersnaam'])) {
                         <label for="inputTitel">Titel (Vul een titel in. Denk aan belangrijke eigenschappen zoals kleur,
                             merk of maat):</label>
                         <input type="text" name="titel" class="form-control" id="inputTitel"
-                               pattern="[A-Za-z0-9]{1,40}" maxlength="100" placeholder="Titel"
+                               pattern="[A-Za-z0-9 ]{1,99}" maxlength="99" placeholder="Titel"
                                value="<?php if ($_POST) {
                                    echo $_POST['titel'];
                                } ?>" required>
@@ -158,14 +158,12 @@ if (isset($_SESSION['gebruikersnaam'])) {
                     <div class="form-group col-md-10">
                         <label for="beschrijving">Beschrijving:</label>
                         <input type="text" name="beschrijving" class="form-control" placeholder="Voer hier een beschrijving in in."
-                                  pattern="[A-Za-z0-9 ]{1,50}" id="beschrijving" required>
+                                  pattern="[A-Za-z0-9 ]{1,100}" id="beschrijving" required>
                         <div class="invalid-feedback">
                             Voer een beschrijving in, deze mag geen tekens bevatten.
                         </div>
                     </div>
-
                     <div class="form-group col-md-6">
-
                         <div class="form-group">
                             <label for="exampleFormControlFile1">Voeg minimaal 1 afbeelding toe</label>
                             <input type="file" class="form-control-file" name="foto1" accept="image/*" id="foto1"
@@ -181,8 +179,6 @@ if (isset($_SESSION['gebruikersnaam'])) {
                             <input type="file" class="form-control-file" accept="image/*" name="foto4" id="foto4">
                         </div>
                     </div>
-
-
                     <div class="form-group col-md-4">
                         <label for="inputStartbedrag">Startbedrag in euro's</label>
                         
@@ -192,15 +188,13 @@ if (isset($_SESSION['gebruikersnaam'])) {
                         } ?>" required>
                         <div class="invalid-feedback">
                             Voer een geldig startbedrag in, dit getal moet hoger zijn dan 0.
-                        </div>
-                        
+                        </div>    
                     </div>
-                    <div class="form-group col-md-8">
-                        <label for="Textarea">Betalingsinstructies(optioneel):</label>
-                        <textarea name="betalingsinstructie" class="form-control" placeholder="Voer hier uw bericht in."
-                                  id="Textarea" rows="10"></textarea>
+                    <div class="form-group col-md-10">
+                        <label for="betalingsinstructie">Betalingsinstructies(optioneel):</label>
+                        <input type="text" name="betalingsinstructie" class="form-control" placeholder="Voer hier uw betalingsinstructie in."
+                                pattern="[A-Za-z0-9 ]{1,69}" maxlength="69" id="betalingsinstructie">
                     </div>
-
                     <div class="form-group col-md-4">
                         <label for="inputVerzendBedrag">Verzendkosten</label>
                         
@@ -212,9 +206,9 @@ if (isset($_SESSION['gebruikersnaam'])) {
 
                     </div>
                     <div class="form-group col-md-8">
-                        <label for="Textarea">Verzendinstructies(optioneel):</label>
-                        <textarea name="verzendinstructies" class="form-control" placeholder="Voer hier uw bericht in."
-                                  id="Textarea" rows="10"></textarea>
+                        <label for="verzendinstructies">Verzendinstructies(optioneel):</label>
+                        <input type="text" name="verzendinstructies" class="form-control" placeholder="Voer hier uw verzendinstructies in."
+                                pattern="[A-Za-z0-9 ]{1,69}" maxlength="69"  id="verzendinstructies">
                     </div>
 
                     <div class="form-group col-md-4">
