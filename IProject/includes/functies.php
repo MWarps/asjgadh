@@ -195,7 +195,8 @@ function getPopulairsteArtikelen()
     try {
         require('core/dbconnection.php');
         $sqlSelect = $dbh->prepare("
-          SELECT TOP 9 * FROM Voorwerp ORDER BY gezien DESC
+          SELECT TOP 9 * FROM Voorwerp where Voorwerp.veilinggesloten = 0
+          AND Voorwerp.geblokkeerd = 0 ORDER BY gezien DESC
         ");
 
         $sqlSelect->execute();
@@ -604,6 +605,7 @@ function DetailAdvertentie($id)
           WHERE Voorwerp.voorwerpnr = Illustratie.voorwerpnr
           AND Voorwerp.voorwerpnr = :id
           AND Voorwerp.veilinggesloten = 0
+          AND Voorwerp.geblokkeerd = 0
         ");
 
         $sqlSelect->execute(
