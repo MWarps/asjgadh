@@ -9,7 +9,7 @@ testaccounts:
 (gebruikersnaam -> wachtwoord -> email -> rechten)
 -testBeheerder -> t3$tB3h33rd3r -> asjgadh+beheerder@gmail.com -> verkoper en beeheerder
 -testverkoper -> t3$tV3rk0p3r -> asjgadh+verkoper@gmail.com -> verkoper
--testkoper -> t3$tG3bru1k3r -> asjgadh+koper@gmail.com -> standaard gebruiker zonder extra rechten
+-testKoper -> t3$tK0p3r -> asjgadh+koper@gmail.com -> standaard gebruiker zonder extra rechten
 
 test email:
 email: asjgadh@gmail.com
