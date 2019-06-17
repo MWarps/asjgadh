@@ -66,11 +66,9 @@ if (isset($_GET['id'])) {
             </div>
         </div>
         <div class="row">
-            <div class="col-md-7">
-                <div class="embed-responsive embed-responsive-21by9">
+            <div class="col-md-7">                
                     <iframe width="100%" height="450px"
-                            srcdoc='<html><body><?php echo $advertentie['beschrijving']; ?></body></html>'></iframe>
-                </div>
+                            srcdoc='<html><body><?php echo $advertentie['beschrijving']; ?></body></html>'></iframe>                
             </div>
             <div class="col-md-5">
                 <div class="gallery-wrap">

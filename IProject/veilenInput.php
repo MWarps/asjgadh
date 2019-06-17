@@ -155,10 +155,9 @@ if (isset($_SESSION['gebruikersnaam'])) {
                             Voer een geldige titel in, deze mag geen tekens bevatten.
                         </div>
                     </div>
-                    <div class="form-group col-md-10">
+                    <div class="form-group col-md-8">
                         <label for="beschrijving">Beschrijving:</label>
-                        <input type="text" name="beschrijving" class="form-control" placeholder="Voer hier een beschrijving in in."
-                                  pattern="[A-Za-z0-9 ]{1,100}" id="beschrijving" required>
+                         <textarea name="beschrijving" placeholder="Voer hier een beschrijving in in." class="form-control" rows="10" id="beschrijving" required></textarea>  
                         <div class="invalid-feedback">
                             Voer een beschrijving in, deze mag geen tekens bevatten.
                         </div>
