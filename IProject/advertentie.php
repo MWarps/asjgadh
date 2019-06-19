@@ -185,7 +185,7 @@ if (isset($_GET['id'])) {
                             Reviews:<br>
                             Kopers geven deze verkoper een<br>
 
-                            <h3><?php echo 'Gemiddelde: ' . $recenties[0]['recentie'] . '/10' ?> </h3>
+                            <h3><?php echo 'Gemiddelde: ' . $recenties[1]['recentie'] . '/10' ?> </h3>
                             <p><?php echo 'Aantal recenties: ' . $recenties[0]['recentie'] . '' ?> </p>
 
                         <?php } else {
@@ -206,7 +206,7 @@ if (isset($_GET['id'])) {
                     <strong><?php echo $advertentie['betalingswijze'] ?></strong> <br>
                     <img src="assets/img/instructions.png">
                     betalingsinstructies: <?php echo $advertentie['betalingsinstructie'] ?> <br><br>
-                    <img src="assets/img/verzending.png"> Verzendkosten: <?php echo $advertentie['verzendkosten'] ?>
+                    <img src="assets/img/verzending.png"> Verzendkosten: €<?php echo $advertentie['verzendkosten'] ?>
                     <br>
                     <img src="assets/img/instructions.png">
                     Verzendinstructies: <?php echo $advertentie['verzendinstructies'] ?> <br><br>

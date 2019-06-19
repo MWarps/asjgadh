@@ -157,7 +157,8 @@ if (isset($_SESSION['gebruikersnaam'])) {
                     </div>
                     <div class="form-group col-md-8">
                         <label for="beschrijving">Beschrijving:</label>
-                         <textarea name="beschrijving" placeholder="Voer hier een beschrijving in in." class="form-control" rows="10" id="beschrijving" required></textarea>  
+                         <textarea name="beschrijving" placeholder="Voer hier een beschrijving in in." clken
+                         ass="form-control" rows="10" id="beschrijving" required></textarea>  
                         <div class="invalid-feedback">
                             Voer een beschrijving in, deze mag geen tekens bevatten.
                         </div>
@@ -168,7 +169,7 @@ if (isset($_SESSION['gebruikersnaam'])) {
                             <input type="file" class="form-control-file" name="foto1" accept="image/*" id="foto1"
                                    required>
                             <div class="invalid-feedback">
-                                Geef minmaal 1 foto mee.
+                                Geef minimaal 1 foto mee.
                             </div>
                             <label for="exampleFormControlFile2">Afbeelding 2</label>
                             <input type="file" class="form-control-file" accept="image/*" name="foto2" id="foto2">

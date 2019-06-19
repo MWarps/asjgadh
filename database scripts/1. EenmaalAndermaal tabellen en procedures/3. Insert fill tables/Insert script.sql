@@ -410,6 +410,6 @@ go
 
 
 insert into Gebruiker 
-Values ('testBeheerder', 'Test', ' beheerder', 'X', 'teststraat 1', 'NULL', '1234 AB', 'test', 'Nederland', '2000-01-01', 'asjgadh+beheerder@gmail.com', '$2y$10$DTyNwkI4xbVGg/QjycYBoe5tEMjLZkhQ8xTbzhDMDW/OV.efnywGq', 1, 'test', 1, 1, 0, 0),
-		('testVerkoper', 'Test', ' Verkoper', 'X', 'teststraat 1', 'NULL', '1234 AB', 'test', 'Nederland', '2000-01-01', 'asjgadh+verkoper@gmail.com', '$2y$10$J8kytrCwZ.6mr/iDCwL3a.Z.wYKgdiMyKwxBTETONxR7wxDnjsbsW', 1, 'test', 1, 0, 0, 0),
-		('testKoper', 'Test', ' Koper', 'X', 'teststraat 1', 'NULL', '1234 AB', 'test', 'Nederland', '2000-01-01', 'asjgadh+koper@gmail.com', '$2y$10$AFEMXoE9kawdpOc3FYjhteHwsLxMmpk6Xp0qkzqu4p8W3jkbOkm6O', 1, 'test', 0, 0, 0, 0)
+Values ('testBeheerder', 'Test', ' beheerder', 'X', 'teststraat 1', 'NULL', '1234 AB', 'test', 'Nederland', '2000-01-01', 'asjgadh+beheerder@gmail.com', '$2y$10$DTyNwkI4xbVGg/QjycYBoe5tEMjLZkhQ8xTbzhDMDW/OV.efnywGq', 1, 'test', 1, 1, 0),
+		('testVerkoper', 'Test', ' Verkoper', 'X', 'teststraat 1', 'NULL', '1234 AB', 'test', 'Nederland', '2000-01-01', 'asjgadh+verkoper@gmail.com', '$2y$10$J8kytrCwZ.6mr/iDCwL3a.Z.wYKgdiMyKwxBTETONxR7wxDnjsbsW', 1, 'test', 1, 0, 0),
+		('testKoper', 'Test', ' Koper', 'X', 'teststraat 1', 'NULL', '1234 AB', 'test', 'Nederland', '2000-01-01', 'asjgadh+koper@gmail.com', '$2y$10$AFEMXoE9kawdpOc3FYjhteHwsLxMmpk6Xp0qkzqu4p8W3jkbOkm6O', 1, 'test', 0, 0, 0)

@@ -13,7 +13,7 @@ tweede validatie
 geen problemen gevonden
 */
 include 'includes/header.php';
-
+if(empty($_SESSION['gebruikersnaam'])){
 
 if (isset($_GET['id']) || isset($_POST['rVolgende'])) {
 $Gbestaat = False;
@@ -290,7 +290,7 @@ if (isset($_GET['id'])) {
     </div>
 
     <?php
-} else {
+}} else {
     include 'includes/404error.php';
 
 }

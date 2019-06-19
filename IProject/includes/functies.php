@@ -264,7 +264,9 @@ function getProductenUitRubriek2($rubriek, $aantal)
             SELECT distinct top 21 * 
         	    FROM dbo.Voorwerpinrubriek
         	    JOIN dbo.Voorwerp on dbo.Voorwerpinrubriek.voorwerpnr = dbo.Voorwerp.voorwerpnr
-        	    JOIN cte on dbo.Voorwerpinrubriek.rubrieknr = cte.rubrieknummer;
+        	    JOIN cte on dbo.Voorwerpinrubriek.rubrieknr = cte.rubrieknummer 
+              where Voorwerp.veilinggesloten = 0
+              AND Voorwerp.geblokkeerd = 0;
         ");
 
         $sqlSelect->execute(
@@ -303,7 +305,9 @@ function getProductenUitRubriek($rubriek, $aantal)
             SELECT distinct top 21 * 
             	FROM dbo.Voorwerpinrubriek
             	JOIN dbo.Voorwerp on dbo.Voorwerpinrubriek.voorwerpnr = dbo.Voorwerp.voorwerpnr
-            	JOIN cte on dbo.Voorwerpinrubriek.rubrieknr = cte.rubrieknummer;
+            	JOIN cte on dbo.Voorwerpinrubriek.rubrieknr = cte.rubrieknummer
+              Where Voorwerp.veilinggesloten = 0
+              AND Voorwerp.geblokkeerd = 0;
         ");
 
         $sqlSelect->execute(
@@ -328,9 +332,12 @@ function getLaatstBekeken($gebruiker)
     try {
         require('core/dbconnection.php');
         $sqlSelect = $dbh->prepare("
-          SELECT TOP 3 voorwerpnr FROM LaatstBekeken
-          WHERE gebruikersnaam = :gebruikersnaam
-	      ORDER BY datumtijd DESC
+        SELECT TOP 3 Voorwerp.voorwerpnr FROM LaatstBekeken 
+       join Voorwerp on Voorwerp.voorwerpnr = LaatstBekeken.voorwerpnr
+       WHERE Voorwerp.veilinggesloten = 0 
+       AND Voorwerp.geblokkeerd = 0
+       AND LaatstBekeken.gebruikersnaam = :gebruikersnaam
+       ORDER BY datumtijd DESC
 	    ");
 
         $sqlSelect->execute(
@@ -348,9 +355,12 @@ function getLaatstBekeken($gebruiker)
             </div>';
     } else {
         foreach ($records as $rij) {
+          
             $details = DetailAdvertentie($rij['voorwerpnr']);
             $locatie = '../pics/';
-
+            
+            
+            
             $hoogstebieder = zijnErBiedingen($details['voorwerpnr']);
             $hoogstbieder = $hoogstebieder['euro'];
 
@@ -380,8 +390,8 @@ function getLaatstBekeken($gebruiker)
             </div>
         </div>
         </div>';
-        }
-    }
+        }    
+  }
 }
 
 // deze functie laadt de advertenties die aanbevolen worden aan de gebruiker
@@ -393,7 +403,7 @@ function getAanbevolen($gebruiker)
         $sqlSelect = $dbh->prepare("
           SELECT * FROM Aanbevolen
           WHERE gebruikersnaam = :gebruikersnaam
-	      ORDER BY datumtijd DESC
+	        ORDER BY datumtijd DESC
 	    ");
 
         $sqlSelect->execute(
@@ -457,7 +467,7 @@ function bestaatRecentie($voorwerpnr)
 
     try {
         require('core/dbconnection.php');
-        $sqlSelect = $dbh->prepare(" SELECT voorwerpnr from recenties where voorwerpnr = :voorwerpnr
+        $sqlSelect = $dbh->prepare(" SELECT voorwerpnr from Recenties where voorwerpnr = :voorwerpnr
         ");
 
         $sqlSelect->execute(
@@ -660,7 +670,7 @@ function haalAdvertentieOp($rubriek)
         foreach ($producten as $rij) {
             $details = DetailAdvertentie($rij['voorwerpnr']);
             $locatie = '../pics/';
-
+            
             $hoogstebieder = zijnErBiedingen($details['voorwerpnr']);
             $hoogstbieder = $hoogstebieder['euro'];
 
@@ -1515,17 +1525,17 @@ function StuurGebruikerBlockedEmail($gebruikersnaam)
         $from = "no-reply@iconcepts.nl";
         $to = $records['email'];
         $subject = "Account geblokkeerd";
-        $message = 'Beste  ' . $records['voornaam'] . ',
-
-
-         Helaas moeten wij u op de hoogte stellen dat uw account is geblokkeerd. Dit kan meerdere redenen hebben.
-         Om meer informatie te krijgen kunt u contact met ons opnemen door een mail te sturen naar: EenmaalAndermaal@gmail.com
-         Vermeld in deze mail uw gebruikersnaam.
-         Wij hopen u zodoende genoeg informatie te hebben gegeven.
-
-         Met vriendelijke groeten,
-
-         EenmaalAndermaal  
+        $message = 
+        'Beste  ' . $records['voornaam'] . ',
+        
+        
+        Helaas moeten wij u op de hoogte stellen dat uw account is geblokkeerd.Dit kan meerdere redenen hebben.
+        Om meer informatie te krijgen kunt u contact met ons opnemen door een mail te sturen naar: EenmaalAndermaal@gmail.com
+        Vermeld in deze mail uw gebruikersnaam.
+        Wij hopen u zodoende genoeg informatie te hebben gegeven.
+        
+        Met vriendelijke groeten,
+        EenmaalAndermaal  
          ';
         $headers = "From:" . $from;
         mail($to, $subject, $message, $headers);
@@ -1556,7 +1566,7 @@ function StuurGebruikerDeblockedEmail($gebruikersnaam)
         $to = $records['email'];
         $subject = "Account gedeblokkeerd";
         $message = ' Beste ' . $records['voornaam'] . ',
-
+        
         Uw account is gedeblokkeerd. U kunt nu weer inloggen.
         Wij hopen u zodoende genoeg informatie te hebben gegeven.
 

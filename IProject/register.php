@@ -59,7 +59,7 @@ if(!isset($_SESSION['gebruikersnaam'])){
                                placeholder="Voer hier uw email in"
                                maxlength="254" required>
                         <div class="invalid-feedback">
-                            Voer een emailadres in.
+                            Voer een geldig emailadres in.
                         </div>
                         <button class="btn btn-lg bg-flame btn-block mb-5 mt-3" id="registreren" type="submit"
                                 name="registreren" value="registreren"> Stuur mail

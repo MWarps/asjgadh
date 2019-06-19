@@ -4,7 +4,7 @@ delete from dbo.Voorwerp
 delete from dbo.Illustratie
 
 INSERT INTO dbo.Gebruiker (gebruikersnaam, voornaam, achternaam, geslacht, adresregel1, adresregel2, postcode, plaatsnaam, 
-land, geboortedatum, email, wachtwoord, vraag, antwoordtekst, verkoper, beheerder, geblokkeerd, gezien)
+land, geboortedatum, email, wachtwoord, vraag, antwoordtekst, verkoper, beheerder, geblokkeerd)
 SELECT DISTINCT 
 LEFT(Username, 50)	AS gebruikersnaam,
 ' '					AS voornaam, -- is niet bekend bij ebay
@@ -22,8 +22,7 @@ CONCAT('asjgadh+', Username, '@gmail.com') AS email, -- email naam nog niet fina
 Location			AS antwoordtekst, -- locatie als antwoord
 1					AS verkoper,
 0					AS beheerder,
-0					AS geblokkeerd,
-0					AS gezien
+0					AS geblokkeerd
 FROM dbo.Users
 
 -- Compleet --
