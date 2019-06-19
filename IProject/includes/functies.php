@@ -9,6 +9,8 @@ include 'emailVerwijderdHoogstebod.php';
 include 'brief.php';
 include 'emailVeilingBlockedKoper.php';
 include 'emailVeilingBlockedVerkoper.php';
+include 'emailEindeLooptijdKoper.php';
+include 'emailEindeLooptijdVerkoper.php';
 
 // deze functie geeft de minimumverhoging van het bod bij verschillende bedragen
 // wordt gebruikt in: advertentie.php

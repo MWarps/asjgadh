@@ -339,15 +339,9 @@ function emailEindeLooptijdKoper($veiling)
                          Voorwerpnummer: <strong>'.$veiling[2]['voorwerpnr'].'</strong><br>
                          Voorwerptitel: <strong>'.$veiling[2]['titel'].'</strong><br>
                          </p> 
-                         <p>U heeft geboden voor: <strong> &euro; '.number_format($veiling[2]['verkoopprijs'], 2, ',', '.').' </strong><br> 
-                         Deze wordt via <strong>'.$veiling[2]['betalingswijze'].'</strong> betaald.<br>
-                         De betalingsinstructie is als volgt: '.$veiling[2]['betalingsinstructie'].' <br><br>
-                         De locatie van het voorwerp is: <br>
-                         Land: <strong>'.$veiling[2]['land'].'</strong><br>
-                         Plaats: <strong>'.$veiling[2]['plaatsnaam'].'</strong> <br>
-                         De verzendkosten zijn: '.$veiling[2]['verzendkosten'].' <br>                                     
+                         <p>Het voowerp waar u het hoogste bod op heeft is over de looptijd heen. Deze wordt verwijderd.                                  
                       <br>
-                      <br>                      
+                                           
                       </p>                      
                       <br>
                       <p>Neem contact op met de verkoper: <strong>'.$veiling[1]['gebruikersnaam'].'</strong> via <br>

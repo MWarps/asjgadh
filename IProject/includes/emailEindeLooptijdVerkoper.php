@@ -4,7 +4,7 @@ gevalideerd op 04/06/2019 door Merlijn
 validator: https://phpcodechecker.com/
 geen problemen gevonden
 */
-function emailEindeLooptijdVerkoper($veiling, $id)
+function emailEindeLooptijdVerkoper($veiling, $voorwerp, $verkoper)
 {
   // https://github.com/leemunroe/responsive-html-email-template
     $tekst = '
@@ -331,21 +331,12 @@ function emailEindeLooptijdVerkoper($veiling, $id)
                   <table role="presentation" border="0" cellpadding="0" cellspacing="0">
                     <tr>
                       <td>
-                      <h2> Hallo '.$veiling[$id-1]['voornaam'].',</h2>
+                      <h2> Hallo '.$veiling[$verkoper]['voornaam'].',</h2>
                       <br>
                       <p>Uw veiling is verwijderd. De veiling is over de looptijd heen wordt automatisch verwijderd. </p>
                       <br>
-                      <p>De hoogste bieder is: <strong>'.$veiling[0]['gebruikersnaam'].'</strong> <br>
-                         Het hoogste bod is: <strong> &euro; '.number_format($veiling[2]['verkoopprijs'], 2, ',', '.').'</strong><br>
-                         Deze wordt via <strong>'.$veiling[2]['betalingswijze'].'</strong> betaald.<br>
-                         De betaalinstructies zijn: <strong>'.$veiling[2]['betalingsinstructie'].'</strong><br>
-                         De verzendinstructies zijn: <strong>'.$veiling[2]['verzendinstructies'].'</strong><br><br>
-                         Uw wordt nu verwijderd. Dit betekent dat de veiling niet meer gezien kan worden.                                      
-                      <br>
-                      <br>                      
-                        U kunt contact opnemen met de hoogstebieder.<br>
-                        Emailadres: <strong>'.$veiling[0]['email'].'</strong> </p>
-                      <br>                    
+                      <p>Het voorwerp wordt nu verwijderd. Dit betekent dat de veiling niet meer gezien kan worden.                                      
+                      <br>                               
                       <br>
                       <p>Klik hier om naar de website te gaan: <a href="http://iproject34.icasites.nl">EenmaalAndermaal.nl</a>
                               
