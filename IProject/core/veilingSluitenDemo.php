@@ -4,7 +4,7 @@ require_once 'dbconnection.php';
 // controleerd of de CronJob de pagina ophaald door de checken voor de unieke gegevens die de CronJob heeft.
 
 checkBotAdvertentie ('asjgadh'); 
-checkNormaleAdvertenties();
+checkNormaleAdvertenties('asjgadh');
 
 // controleerd alle bot veilingen die nog openstaan.
 function checkBotAdvertentie ($botEMail){
@@ -42,8 +42,7 @@ function checkBotAdvertentie ($botEMail){
 }
 
 // controleerd alle veilingen die niet van de bots zijn die nog openstaan.
-function checkNormaleAdvertenties(){
-   
+function checkNormaleAdvertenties($botEMail){
     $klantteller = 0;// houdt bij hoeveel veilingen de functie heeft gechecked
     $blokker = 0;
     try {
@@ -51,22 +50,22 @@ function checkNormaleAdvertenties(){
         // algemene query voor het sluiten van veilingen
         $sluitVeiling = $dbh -> prepare(' update Voorwerp set veilinggesloten = 1  where voorwerpnr = :voorwerpnr '); 
         // haalt alle veilingen op die nog openstaand en waarvan de email niet de bot code bevat.
-        $haalVeilingenOp = $dbh -> prepare(' select * from Voorwerp V, Gebruiker G where  G.gebruikersnaam = V.verkoper and G.email not like %asjgadh% and veilinggesloten = 0 ');
+        $haalVeilingenOp = $dbh -> prepare(' select * from Voorwerp V, Gebruiker G where  G.gebruikersnaam = V.verkoper and G.email not like :botnaam and veilinggesloten = 0 ');
  
-        $haalVeilingenOp -> execute();
+        $haalVeilingenOp -> execute( array (':botnaam' => '%'.$botEMail.'%' ) );
         
-        while ($resultaat = $haalVeilingenOp = $sqlSelect->fetch(PDO::FETCH_ASSOC)){  
-            echo('we zitten nu in while loop');
+        while ($resultaat = $haalVeilingenOp ->fetch(PDO::FETCH_ASSOC)){  
             if ((date("d.m.Y H:i", strtotime($resultaat['looptijdeindedagtijdstip'])) ) <= date("d.m.Y H:i:s")){
+                echo ('date check is true');
                 if ($resultaat['veilinggesloten'] == 0){
-
-                    $veiling = HaalBiederEnVerkoperOp($resultaat['voorwerpnr'], $resultaat['verkoper']);
+                    $veiling = HaalBiederEnVerkoperOp($resultaat['voorwerpnr'],$resultaat['verkoper']);
+                    print_r($veiling);
                     VerstuurEindeLooptijdMail($veiling, true);
-
+                    echo ('mails zijn verstuurd');
                     if(count($veiling) == 3){
                         VerstuurEindeLooptijdMail($veiling, false);
                     }
-
+                    echo ('vlakvoor de sluiting query');
                     $sluitVeiling -> execute( array(':voorwerpnr' => $resultaat['voorwerpnr'] ));
                     $klantteller++;
                     $blokker ++;
